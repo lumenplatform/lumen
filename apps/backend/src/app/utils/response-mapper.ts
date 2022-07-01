@@ -1,0 +1,7 @@
+export const createResponse = (data, code = 200, message?: string) => {
+  return {
+    data,
+    code: code,
+    message: message,
+  };
+};
