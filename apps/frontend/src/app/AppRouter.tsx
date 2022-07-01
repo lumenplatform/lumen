@@ -5,6 +5,7 @@ import Courses from './pages/management/Courses';
 import Dashboard from './pages/management/Dashboard';
 import CoursePage from './pages/student/CoursePage';
 import StudentHome from './pages/student/StudentHome';
+import UserProfile from './pages/UserProfile';
 
 export default function () {
   return (
@@ -25,6 +26,9 @@ export default function () {
         <Route index element={<Dashboard />}></Route>
         <Route path="courses" element={<Courses />}></Route>
       </Route>
+      
+      {/* Common pages to all users */}
+      <Route path="/profile" element={<UserProfile />} />
     </Routes>
   );
 }

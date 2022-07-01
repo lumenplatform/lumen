@@ -9,6 +9,8 @@ export default function HomePage(props: any) {
       <Link to="/student">Student Home</Link>
       &nbsp; | &nbsp;
       <Link to="/manage">Management Home</Link>
+      &nbsp; | &nbsp;
+      <Link to="/profile">Profile</Link>
     </div>
   );
 }
