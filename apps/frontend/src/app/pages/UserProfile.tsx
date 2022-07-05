@@ -26,6 +26,7 @@ import {
 import { Box } from '@mui/system';
 import React from 'react';
 import CourseHistoryList from '../components/CourseHistoryList';
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -292,4 +293,5 @@ export default function UserProfile(props: any) {
       </Grid>
     </div>
   );
+
 }
