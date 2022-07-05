@@ -30,6 +30,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Avatar, ListSubheader } from '@mui/material';
+import HeaderActions from '../../components/HeaderActions';
 
 const drawerWidth = 220;
 
@@ -128,20 +129,7 @@ const AdminToolbar = (props: {
         component="div"
         sx={{ flexGrow: 1 }}
       ></Typography>
-      <IconButton color="inherit">
-        {theme.palette.mode === 'dark' ? (
-          <LightModeOutlinedIcon />
-        ) : (
-          <DarkModeOutlinedIcon />
-        )}
-      </IconButton>
-      <IconButton color="inherit" sx={{ mr: theme.spacing(2) }}>
-        <NotificationsNoneOutlinedIcon />
-      </IconButton>
-      <Avatar
-        alt="Remy Sharp"
-        src="https://demos.themeselection.com/marketplace/materio-mui-react-nextjs-admin-template/demo-3/images/avatars/1.png"
-      />
+      <HeaderActions />
     </Toolbar>
   );
 };

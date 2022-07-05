@@ -6,6 +6,9 @@ import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
 import Users from './pages/management/Users';
+import CourseInfo from './pages/student/course/CourseInfo';
+import CourseMaterial from './pages/student/course/CourseMaterial';
+import CourseResources from './pages/student/course/CourseResources';
 import CoursePage from './pages/student/CoursePage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
@@ -20,8 +23,11 @@ export default function () {
       <Route path="/student">
         <Route index element={<StudentHome />} />
         <Route path="courses" element={<div>Course Page</div>} />
-        <Route path=":courseId" element={<CoursePage />} />
-        <Route path=":courseId/learn/:contentId" element={<div>Content</div>} />
+        <Route path=":courseId" element={<CoursePage />}>
+          <Route path="material" element={<CourseMaterial />} />
+          <Route path="info" element={<CourseInfo />} />
+          <Route path="resources" element={<CourseResources />} />
+        </Route>
       </Route>
 
       {/* Pages accessed by the teacher / admin / moderator */}
