@@ -49,7 +49,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-const course_materials = [{
+const courseMaterials = [{
   topic: "Week_1",
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
   items: [
@@ -153,8 +153,8 @@ function CourseMaterial(props: any) {
   return (
     <div>
       {
-        course_materials.map((course_material: any) => (
-          <CourseMaterialTopics course_material={course_material} />
+        courseMaterials.map((courseMaterial: any) => (
+          <CourseMaterialTopics courseMaterial={courseMaterial} />
         ))
       }
     </div>
@@ -165,15 +165,15 @@ function CourseMaterialTopics(props: any) {
   return (
     <Accordion>
       <AccordionSummary>
-        <Typography>{props.course_material.topic}</Typography>
+        <Typography>{props.courseMaterial.topic}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography sx={{ mb: 2 }}>
-          {props.course_material.description}
+          {props.courseMaterial.description}
         </Typography>
         {
-          props.course_material.items.map((course_material_item: any) => (
-            <CourseMaterialItem course_material_item={course_material_item} />
+          props.courseMaterial.items.map((courseMaterialItem: any) => (
+            <CourseMaterialItem courseMaterialItem={courseMaterialItem} />
           ))
         }
       </AccordionDetails>
@@ -186,70 +186,32 @@ function CourseMaterialItem(props: any) {
     <Accordion>
       <AccordionSummary>
         <Typography>
-          {props.course_material_item.item_topic}
+          {props.courseMaterialItem.item_topic}
         </Typography>
       </AccordionSummary>
       {
-        props.course_material_item.resources.map((resource: any) => {
-          if (resource.type === "video")
-            return <VideoResource resource={resource} />
-          else if (resource.type === "audio")
-            return <AudioResource resource={resource} />
-          else if (resource.type === "link")
-            return <LinkResource resource={resource} />
-          else if (resource.type === "file")
-            return <FileResource resource={resource} />
-          return null;
-        })
+        props.courseMaterialItem.resources.map((resource: any) => (
+          <Resource resource={resource} />
+        ))
       }
     </Accordion>
   );
 }
-
-function VideoResource(props: any) {
+function Resource(props: any) {
+  let Icon;
+  if (props.resource.type === "video")
+    Icon = <VideoIcon color="action" />;
+  else if (props.resource.type === "audio")
+    Icon = <AudioIcon color="action" />;
+  else if (props.resource.type === "link")
+    Icon = <LinkIcon color="action" />;
+  else if (props.resource.type === "file")
+    Icon = <FileIcon color="action" />;
+    
   return (
     <AccordionDetails sx={{ alignItems: "center", display: "flex", justifyContent: "flex-start" }}>
       <Badge color="primary" variant="dot" invisible={props.resource.checked}>
-        <VideoIcon color="action" />
-      </Badge>
-      <Link href={props.resource.url} underline="hover" sx={{ m: 0, ml: 2 }}>
-        {props.resource.title}
-      </Link>
-    </AccordionDetails>
-  );
-}
-
-function AudioResource(props: any) {
-  return (
-    <AccordionDetails sx={{ alignItems: "center", display: "flex", justifyContent: "flex-start" }}>
-      <Badge color="primary" variant="dot" invisible={props.resource.checked}>
-        <AudioIcon color="action" />
-      </Badge>
-      <Link href={props.resource.url} underline="hover" sx={{ m: 0, ml: 2 }}>
-        {props.resource.title}
-      </Link>
-    </AccordionDetails>
-  );
-}
-
-function FileResource(props: any) {
-  return (
-    <AccordionDetails sx={{ alignItems: "center", display: "flex", justifyContent: "flex-start" }}>
-      <Badge color="primary" variant="dot" invisible={props.resource.checked}>
-        <FileIcon color="action" />
-      </Badge>
-      <Link href={props.resource.url} underline="hover" sx={{ m: 0, ml: 2 }}>
-        {props.resource.title}
-      </Link>
-    </AccordionDetails>
-  );
-}
-
-function LinkResource(props: any) {
-  return (
-    <AccordionDetails sx={{ alignItems: "center", display: "flex", justifyContent: "flex-start" }}>
-      <Badge color="primary" variant="dot" invisible={props.resource.checked}> {/* invisble = props.visibilty */}
-        <LinkIcon color="action" />
+        {Icon}
       </Badge>
       <Link href={props.resource.url} underline="hover" sx={{ m: 0, ml: 2 }}>
         {props.resource.title}
