@@ -13,7 +13,7 @@ import {
 import { NavLink, Outlet } from 'react-router-dom';
 import StudentHeader from '../../components/StudentHeader';
 
-let sideBarItems = [
+const sideBarItems = [
   {
     path: 'material',
     label: 'Course Material',
@@ -91,7 +91,7 @@ export default function CoursePage(props: any) {
           <Box sx={{ width: '200px' }}>
             <CourseNav />
           </Box>
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2 , flex:1,mr:10}}>
             <Outlet />
           </Box>
         </Box>
