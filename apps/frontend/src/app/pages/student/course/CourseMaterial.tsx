@@ -173,9 +173,11 @@ function CourseMaterialTopics(props: any) {
   const theme = useTheme();
 
   return (
-    <Accordion>
-      <AccordionSummary>
-        <Typography>{props.courseMaterial.topic}</Typography>
+    <Accordion expanded={expanded === true} onChange={handleChange(true)}>
+      <AccordionSummary sx={{ background: expanded ? alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity) : '' }}>
+        <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
+          {props.courseMaterial.topic}
+        </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography sx={{ mb: 2 }}>
@@ -203,9 +205,9 @@ function CourseMaterialItem(props: any) {
   const theme = useTheme();
 
   return (
-    <Accordion>
-      <AccordionSummary>
-        <Typography>
+    <Accordion expanded={expanded === true} onChange={handleChange(true)}>
+      <AccordionSummary sx={{ background: expanded ? alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity) : '' }}>
+        <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
           {props.courseMaterialItem.item_topic}
         </Typography>
       </AccordionSummary>
@@ -227,7 +229,7 @@ function Resource(props: any) {
     Icon = <LinkIcon color="action" />;
   else if (props.resource.type === "file")
     Icon = <FileIcon color="action" />;
-    
+
   return (
     <AccordionDetails sx={{ alignItems: "center", display: "flex", justifyContent: "flex-start" }}>
       <Badge color="primary" variant="dot" invisible={props.resource.checked}>
