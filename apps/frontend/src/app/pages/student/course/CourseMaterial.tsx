@@ -11,12 +11,12 @@ import VideoIcon from '@mui/icons-material/VideoFileRounded';
 import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
 import AudioIcon from '@mui/icons-material/AudioFileRounded';
 import LinkIcon from '@mui/icons-material/LinkRounded';
-
+import { alpha } from '@mui/system';
+import { useTheme } from '@mui/material'
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
   '&:not(:last-child)': {
     marginBottom: 10,
   },
@@ -60,7 +60,7 @@ const courseMaterials = [{
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         title: "Video 1",
         checked: false,
-      }, 
+      },
       {
         type: "audio",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -76,7 +76,7 @@ const courseMaterials = [{
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         title: "Audio 1",
         checked: false,
-      },{
+      }, {
         type: "video",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         title: "Video 1",
@@ -88,7 +88,7 @@ const courseMaterials = [{
         title: "File 1",
         checked: true,
       }
-      ,
+        ,
       {
         type: "link",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -98,7 +98,7 @@ const courseMaterials = [{
       ]
     }
   ]
-},{
+}, {
   topic: "Week_2",
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
   items: [
@@ -109,7 +109,7 @@ const courseMaterials = [{
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         title: "Video 1",
         checked: false,
-      }, 
+      },
       {
         type: "audio",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -125,7 +125,7 @@ const courseMaterials = [{
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         title: "Audio 1",
         checked: false,
-      },{
+      }, {
         type: "video",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         title: "Video 1",
@@ -137,7 +137,7 @@ const courseMaterials = [{
         title: "File 1",
         checked: true,
       }
-      ,
+        ,
       {
         type: "link",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -162,10 +162,22 @@ function CourseMaterial(props: any) {
 }
 
 function CourseMaterialTopics(props: any) {
+  const [expanded, setExpanded] = React.useState<true | false>(false);
+
+  const handleChange =
+    (panel: boolean) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? true : false);
+      console.log("case");
+    };
+
+  const theme = useTheme();
+
   return (
-    <Accordion>
-      <AccordionSummary>
-        <Typography>{props.courseMaterial.topic}</Typography>
+    <Accordion expanded={expanded === true} onChange={handleChange(true)}>
+      <AccordionSummary sx={{ background: expanded ? alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity) : '' }}>
+        <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
+          {props.courseMaterial.topic}
+        </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography sx={{ mb: 2 }}>
@@ -182,10 +194,20 @@ function CourseMaterialTopics(props: any) {
 }
 
 function CourseMaterialItem(props: any) {
+  const [expanded, setExpanded] = React.useState<true | false>(false);
+
+  const handleChange =
+    (panel: boolean) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? true : false);
+      console.log("case");
+    };
+
+  const theme = useTheme();
+
   return (
-    <Accordion>
-      <AccordionSummary>
-        <Typography>
+    <Accordion expanded={expanded === true} onChange={handleChange(true)}>
+      <AccordionSummary sx={{ background: expanded ? alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity) : '' }}>
+        <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
           {props.courseMaterialItem.item_topic}
         </Typography>
       </AccordionSummary>
@@ -207,7 +229,7 @@ function Resource(props: any) {
     Icon = <LinkIcon color="action" />;
   else if (props.resource.type === "file")
     Icon = <FileIcon color="action" />;
-    
+
   return (
     <AccordionDetails sx={{ alignItems: "center", display: "flex", justifyContent: "flex-start" }}>
       <Badge color="primary" variant="dot" invisible={props.resource.checked}>
