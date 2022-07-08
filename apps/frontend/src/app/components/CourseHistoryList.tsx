@@ -6,24 +6,23 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
 
 function createData(
   name: string,
   EnrolledDate: string,
   CompletedDate: string,
-  // carbs: number,
-  // protein: number,
 ) {
   return { name, EnrolledDate, CompletedDate };  //enter the other variable names if used
 }
 
+
 const rows = [
-  createData('Machine Learning', "2020-01-15", "2020-03-05"),        //enter data if other variables are used
-  // createData('Ice cream sandwich', 237, 9.9),
-  // createData('Eclair', 262, 16.0),
-  // createData('Cupcake', 305, 3.7),
-  // createData('Gingerbread', 356, 16.0),
+  createData('Machine Learning',"2020-01-15", "2020-03-05"),        //enter data if other variables are used
+  createData('Machine Learning', "2020-01-15", "2020-03-05"), 
+
 ];
 
 export default function CourseHistoryList() {
@@ -33,10 +32,10 @@ export default function CourseHistoryList() {
         <TableHead>
           <TableRow>
             <TableCell>Course Name</TableCell>
-            <TableCell align="right">Enrolled Date</TableCell>
-            <TableCell align="right">Completed Date</TableCell>
-            {/* <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
+            <TableCell>Progress</TableCell>
+            <TableCell>Enrolled Date</TableCell>
+            <TableCell>Completed Date</TableCell>
+            <TableCell>Certificate</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -48,9 +47,10 @@ export default function CourseHistoryList() {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              {/* <TableCell align="right">{row.name}</TableCell> */}
-              <TableCell align="right">{row.EnrolledDate}</TableCell>
-              <TableCell align="right">{row.CompletedDate}</TableCell>
+              <TableCell>{<CircularProgress variant="determinate" value={80}/>}</TableCell>
+              <TableCell>{row.EnrolledDate}</TableCell>
+              <TableCell>{row.CompletedDate}</TableCell>
+              <TableCell>{<Button variant="outlined">View</Button>}</TableCell>
               {/* <TableCell align="right">{row.protein}</TableCell> */}
             </TableRow>
           ))}
