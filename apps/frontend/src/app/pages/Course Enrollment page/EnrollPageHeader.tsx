@@ -4,8 +4,10 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import TabContext from '@material-ui/lab/TabContext';
+import TabList from '@material-ui/lab/TabList';
+import TabPanel from '@material-ui/lab/TabPanel';
 
 const [value, setValue] = React.useState('one');
 
@@ -28,22 +30,26 @@ export default function FixedContainer() {
         </Box>
       </Container>
 
-      <Box sx={{ width: '100%' }}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        textColor="secondary"
-        indicatorColor="secondary"
-        aria-label="secondary tabs example"
-      >
-        <Tab value="one" label="About" />
-        <Tab value="two" label="Instructors" />
-        <Tab value="three" label="Syllabus" />
-        <Tab value="four" label="Reviews" />
-        <Tab value="five" label="Enrollment Options" />
-        <Tab value="six" label="FAQ" />
-      </Tabs>
+      <Box sx={{ width: '100%', typography: 'body1' }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="About" value="1" />
+            <Tab label="Instructors" value="2" />
+            <Tab label="Syllabus" value="3" />
+            <Tab label="Reviews" value="4" />
+            <Tab label="Enrollment Options" value="5" />
+            <Tab label="FAQ" value="6" />
+          </TabList>
         </Box>
+        <TabPanel value="1">import CourseAbout from 'course_about';</TabPanel>
+        <TabPanel value="2">Item Two</TabPanel>
+        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="4">Item Three</TabPanel>
+        <TabPanel value="5">Item Three</TabPanel>
+        <TabPanel value="6">Item Three</TabPanel>
+      </TabContext>
+    </Box>
 
     </React.Fragment>
   );
