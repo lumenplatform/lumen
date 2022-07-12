@@ -5,7 +5,8 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import FilesInput from '../components/FilesInput';
 
 export default function HomePage(props: any) {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ export default function HomePage(props: any) {
         </Box>
         <img src="/assets/images/illustration_3.png" style={{ width: '50%' }} />
       </Box>
+      <FilesInput />
     </Box>
   );
 }

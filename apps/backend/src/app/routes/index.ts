@@ -2,6 +2,7 @@ import * as express from 'express';
 import { json } from 'body-parser';
 import { authRouter } from './auth.router';
 import { injectUser } from '../middleware/security';
+import { contentRouter } from './content.router';
 
 export const indexRouter = express.Router();
 
@@ -9,6 +10,7 @@ indexRouter.use(json());
 indexRouter.use(injectUser);
 
 indexRouter.use('/auth', authRouter);
+indexRouter.use('/content', contentRouter);
 
 indexRouter.use((error, req, res, next) => {
   console.log(error);

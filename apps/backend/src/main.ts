@@ -8,7 +8,7 @@ import { InitORM } from './app/config/db';
 import { indexRouter } from './app/routes';
 import { logger } from './app/utils/logger';
 import { environment } from './environments/environment';
-
+import adminRouter from './app/admin/admin.router';
 declare global {
   namespace Express {
     interface Request {
@@ -20,6 +20,7 @@ declare global {
 }
 
 const app = express();
+app.set('view engine', 'ejs');
 
 if (environment.production) {
   // prod only middleware
@@ -35,6 +36,7 @@ if (environment.production) {
 }
 
 app.use('/api', indexRouter);
+app.use('/admin', adminRouter);
 
 const port = process.env.PORT;
 
