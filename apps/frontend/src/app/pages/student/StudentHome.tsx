@@ -1,24 +1,31 @@
 import {
   Box,
   Breadcrumbs,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Typography,
-  useTheme,
+  Container,
+  Grid,
   Link,
-  Avatar,
+  Paper,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { NavLink, Outlet } from 'react-router-dom';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { useState } from 'react';
 import StudentHeader from '../../components/StudentHeader';
+import UpcomingEvents from '../../components/UpcomingEvents';
 
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import CourseCard from '../../components/CourseCard';
 
 export default function CoursePage(props: any) {
+  const [value, setValue] = useState<Date | null>(new Date());
+
   return (
     <div>
       <StudentHeader />
-      <Box sx={{ maxWidth: '1440px', px: 3 }}>
+      <Container maxWidth="xl">
         <Box sx={{ py: 1 }}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/student">
@@ -29,48 +36,63 @@ export default function CoursePage(props: any) {
             </Link>
           </Breadcrumbs>
         </Box>
-        <Box sx={{ py: 1, display: 'flex' }}>
+
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'auto min-content',
+            gap: 3,
+          }}
+        >
           <Box>
-            <Typography variant="h5" lineHeight={1}>
-              Student Home Page
-            </Typography>
-          </Box>
-        </Box>
-        
-        <Box sx={{ display: 'flex', margin: '', backgroundColor: '#EBE8E1', height: '200px', width: '1150px'}}>
-          <Box sx={{ p: 2 , flex:1,mr:10}}>
-            <Outlet />
-          </Box>
-        </Box>
-        
-        <br />
-        <Box sx={{ display: 'flex', marginLeft: '950px', backgroundColor: '#EBE8E1', height: '50px', width: '200px'}}>
-          <Box sx={{ p: 2 , flex:1,mr:10}}>
-            <Outlet />
-          </Box>
-        </Box>
+            <Typography variant="h5"> Learning Dashboard</Typography>
 
-        <br />
+            <Tabs value={0}>
+              {/* <Tab label="Home" /> */}
+              <Tab label="In Progress" />
+              <Tab label="Completed" />
+            </Tabs>
 
-        <Box sx={{ display: 'flex', margin: '', backgroundColor: '#EBE8E1', height: '500px', width: '1150px'}}>
-          <Box sx={{ p: 2 , flex:1,mr:10}}>
-            <Outlet />
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))',
+                gap: 2,
+                mt: 2,
+              }}
+            >
+              {Array.from(Array(3).keys()).map((r) => (
+                <CourseCard key={r} />
+              ))}
+            </Box>
+          </Box>
+          <Box>
+            <Paper sx={{ mb: 3 }}>
+              <DatePickerDemo></DatePickerDemo>
+            </Paper>
+            <Paper>
+              <UpcomingEvents></UpcomingEvents>
+            </Paper>
           </Box>
         </Box>
-        
-      </Box>
-
-      <Box sx={{ display: 'flex', marginLeft: '1200px', marginTop: '-800px', backgroundColor: '#EBE8E1', height: '200px', width: '270px', alignContent: 'left'}}>
-        <Box sx={{ p: 2 , flex:1,mr:10}}>
-          <Outlet />
-        </Box>
-      </Box>
-      <br />
-      <Box sx={{ display: 'flex', marginLeft: '1200px', marginTop: '0px', backgroundColor: '#EBE8E1', height: '580px', width: '270px', alignContent: 'left'}}>
-        <Box sx={{ p: 2 , flex:1,mr:10}}>
-          <Outlet />
-        </Box>
-      </Box>
+      </Container>
     </div>
+  );
+}
+
+export function DatePickerDemo() {
+  const [value, setValue] = useState<Date | null>(new Date());
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <StaticDatePicker
+        displayStaticWrapperAs="desktop"
+        value={value}
+        onChange={(newValue) => {
+          setValue(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </LocalizationProvider>
   );
 }
