@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import { indexRouter } from './app/routes';
 import { environment } from './environments/environment';
-
+import adminRouter from './app/admin/admin.router';
 declare global {
   namespace Express {
     interface Request {
@@ -16,12 +16,14 @@ declare global {
 }
 
 const app = express();
+app.set('view engine', 'ejs');
 
 if (environment.production) {
   app.use(express.static(path.join(__dirname, '../frontend')));
 }
 
 app.use('/api', indexRouter);
+app.use('/admin', adminRouter);
 
 const port = process.env.PORT;
 

@@ -1,0 +1,19 @@
+<style>
+  td,
+  th {
+    padding: 0.3em;
+  }
+</style>
+Info
+<table border="1" style="border-collapse: collapse">
+  <tr>
+    <th>Streaming Endpoint</th>
+    <td><%=streamingEndpoint.resourceState%></td>
+    <td>
+      <a href="/admin/do?action=START_ENDPOINT">START </a> |
+      <a href="/admin/do?action=STOP_ENDPOINT">STOP </a>
+    </td>
+  </tr>
+</table>
+
+<pre><%=JSON.stringify({ },null,1)%></pre>

@@ -16,6 +16,9 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.10.2",
+    "@azure/arm-mediaservices": "^12.0.0",
+    "@azure/identity": "^2.1.0",
+    "@azure/storage-blob": "^12.11.0",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
@@ -23,6 +26,7 @@
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
     "express": "4.17.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^2.1.0",
@@ -33,7 +37,8 @@
     "react-query": "^3.39.1",
     "react-router-dom": "6.3.0",
     "regenerator-runtime": "0.13.7",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nrwl/cli": "14.1.9",
