@@ -12,6 +12,7 @@ import CourseResources from './pages/student/course/CourseResources';
 import CoursePage from './pages/student/CoursePage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import Enroll from './components/EnrollPageHeader';
 
 export default function () {
   return (
@@ -23,7 +24,9 @@ export default function () {
       <Route path="/student">
         <Route index element={<StudentHome />} />
         <Route path="courses" element={<div>Course Page</div>} />
+        <Route path=":courseId/enrollment" element={<Enroll />}></Route>
         <Route path=":courseId" element={<CoursePage />}>
+        
           <Route path="material" element={<CourseMaterial />} />
           <Route path="info" element={<CourseInfo />} />
           <Route path="resources" element={<CourseResources />} />
@@ -39,6 +42,8 @@ export default function () {
         <Route path="billing" element={<Billing />}></Route>
         <Route path="customize" element={<Customizations />}></Route>
       </Route>
+
+      <Route path="/enrollment" element={<Enroll />}></Route>
 
       {/* Common pages to all users */}
       <Route path="/profile" element={<UserProfile />} />
