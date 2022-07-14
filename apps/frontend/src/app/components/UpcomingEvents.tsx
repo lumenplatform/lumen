@@ -10,11 +10,24 @@ import Typography from '@mui/material/Typography';
 import Backdrop, { backdropClasses } from '@mui/material/Backdrop';
 
 export default function UpcomingEvents(props: any) {
-  const events= [{course:"compiler theory", description:"Upcoming assignment due"},{course:"compiler theory", description:"Upcoming assignment due"}]
+  const events = [
+    { course: 'compiler theory', description: 'Upcoming assignment due' },
+    { course: 'compiler theory', description: 'Upcoming assignment due' },
+  ];
   return (
-    <List sx={{ width: '30%', minWidth:300, bgcolor: 'background.paper' , maxHeight:'calc(10% + 10px)' , overflow: 'auto', p:1 , boxShadow: 4,borderRadius: 3}}>
+    <List
+      sx={{
+        bgcolor: 'background.paper',
+        overflow: 'auto',
+        p: 1,
+        borderRadius: 3,
+      }}
+    >
       {events.map((event: any) => (
-        <UpcomingEventsItem course={event.course} description={event.description} />
+        <UpcomingEventsItem
+          course={event.course}
+          description={event.description}
+        />
       ))}
     </List>
   );
@@ -22,24 +35,27 @@ export default function UpcomingEvents(props: any) {
 
 function UpcomingEventsItem(props: any) {
   return (
-    <ListItem alignItems="center" sx={{ pr:4 ,mb:1,backdropFilter: "blur(10px)" }}>
+    <ListItem
+      alignItems="center"
+      sx={{ pr: 4, mb: 1, backdropFilter: 'blur(10px)' }}
+    >
       <ListItemAvatar>
-      <Avatar sx={{ bgcolor: green[500] }}>
-        <AssignmentIcon />
-      </Avatar>
+        <Avatar sx={{ bgcolor: green[500] }}>
+          <AssignmentIcon />
+        </Avatar>
       </ListItemAvatar>
-        <ListItemText
-          primary={
+      <ListItemText
+        primary={
           <Typography noWrap variant="h6">
-          {props.course}
+            {props.course}
           </Typography>
-          }
-          secondary={
+        }
+        secondary={
           <Typography noWrap variant="body2">
-          {props.description}
+            {props.description}
           </Typography>
-          }
-        />
+        }
+      />
     </ListItem>
-    );
+  );
 }
