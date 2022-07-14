@@ -1,45 +1,41 @@
 import {
   BlobServiceClient,
-  ContainerSASPermissions,
-  AccountSASPermissions,
+  ContainerSASPermissions
 } from '@azure/storage-blob';
-const { v1: uuid_v1 } = require('uuid');
-require('dotenv').config();
 
-const AZURE_STORAGE_CONNECTION_STRING =
-  process.env.AZURE_STORAGE_CONNECTION_STRING;
+const AZURE_STORAGE_CONN_STRING = process.env.AZURE_STORAGE_CONN_STRING;
 
 export class StorageService {
   _blobServiceClient: BlobServiceClient;
 
   constructor() {
-    if (!AZURE_STORAGE_CONNECTION_STRING) {
+    if (!AZURE_STORAGE_CONN_STRING) {
       throw Error('Azure Storage Connection string not found');
     }
     this._blobServiceClient = BlobServiceClient.fromConnectionString(
-      AZURE_STORAGE_CONNECTION_STRING
+      AZURE_STORAGE_CONN_STRING
     );
   }
 
-  async generateContainer() {
-    const currentDate = new Date();
-    // const containerName =
-    //   uuid_v1() + '-' + currentDate.toISOString().substring(0, 10);
-    // // Get a reference to a container
+  async generateSAS() {
+    const expiresOn = new Date();
+    expiresOn.setDate(expiresOn.getDate() + 1);
+
     const containerClient = this._blobServiceClient.getContainerClient('test');
-    // // Create the container
-    // const createContainerResponse = await containerClient.create();
-    currentDate.setHours(23);
+
     return {
       sas: await containerClient.generateSasUrl({
-        expiresOn: currentDate,
+        expiresOn: expiresOn,
         permissions: ContainerSASPermissions.from({
           create: true,
           read: true,
           write: true,
         }),
       }),
-      containerName: 'test',
+      containerName: 'uploads',
     };
   }
+
+  
+  
 }

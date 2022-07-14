@@ -26,6 +26,7 @@ import {
 import { Box } from '@mui/system';
 import React from 'react';
 import CourseHistoryList from '../components/CourseHistoryList';
+import VideoPlayer from '../components/VideoPlayer';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -77,6 +78,13 @@ function OverviewTab() {
         </Box>
         <Button variant="contained">Update Profile</Button>
       </Paper>
+      <VideoPlayer
+        src={[
+          {
+            src: '//amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest',
+          },
+        ]}
+      ></VideoPlayer>
     </div>
   );
 }
@@ -293,5 +301,4 @@ export default function UserProfile(props: any) {
       </Grid>
     </div>
   );
-
 }
