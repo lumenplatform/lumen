@@ -1,5 +1,4 @@
 import * as express from 'express';
-import { db } from '../config/db';
 import { AuthController } from '../controllers';
 import { guard } from '../middleware/security';
 import { AuthService } from '../services/auth.service';
@@ -21,15 +20,16 @@ authRouter.post('/login', (req, res) => {
   res.json({ token });
 });
 
-authRouter.use(guard.isAuthenticated);
+// authRouter.use(guard.isAuthenticated);
 
 authRouter.get('/users', async (req, res) => {
-  db.select()
-    .table('users')
-    .then((r) => {
-      res.json(createResponse(r));
-    })
-    .catch((r) => {
-      res.json({ message: 'error' });
-    });
+  let x = require('./../config/generate-migrations');
+  // db.select()
+  //   .table('users')
+  //   .then((r) => {
+  //     res.json(createResponse(r));
+  //   })
+  //   .catch((r) => {
+  //     res.json({ message: 'error' });
+  //   });
 });
