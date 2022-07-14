@@ -1,7 +1,7 @@
 import { urlencoded } from 'express';
 import express = require('express');
 import path = require('path');
-import { AMSService } from '../services/ams.service';
+import { AMSService } from '../services/drm/ams.service';
 
 const app = express();
 
