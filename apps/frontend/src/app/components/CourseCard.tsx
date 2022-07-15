@@ -1,3 +1,4 @@
+
 import {
   Avatar,
   Box,
@@ -67,4 +68,5 @@ export default function CourseCard(props: any) {
       </CardActionArea>
     </Card>
   </div>;
+
 }
