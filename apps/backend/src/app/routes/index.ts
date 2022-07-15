@@ -1,13 +1,11 @@
 import * as express from 'express';
-import { json } from 'body-parser';
+import { createResponse } from '../utils/response-mapper';
 import { authRouter } from './auth.router';
-import { injectUser } from '../middleware/security';
 import { contentRouter } from './content.router';
 
 export const indexRouter = express.Router();
 
-indexRouter.use(json());
-indexRouter.use(injectUser);
+// indexRouter.use(injectUser);
 
 indexRouter.use('/auth', authRouter);
 indexRouter.use('/content', contentRouter);
@@ -18,10 +16,9 @@ indexRouter.use((error, req, res, next) => {
     return next(error);
   }
 
-  res.send({
-    success: false,
-    message: error.message,
-    statusCode: error.statusCode,
-    data: null,
-  });
+  if (error.name == 'ValidationError') {
+    res.send(createResponse(undefined, 400, error.name, error));
+  } else {
+    res.send(createResponse(undefined, 500, 'Error Processing Request'));
+  }
 });

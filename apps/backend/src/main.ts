@@ -3,12 +3,13 @@ import * as express from 'express';
 import * as path from 'path';
 var morgan = require('morgan');
 
-import { InitORM } from './app/config/db';
+import { InitORM, InjectORM } from './app/config/db';
 
+import { json } from 'express';
+import adminRouter from './app/admin/admin.router';
 import { indexRouter } from './app/routes';
 import { logger } from './app/utils/logger';
 import { environment } from './environments/environment';
-import adminRouter from './app/admin/admin.router';
 declare global {
   namespace Express {
     interface Request {
@@ -34,6 +35,9 @@ if (environment.production) {
     )
   );
 }
+
+app.use(json());
+app.use(InjectORM);
 
 app.use('/api', indexRouter);
 app.use('/admin', adminRouter);

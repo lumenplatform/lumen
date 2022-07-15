@@ -15,7 +15,7 @@ const DEFAULT_OPTIONS = {
 declare const window: any;
 
 export interface IVideoPlayerProps {
-  readonly src: { src: string }[];
+  readonly src: { src: string; protectionInfo: any }[];
   readonly options: any;
   readonly skin: string;
   readonly className: string;
@@ -77,7 +77,13 @@ export default class VideoPlayer extends PureComponent<IVideoPlayerProps, {}> {
   override render(): JSX.Element {
     return (
       <div>
-        <video className="azuremediaplayer amp-flush-skin" width="640" height="400" controls ref={this.videoNode} />
+        <video
+          className="azuremediaplayer amp-flush-skin"
+          width="640"
+          height="400"
+          controls
+          ref={this.videoNode}
+        />
       </div>
     );
   }

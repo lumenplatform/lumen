@@ -15,5 +15,41 @@ Info
     </td>
   </tr>
 </table>
+<br />
+<table border="1" style="border-collapse: collapse">
+  <tr>
+    <td>ID</td>
+    <td>NAME & LINK</td>
+    <td>TYPE</td>
+    <td>MIME</td>
+    <td>STATUS</td>
+    <td>Content Key</td>
+  </tr>
+  <% for (const item of content) {%>
+  <tr>
+    <td><%=item.id%></td>
+    <td><a href="<%=item.name%>"><%=item.name%></a></td>
+    <td><%=item.type%></td>
+    <td><%=item.mime.substr(0,10)%></td>
+    <td><%=item.status%></td>
+    <td><%=item.contentKey%></td>
+    <td>
+      <% if(item.streamingURLs.length) { console.log(item.streamingURLs) %>
+      <a
+        target="_blank"
+        href="http://localhost:4200/profile?url=<%=item.streamingURLs[0].url%>&token=<%=item.streamingURLs[0].token %>"
+      >
+        Play
+      </a>
+      <%} %>
+    </td>
+    <td>
+      <a href="/admin/do?action=PROCESS_VIDEO&content_id=<%=item.id%>">
+        PROCESS
+      </a>
+    </td>
+  </tr>
+  <%} %>
+</table>
 
 <pre><%=JSON.stringify({ },null,1)%></pre>

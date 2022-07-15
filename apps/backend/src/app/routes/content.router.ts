@@ -1,11 +1,16 @@
+import { RequestContext } from '@mikro-orm/core';
 import * as express from 'express';
+import * as Yup from 'yup';
+import { ContentController } from '../controllers/content.controller';
+import { validate } from '../middleware/validation';
 import { AMSService } from '../services/drm/ams.service';
 import { StorageService } from '../services/storage.service';
-
+import { createResponse } from './../utils/response-mapper';
 export const contentRouter = express.Router();
 
 const ams = new AMSService();
 const storageService = new StorageService();
+const contentController = new ContentController(storageService, ams);
 
 contentRouter.get('/', async (req, res) => {
   let it = await ams.getAllAssets();
@@ -13,37 +18,34 @@ contentRouter.get('/', async (req, res) => {
   res.send('<pre>' + JSON.stringify(it, null, 1));
 });
 
-contentRouter.get('/get-container-sas', async (req, res) => {
-  storageService
-    .generateSAS()
-    .catch(console.log)
-    .then((r) => {
-      res.json(r);
-    });
+contentRouter.get('/upload-config', async (req, res, next) => {
+  contentController
+    .generateUploadConfig()
+    .catch(next)
+    .then((config) => res.json(createResponse(config)));
 });
 
-contentRouter.get('/test', async (req, res) => {
-  let inputUrl: string =
-    'https://amssamples.streaming.mediaservices.windows.net/2e91931e-0d29-482b-a42b-9aadc93eb825/AzurePromo.mp4';
-
-  inputUrl =
-    'https://lumenlmsstorage.blob.core.windows.net/test/2q5Z1Zvra3csQhfF.mp4?sv=2021-08-06&se=2022-07-13T17%3A54%3A47Z&sr=c&sp=rcw&sig=oGSwJI78GDbWAl4mknRH%2FVZBS%2F2ZsRk9Wz8aQmOPoqk%3D';
-
-  ams
-    .getStreamingURLsFormURL(inputUrl)
-    .catch(console.log)
-    .then((r) => {
-      res.json(r);
-    });
-});
-
-contentRouter.get('/token', async (req, res) => {
-  res.send(ams.generateToken('14bfd13e-dcb2-4aeb-8873-f9dceae52112'));
-});
-
-contentRouter.post('/', (req, res) => {
-  // get URLs & move ?
-});
+contentRouter.post(
+  '/',
+  validate({
+    body: Yup.array(
+      Yup.object({
+        url: Yup.string().url('invalid valid URL').required(),
+        mime: Yup.string().required(),
+        name: Yup.string().required(),
+        config: Yup.object(),
+      })
+    ).min(1),
+  }),
+  (req, res, next) => {
+    contentController
+      .createContent(req.body)
+      .then((r) => {
+        res.json(createResponse(r));
+      })
+      .catch(next);
+  }
+);
 
 contentRouter.get('/:id', (req, res) => {
   // redirect to azure storage
@@ -66,3 +68,6 @@ contentRouter.delete('/video/:id', (req, res) => {
   // delete in DB & azure
 });
 
+contentRouter.get('/token', async (req, res) => {
+  res.send(ams.generateToken('14bfd13e-dcb2-4aeb-8873-f9dceae52112'));
+});

@@ -1,17 +1,21 @@
 import {
   Box,
   Button,
+  Container,
   Link as MuiLink,
   Toolbar,
   Typography,
 } from '@mui/material';
+import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { uploadContent } from '../api';
 import FilesInput from '../components/FilesInput';
 
 export default function HomePage(props: any) {
   const navigate = useNavigate();
+
   return (
-    <Box sx={{ maxWidth: '1024px', mx: 'auto' }}>
+    <Container>
       <Toolbar sx={{ my: 2 }}>
         <img src="/assets/icons/logo_horiz.png" style={{ height: '50px' }} />
         <MuiLink sx={{ ml: 3, mt: '3px' }} underline="hover">
@@ -59,6 +63,6 @@ export default function HomePage(props: any) {
         <img src="/assets/images/illustration_3.png" style={{ width: '50%' }} />
       </Box>
       <FilesInput />
-    </Box>
+    </Container>
   );
 }

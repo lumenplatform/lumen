@@ -8,7 +8,7 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
   entities: [Content],
   type: 'postgresql',
   clientUrl: process.env.PG_CONNECTION_STRING,
-  debug: false,
+  debug: true,
   logger: ORMLogger.info,
   migrations: { emit: 'js' },
 };

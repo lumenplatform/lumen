@@ -81,7 +81,15 @@ function OverviewTab() {
       <VideoPlayer
         src={[
           {
-            src: '//amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest',
+            // src: '//amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest',
+            src: new URLSearchParams(location.search).get('url') || '',
+            protectionInfo: [
+              {
+                type: 'Widevine',
+                authenticationToken:
+                  'Bearer ' + new URLSearchParams(location.search).get('token'),
+              },
+            ],
           },
         ]}
       ></VideoPlayer>
