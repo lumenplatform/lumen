@@ -28,13 +28,13 @@ Info
   <% for (const item of content) {%>
   <tr>
     <td><%=item.id%></td>
-    <td><a href="<%=item.name%>"><%=item.name%></a></td>
+    <td><a href="<%=item.url%>"><%=item.name%></a></td>
     <td><%=item.type%></td>
     <td><%=item.mime.substr(0,10)%></td>
     <td><%=item.status%></td>
     <td><%=item.contentKey%></td>
     <td>
-      <% if(item.streamingURLs.length) { console.log(item.streamingURLs) %>
+      <% if(item.streamingURLs?.length) { console.log(item.streamingURLs) %>
       <a
         target="_blank"
         href="http://localhost:4200/profile?url=<%=item.streamingURLs[0].url%>&token=<%=item.streamingURLs[0].token %>"

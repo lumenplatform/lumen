@@ -31,7 +31,7 @@ app.get('/', async (req, res, next) => {
         streamingEndpoint: e[0],
         content: e[1].map((r) => ({
           ...r,
-          streamingURLs: r.streamingURLs.map((k) => ({
+          streamingURLs: r.streamingURLs?.map((k) => ({
             ...k,
             token: ams.generateToken(k.keyIdentifier),
           })),
