@@ -10,6 +10,7 @@ import CourseInfo from './pages/student/course/CourseInfo';
 import CourseMaterial from './pages/student/course/CourseMaterial';
 import CourseResources from './pages/student/course/CourseResources';
 import CoursePage from './pages/student/CoursePage';
+import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
 
@@ -23,6 +24,7 @@ export default function () {
       <Route path="/student">
         <Route index element={<StudentHome />} />
         <Route path="courses" element={<div>Course Page</div>} />
+        <Route path="search" element={<SearchPage />} />
         <Route path=":courseId" element={<CoursePage />}>
           <Route path="material" element={<CourseMaterial />} />
           <Route path="info" element={<CourseInfo />} />
@@ -39,7 +41,7 @@ export default function () {
         <Route path="billing" element={<Billing />}></Route>
         <Route path="customize" element={<Customizations />}></Route>
       </Route>
-
+    
       {/* Common pages to all users */}
       <Route path="/profile" element={<UserProfile />} />
     </Routes>
