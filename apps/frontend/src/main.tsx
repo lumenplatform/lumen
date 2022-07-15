@@ -2,9 +2,10 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider } from '@auth0/auth0-react';
 
 import App from './app/app';
+import { AuthProvider } from './app/components/Auth';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -22,9 +23,11 @@ root.render(
       scope="read:current_user update:current_user_metadata"
     >
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
       </QueryClientProvider>
     </Auth0Provider>
   </StrictMode>
