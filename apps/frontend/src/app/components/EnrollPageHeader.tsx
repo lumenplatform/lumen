@@ -24,37 +24,48 @@ export default function EnrollHEader() {
   return (
     <React.Fragment>
       <Box sx={{ bgcolor: '#9fc9ae', padding: '40px' }}>
-        {/* <h2>Operating Systems</h2> */}
         <Typography variant="h3" component="h3">
           Operating Systems
         </Typography>
-        <Rating name="read-only" value={4} readOnly size="small" /> 
-        <Typography display="inline" variant="subtitle2" component="h3">
+        <Box sx={{display:'flex', alignItems:'center'}}>
+        <Rating name="read-only" value={4} readOnly size="small" />
+        <Typography display="inline" variant="subtitle2" component="h3" sx={{lineHeight:0, ml:1}}>
           34 ratings
         </Typography>
-        
-        <Stack direction="row" spacing={2} sx={{ margin: '2% 0 0.5%' }}>
-          <Avatar 
+        </Box>
+
+        <Box  sx={{ margin: '2% 0 0.5%' , display:'flex', alignItems:'center'}}>
+          <Avatar
             alt="Remy Sharp"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
           />
-          <Typography variant='subtitle1' style={{ margin: '0.5rem 1%' }}>Remy Sharp</Typography>
-        </Stack>
-      
-        <Stack direction="row" spacing={2}>
+          <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
+            Remy Sharp
+          </Typography>
+        </Box>
+
+        <Box  sx={{ display:'flex', alignItems:'center'}}>
           <Avatar
             alt="Kewin Wayne"
             src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
           />
-         <Typography variant='subtitle1' style={{ margin: '0.5rem 1%' }}>Kevin Wayne</Typography>
-        </Stack>
-        
-        <Stack direction="row" spacing={2} sx={{margin:'3% 1% 0 0'}}>
-        <Button variant="contained" size="large">
-          Enroll Me
-        </Button>
-        <Typography variant='subtitle2' display='inline' style={{padding:'0.5% 0 0 0 '}}>120 Already enrolled</Typography>
-        </Stack>
+          <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
+            Kevin Wayne
+          </Typography>
+        </Box>
+
+        <Box sx={{ margin: '3% 1% 0 0', display:'flex', alignItems:'center' }}>
+          <Button variant="contained" size="large">
+            Enroll Me
+          </Button>
+          <Typography
+            variant="subtitle2"
+            display="inline"
+            style={{ marginLeft:10 }}
+          >
+            120 Already enrolled
+          </Typography>
+        </Box>
       </Box>
 
       <Box sx={{ width: '100%', typography: 'body1' }}>
