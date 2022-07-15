@@ -1,13 +1,13 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Alert,
   Avatar,
   Button,
   Checkbox,
-  Container,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -23,12 +23,10 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
 import React from 'react';
-import { useAuth } from '../components/Auth';
 import CourseHistoryList from '../components/CourseHistoryList';
-import StudentHeader from '../components/StudentHeader';
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -147,7 +145,7 @@ function SecurityTab() {
               // onMouseDown={handleMouseDownPassword}
               edge="end"
             >
-              <VisibilityOff />
+              {true ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
         }
@@ -239,12 +237,6 @@ function ProfileSections() {
 
 function ProfileCard() {
   const theme = useTheme();
-  const { user, signOut } = useAuth();
-
-  if (!user) {
-    return <Skeleton variant="rectangular" width={210} height={118} />;
-  }
-
   return (
     <Paper sx={{ p: theme.spacing(2) }}>
       <Box
@@ -255,35 +247,31 @@ function ProfileCard() {
           p: theme.spacing(1),
         }}
       >
-        <Avatar sx={{ width: 72, height: 72 }} src={user.picture}></Avatar>
-        <Typography variant="h6">{user.name}</Typography>
-        <Typography>@{user.nickname}</Typography>
+        <Avatar sx={{ width: 72, height: 72 }}></Avatar>
+        <Typography variant="h6">Dalana Pasindu</Typography>
+        <Typography>@dalanad</Typography>
       </Box>
       <Typography variant="subtitle2" my={theme.spacing(1)}>
         Details
       </Typography>
       <Box>
         <Typography>
-          <b>Username:</b> @{user.nickname}
+          <b>Username:</b> @dalanad
         </Typography>
         <Typography>
-          <b>Full Name</b> {user.name}
+          <b>Full Name</b> Dalana Dharmathilake
         </Typography>
         <Typography>
-          <b>Email:</b> {user.email}
+          <b>Email:</b> dalana.dhar@gmail.com
         </Typography>
         <Typography>
           <b>Timezone:</b> +05.30
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Button variant="outlined" sx={{ mr: 2 }} onClick={signOut}>
-          Logout
-        </Button>
         <Button variant="outlined" sx={{ mr: 2 }}>
           Edit
         </Button>
-
         <Button variant="outlined" color="error">
           Deactivate
         </Button>
@@ -294,8 +282,7 @@ function ProfileCard() {
 
 export default function UserProfile(props: any) {
   return (
-    <Container>
-      <StudentHeader />
+    <div style={{ maxWidth: '1024px', margin: '1rem' }}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={4}>
           <ProfileCard />
@@ -304,6 +291,7 @@ export default function UserProfile(props: any) {
           <ProfileSections />
         </Grid>
       </Grid>
-    </Container>
+    </div>
   );
+
 }

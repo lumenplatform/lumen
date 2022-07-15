@@ -1,14 +1,22 @@
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import DisplaySettingsOutlinedIcon from '@mui/icons-material/DisplaySettingsOutlined';
-import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import AnalyticsIcon from '@mui/icons-material/AnalyticsOutlined';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
-import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutlined';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import DisplaySettingsOutlinedIcon from '@mui/icons-material/DisplaySettingsOutlined';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 
-import { ListSubheader } from '@mui/material';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -20,7 +28,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Avatar, ListSubheader } from '@mui/material';
 import HeaderActions from '../../components/HeaderActions';
 
 const drawerWidth = 220;
@@ -133,7 +142,7 @@ const SideNavItems = () => {
       {sideBarItems.map((item, index) => {
         if (item.subHeading) {
           return (
-            <ListSubheader key={index} component="div">
+            <ListSubheader key={item.label} component="div">
               {item.subHeading}
             </ListSubheader>
           );
@@ -141,7 +150,6 @@ const SideNavItems = () => {
 
         return (
           <NavLink
-            key={index}
             to={item.path}
             style={{ color: 'unset', textDecoration: 'unset' }}
             end={item.path === '/manage'}
@@ -177,6 +185,7 @@ const SideNavItems = () => {
 
 export default function AdminLayout() {
   const theme = useTheme();
+  let navigate = useNavigate();
 
   const [open, setOpen] = React.useState(true);
 
