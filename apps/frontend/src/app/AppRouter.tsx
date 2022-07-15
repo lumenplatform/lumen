@@ -42,7 +42,7 @@ export default function () {
         <Route path="billing" element={<Billing />}></Route>
         <Route path="customize" element={<Customizations />}></Route>
       </Route>
-    
+
       {/* Common pages to all users */}
       <Route path="/profile" element={<UserProfile />} />
     </Routes>

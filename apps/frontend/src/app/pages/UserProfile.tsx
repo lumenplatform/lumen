@@ -293,5 +293,4 @@ export default function UserProfile(props: any) {
       </Grid>
     </div>
   );
-
 }

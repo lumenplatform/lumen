@@ -2,7 +2,9 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
-import MuiAccordionSummary, { AccordionSummaryProps, } from '@mui/material/AccordionSummary';
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -12,7 +14,7 @@ import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
 import AudioIcon from '@mui/icons-material/AudioFileRounded';
 import LinkIcon from '@mui/icons-material/LinkRounded';
 import { alpha } from '@mui/system';
-import { useTheme } from '@mui/material'
+import { useTheme } from '@mui/material';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -49,114 +51,121 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-const courseMaterials = [{
-  topic: "Week_1",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
-  items: [
-    {
-      item_topic: "video and audio",
-      resources: [{
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: false,
+const courseMaterials = [
+  {
+    topic: 'Week_1',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.',
+    items: [
+      {
+        item_topic: 'video and audio',
+        resources: [
+          {
+            type: 'video',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Video 1',
+            checked: false,
+          },
+          {
+            type: 'audio',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Audio 1',
+            checked: false,
+          },
+        ],
       },
       {
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }
-      ]
-    },
-    {
-      item_topic: "all",
-      resources: [{
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }, {
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: true,
+        item_topic: 'all',
+        resources: [
+          {
+            type: 'audio',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Audio 1',
+            checked: false,
+          },
+          {
+            type: 'video',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Video 1',
+            checked: true,
+          },
+          {
+            type: 'file',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'File 1',
+            checked: true,
+          },
+          {
+            type: 'link',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Link 1',
+            checked: false,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    topic: 'Week_2',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.',
+    items: [
+      {
+        item_topic: 'video and audio',
+        resources: [
+          {
+            type: 'video',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Video 1',
+            checked: false,
+          },
+          {
+            type: 'audio',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Audio 1',
+            checked: false,
+          },
+        ],
       },
       {
-        type: "file",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "File 1",
-        checked: true,
-      }
-        ,
-      {
-        type: "link",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Link 1",
-        checked: false,
-      }
-      ]
-    }
-  ]
-}, {
-  topic: "Week_2",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
-  items: [
-    {
-      item_topic: "video and audio",
-      resources: [{
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: false,
+        item_topic: 'all',
+        resources: [
+          {
+            type: 'audio',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Audio 1',
+            checked: false,
+          },
+          {
+            type: 'video',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Video 1',
+            checked: true,
+          },
+          {
+            type: 'file',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'File 1',
+            checked: true,
+          },
+          {
+            type: 'link',
+            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            title: 'Link 1',
+            checked: false,
+          },
+        ],
       },
-      {
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }
-      ]
-    },
-    {
-      item_topic: "all",
-      resources: [{
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }, {
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: true,
-      },
-      {
-        type: "file",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "File 1",
-        checked: true,
-      }
-        ,
-      {
-        type: "link",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Link 1",
-        checked: false,
-      }
-      ]
-    }
-  ]
-}]
+    ],
+  },
+];
 
 function CourseMaterial(props: any) {
   return (
     <div>
-      {
-        courseMaterials.map((courseMaterial: any) => (
-          <CourseMaterialTopics courseMaterial={courseMaterial} />
-        ))
-      }
+      {courseMaterials.map((courseMaterial: any) => (
+        <CourseMaterialTopics courseMaterial={courseMaterial} />
+      ))}
     </div>
   );
 }
@@ -173,7 +182,16 @@ function CourseMaterialTopics(props: any) {
 
   return (
     <Accordion expanded={expanded === true} onChange={handleChange(true)}>
-      <AccordionSummary sx={{ background: expanded ? alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity) : '' }}>
+      <AccordionSummary
+        sx={{
+          background: expanded
+            ? alpha(
+                theme.palette.primary.main,
+                theme.palette.action.selectedOpacity
+              )
+            : '',
+        }}
+      >
         <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
           {props.courseMaterial.topic}
         </Typography>
@@ -182,11 +200,9 @@ function CourseMaterialTopics(props: any) {
         <Typography sx={{ mb: 2 }}>
           {props.courseMaterial.description}
         </Typography>
-        {
-          props.courseMaterial.items.map((courseMaterialItem: any) => (
-            <CourseMaterialItem courseMaterialItem={courseMaterialItem} />
-          ))
-        }
+        {props.courseMaterial.items.map((courseMaterialItem: any) => (
+          <CourseMaterialItem courseMaterialItem={courseMaterialItem} />
+        ))}
       </AccordionDetails>
     </Accordion>
   );
@@ -204,32 +220,41 @@ function CourseMaterialItem(props: any) {
 
   return (
     <Accordion expanded={expanded === true} onChange={handleChange(true)}>
-      <AccordionSummary sx={{ background: expanded ? alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity) : '' }}>
+      <AccordionSummary
+        sx={{
+          background: expanded
+            ? alpha(
+                theme.palette.primary.main,
+                theme.palette.action.selectedOpacity
+              )
+            : '',
+        }}
+      >
         <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
           {props.courseMaterialItem.item_topic}
         </Typography>
       </AccordionSummary>
-      {
-        props.courseMaterialItem.resources.map((resource: any) => (
-          <Resource resource={resource} />
-        ))
-      }
+      {props.courseMaterialItem.resources.map((resource: any) => (
+        <Resource resource={resource} />
+      ))}
     </Accordion>
   );
 }
 function Resource(props: any) {
   let Icon;
-  if (props.resource.type === "video")
-    Icon = <VideoIcon color="action" />;
-  else if (props.resource.type === "audio")
-    Icon = <AudioIcon color="action" />;
-  else if (props.resource.type === "link")
-    Icon = <LinkIcon color="action" />;
-  else if (props.resource.type === "file")
-    Icon = <FileIcon color="action" />;
+  if (props.resource.type === 'video') Icon = <VideoIcon color="action" />;
+  else if (props.resource.type === 'audio') Icon = <AudioIcon color="action" />;
+  else if (props.resource.type === 'link') Icon = <LinkIcon color="action" />;
+  else if (props.resource.type === 'file') Icon = <FileIcon color="action" />;
 
   return (
-    <AccordionDetails sx={{ alignItems: "center", display: "flex", justifyContent: "flex-start" }}>
+    <AccordionDetails
+      sx={{
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'flex-start',
+      }}
+    >
       <Badge color="primary" variant="dot" invisible={props.resource.checked}>
         {Icon}
       </Badge>
