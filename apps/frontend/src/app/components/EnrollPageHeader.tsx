@@ -1,19 +1,18 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import {useTheme} from '@mui/material';
+import { useTheme } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import CourseAbout from './CourseAbout';
-import Stack from '@mui/material/Stack';
-
+import Syllabus from './CourseSyllabus';
+import Instructors from './EnrollmentInstructors';
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -24,58 +23,74 @@ export default function EnrollHEader() {
   };
   return (
     <React.Fragment>
-
-
-        <Box sx={{ bgcolor:'#9fc9ae', padding:'40px' }}>
-            <h2>Operating Systems</h2> 
-            <Rating name="read-only" value= {4} readOnly />  &nbsp; &nbsp; 34 ratings
-            <br/><br/>
-
-            Instructors : <br/><br/>
-            <Stack direction="row" spacing={2}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> &nbsp; &nbsp;Remy Sharp
-            </Stack><br/>
-            <Stack direction="row" spacing={2}>
-              <Avatar alt="Kewin Wayne" src="/static/images/avatar/1.jpg" /> &nbsp; &nbsp;Kevin Wayne
-            </Stack>
-            <br/><br/>
-            
-            <Button variant="contained" size='large'>Enroll Me</Button>
-            <p>120 Already enrolled</p>
-        </Box>
-
+      <Box sx={{ bgcolor: '#9fc9ae', padding: '40px' }}>
+        {/* <h2>Operating Systems</h2> */}
+        <Typography variant="h3" component="h3">
+          Operating Systems
+        </Typography>
+        <Rating name="read-only" value={4} readOnly size="small" /> 
+        <Typography display="inline" variant="subtitle2" component="h3">
+          34 ratings
+        </Typography>
+        
+        <Stack direction="row" spacing={2} sx={{ margin: '2% 0 0.5%' }}>
+          <Avatar 
+            alt="Remy Sharp"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
+          />
+          <Typography variant='subtitle1' style={{ margin: '0.5rem 1%' }}>Remy Sharp</Typography>
+        </Stack>
+      
+        <Stack direction="row" spacing={2}>
+          <Avatar
+            alt="Kewin Wayne"
+            src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
+          />
+         <Typography variant='subtitle1' style={{ margin: '0.5rem 1%' }}>Kevin Wayne</Typography>
+        </Stack>
+        
+        <Stack direction="row" spacing={2} sx={{margin:'3% 1% 0 0'}}>
+        <Button variant="contained" size="large">
+          Enroll Me
+        </Button>
+        <Typography variant='subtitle2' display='inline' style={{padding:'0.5% 0 0 0 '}}>120 Already enrolled</Typography>
+        </Stack>
+      </Box>
 
       <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="About" value="1" />
-            <Tab label="Instructors" value="2" />
-            <Tab label="Syllabus" value="3" />
-            <Tab label="Reviews" value="4" />
-            <Tab label="Enrollment Options" value="5" />
-            <Tab label="FAQ" value="6" />
-          </TabList>
-        </Box>
-        <TabPanel value="1"><CourseAbout/></TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
-        <TabPanel value="4">Item Three</TabPanel>
-        <TabPanel value="5">Item Three</TabPanel>
-        <TabPanel value="6">Item Three</TabPanel>
-      </TabContext>
-    </Box>
-
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="About" value="1" />
+              <Tab label="Instructors" value="2" />
+              <Tab label="Syllabus" value="3" />
+              <Tab label="Reviews" value="4" />
+              <Tab label="Enrollment Options" value="5" />
+              <Tab label="FAQ" value="6" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            <CourseAbout />
+          </TabPanel>
+          <TabPanel value="2">
+            <Instructors />
+          </TabPanel>
+          <TabPanel value="3">
+            <Syllabus />
+          </TabPanel>
+          <TabPanel value="4">Item Three</TabPanel>
+          <TabPanel value="5">Item Three</TabPanel>
+          <TabPanel value="6">Item Three</TabPanel>
+        </TabContext>
+      </Box>
     </React.Fragment>
   );
 }
-
 
 // import * as React from 'react';
 // import CssBaseline from '@mui/material/CssBaseline';
 // import Box from '@mui/material/Box';
 // import Container from '@mui/material/Container';
-
 
 // //didn't make this yet. Don't review
 
@@ -96,4 +111,3 @@ export default function EnrollHEader() {
 //     </React.Fragment>
 //   );
 // }
-

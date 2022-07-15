@@ -9,20 +9,13 @@ import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 
-
-function createData(
-  name: string,
-  EnrolledDate: string,
-  CompletedDate: string,
-) {
-  return { name, EnrolledDate, CompletedDate };  //enter the other variable names if used
+function createData(name: string, EnrolledDate: string, CompletedDate: string) {
+  return { name, EnrolledDate, CompletedDate }; //enter the other variable names if used
 }
 
-
 const rows = [
-  createData('Machine Learning',"2020-01-15", "2020-03-05"),        //enter data if other variables are used
-  createData('Machine Learning', "2020-01-15", "2020-03-05"), 
-
+  createData('Machine Learning', '2020-01-15', '2020-03-05'), //enter data if other variables are used
+  createData('Machine Learning', '2020-01-15', '2020-03-05'),
 ];
 
 export default function CourseHistoryList() {
@@ -47,7 +40,9 @@ export default function CourseHistoryList() {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell>{<CircularProgress variant="determinate" value={80}/>}</TableCell>
+              <TableCell>
+                {<CircularProgress variant="determinate" value={80} />}
+              </TableCell>
               <TableCell>{row.EnrolledDate}</TableCell>
               <TableCell>{row.CompletedDate}</TableCell>
               <TableCell>{<Button variant="outlined">View</Button>}</TableCell>
@@ -60,6 +55,4 @@ export default function CourseHistoryList() {
   );
 }
 
-// export default function CourseHistoryList(props: any) {
-//     return <div> Course History</div>;
-// }
+

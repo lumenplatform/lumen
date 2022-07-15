@@ -6,7 +6,6 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
 
-//didn't make this yet. Don't review
 
 export default function CourseAbout() {
   return (
