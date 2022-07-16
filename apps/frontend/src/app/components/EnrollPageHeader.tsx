@@ -23,18 +23,34 @@ export default function EnrollHEader() {
   };
   return (
     <React.Fragment>
-      <Box sx={{ backgroundImage: "url(" + "https://media.istockphoto.com/photos/bokeh-picture-id1248398407?b=1&k=20&m=1248398407&s=170667a&w=0&h=Th_6hTCGv-exKITb_lOleR5duCisQB1T1V8Y7Xyd-hM=" + ")", backgroundSize: 'cover', padding: '40px' }}>
+      <Box
+        sx={{
+          backgroundImage:
+            'url(' +
+            'https://media.istockphoto.com/photos/bokeh-picture-id1248398407?b=1&k=20&m=1248398407&s=170667a&w=0&h=Th_6hTCGv-exKITb_lOleR5duCisQB1T1V8Y7Xyd-hM=' +
+            ')',
+          backgroundSize: 'cover',
+          padding: '40px',
+        }}
+      >
         <Typography variant="h3" component="h3">
           Operating Systems
         </Typography>
-        <Box sx={{display:'flex', alignItems:'center'}}>
-        <Rating name="read-only" value={4} readOnly size="small" />
-        <Typography display="inline" variant="subtitle2" component="h3" sx={{lineHeight:0, ml:1}}>
-          34 ratings
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Rating name="read-only" value={4} readOnly size="small" />
+          <Typography
+            display="inline"
+            variant="subtitle2"
+            component="h3"
+            sx={{ lineHeight: 0, ml: 1 }}
+          >
+            34 ratings
+          </Typography>
         </Box>
 
-        <Box  sx={{ margin: '2% 0 0.5%' , display:'flex', alignItems:'center'}}>
+        <Box
+          sx={{ margin: '2% 0 0.5%', display: 'flex', alignItems: 'center' }}
+        >
           <Avatar
             alt="Remy Sharp"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
@@ -44,7 +60,7 @@ export default function EnrollHEader() {
           </Typography>
         </Box>
 
-        <Box  sx={{ display:'flex', alignItems:'center'}}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
             alt="Kewin Wayne"
             src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
@@ -54,14 +70,16 @@ export default function EnrollHEader() {
           </Typography>
         </Box>
 
-        <Box sx={{ margin: '3% 1% 0 0', display:'flex', alignItems:'center' }}>
+        <Box
+          sx={{ margin: '3% 1% 0 0', display: 'flex', alignItems: 'center' }}
+        >
           <Button variant="contained" size="large">
             Enroll Me
           </Button>
           <Typography
             variant="subtitle2"
             display="inline"
-            style={{ marginLeft:10 }}
+            style={{ marginLeft: 10 }}
           >
             120 Already enrolled
           </Typography>
