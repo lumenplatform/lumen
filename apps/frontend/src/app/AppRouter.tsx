@@ -14,6 +14,8 @@ import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
+import CourseMaterialView from './pages/student/course/CourseMaterialView';
 
 const ProtectedPage = () => (
   <RequireAuth>
@@ -37,6 +39,9 @@ export default function () {
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />
             <Route path="resources" element={<CourseResources />} />
+          </Route>
+          <Route path=":courseId/materialview" element={<CourseMaterialPage />}>
+            <Route path=":materialId" element={<CourseMaterialView />} />
           </Route>
         </Route>
 
