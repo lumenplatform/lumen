@@ -106,7 +106,7 @@ const AdminToolbar = (props: {
 
   return (
     <Toolbar>
-      <IconButton
+      {/* <IconButton
         color="inherit"
         onClick={props.handleDrawerClose}
         sx={{ mr: 2, ...(!props.open && { display: 'none' }) }}
@@ -123,7 +123,7 @@ const AdminToolbar = (props: {
         sx={{ mr: 2, ...(props.open && { display: 'none' }) }}
       >
         <MenuIcon />
-      </IconButton>
+      </IconButton> */}
       <Typography
         variant="h6"
         component="div"
