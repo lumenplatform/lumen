@@ -9,6 +9,7 @@ import {
   useTheme,
   Link,
   Avatar,
+  Container,
 } from '@mui/material';
 import { NavLink, Outlet } from 'react-router-dom';
 import StudentHeader from '../../components/StudentHeader';
@@ -64,7 +65,7 @@ export default function CoursePage(props: any) {
   return (
     <div>
       <StudentHeader />
-      <Box sx={{ maxWidth: '1440px', px: 3 }}>
+      <Container maxWidth="xl">
         <Box sx={{ py: 1 }}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/student">
@@ -91,11 +92,11 @@ export default function CoursePage(props: any) {
           <Box sx={{ width: '200px' }}>
             <CourseNav />
           </Box>
-          <Box sx={{ p: 2 , flex:1,mr:10}}>
+          <Box sx={{ p: 2, flex: 1, mr: 10 }}>
             <Outlet />
           </Box>
         </Box>
-      </Box>
+      </Container>
     </div>
   );
 }
