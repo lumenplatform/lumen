@@ -23,7 +23,7 @@ export default function EnrollHEader() {
   };
   return (
     <React.Fragment>
-      <Box sx={{ bgcolor: '#9fc9ae', padding: '40px' }}>
+      <Box sx={{ backgroundImage: "url(" + "https://media.istockphoto.com/photos/bokeh-picture-id1248398407?b=1&k=20&m=1248398407&s=170667a&w=0&h=Th_6hTCGv-exKITb_lOleR5duCisQB1T1V8Y7Xyd-hM=" + ")", backgroundSize: 'cover', padding: '40px' }}>
         <Typography variant="h3" component="h3">
           Operating Systems
         </Typography>
