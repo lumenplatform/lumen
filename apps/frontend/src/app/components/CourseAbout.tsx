@@ -11,13 +11,10 @@ export default function CourseAbout() {
     <React.Fragment>
       <CssBaseline />
       <Container>
-        <Typography variant='h6'>About this course</Typography>
-        <Typography variant='subtitle2'>
-          125 recent views
-        </Typography>
+        <Typography variant="h6">About this course</Typography>
+        <Typography variant="subtitle2">125 recent views</Typography>
 
-        <Typography variant='body1' sx={{mt:4, mb:4}}> 
-          
+        <Typography variant="body1" sx={{ mt: 4, mb: 4 }}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -28,7 +25,9 @@ export default function CourseAbout() {
         </Typography>
 
         <Box>
-          <Typography variant='h6' sx={{mb:2}}>Skills that you will gain</Typography>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Skills that you will gain
+          </Typography>
           <Stack direction="row" spacing={1}>
             <Chip label="Operating Systems" />
             <Chip label="Computer Architecture" />
