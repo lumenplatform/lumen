@@ -5,6 +5,7 @@ import Container from '@mui/material/Container';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 
 export default function CourseAbout() {
   return (
@@ -28,11 +29,14 @@ export default function CourseAbout() {
           <Typography variant="h6" sx={{ mb: 2 }}>
             Skills that you will gain
           </Typography>
-          <Stack direction="row" spacing={1}>
-            <Chip label="Operating Systems" />
-            <Chip label="Computer Architecture" />
-            <Chip label="Memory Management" />
-          </Stack>
+          {/* <Stack direction="row" spacing={1}> */}
+          <Grid container spacing={1}>
+
+            <Grid item ><Chip label="Operating Systems" /></Grid>
+            <Grid item ><Chip label="Computer Architecture" /></Grid>
+            <Grid item ><Chip label="Memory Management" /></Grid>
+          {/* </Stack> */}
+          </Grid>
         </Box>
       </Container>
     </React.Fragment>
