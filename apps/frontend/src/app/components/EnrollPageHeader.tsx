@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography';
 import CourseAbout from './CourseAbout';
 import Syllabus from './CourseSyllabus';
 import Instructors from './EnrollmentInstructors';
+import CourseReviews from './CourseReviews';
+import CourseEnrolmentOptions from './EnrolmentOptions';
+import Faq from './FAQ';
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -89,36 +92,19 @@ export default function EnrollHEader() {
           <TabPanel value="3">
             <Syllabus />
           </TabPanel>
-          <TabPanel value="4">Item Three</TabPanel>
-          <TabPanel value="5">Item Three</TabPanel>
-          <TabPanel value="6">Item Three</TabPanel>
+          <TabPanel value="4">
+            <CourseReviews />
+          </TabPanel>
+          <TabPanel value="5">
+            <CourseEnrolmentOptions />
+          </TabPanel>
+          <TabPanel value="6">
+            <Faq />
+          </TabPanel>
         </TabContext>
       </Box>
     </React.Fragment>
   );
 }
 
-// import * as React from 'react';
-// import CssBaseline from '@mui/material/CssBaseline';
-// import Box from '@mui/material/Box';
-// import Container from '@mui/material/Container';
 
-// //didn't make this yet. Don't review
-
-// export default function CourseAbout() {
-//   return (
-//     <React.Fragment>
-//       <CssBaseline />
-//       <Container maxWidth="sm">
-//         <h3>About this course</h3>
-//         <h5><i>125 recent views</i></h5>
-
-//         <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-//         <Box>
-//           <h3>Skills that you will gain</h3>
-//         </Box>
-//       </Container>
-//     </React.Fragment>
-//   );
-// }
