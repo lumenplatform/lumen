@@ -10,13 +10,13 @@ export class ContentController {
   ) {}
 
   async generateUploadConfig() {
-    let sas = await this.storageService.generateSAS();
+    const sas = await this.storageService.generateSAS();
     return { sas, containerName: 'uploads' };
   }
 
   async setupStreamingForContent(id: string) {
     const em = RequestContext.getEntityManager();
-    let content = await em.findOneOrFail(Content, id);
+    const content = await em.findOneOrFail(Content, id);
 
     content.status = ContentStatus.PROCESSING;
 
@@ -24,7 +24,7 @@ export class ContentController {
 
     this.drmService.getStreamingURLsFormURL(content.url).then(async (r) => {
       const em = RequestContext.getEntityManager();
-      let content = await em.findOneOrFail(Content, id);
+      const content = await em.findOneOrFail(Content, id);
       content.contentKey = r[0].keyIdentifier;
       content.status = ContentStatus.ACTIVE;
       content.streamingURLs = r;
@@ -35,10 +35,10 @@ export class ContentController {
     // return this.drmService.getStreamingURLsFormURL(inputUrl);
   }
 
-  async createContent(content) {
+  async createContent(content: Content[]) {
     const em = RequestContext.getEntityManager();
     for (const it of content) {
-      let x = em.create(Content, it);
+      const x = em.create(Content, it);
       em.persist(x);
     }
 

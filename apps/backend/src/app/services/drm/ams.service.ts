@@ -29,14 +29,14 @@ const subscriptionId: string = process.env.AZURE_SUBSCRIPTION_ID as string;
 const resourceGroup: string = process.env.AZURE_RESOURCE_GROUP as string;
 const accountName = process.env.AZURE_MEDIA_SERVICES_ACCOUNT_NAME as string;
 
-const namePrefix: string = 'DRM_Widevine';
+const namePrefix = 'DRM_Widevine';
 let inputExtension: string;
 let blobName: string;
 
 // DRM Configuration Settings
-const issuer: string = 'myIssuer';
-const audience: string = 'myAudience';
-let tokenSigningKey: Int16Array = new Int16Array(40);
+const issuer = 'myIssuer';
+const audience = 'myAudience';
+const tokenSigningKey: Int16Array = new Int16Array(40);
 const contentKeyPolicyName =
   'CommonEncryptionCencDrmContentKeyPolicy_2021_12_15';
 
@@ -97,7 +97,7 @@ export class AMSService implements DRMService {
   }
 
   async createOrUpdateTransform() {
-    let adaptiveStreamingTransform: BuiltInStandardEncoderPreset =
+    const adaptiveStreamingTransform: BuiltInStandardEncoderPreset =
       createBuiltInStandardEncoderPreset({
         presetName: 'ContentAwareEncoding',
       });
@@ -118,22 +118,22 @@ export class AMSService implements DRMService {
   }
 
   generateToken(keyIdentifier: string) {
-    let tokenSigningKey = new Uint8Array(Buffer.from(symmetricKey, 'base64'));
+    const tokenSigningKey = new Uint8Array(Buffer.from(symmetricKey, 'base64'));
     return getToken(issuer, audience, keyIdentifier, tokenSigningKey);
   }
 
   async getStreamingURLsFormURL(inputUrl) {
-    let uniqueness = uuidv4();
+    const uniqueness = uuidv4();
 
     const input = createJobInputHttp({ files: [inputUrl] });
 
-    let outputAssetName = `${namePrefix}-output-${uniqueness}`;
-    let jobName = `${namePrefix}-job-${uniqueness}`;
-    let locatorName = `locator${uniqueness}`;
+    const outputAssetName = `${namePrefix}-output-${uniqueness}`;
+    const jobName = `${namePrefix}-job-${uniqueness}`;
+    const locatorName = `locator${uniqueness}`;
 
     console.log('Creating the output Asset to encode content into...');
 
-    let outputAsset = await this.mediaServicesClient.assets.createOrUpdate(
+    const outputAsset = await this.mediaServicesClient.assets.createOrUpdate(
       resourceGroup,
       accountName,
       outputAssetName,
@@ -161,7 +161,7 @@ export class AMSService implements DRMService {
 
     // Set a token signing key that you want to use from the env file
     // WARNING: This is an important secret when moving to a production system and should be kept in a Key Vault.
-    let tokenSigningKey = new Uint8Array(Buffer.from(symmetricKey, 'base64'));
+    const tokenSigningKey = new Uint8Array(Buffer.from(symmetricKey, 'base64'));
 
     // Create the content key policy that configures how the content key is delivered to end clients
     // via the Key Delivery component of Azure Media Services.
@@ -197,11 +197,11 @@ export class AMSService implements DRMService {
     const sleepInterval: number = 1000 * 2;
     const setTimeoutPromise = util.promisify(setTimeout);
 
-    let timeout = new Date();
+    const timeout = new Date();
     timeout.setSeconds(timeout.getSeconds() + timeoutSeconds);
 
     const pollForJobStatus = async (): Promise<JobsGetResponse> => {
-      let job = await this.mediaServicesClient.jobs.get(
+      const job = await this.mediaServicesClient.jobs.get(
         resourceGroup,
         accountName,
         transformName,
@@ -240,24 +240,24 @@ export class AMSService implements DRMService {
     locatorName: string,
     keyIdentifier: string
   ): Promise<StreamingURL[]> {
-    let streamingEndpoint =
+    const streamingEndpoint =
       await this.mediaServicesClient.streamingEndpoints.get(
         resourceGroup,
         accountName,
         'default'
       );
 
-    let paths = await this.mediaServicesClient.streamingLocators.listPaths(
+    const paths = await this.mediaServicesClient.streamingLocators.listPaths(
       resourceGroup,
       accountName,
       locatorName
     );
 
-    let urls: StreamingURL[] = [];
+    const urls: StreamingURL[] = [];
     if (paths.streamingPaths) {
       paths.streamingPaths.forEach((path) => {
         path.paths?.forEach((formatPath) => {
-          let manifestPath =
+          const manifestPath =
             'https://' + streamingEndpoint.hostName + formatPath;
 
           const token: string = this.generateToken(keyIdentifier);
@@ -287,7 +287,7 @@ export class AMSService implements DRMService {
         'OutputAsset Name is not defined. Check creation of the output asset'
       );
     }
-    let jobOutputs: JobOutputAsset[] = [
+    const jobOutputs: JobOutputAsset[] = [
       createJobOutputAsset({ assetName: outputAssetName }),
     ];
 
@@ -307,13 +307,13 @@ export class AMSService implements DRMService {
     locatorName: string,
     contentKeyPolicyName: string
   ) {
-    let streamingLocator = {
+    const streamingLocator = {
       assetName: assetName,
       streamingPolicyName: 'Predefined_MultiDrmCencStreaming', // Uses the built in Policy for Multi DRM Common Encryption Streaming.
       defaultContentKeyPolicyName: contentKeyPolicyName,
     };
 
-    let locator = await this.mediaServicesClient.streamingLocators.create(
+    const locator = await this.mediaServicesClient.streamingLocators.create(
       resourceGroup,
       accountName,
       locatorName,
@@ -331,18 +331,18 @@ export class AMSService implements DRMService {
     let contentKeyPolicy: ContentKeyPoliciesCreateOrUpdateResponse;
     let options: ContentKeyPolicyOption[] = [];
 
-    let primaryKey: ContentKeyPolicySymmetricTokenKey = {
+    const primaryKey: ContentKeyPolicySymmetricTokenKey = {
       odataType: '#Microsoft.Media.ContentKeyPolicySymmetricTokenKey',
       keyValue: tokenSigningKey,
     };
 
-    let requiredClaims: ContentKeyPolicyTokenClaim[] = [
+    const requiredClaims: ContentKeyPolicyTokenClaim[] = [
       {
         claimType: 'urn:microsoft:azure:mediaservices:contentkeyidentifier', // contentKeyIdentifierClaim
       },
     ];
 
-    let restriction: ContentKeyPolicyTokenRestriction = {
+    const restriction: ContentKeyPolicyTokenRestriction = {
       odataType: '#Microsoft.Media.ContentKeyPolicyTokenRestriction',
       issuer: issuer,
       audience: audience,

@@ -13,7 +13,7 @@ const storageService = new StorageService();
 const contentController = new ContentController(storageService, ams);
 
 contentRouter.get('/', async (req, res) => {
-  let it = await ams.getAllAssets();
+  const it = await ams.getAllAssets();
   console.log(it);
   res.send('<pre>' + JSON.stringify(it, null, 1));
 });

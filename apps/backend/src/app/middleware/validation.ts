@@ -9,7 +9,7 @@ interface ValidationObject {
 export function validate(obj: ValidationObject) {
   return async (req, res, next) => {
     try {
-      for (let key of Object.keys(obj)) {
+      for (const key of Object.keys(obj)) {
         if (['body', 'params'].includes(key)) {
           // validate and assign back only for body & params
           const schema = obj[key];

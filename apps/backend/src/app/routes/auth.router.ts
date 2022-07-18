@@ -21,15 +21,3 @@ authRouter.post('/login', (req, res) => {
 });
 
 // authRouter.use(guard.isAuthenticated);
-
-authRouter.get('/users', async (req, res) => {
-  let x = require('./../config/generate-migrations');
-  // db.select()
-  //   .table('users')
-  //   .then((r) => {
-  //     res.json(createResponse(r));
-  //   })
-  //   .catch((r) => {
-  //     res.json({ message: 'error' });
-  //   });
-});

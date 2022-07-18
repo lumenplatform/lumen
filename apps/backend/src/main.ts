@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as express from 'express';
 import * as path from 'path';
-var morgan = require('morgan');
+import * as morgan from 'morgan';
 
 import { InitORM, InjectORM } from './app/config/db';
 
@@ -11,12 +11,11 @@ import { indexRouter } from './app/routes';
 import { logger } from './app/utils/logger';
 import { environment } from './environments/environment';
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user: any;
     }
-
-    interface Response {}
   }
 }
 
@@ -35,7 +34,6 @@ if (environment.production) {
     )
   );
 }
-
 app.use(json());
 app.use(InjectORM);
 

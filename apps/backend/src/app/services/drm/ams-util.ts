@@ -66,21 +66,21 @@ export function getToken(
   keyIdentifier: string,
   tokenSigningKey: Uint8Array
 ): string {
-  let startDate: number = Date.now();
-  let endDate: number = startDate + 1000 * 60 * 60 * 60 * 5;
+  const startDate: number = Date.now();
+  const endDate: number = startDate + 1000 * 60 * 60 * 60 * 5;
 
   // To set a limit on how many times the same token can be used to request a key or a license.
   // add  the "urn:microsoft:azure:mediaservices:maxuses" claim.
   // For example, "urn:microsoft:azure:mediaservices:maxuses", 2));
 
-  let claims = {
+  const claims = {
     'urn:microsoft:azure:mediaservices:contentkeyidentifier': keyIdentifier,
     // "urn:microsoft:azure:mediaservices:maxuses": 2 // optional feature for token replay prevention
     exp: Math.floor(endDate / 1000),
     nbf: Math.floor((Date.now() - 8000) / 1000),
   };
 
-  let jwtToken = jsonWebToken.sign(claims, Buffer.from(tokenSigningKey), {
+  const jwtToken = jsonWebToken.sign(claims, Buffer.from(tokenSigningKey), {
     algorithm: 'HS256',
     issuer: issuer,
     audience: audience,

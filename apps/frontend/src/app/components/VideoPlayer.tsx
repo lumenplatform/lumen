@@ -22,7 +22,7 @@ export interface IVideoPlayerProps {
   readonly adaptRatio: Array<number>;
 }
 
-export default class VideoPlayer extends PureComponent<IVideoPlayerProps, {}> {
+export default class VideoPlayer extends PureComponent<IVideoPlayerProps> {
   public static defaultProps = {
     skin: DEFAULT_SKIN,
     className: '',
@@ -96,8 +96,8 @@ function loader(skin = 'amp-flush') {
       return resolve(null);
     }
 
-    let scriptTag = document.createElement('script');
-    let linkTag = document.createElement('link');
+    const scriptTag = document.createElement('script');
+    const linkTag = document.createElement('link');
     linkTag.rel = 'stylesheet';
     scriptTag.id = 'amp-azure';
     scriptTag.src = '//amp.azure.net/libs/amp/latest/azuremediaplayer.min.js';
