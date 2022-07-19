@@ -26,7 +26,6 @@ import {
 import { Box } from '@mui/system';
 import React from 'react';
 import CourseHistoryList from '../components/CourseHistoryList';
-import VideoPlayer from '../components/VideoPlayer';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -78,21 +77,6 @@ function OverviewTab() {
         </Box>
         <Button variant="contained">Update Profile</Button>
       </Paper>
-      <VideoPlayer
-        src={[
-          {
-            // src: '//amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest',
-            src: new URLSearchParams(location.search).get('url') || '',
-            protectionInfo: [
-              {
-                type: 'Widevine',
-                authenticationToken:
-                  'Bearer ' + new URLSearchParams(location.search).get('token'),
-              },
-            ],
-          },
-        ]}
-      ></VideoPlayer>
     </div>
   );
 }
@@ -161,7 +145,7 @@ function SecurityTab() {
               // onMouseDown={handleMouseDownPassword}
               edge="end"
             >
-              {/* {true ? <VisibilityOff /> : <Visibility />} */}
+              {true ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
         }
