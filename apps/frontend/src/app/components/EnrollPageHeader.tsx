@@ -23,6 +23,11 @@ export default function EnrollHEader() {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const enrollbutton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setValue('5');
+  };
+
   return (
     <React.Fragment>
       <Box
@@ -75,7 +80,7 @@ export default function EnrollHEader() {
         <Box
           sx={{ margin: '3% 1% 0 0', display: 'flex', alignItems: 'center' }}
         >
-          <Button variant="contained" size="large">
+          <Button variant="contained" size="large" onClick={enrollbutton}>
             Enroll Me
           </Button>
           <Typography
@@ -91,12 +96,12 @@ export default function EnrollHEader() {
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            {/* <AppBar position="static"> */}
             <TabList
               onChange={handleChange}
               aria-label="lab API tabs example"
               variant="scrollable"
-              scrollButtons="auto"
+              scrollButtons={true}
+              allowScrollButtonsMobile
             >
               <Tab label="About" value="1" />
               <Tab label="Instructors" value="2" />
@@ -105,8 +110,6 @@ export default function EnrollHEader() {
               <Tab label="Enrollment Options" value="5" />
               <Tab label="FAQ" value="6" />
             </TabList>
-
-            {/* </AppBar> */}
           </Box>
           <TabPanel value="1">
             <CourseAbout />
