@@ -1,4 +1,3 @@
-import * as React from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -7,13 +6,13 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import CourseAbout from './CourseAbout';
+import CourseReviews from './CourseReviews';
 import Syllabus from './CourseSyllabus';
 import Instructors from './EnrollmentInstructors';
-import CourseReviews from './CourseReviews';
 import CourseEnrolmentOptions from './EnrolmentOptions';
 import Faq from './FAQ';
 
@@ -92,7 +91,13 @@ export default function EnrollHEader() {
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
+            {/* <AppBar position="static"> */}
+            <TabList
+              onChange={handleChange}
+              aria-label="lab API tabs example"
+              variant="scrollable"
+              scrollButtons="auto"
+            >
               <Tab label="About" value="1" />
               <Tab label="Instructors" value="2" />
               <Tab label="Syllabus" value="3" />
@@ -100,6 +105,8 @@ export default function EnrollHEader() {
               <Tab label="Enrollment Options" value="5" />
               <Tab label="FAQ" value="6" />
             </TabList>
+
+            {/* </AppBar> */}
           </Box>
           <TabPanel value="1">
             <CourseAbout />
@@ -124,5 +131,3 @@ export default function EnrollHEader() {
     </React.Fragment>
   );
 }
-
-
