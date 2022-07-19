@@ -11,6 +11,17 @@ const app = express();
 
 app.use(urlencoded());
 
+app.use((req, res, next) => {
+  const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+
+  if (b64auth === 'ZGFsYW5hOnN1cGVybWFu') {
+    return next();
+  }
+
+  res.set('WWW-Authenticate', 'Basic realm="401"');
+  res.status(401).send('Authentication required.');
+});
+
 const viewsPath = 'apps/backend/src/app/admin/views';
 app.set('views', path.join(__dirname, '../../../', viewsPath));
 
