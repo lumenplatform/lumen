@@ -1,25 +1,26 @@
 import 'dotenv/config';
 import * as express from 'express';
 import * as path from 'path';
-var morgan = require('morgan');
+import * as morgan from 'morgan';
 
-import { InitORM } from './app/config/db';
+import { InitORM, InjectORM } from './app/config/db';
 
+import { json } from 'express';
+import adminRouter from './app/admin/admin.router';
 import { indexRouter } from './app/routes';
 import { logger } from './app/utils/logger';
 import { environment } from './environments/environment';
-
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user: any;
     }
-
-    interface Response {}
   }
 }
 
 const app = express();
+app.set('view engine', 'ejs');
 
 if (environment.production) {
   // prod only middleware
@@ -33,8 +34,11 @@ if (environment.production) {
     )
   );
 }
+app.use(json());
+app.use(InjectORM);
 
 app.use('/api', indexRouter);
+app.use('/admin', adminRouter);
 
 const port = process.env.PORT;
 
