@@ -9,15 +9,9 @@ export const authRouter = express.Router();
 const authController = new AuthController();
 const authService = new AuthService();
 
-authRouter.post('/login', (req, res) => {
-  console.log(req.body);
-  const { username, password } = req.body;
+authRouter.use(guard.isAuthenticated);
 
-  const user = authController.validateUser(username, password);
-  console.log(user);
-  const token = AuthService.generateAccessToken(user);
-
-  res.json({ token });
+authRouter.get('/me', (req, res) => {
+  console.log(req.user);
+  res.json(req.user);
 });
-
-// authRouter.use(guard.isAuthenticated);
