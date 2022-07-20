@@ -12,6 +12,7 @@ import CourseResources from './pages/student/course/CourseResources';
 import CoursePage from './pages/student/CoursePage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import Notification from './pages/Notification/AllNotification';
 
 export default function () {
   return (
@@ -31,7 +32,7 @@ export default function () {
       </Route>
 
       {/* Pages accessed by the teacher / admin / moderator */}
-      <Route path="/manage" element={<AdminLayout />}>
+      <Route path="/manage" element={<AdminLayout />} >
         <Route index element={<Dashboard />}></Route>
         <Route path="courses" element={<Courses />}></Route>
         <Route path="new-course" element={<Courses />}></Route>
@@ -42,6 +43,7 @@ export default function () {
 
       {/* Common pages to all users */}
       <Route path="/profile" element={<UserProfile />} />
+      <Route path="/notification" element={<Notification />} />
     </Routes>
   );
 }

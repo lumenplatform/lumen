@@ -5,6 +5,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
+
+
 export default function StatCard(props: any){
     return <div>  <Card sx={{ width:350 }}>
   <CardActionArea>
@@ -14,7 +16,7 @@ export default function StatCard(props: any){
      Total Active users
     </Typography>
     <Typography  component="div">
-      +67
+      +67  
      </Typography>
      
      <Typography  gutterBottom variant="h6"  component="div">
