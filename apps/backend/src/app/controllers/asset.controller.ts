@@ -1,9 +1,9 @@
 import { EntityManager, MikroORM, RequestContext } from '@mikro-orm/core';
-import { Content, ContentStatus } from '../models/content.model';
+import { Asset, AssetStatus } from '../models/asset.model';
 import { DRMService } from '../services/drm/ams.service';
 import { StorageService } from '../services/storage.service';
 
-export class ContentController {
+export class AssetController {
   constructor(
     private storageService: StorageService,
     private drmService: DRMService
@@ -14,19 +14,19 @@ export class ContentController {
     return { sas, containerName: 'uploads' };
   }
 
-  async setupStreamingForContent(id: string) {
+  async setupStreamingForAsset(id: string) {
     const em = RequestContext.getEntityManager();
-    const content = await em.findOneOrFail(Content, id);
+    const content = await em.findOneOrFail(Asset, id);
 
-    content.status = ContentStatus.PROCESSING;
+    content.status = AssetStatus.PROCESSING;
 
     em.flush();
 
     this.drmService.getStreamingURLsFormURL(content.url).then(async (r) => {
       const em = RequestContext.getEntityManager();
-      const content = await em.findOneOrFail(Content, id);
+      const content = await em.findOneOrFail(Asset, id);
       content.contentKey = r[0].keyIdentifier;
-      content.status = ContentStatus.ACTIVE;
+      content.status = AssetStatus.ACTIVE;
       content.streamingURLs = r;
       em.flush();
     });
@@ -35,10 +35,10 @@ export class ContentController {
     // return this.drmService.getStreamingURLsFormURL(inputUrl);
   }
 
-  async createContent(content: Content[]) {
+  async createAsset(content: Asset[]) {
     const em = RequestContext.getEntityManager();
     for (const it of content) {
-      const x = em.create(Content, it);
+      const x = em.create(Asset, it);
       em.persist(x);
     }
 

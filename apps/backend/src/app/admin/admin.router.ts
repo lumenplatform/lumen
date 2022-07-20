@@ -2,8 +2,8 @@ import { RequestContext } from '@mikro-orm/core';
 import { urlencoded } from 'express';
 import express = require('express');
 import path = require('path');
-import { ContentController } from '../controllers/content.controller';
-import { Content } from '../models/content.model';
+import { AssetController } from '../controllers/asset.controller';
+import { Asset } from '../models/asset.model';
 import { AMSService } from '../services/drm/ams.service';
 import { StorageService } from '../services/storage.service';
 
@@ -27,14 +27,14 @@ app.set('views', path.join(__dirname, '../../../', viewsPath));
 
 const ams = new AMSService();
 const storageService = new StorageService();
-const contentController = new ContentController(storageService, ams);
+const contentController = new AssetController(storageService, ams);
 
 app.get('/', async (req, res, next) => {
   const em = RequestContext.getEntityManager();
 
   Promise.all([
     ams.getStreamingEndpoint(),
-    em.find(Content, {}, { orderBy: { id: 'asc' } }),
+    em.find(Asset, {}, { orderBy: { id: 'asc' } }),
   ])
     .catch(next)
     .then((e) => {
@@ -63,7 +63,7 @@ app.get('/do', async (req, res) => {
     }
 
     if (action === 'PROCESS_VIDEO') {
-      await contentController.setupStreamingForContent(
+      await contentController.setupStreamingForAsset(
         new String(req.query.content_id).toString()
       );
     }

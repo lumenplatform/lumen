@@ -1,14 +1,14 @@
 import * as express from 'express';
 import { createResponse } from '../utils/response-mapper';
 import { authRouter } from './auth.router';
-import { contentRouter } from './content.router';
+import { assetRouter } from './asset.router';
 
 export const indexRouter = express.Router();
 
 // indexRouter.use(injectUser);
 
 indexRouter.use('/auth', authRouter);
-indexRouter.use('/content', contentRouter);
+indexRouter.use('/asset', assetRouter);
 
 indexRouter.use((error, req, res, next) => {
   console.log(error);
