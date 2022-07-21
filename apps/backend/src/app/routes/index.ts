@@ -1,24 +1,22 @@
 import * as express from 'express';
-import { createResponse } from '../utils/response-mapper';
+import errorHandler from '../middleware/error-handler';
+import { injectUser } from '../middleware/security';
+import { assetRouter } from './asset.router';
 import { authRouter } from './auth.router';
-import { contentRouter } from './content.router';
+import { coursesRouter } from './courses.router';
+import { managementRouter } from './management';
+import { userRouter } from './user.router';
 
-export const indexRouter = express.Router();
+const router = express.Router();
 
-// indexRouter.use(injectUser);
+router.use(injectUser);
 
-indexRouter.use('/auth', authRouter);
-indexRouter.use('/content', contentRouter);
+router.use('/auth', authRouter);
+router.use('/asset', assetRouter);
+router.use('/manage', managementRouter);
+router.use('/user', userRouter);
+router.use('/courses', coursesRouter);
 
-indexRouter.use((error, req, res, next) => {
-  console.log(error);
-  if (res.headerSent) {
-    return next(error);
-  }
+router.use(errorHandler);
 
-  if (error.name == 'ValidationError') {
-    res.send(createResponse(undefined, 400, error.name, error));
-  } else {
-    res.send(createResponse(undefined, 500, 'Error Processing Request'));
-  }
-});
+export default router;

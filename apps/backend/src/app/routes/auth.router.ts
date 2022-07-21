@@ -1,8 +1,6 @@
 import * as express from 'express';
 import { AuthController } from '../controllers';
-import { guard } from '../middleware/security';
 import { AuthService } from '../services/auth.service';
-import { createResponse } from '../utils/response-mapper';
 
 export const authRouter = express.Router();
 

@@ -1,6 +1,6 @@
 import { AnySchema, object } from 'yup';
 
-interface ValidationObject {
+export interface ValidationObject {
   body?: AnySchema;
   params?: AnySchema;
   query?: AnySchema;
