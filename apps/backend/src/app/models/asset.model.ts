@@ -29,12 +29,18 @@ export class Asset {
   @Enum(() => AssetStatus)
   status: AssetStatus = AssetStatus.UPLOADED;
 
-  @Property() mime: string;
+  @Property()
+  mime: string;
 
-  @Property() name: string;
+  @Property()
+  name: string;
 
-  @Property() config: Record<string, unknown>;
+  @Property()
+  config: Record<string, unknown>;
 
-  @Property({ nullable: true }) contentKey?: string;
-  @Property({ type: 'json', nullable: true }) streamingURLs?: StreamingURL[];
+  @Property({ nullable: true })
+  contentKey?: string;
+  
+  @Property({ type: 'json', nullable: true })
+  streamingURLs?: StreamingURL[];
 }

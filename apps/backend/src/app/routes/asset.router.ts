@@ -5,6 +5,8 @@ import { validate } from '../middleware/validation';
 import { AMSService } from '../services/drm/ams.service';
 import { StorageService } from '../services/storage.service';
 import { createResponse } from '../utils/response-mapper';
+import { asyncHandler } from './../utils/async-wrapper';
+
 export const assetRouter = express.Router();
 
 const ams = new AMSService();
@@ -17,7 +19,7 @@ assetRouter.get('/', async (req, res) => {
   res.send('<pre>' + JSON.stringify(it, null, 1));
 });
 
-assetRouter.get('/upload-config', async (req, res, next) => {
+assetRouter.get('/upload-config', (req, res, next) => {
   assetController
     .generateUploadConfig()
     .catch(next)
@@ -36,14 +38,7 @@ assetRouter.post(
       })
     ).min(1),
   }),
-  (req, res, next) => {
-    assetController
-      .createAsset(req.body)
-      .then((r) => {
-        res.json(createResponse(r));
-      })
-      .catch(next);
-  }
+  asyncHandler(({ body }) => assetController.createAsset(body))
 );
 
 assetRouter.get('/:id', (req, res) => {

@@ -6,6 +6,52 @@
   "tables": [
     {
       "columns": {
+        "txn_id": {
+          "name": "txn_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "amount": {
+          "name": "amount",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        }
+      },
+      "name": "payment",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "payment_pkey",
+          "columnNames": [
+            "txn_id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
         "id": {
           "name": "id",
           "type": "varchar(255)",
@@ -33,6 +79,8 @@
           "nullable": false,
           "enumItems": [
             "FILE",
+            "IMAGE",
+            "PDF",
             "VIDEO"
           ],
           "mappedType": "enum"
@@ -98,11 +146,11 @@
           "mappedType": "json"
         }
       },
-      "name": "content",
+      "name": "asset",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "content_pkey",
+          "keyName": "asset_pkey",
           "columnNames": [
             "id"
           ],
@@ -113,6 +161,992 @@
       ],
       "checks": [],
       "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "org_id": {
+          "name": "org_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "customizations_logo_id": {
+          "name": "customizations_logo_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "organization",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "customizations_logo_id"
+          ],
+          "composite": false,
+          "keyName": "organization_customizations_logo_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "organization_pkey",
+          "columnNames": [
+            "org_id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "organization_customizations_logo_id_foreign": {
+          "constraintName": "organization_customizations_logo_id_foreign",
+          "columnNames": [
+            "customizations_logo_id"
+          ],
+          "localTableName": "public.organization",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.asset",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "time_zone": {
+          "name": "time_zone",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "preferences_preferred_theme": {
+          "name": "preferences_preferred_theme",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "preferences_weekly_recommendations": {
+          "name": "preferences_weekly_recommendations",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "preferences_promotions": {
+          "name": "preferences_promotions",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "preferences_course_announcements": {
+          "name": "preferences_course_announcements",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "preferences_course_reminders": {
+          "name": "preferences_course_reminders",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "preferences_discussion_forums": {
+          "name": "preferences_discussion_forums",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "ACTIVE",
+            "INACTIVE"
+          ],
+          "mappedType": "enum"
+        },
+        "organization_org_id": {
+          "name": "organization_org_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "user",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "user_pkey",
+          "columnNames": [
+            "uid"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "user_organization_org_id_foreign": {
+          "constraintName": "user_organization_org_id_foreign",
+          "columnNames": [
+            "organization_org_id"
+          ],
+          "localTableName": "public.user",
+          "referencedColumnNames": [
+            "org_id"
+          ],
+          "referencedTableName": "public.organization",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "message": {
+          "name": "message",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "link": {
+          "name": "link",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "seen": {
+          "name": "seen",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "notification",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "notification_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "notification_user_uid_foreign": {
+          "constraintName": "notification_user_uid_foreign",
+          "columnNames": [
+            "user_uid"
+          ],
+          "localTableName": "public.notification",
+          "referencedColumnNames": [
+            "uid"
+          ],
+          "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "course_id": {
+          "name": "course_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "subtitle": {
+          "name": "subtitle",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "language": {
+          "name": "language",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "level": {
+          "name": "level",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "tags": {
+          "name": "tags",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "subject_area": {
+          "name": "subject_area",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "duration": {
+          "name": "duration",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "price": {
+          "name": "price",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "course_image_id": {
+          "name": "course_image_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "promotional_video_id": {
+          "name": "promotional_video_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "organization_org_id": {
+          "name": "organization_org_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "welcome_message": {
+          "name": "welcome_message",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "congrats_message": {
+          "name": "congrats_message",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "learning_outcome": {
+          "name": "learning_outcome",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "prerequisites": {
+          "name": "prerequisites",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "intended_audience": {
+          "name": "intended_audience",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "DRAFT",
+            "PUBLISHED",
+            "UNPUBLISHED"
+          ],
+          "mappedType": "enum"
+        }
+      },
+      "name": "course",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "course_image_id"
+          ],
+          "composite": false,
+          "keyName": "course_course_image_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "promotional_video_id"
+          ],
+          "composite": false,
+          "keyName": "course_promotional_video_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "course_pkey",
+          "columnNames": [
+            "course_id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "course_course_image_id_foreign": {
+          "constraintName": "course_course_image_id_foreign",
+          "columnNames": [
+            "course_image_id"
+          ],
+          "localTableName": "public.course",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.asset",
+          "updateRule": "cascade"
+        },
+        "course_promotional_video_id_foreign": {
+          "constraintName": "course_promotional_video_id_foreign",
+          "columnNames": [
+            "promotional_video_id"
+          ],
+          "localTableName": "public.course",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.asset",
+          "updateRule": "cascade"
+        },
+        "course_organization_org_id_foreign": {
+          "constraintName": "course_organization_org_id_foreign",
+          "columnNames": [
+            "organization_org_id"
+          ],
+          "localTableName": "public.course",
+          "referencedColumnNames": [
+            "org_id"
+          ],
+          "referencedTableName": "public.organization",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "enrollment_id": {
+          "name": "enrollment_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "course_course_id": {
+          "name": "course_course_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "enrollment_date": {
+          "name": "enrollment_date",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "payment_txn_id": {
+          "name": "payment_txn_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "ACTIVE",
+            "COMPLETED",
+            "ABANDONED"
+          ],
+          "mappedType": "enum"
+        }
+      },
+      "name": "enrollment",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "enrollment_pkey",
+          "columnNames": [
+            "enrollment_id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "enrollment_user_uid_foreign": {
+          "constraintName": "enrollment_user_uid_foreign",
+          "columnNames": [
+            "user_uid"
+          ],
+          "localTableName": "public.enrollment",
+          "referencedColumnNames": [
+            "uid"
+          ],
+          "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        },
+        "enrollment_course_course_id_foreign": {
+          "constraintName": "enrollment_course_course_id_foreign",
+          "columnNames": [
+            "course_course_id"
+          ],
+          "localTableName": "public.enrollment",
+          "referencedColumnNames": [
+            "course_id"
+          ],
+          "referencedTableName": "public.course",
+          "updateRule": "cascade"
+        },
+        "enrollment_payment_txn_id_foreign": {
+          "constraintName": "enrollment_payment_txn_id_foreign",
+          "columnNames": [
+            "payment_txn_id"
+          ],
+          "localTableName": "public.enrollment",
+          "referencedColumnNames": [
+            "txn_id"
+          ],
+          "referencedTableName": "public.payment",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "user_uid": {
+          "name": "user_uid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "enrollment_enrollment_id": {
+          "name": "enrollment_enrollment_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "rating": {
+          "name": "rating",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "review": {
+          "name": "review",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "course_review",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "course_review_pkey",
+          "columnNames": [
+            "user_uid",
+            "enrollment_enrollment_id"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "course_review_user_uid_foreign": {
+          "constraintName": "course_review_user_uid_foreign",
+          "columnNames": [
+            "user_uid"
+          ],
+          "localTableName": "public.course_review",
+          "referencedColumnNames": [
+            "uid"
+          ],
+          "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        },
+        "course_review_enrollment_enrollment_id_foreign": {
+          "constraintName": "course_review_enrollment_enrollment_id_foreign",
+          "columnNames": [
+            "enrollment_enrollment_id"
+          ],
+          "localTableName": "public.course_review",
+          "referencedColumnNames": [
+            "enrollment_id"
+          ],
+          "referencedTableName": "public.enrollment",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "course_course_id": {
+          "name": "course_course_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "course_instructors",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "course_instructors_pkey",
+          "columnNames": [
+            "course_course_id",
+            "user_uid"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "course_instructors_course_course_id_foreign": {
+          "constraintName": "course_instructors_course_course_id_foreign",
+          "columnNames": [
+            "course_course_id"
+          ],
+          "localTableName": "public.course_instructors",
+          "referencedColumnNames": [
+            "course_id"
+          ],
+          "referencedTableName": "public.course",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "course_instructors_user_uid_foreign": {
+          "constraintName": "course_instructors_user_uid_foreign",
+          "columnNames": [
+            "user_uid"
+          ],
+          "localTableName": "public.course_instructors",
+          "referencedColumnNames": [
+            "uid"
+          ],
+          "referencedTableName": "public.user",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "course_course_id": {
+          "name": "course_course_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "course_moderators",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "course_moderators_pkey",
+          "columnNames": [
+            "course_course_id",
+            "user_uid"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "course_moderators_course_course_id_foreign": {
+          "constraintName": "course_moderators_course_course_id_foreign",
+          "columnNames": [
+            "course_course_id"
+          ],
+          "localTableName": "public.course_moderators",
+          "referencedColumnNames": [
+            "course_id"
+          ],
+          "referencedTableName": "public.course",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "course_moderators_user_uid_foreign": {
+          "constraintName": "course_moderators_user_uid_foreign",
+          "columnNames": [
+            "user_uid"
+          ],
+          "localTableName": "public.course_moderators",
+          "referencedColumnNames": [
+            "uid"
+          ],
+          "referencedTableName": "public.user",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "time_estimate": {
+          "name": "time_estimate",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "content_id": {
+          "name": "content_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "course_course_id": {
+          "name": "course_course_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "course_material",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "course_material_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "course_material_content_id_foreign": {
+          "constraintName": "course_material_content_id_foreign",
+          "columnNames": [
+            "content_id"
+          ],
+          "localTableName": "public.course_material",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.asset",
+          "updateRule": "cascade"
+        },
+        "course_material_parent_id_foreign": {
+          "constraintName": "course_material_parent_id_foreign",
+          "columnNames": [
+            "parent_id"
+          ],
+          "localTableName": "public.course_material",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.course_material",
+          "updateRule": "cascade"
+        },
+        "course_material_course_course_id_foreign": {
+          "constraintName": "course_material_course_course_id_foreign",
+          "columnNames": [
+            "course_course_id"
+          ],
+          "localTableName": "public.course_material",
+          "referencedColumnNames": [
+            "course_id"
+          ],
+          "referencedTableName": "public.course",
+          "updateRule": "cascade"
+        }
+      }
     }
   ]
 }

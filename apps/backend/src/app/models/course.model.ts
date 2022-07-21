@@ -1,3 +1,14 @@
+import {
+  Collection,
+  Entity,
+  Enum,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryKey,
+  Property,
+} from '@mikro-orm/core';
 import { Asset } from './asset.model';
 import { CourseMaterial } from './course-material.model';
 import { Enrollment } from './enrollment.model';
@@ -9,35 +20,74 @@ export enum CourseStatus {
   PUBLISHED = 'PUBLISHED',
   UNPUBLISHED = 'UNPUBLISHED',
 }
-
+@Entity()
 export class Course {
-  id: string;
+  @PrimaryKey()
+  courseId: string;
+
+  @Property()
   title: string;
-  subtitle;
-  description;
-  language;
-  level;
-  tags;
-  subjectArea;
+
+  @Property()
+  subtitle: string;
+
+  @Property()
+  description: string;
+
+  @Property()
+  language: string;
+
+  @Property()
+  level: string;
+
+  @Property()
+  tags: string;
+
+  @Property()
+  subjectArea: string;
+
+  @Property()
   duration: number;
 
-  courseImage: Asset;
-  promotionalVideo: Asset;
-
-  instructors: User[];
-  moderators: User[];
-  organization: Organization;
-
+  @Property()
   price: number;
 
+  @OneToOne(() => Asset)
+  courseImage: Asset;
+
+  @OneToOne(() => Asset)
+  promotionalVideo: Asset;
+
+  @ManyToMany(() => User)
+  instructors = new Collection<User>(this);
+
+  @ManyToMany(() => User)
+  moderators = new Collection<User>(this);
+
+  @ManyToOne(() => Organization)
+  organization: Organization;
+
+  @Property()
   welcomeMessage: string;
+
+  @Property()
   congratsMessage: string;
 
+  @Property({ type: 'jsonb' })
   learningOutcome: string[];
+
+  @Property({ type: 'jsonb' })
   prerequisites: string[];
+
+  @Property({ type: 'jsonb' })
   intendedAudience: string[];
 
-  courseMaterial: CourseMaterial[];
-  enrollment: Enrollment[];
-  status: CourseStatus;
+  @OneToMany(() => CourseMaterial, (material) => material.course)
+  courseMaterial = new Collection<CourseMaterial>(this);
+
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
+  enrollment = new Collection<Enrollment>(this);
+
+  @Enum(() => CourseStatus)
+  status = CourseStatus.DRAFT;
 }
