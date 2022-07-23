@@ -8,19 +8,20 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+import { v4 } from 'uuid';
 import { Asset } from './asset.model';
 import { Course } from './course.model';
 import { User } from './user.model';
 @Embeddable()
 export class OrgCustomizations {
-  @OneToOne()
+  @OneToOne({ eager: true })
   logo: Asset;
 }
 
 @Entity()
 export class Organization {
   @PrimaryKey()
-  orgId: string;
+  orgId: string = v4();
 
   @Property()
   name: string;
