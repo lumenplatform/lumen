@@ -15,13 +15,14 @@ async function InitORM() {
 }
 
 async function InjectORM(req: any, res, next) {
-  req.orm = orm;
-  if (!req.orm) {
-    req.orm = await InitORM();
-  }
-  orm.em.setFilterParams('user', { ...req.user });
+  // req.orm = orm;
+  // if (!req.orm) {
+  //   req.orm = await InitORM();
+  // }
 
-  RequestContext.create(req.orm.em, next);
+  // req.orm.em.setFilterParams('user', { ...req.user });
+
+  RequestContext.create(orm.em, next);
 }
 
 export { InjectORM, orm, InitORM };

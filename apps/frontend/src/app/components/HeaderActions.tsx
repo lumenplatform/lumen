@@ -5,10 +5,12 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import { Avatar, useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './Auth';
 
 function HeaderActions() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <>
@@ -23,8 +25,8 @@ function HeaderActions() {
         <NotificationsNoneOutlinedIcon />
       </IconButton>
       <Avatar
-        alt="Remy Sharp"
-        src="https://demos.themeselection.com/marketplace/materio-mui-react-nextjs-admin-template/demo-3/images/avatars/1.png"
+        alt={user?.name}
+        src={user?.picture}
         onClick={() => navigate('/profile')}
       />
     </>

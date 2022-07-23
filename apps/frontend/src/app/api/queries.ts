@@ -4,7 +4,7 @@ const getToken = () => localStorage.getItem('token');
 
 const client = axios.create({
   baseURL: '/api/',
-  timeout: 1000,
+  timeout: 10000,
 });
 
 client.interceptors.request.use(function (config) {
@@ -22,6 +22,14 @@ export function login() {
     username: 'ee',
     password: 'ee®',
   });
+}
+
+export function getUploadConfig() {
+  return client.get<any>('/content/upload-config').then((r) => r.data.data);
+}
+
+export function uploadContent(data: any) {
+  return client.post('/content', data);
 }
 
 export const fetchUsers = () => client.get('/auth/users');

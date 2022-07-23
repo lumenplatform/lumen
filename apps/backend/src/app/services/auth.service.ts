@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 
 const TOKEN_SECRET = process.env.TOKEN_SECRET || 'test';
 
@@ -14,6 +14,4 @@ export class AuthService {
   static getUserFromToken(token: string) {
     return jwt.verify(token, TOKEN_SECRET);
   }
-
-  validateUser(username, password) {}
 }
