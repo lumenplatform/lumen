@@ -20,13 +20,13 @@ export class Asset {
   @PrimaryKey()
   id: string = v4();
 
-  @Property()
+  @Property({ hidden: true })
   url!: string;
 
-  @Enum(() => AssetType)
+  @Enum({ items: () => AssetType, hidden: true })
   type: AssetType = AssetType.FILE;
 
-  @Enum(() => AssetStatus)
+  @Enum({ items: () => AssetStatus, hidden: true })
   status: AssetStatus = AssetStatus.UPLOADED;
 
   @Property()
@@ -35,12 +35,17 @@ export class Asset {
   @Property()
   name: string;
 
-  @Property()
+  @Property({ hidden: true })
   config: Record<string, unknown>;
 
-  @Property({ nullable: true })
+  @Property({ nullable: true, hidden: true })
   contentKey?: string;
-  
-  @Property({ type: 'json', nullable: true })
+
+  @Property({ type: 'json', nullable: true, hidden: true })
   streamingURLs?: StreamingURL[];
+
+  @Property({ persist: false })
+  get uri() {
+    return this.streamingURLs ? this.streamingURLs[0] : this.url;
+  }
 }

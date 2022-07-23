@@ -74,13 +74,13 @@ export class Course {
   congratsMessage: string;
 
   @Property({ type: 'jsonb' })
-  learningOutcome: string[];
+  learningOutcome: any;
 
   @Property({ type: 'jsonb' })
-  prerequisites: string[];
+  prerequisites: any;
 
   @Property({ type: 'jsonb' })
-  intendedAudience: string[];
+  intendedAudience: any;
 
   @OneToMany(() => CourseMaterial, (material) => material.course)
   courseMaterial = new Collection<CourseMaterial>(this);
