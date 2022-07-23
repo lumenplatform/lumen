@@ -18,10 +18,11 @@ import UpcomingEvents from '../../components/UpcomingEvents';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import CourseCard from '../../components/CourseCard';
+import { useNavigate } from 'react-router-dom';
 
 export default function CoursePage(props: any) {
   const [value, setValue] = useState<Date | null>(new Date());
-
+  const navigate = useNavigate()
   return (
     <div>
       <StudentHeader />
@@ -55,7 +56,9 @@ export default function CoursePage(props: any) {
               }}
             >
               {Array.from(Array(3).keys()).map((r) => (
-                <CourseCard key={r} />
+                <CourseCard key={r}   onClick={() => {
+                  navigate('/student/co1');
+                }} />
               ))}
           </Box>
         </Box>
@@ -79,7 +82,9 @@ export default function CoursePage(props: any) {
               }}
             >
               {Array.from(Array(3).keys()).map((r) => (
-                <CourseCard key={r} />
+                <CourseCard key={r}   onClick={() => {
+                  navigate('/student/co1');
+                }} />
               ))}
           </Box>
         </Box>

@@ -8,6 +8,7 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import { Link as L } from 'react-router-dom';
 import Badge from '@mui/material/Badge';
 import VideoIcon from '@mui/icons-material/VideoFileRounded';
 import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
@@ -258,9 +259,7 @@ function Resource(props: any) {
       <Badge color="primary" variant="dot" invisible={props.resource.checked}>
         {Icon}
       </Badge>
-      <Link href={props.resource.url} underline="hover" sx={{ m: 0, ml: 2 }}>
-        {props.resource.title}
-      </Link>
+      <L to="/student/co1/materialview">{props.resource.title}</L>
     </AccordionDetails>
   );
 }
