@@ -6,10 +6,8 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { uploadContent } from '../api';
-import FilesInput from '../components/FilesInput';
+import CourseMaterialEditor from '../components/course-builder/CourseMaterialEditor';
 
 export default function HomePage(props: any) {
   const navigate = useNavigate();
@@ -37,6 +35,10 @@ export default function HomePage(props: any) {
           Start Learning
         </Button>
       </Toolbar>
+      <Box sx={{ maxWidth: '900px', margin: '0 auto' }}>
+        <CourseMaterialEditor />
+      </Box>
+
       <Box sx={{ display: 'flex' }}>
         <Box
           sx={{
@@ -62,7 +64,6 @@ export default function HomePage(props: any) {
         </Box>
         <img src="/assets/images/illustration_3.png" style={{ width: '50%' }} />
       </Box>
-      <FilesInput />
     </Container>
   );
 }
