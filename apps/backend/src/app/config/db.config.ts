@@ -9,6 +9,7 @@ import { Organization } from '../models/organization.model';
 import { User } from '../models/user.model';
 import { Logger } from '../utils/logger';
 import { Notification } from '../models/Notification';
+import path = require('path');
 
 const ORMLogger = new Logger('ORM');
 
@@ -29,6 +30,13 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
   debug: true,
   logger: ORMLogger.info,
   migrations: { emit: 'js' },
+  seeder: {
+    path: path.join(__dirname, './seeders'),
+    defaultSeeder: 'DatabaseSeeder', // default seeder class name
+    glob: '!(*.d).{js,ts}', // how to match seeder files (all .js and .ts files, but not .d.ts)
+    emit: 'ts', // seeder generation mode
+    fileName: (className: string) => className, // seeder file naming convention
+  },
 };
 
 export { ORMConfig, ORMLogger };
