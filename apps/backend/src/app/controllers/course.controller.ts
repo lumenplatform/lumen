@@ -1,4 +1,9 @@
 import { RequestContext } from '@mikro-orm/core';
-import { CourseMaterial } from '../models/course-material.model';
+import { Course } from '../models/course.model';
 
-export class CourseController {}
+export class CourseController {
+  async getCourseByID(id: string) {
+    const em = RequestContext.getEntityManager();
+    return em.findOneOrFail(Course, { courseId: id });
+  }
+}
