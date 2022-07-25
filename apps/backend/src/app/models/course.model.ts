@@ -90,4 +90,10 @@ export class Course {
 
   @Enum(() => CourseStatus)
   status = CourseStatus.DRAFT;
+
+  @Property({default:0})
+  rating:number;
+
+  @Property({default:0})
+  ratingCount:number;
 }
