@@ -8,10 +8,30 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
 
 function createData(name: string, EnrolledDate: string, CompletedDate: string) {
   return { name, EnrolledDate, CompletedDate }; //enter the other variable names if used
 }
+
+function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value,
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
+
+
 
 const rows = [
   createData('Machine Learning', '2020-01-15', '2020-03-05'), //enter data if other variables are used
@@ -40,9 +60,7 @@ export default function CourseHistoryList() {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell>
-                {<CircularProgress variant="determinate" value={80} />}
-              </TableCell>
+              <TableCell>{<LinearProgressWithLabel value={80} />}</TableCell>
               <TableCell>{row.EnrolledDate}</TableCell>
               <TableCell>{row.CompletedDate}</TableCell>
               <TableCell>{<Button variant="outlined">View</Button>}</TableCell>

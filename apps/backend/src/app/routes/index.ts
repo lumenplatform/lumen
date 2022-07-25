@@ -1,25 +1,22 @@
 import * as express from 'express';
-import { json } from 'body-parser';
-import { authRouter } from './auth.router';
+import errorHandler from '../middleware/error-handler';
 import { injectUser } from '../middleware/security';
+import { assetRouter } from './asset.router';
+import { authRouter } from './auth.router';
+import { coursesRouter } from './courses.router';
+import { managementRouter } from './management';
+import { userRouter } from './user.router';
 
-export const indexRouter = express.Router();
+const router = express.Router();
 
-indexRouter.use(json());
-indexRouter.use(injectUser);
+router.use(injectUser);
 
-indexRouter.use('/auth', authRouter);
+router.use('/auth', authRouter);
+router.use('/asset', assetRouter);
+router.use('/manage', managementRouter);
+router.use('/user', userRouter);
+router.use('/courses', coursesRouter);
 
-indexRouter.use((error, req, res, next) => {
-  console.log(error);
-  if (res.headerSent) {
-    return next(error);
-  }
+router.use(errorHandler);
 
-  res.send({
-    success: false,
-    message: error.message,
-    statusCode: error.statusCode,
-    data: null,
-  });
-});
+export default router;
