@@ -9,7 +9,7 @@ export function AddButton({ onClick }: { onClick: any; }) {
         position: 'absolute',
         right: '100%',
         top: '-1.2rem',
-        opacity: 0.2,
+        opacity: 0.0,
         '&:hover': {
           opacity: 1,
         },

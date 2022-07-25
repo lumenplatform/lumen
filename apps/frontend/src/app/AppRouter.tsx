@@ -50,11 +50,14 @@ export default function () {
         <Route path="/manage" element={<AdminLayout />}>
           <Route index element={<Dashboard />}></Route>
           <Route path="courses" element={<Courses />}></Route>
-          <Route path="new-course" element={<CourseCreate />}></Route>
           <Route path="users" element={<Users />}></Route>
           <Route path="billing" element={<Billing />}></Route>
           <Route path="customize" element={<Customizations />}></Route>
         </Route>
+        <Route path="/manage">
+          <Route path="new-course" element={<CourseCreate />}></Route>
+        </Route>
+
         {/* Common pages to all users */}
         <Route path="/profile" element={<UserProfile />} />
       </Route>

@@ -28,7 +28,7 @@ import { getUploadConfig, uploadContent } from '../api';
 
 function formatBytes(bytes: number, decimals: number) {
   if (bytes == 0) return '0 Bytes';
-  var k = 1024,
+  const k = 1024,
     dm = decimals || 2,
     sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
     i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -38,19 +38,20 @@ interface StorageContextType {
   containerClient?: ContainerClient | null;
 }
 
-let StorageContext = createContext<StorageContextType>(null!);
+const StorageContext = createContext<StorageContextType>(null!);
 /**
  * TODO: Mode upload logic to provider
  *
  *
  */
 function StorageProvider({ children }: { children: React.ReactNode }) {
-  const [containerClient, setContainerClient] = useState(null);
+  const [containerClient, setContainerClient] = useState<ContainerClient>(
+    null!
+  );
 
   const getAffiliates = async () => {
     const response = await getUploadConfig();
     const client = new ContainerClient(response.sas);
-    // @ts-ignore
     setContainerClient(client);
   };
 
@@ -78,7 +79,7 @@ export class FileItemComp extends Component<
     progress: number;
   }
 > {
-  private started: boolean = false;
+  private started = false;
   static override contextType = StorageContext;
   override context!: ContextType<typeof StorageContext>;
 
@@ -158,6 +159,7 @@ export class FileItemComp extends Component<
 
     return (
       <ListItem
+        dense
         secondaryAction={
           <IconButton edge="end" onClick={handleRemove}>
             <DeleteIcon />
@@ -223,17 +225,18 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
 
   return (
     <StorageProvider>
-      <List>
-        {files.map((file, index) => (
-          <FileItemComp
-            key={index}
-            fileItem={file}
-            handleRemove={() => removeAt(index)}
-            updateItem={(c: any) => updateAt(index, { ...file, ...c })}
-          />
-        ))}
-      </List>
-
+      {files.length > 0 && (
+        <List dense={true}>
+          {files.map((file, index) => (
+            <FileItemComp
+              key={index}
+              fileItem={file}
+              handleRemove={() => removeAt(index)}
+              updateItem={(c: any) => updateAt(index, { ...file, ...c })}
+            />
+          ))}
+        </List>
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -249,20 +252,23 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
           onChange={(event) => onFileChange(event.target)}
           hidden
         />
-        <Button onClick={() => upload()} variant="contained">
+        {/* <Button onClick={() => upload()} variant="contained">
           Upload
-        </Button>
+        </Button> */}
         <StorageContext.Consumer>
-          {(value) => (
-            <Button
-              size="small"
-              onClick={addFiles}
-              disabled={!value.containerClient}
-              variant="outlined"
-            >
-              Add
-            </Button>
-          )}
+          {(value) =>
+            (multiple === true || files.length === 0) && (
+              <Button
+                size="small"
+                onClick={addFiles}
+                sx={{ m: 1 }}
+                disabled={!value.containerClient}
+                variant="outlined"
+              >
+                Add File
+              </Button>
+            )
+          }
         </StorageContext.Consumer>
       </Box>
     </StorageProvider>

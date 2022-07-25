@@ -35,9 +35,7 @@ export default function HomePage(props: any) {
           Start Learning
         </Button>
       </Toolbar>
-      <Box sx={{ maxWidth: '900px', margin: '0 auto' }}>
-        <CourseMaterialEditor />
-      </Box>
+      
 
       <Box sx={{ display: 'flex' }}>
         <Box
