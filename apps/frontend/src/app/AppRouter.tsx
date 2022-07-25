@@ -31,16 +31,21 @@ export default function () {
       {/* Site Home Page */}
       <Route path="/" element={<HomePage />} />
 
-      {/* Pages accessed by the student */}
-      <Route path="/student">
-        <Route index element={<StudentHome />} />
-        <Route path="courses" element={<div>Course Page</div>} />
-        <Route path=":courseId/enrollment" element={<Enroll />}></Route>
-        <Route path=":courseId" element={<CoursePage />}>
-        
-          <Route path="material" element={<CourseMaterial />} />
-          <Route path="info" element={<CourseInfo />} />
-          <Route path="resources" element={<CourseResources />} />
+      {/* Protected Pages */}
+      <Route element={<ProtectedPage />}>
+        {/* Pages accessed by the student */}
+        <Route path="/student">
+          <Route index element={<StudentHome />} />
+          <Route path="search" element={<SearchPage />} />
+          <Route path=":courseId/enrollment" element={<Enroll />}></Route>
+          <Route path=":courseId" element={<CoursePage />}>
+            <Route path="material" element={<CourseMaterial />} />
+            <Route path="info" element={<CourseInfo />} />
+            <Route path="resources" element={<CourseResources />} />
+          </Route>
+          <Route path=":courseId/materialview" element={<CourseMaterialPage />}>
+            <Route path=":materialId" element={<CourseMaterialView />} />
+          </Route>
         </Route>
 
         {/* Pages accessed by the teacher / admin / moderator */}
@@ -55,7 +60,6 @@ export default function () {
         {/* Common pages to all users */}
         <Route path="/profile" element={<UserProfile />} />
       </Route>
-
     </Routes>
   );
 }
