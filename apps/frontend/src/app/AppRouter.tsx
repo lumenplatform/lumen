@@ -15,6 +15,7 @@ import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import Enroll from './components/EnrollPageHeader';
 import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
 import CourseMaterialView from './pages/student/course/CourseMaterialView';
 
@@ -36,6 +37,7 @@ export default function () {
         <Route path="/student">
           <Route index element={<StudentHome />} />
           <Route path="search" element={<SearchPage />} />
+          <Route path=":courseId/enrollment" element={<Enroll />}></Route>
           <Route path=":courseId" element={<CoursePage />}>
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />
