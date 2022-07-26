@@ -8,6 +8,6 @@ export class Payment {
   @Property()
   amount: number;
 
-  @Property({columnType : 'timestamp'})
+  @Property({ columnType: 'timestamptz' })
   createdAt = new Date();
 }
