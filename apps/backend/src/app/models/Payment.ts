@@ -10,4 +10,9 @@ export class Payment {
 
   @Property()
   createdAt = new Date();
+
+  constructor(txnId: string, amount: number) {
+    this.txnId = txnId;
+    this.amount = amount;
+  }
 }

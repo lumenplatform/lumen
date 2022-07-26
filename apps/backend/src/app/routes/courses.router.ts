@@ -30,3 +30,12 @@ coursesRouter.get('/:id', (req, res, next) => {
 coursesRouter.get('/:id/reviews');
 
 coursesRouter.get('/:id/material');
+
+coursesRouter.post('/:id/enroll' ,(req, res, next) => {
+  courseController
+    .enroll(req, res, req.params.id)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});
