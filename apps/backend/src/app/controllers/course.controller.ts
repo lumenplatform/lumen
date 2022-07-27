@@ -1,29 +1,45 @@
 import { RequestContext } from '@mikro-orm/core';
-import Stripe from 'stripe';
 import { Course } from '../models/course.model';
+import { User } from '../models/user.model';
 import { CourseService } from '../services/course.service';
+import { MailService } from '../services/email.service';
 import { PaymentService } from '../services/payment.service';
 
-
 export class CourseController {
-
-  stripe =  new Stripe( process.env.STRIPE_SECRET,{apiVersion:'2020-08-27'});
+  constructor(
+    private payment: PaymentService,
+    private mail: MailService,
+    private courseService: CourseService
+  ) {}
 
   async getCourseByID(id: string) {
     const em = RequestContext.getEntityManager();
     return em.findOneOrFail(Course, { courseId: id });
   }
 
-  async enroll(req, res, id: string) {
-    const course = await this.getCourseByID(id);
-    const payment = new PaymentService();
-    payment.acceptEnrollmentPayment(req, res, course);
+  async enroll(req, userId, courseId) {
+    const course = await this.getCourseByID(courseId);
+    const user: User = new User();
+    const em = RequestContext.getEntityManager();
+    /* const user = await em.findOneOrFail(User,{}); */
+    const domain = `${req.protocol == 'https' ? 'https:' : 'http'}://${req.get(
+      'host'
+    )}`;
+    console.log(domain);
+    const redirectUrl = await this.payment.acceptEnrollmentPayment(
+      user,
+      course,
+      domain
+    );
+    return redirectUrl;
   }
 
-  async enrollSuccess(req, res) {
-    const payment = new PaymentService();
-    const {userId,courseId,price} = await payment.successPayment(req.session_id);
-    (new CourseService()).addEnrollment(userId, courseId , price);
-    res.redirect(`/student/${courseId}`);
+  async enrollSuccess(sessionId) {
+    const { user, course, price } = await this.payment.getPaymentDetails(
+      sessionId
+    );
+    this.courseService.addEnrollment(user, course, price);
+    //this.mail.sendMail()
+    return `/student/${course.courseId}`;
   }
 }
