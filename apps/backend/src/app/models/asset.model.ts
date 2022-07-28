@@ -20,8 +20,8 @@ export class Asset {
   @PrimaryKey()
   id: string = v4();
 
-  @Property({ hidden: true })
-  url!: string;
+  @Property( )
+  url: string;
 
   @Enum({ items: () => AssetType, hidden: true })
   type: AssetType = AssetType.FILE;

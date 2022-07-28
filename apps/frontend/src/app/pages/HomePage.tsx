@@ -7,7 +7,6 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import CourseMaterialEditor from '../components/course-builder/CourseMaterialEditor';
 
 export default function HomePage(props: any) {
   const navigate = useNavigate();
@@ -35,7 +34,6 @@ export default function HomePage(props: any) {
           Start Learning
         </Button>
       </Toolbar>
-      
 
       <Box sx={{ display: 'flex' }}>
         <Box

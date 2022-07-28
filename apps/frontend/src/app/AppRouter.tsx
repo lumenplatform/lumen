@@ -3,7 +3,7 @@ import { RequireAuth } from './components/Auth';
 import HomePage from './pages/HomePage';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
-import CourseCreate from './pages/management/Course/CourseCreate/CourseCreate';
+import CourseCreate from './pages/management/course/CourseCreate';
 import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';

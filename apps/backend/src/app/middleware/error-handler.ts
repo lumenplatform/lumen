@@ -7,8 +7,10 @@ export default (error, req, res, next) => {
   }
 
   if (error.name == 'ValidationError') {
-    res.send(createResponse(undefined, 400, error.name, error));
+    res.status(400).send(createResponse(undefined, 400, error.name, error));
   } else {
-    res.send(createResponse(undefined, 500, 'Error Processing Request'));
+    res
+      .status(500)
+      .send(createResponse(undefined, 500, 'Unable to process Request'));
   }
 };

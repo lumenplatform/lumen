@@ -1,8 +1,8 @@
 import { Add, AddToQueue, PlaylistAdd } from '@mui/icons-material';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import { useState } from 'react';
-import FilesInput from '../FilesInput';
-import Tiptap from '../Tiptap';
+import FilesInput from '../../../../components/FilesInput';
+import Tiptap from '../../../../components/Tiptap';
 
 export default function TopicEditor() {
   const [view, setView] = useState('default');

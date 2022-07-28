@@ -4,10 +4,13 @@ export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
       main: '#14c753',
-      contrastText:'white'
+      contrastText: 'white',
     },
     secondary: {
       main: '#f50057',
+    },
+    error: {
+      main: '#ff0000',
     },
   },
   typography: {

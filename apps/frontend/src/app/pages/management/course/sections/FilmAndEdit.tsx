@@ -1,13 +1,12 @@
 import {
-  Button,
-  Card,
-  CardContent,
+  Button, CardContent,
   Grid,
   Paper,
-  Typography,
+  Typography
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { Link } from 'react-router-dom';
+
 
 export function FilmAndEdit() {
   return (
@@ -181,24 +180,6 @@ export function FilmAndEdit() {
           <Box>Our policies for instructors and students</Box>
         </Typography>
       </CardContent>
-    </Box>
-  );
-}
-
-function Curriculum() {
-  return <Box>implement curriculum here</Box>;
-}
-
-export function Captions() {
-  return <Box>implement captions here</Box>;
-}
-
-export function CreateContent() {
-  return (
-    <Box>
-      <FilmAndEdit />
-      <Curriculum />
-      <Captions />
     </Box>
   );
 }

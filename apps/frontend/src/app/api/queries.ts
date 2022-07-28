@@ -10,8 +10,8 @@ const client = axios.create({
 client.interceptors.request.use(function (config) {
   const token = getToken();
   if (token) {
-    // @ts-ignore
-    config.headers['Authorization'] = token;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    config.headers!['Authorization'] = token;
   }
 
   return config;
@@ -33,3 +33,7 @@ export function uploadContent(data: any) {
 }
 
 export const fetchUsers = () => client.get('/auth/users');
+
+export function createNewCourse(data: any) {
+  return client.post('/manage/courses', data);
+}

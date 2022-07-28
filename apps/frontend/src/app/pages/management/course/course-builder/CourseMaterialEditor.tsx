@@ -1,10 +1,11 @@
-import { Box, Button, Paper, Typography, useTheme } from '@mui/material';
-import { useCallback } from 'react';
+import { Box, Button, Paper, useTheme } from '@mui/material';
+import { useCallback, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useCourseMaterial } from './hooks';
+import { useFormContext } from 'react-hook-form';
 import { SectionItem } from './SectionItem';
 import { Section } from './types';
+import { useCourseMaterial } from './useCourseMaterial';
 
 function CourseMaterialEditor() {
   return (
@@ -17,7 +18,12 @@ export default CourseMaterialEditor;
 
 export function SectionsList() {
   const { sections, actions } = useCourseMaterial();
+  const { setValue: setFormValue } = useFormContext();
   const theme = useTheme();
+
+  useEffect(() => {
+    setFormValue('material', sections);
+  }, [sections, setFormValue]);
 
   const renderSection = useCallback((section: Section, secIndex: number) => {
     return (
@@ -31,23 +37,17 @@ export function SectionsList() {
   }, []);
 
   return (
-    <>
-      <Box style={{ ...style, padding: '0 2rem' }}>
-        {sections.map((section, i) => renderSection(section, i))}
-        <Paper
-          elevation={0}
-          sx={{ p: 2, border: `1px solid ${theme.palette.divider}` }}
-        >
-          <Button onClick={() => actions.addSectionAt(sections.length)}>
-            ADD Section
-          </Button>
-        </Paper>
-      </Box>
-
-      <small>
-        <pre>{JSON.stringify(sections, null, 3)}</pre>
-      </small>
-    </>
+    <Box style={{ ...style, padding: '0 2rem' }}>
+      {sections.map((section, i) => renderSection(section, i))}
+      <Paper
+        elevation={0}
+        sx={{ p: 2, border: `1px solid ${theme.palette.divider}` }}
+      >
+        <Button onClick={() => actions.addSectionAt(sections.length)}>
+          ADD Section
+        </Button>
+      </Paper>
+    </Box>
   );
 }
 
