@@ -35,5 +35,5 @@ export function uploadContent(data: any) {
 export const fetchUsers = () => client.get('/auth/users');
 
 export function createNewCourse(data: any) {
-  return client.post('/manage/courses', data);
+  return client.post('/manage/courses', data, {});
 }

@@ -24,7 +24,7 @@ import {
   useState,
 } from 'react';
 import { useList } from 'react-use';
-import { getUploadConfig, uploadContent } from '../api';
+import { getUploadConfig } from '../api';
 
 function formatBytes(bytes: number, decimals: number) {
   if (bytes == 0) return '0 Bytes';
@@ -69,11 +69,13 @@ function StorageProvider({ children }: { children: React.ReactNode }) {
 function useStorage() {
   return useContext(StorageContext);
 }
+
 export class FileItemComp extends Component<
   {
     fileItem: FileItem;
     handleRemove: any;
     updateItem: any;
+    removeType: 'replace' | 'delete';
   },
   {
     progress: number;
@@ -136,11 +138,21 @@ export class FileItemComp extends Component<
     } = this.props;
 
     const UploadIndicator = () => (
-      <LinearProgress
-        sx={{ height: '1.66em' }}
-        variant={progress == 100 && uploading ? 'indeterminate' : 'determinate'}
-        value={progress}
-      />
+      <Box
+        sx={{
+          minHeight: '1.66em',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <LinearProgress
+          variant={
+            progress === 100 && uploading ? 'indeterminate' : 'determinate'
+          }
+          value={progress}
+        />
+      </Box>
     );
 
     const FileInfo = () => (
@@ -161,9 +173,15 @@ export class FileItemComp extends Component<
       <ListItem
         dense
         secondaryAction={
-          <IconButton edge="end" onClick={handleRemove}>
-            <DeleteIcon />
-          </IconButton>
+          this.props.removeType === 'delete' ? (
+            <IconButton edge="end" onClick={handleRemove}>
+              <DeleteIcon />
+            </IconButton>
+          ) : (
+            <Button onClick={handleRemove} color="secondary">
+              Replace
+            </Button>
+          )
         }
       >
         <ListItemAvatar>
@@ -202,9 +220,29 @@ type FileItem = {
   config: any;
 };
 
-function FilesInput({ multiple }: { multiple?: boolean }) {
-  const [files, { updateAt, push, removeAt }] = useList<FileItem>([]);
+type FileInputProps = {
+  multiple?: boolean;
+  onChange?: any;
+  onBlur?: any;
+  onPreviewChange?: any;
+  name?: string;
+  accept?: string;
+  value?: FileItem[] | FileItem;
+};
+
+function FilesInput({ multiple, onChange, value, accept }: FileInputProps) {
+  console.log(value);
+  const [files, { updateAt, push, removeAt }] = useList<FileItem>(
+    // @ts-ignore
+    multiple ? (value ? value : []) : value ? [value] : []
+  );
   const fileInputElement = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(multiple ? files : files[0]);
+    }
+  }, [files]);
 
   const onFileChange = (fileInput: any) => {
     for (const file of fileInput.files) {
@@ -221,8 +259,6 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
 
   const addFiles = () => fileInputElement.current?.click();
 
-  const upload = () => uploadContent(files);
-
   return (
     <StorageProvider>
       {files.length > 0 && (
@@ -231,8 +267,12 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
             <FileItemComp
               key={index}
               fileItem={file}
-              handleRemove={() => removeAt(index)}
+              handleRemove={() => {
+                removeAt(index);
+                if (!multiple) addFiles();
+              }}
               updateItem={(c: any) => updateAt(index, { ...file, ...c })}
+              removeType={multiple ? 'delete' : 'replace'}
             />
           ))}
         </List>
@@ -251,10 +291,8 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
           multiple={multiple}
           onChange={(event) => onFileChange(event.target)}
           hidden
+          accept={accept ? accept : '*/**'}
         />
-        {/* <Button onClick={() => upload()} variant="contained">
-          Upload
-        </Button> */}
         <StorageContext.Consumer>
           {(value) =>
             (multiple === true || files.length === 0) && (
@@ -265,7 +303,7 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
                 disabled={!value.containerClient}
                 variant="outlined"
               >
-                Add File
+                {multiple === true ? 'Add' : 'Choose'} File
               </Button>
             )
           }

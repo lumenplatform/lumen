@@ -18,11 +18,8 @@ coursesRouter.post('/', async (req, res, next) => {
 
   const course = em.create(Course, {
     ...courseObj,
-    courseId: v4(),
     tags: '',
-    duration: 100,
-    courseImage: new AssetFactory(em).makeOne(),
-    promotionalVideo: new AssetFactory(em).makeOne(),
+    duration: 100, // calculate ?
     organization: (await em.find(Organization, {}, { limit: 1 }))[0],
   });
   em.persistAndFlush(course)
