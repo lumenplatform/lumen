@@ -3,15 +3,17 @@ import { Course } from '../models/course.model';
 import { CourseReview } from '../models/review.mode';
 import { User } from '../models/user.model';
 import { Enrollment } from '../models/enrollment.model';
+import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
+import { Organization } from '../models/organization.model';
 export class CourseController {
-  
-  async AddReview(courseId: string, body: any) {
+  async addReview(courseId: string, body: any) {
     const { rating, review } = body;
     const em = RequestContext.getEntityManager();
 
     const enrollment = await em.findOneOrFail(Enrollment, {
       course: { courseId: courseId },
     });
+
     const user = await em.findOneOrFail(User, {});
     const courseReview = new CourseReview();
     courseReview.rating = rating;
@@ -21,23 +23,25 @@ export class CourseController {
     await em.persistAndFlush(courseReview);
   }
 
-  async Search(params: any) {
-    const { title, language, level, subjectArea, duration, price, tags } =
-      params;
+  async search(params: any) {
+    console.log(params);
+    let {
+      searchQuery,
+      language,
+      levels,
+      subjectArea,
+      duration,
+      price,
+      tags,
+      organization,
+    } = params;
+
+    price = price && JSON.parse(price); //TODO: fix this
 
     const parameters = {
       $and: [
-        title
-          ? {
-              $or: [
-                { title: { $like: '%' + title + '%' } },
-                { description: { $like: '%' + title + '%' } },
-                { organization: { $like: '%' + title + '%' } },
-              ],
-            }
-          : {},
         language ? { language: language } : {},
-        level ? { level: level } : {},
+        levels ? { level: levels } : {},
         subjectArea ? { subjectArea: subjectArea } : {},
         duration && duration.start
           ? { duration: { $gte: duration.start } }
@@ -46,12 +50,31 @@ export class CourseController {
         price && price.start ? { price: { $gte: price.start } } : {},
         price && price.end ? { price: { $lte: price.end } } : {},
         tags ? { tags: { $like: '%' + tags + '%' } } : {},
+        organization ? {organization : {name: organization}} : {},
         /* status: 'PUBLISHED', */
       ],
     };
 
-    const em = RequestContext.getEntityManager();
-    const courses = await em.find(Course, parameters);
+    console.log()
+    const em = RequestContext.getEntityManager() as EntityManager;
+    const qb = em.qb(Course, 'c');
+    console.log(parameters);
+    qb.select('*').leftJoinAndSelect('c.organization', 'o').where(parameters);
+
+    const titleWords = searchQuery
+      ? searchQuery.replace(/^\s+|\s+$/g, '').split(' ')
+      : [];
+
+    //chain Where if only title is true
+    if (searchQuery) {
+      qb.andWhere(
+        "to_tsvector('english',c.title || ' ' || c.description || ' ' || o.name) @@ to_tsquery(?)",
+        [titleWords.join(' | ')]
+      );
+    }
+
+    const courses = await qb.execute('all');
+    //console.log(courses);
     return courses;
   }
 }

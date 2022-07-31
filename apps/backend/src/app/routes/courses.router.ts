@@ -11,7 +11,7 @@ const courseController = new CourseController();
 // search courses
 coursesRouter.get('/', async (req, res) => {
   console.log(req.query);
-  const courses = await courseController.Search(req.query);
+  const courses = await courseController.search(req.query);
   res.json(createResponse(courses));
 });
 
@@ -39,7 +39,7 @@ coursesRouter.post(
     ).min(1),
   }),
   async (req, res) => {
-    const review = await courseController.AddReview(req.params.id, req.body);
+    const review = await courseController.addReview(req.params.id, req.body);
     res.json(createResponse(review));
   }
 );
