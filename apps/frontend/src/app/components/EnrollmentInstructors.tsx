@@ -2,8 +2,24 @@ import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Skeleton, useTheme } from '@mui/material';
+
+import { useQuery } from 'react-query';
+import { Outlet, useParams } from 'react-router-dom';
+import { getCourseById } from '../api';
 
 export default function Instructors() {
+  const { courseId } = useParams();
+
+  const {
+    data: course,
+    isLoading,
+    isError,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
+  if (isError || isLoading) {
+    return <Skeleton></Skeleton>;
+  }
   return (
     <Container>
       <Stack
