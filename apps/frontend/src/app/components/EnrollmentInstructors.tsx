@@ -35,7 +35,7 @@ export default function Instructors() {
         />
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            Remy Sharp
+            {course.instructors.name} {course.instructors.last_name}
           </Typography>
           <Typography variant="subtitle1">1250 learners</Typography>
           <Typography variant="subtitle1">12 courses</Typography>
@@ -55,7 +55,7 @@ export default function Instructors() {
         />
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            Kevin Wayne
+            {course.instructors.first_name} {course.instructors.last_name}
           </Typography>
           <Typography variant="subtitle1">1340 learners</Typography>
           <Typography variant="subtitle1">10 courses</Typography>
