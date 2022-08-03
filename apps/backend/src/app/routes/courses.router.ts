@@ -2,11 +2,21 @@ import * as express from 'express';
 import * as Yup from 'yup';
 import { CourseController } from '../controllers/course.controller';
 import { validate } from '../middleware/validation';
+import { CourseService } from '../services/course.service';
+import { SMTPMailService } from '../services/email.service';
+import { StripePaymentService } from '../services/payment.service';
 import { createResponse } from './../utils/response-mapper';
 
 export const coursesRouter = express.Router();
 
-const courseController = new CourseController();
+const stripePaymentService = new StripePaymentService();
+const smtpMailService = new SMTPMailService();
+const courseService = new CourseService();
+const courseController = new CourseController(
+  stripePaymentService,
+  smtpMailService,
+  courseService
+);
 
 // search courses
 coursesRouter.get('/', async (req, res) => {
@@ -52,3 +62,21 @@ coursesRouter.post(
 );
 
 coursesRouter.get('/:id/material');
+
+coursesRouter.post('/:id/enroll', (req, res, next) => {
+  courseController
+    .enroll(req, req.user, req.params.id)
+    .then((result) => {
+      res.redirect(303, result);
+    })
+    .catch(next);
+});
+
+coursesRouter.get('/:id/enroll/success', (req, res, next) => {
+  courseController
+    .enrollSuccess(req.query.session_id)
+    .then((result) => {
+      res.redirect(result);
+    })
+    .catch(next);
+});
