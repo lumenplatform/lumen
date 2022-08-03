@@ -10,8 +10,11 @@ import {
   Link,
   Avatar,
   Container,
+  Skeleton,
 } from '@mui/material';
-import { NavLink, Outlet } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { getCourseById } from '../../api';
 import StudentHeader from '../../components/StudentHeader';
 
 const sideBarItems = [
@@ -62,6 +65,18 @@ export function CourseNav() {
 }
 
 export default function CoursePage(props: any) {
+  const { courseId } = useParams();
+
+  const {
+    data: course,
+    isLoading,
+    isError,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
+  if (isLoading || isError) {
+    return <Skeleton></Skeleton>;
+  }
+
   return (
     <div>
       <StudentHeader />
@@ -74,17 +89,17 @@ export default function CoursePage(props: any) {
             <Link underline="hover" color="inherit" href="/student/">
               Courses
             </Link>
-            <Typography color="text.primary">Operating Systems I</Typography>
+            <Typography color="text.primary">{course.title}</Typography>
           </Breadcrumbs>
         </Box>
         <Box sx={{ py: 1, display: 'flex' }}>
-          <Avatar sx={{ mr: 2 }} />
+          <Avatar sx={{ mr: 2 }} src={course.courseImage.path} />
           <Box>
             <Typography variant="h6" lineHeight={1}>
-              Operating Systems I
+              {course.title}
             </Typography>
             <Typography variant="caption">
-              University of Colombo School of Computing
+              {course.organization.name}
             </Typography>
           </Box>
         </Box>

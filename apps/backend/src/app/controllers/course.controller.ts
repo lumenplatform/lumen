@@ -1,10 +1,9 @@
 import { RequestContext } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/postgresql';
 import { Course } from '../models/course.model';
+import { Enrollment } from '../models/enrollment.model';
 import { CourseReview } from '../models/review.mode';
 import { User } from '../models/user.model';
-import { Enrollment } from '../models/enrollment.model';
-import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
-import { Organization } from '../models/organization.model';
 export class CourseController {
   async addReview(courseId: string, body: any) {
     const { rating, review } = body;
@@ -50,12 +49,12 @@ export class CourseController {
         price && price.start ? { price: { $gte: price.start } } : {},
         price && price.end ? { price: { $lte: price.end } } : {},
         tags ? { tags: { $like: '%' + tags + '%' } } : {},
-        organization ? {organization : {name: organization}} : {},
+        organization ? { organization: { name: organization } } : {},
         /* status: 'PUBLISHED', */
       ],
     };
 
-    console.log()
+    console.log();
     const em = RequestContext.getEntityManager() as EntityManager;
     const qb = em.qb(Course, 'c');
     console.log(parameters);
@@ -76,5 +75,10 @@ export class CourseController {
     const courses = await qb.execute('all');
     //console.log(courses);
     return courses;
+  }
+
+  async getCourseByID(id: string) {
+    const em = RequestContext.getEntityManager();
+    return em.findOneOrFail(Course, { courseId: id });
   }
 }

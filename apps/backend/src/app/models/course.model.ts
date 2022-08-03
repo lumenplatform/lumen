@@ -52,10 +52,10 @@ export class Course {
   @Property()
   price: number;
 
-  @OneToOne(() => Asset)
+  @OneToOne({ entity: () => Asset, eager: true })
   courseImage: Asset;
 
-  @OneToOne(() => Asset)
+  @OneToOne({ entity: () => Asset, eager: true })
   promotionalVideo: Asset;
 
   @ManyToMany(() => User)
@@ -64,7 +64,7 @@ export class Course {
   @ManyToMany(() => User)
   moderators = new Collection<User>(this);
 
-  @ManyToOne(() => Organization)
+  @ManyToOne(() => Organization, { eager: true })
   organization: Organization;
 
   @Property()

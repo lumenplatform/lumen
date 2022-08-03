@@ -12,13 +12,8 @@ import Box from '@mui/material/Box';
 import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 
-
-function createData(
-  name: string,
-  EnrolledDate: string,
-  CompletedDate: string,
-) {
-  return { name, EnrolledDate, CompletedDate };  //enter the other variable names if used
+function createData(name: string, EnrolledDate: string, CompletedDate: string) {
+  return { name, EnrolledDate, CompletedDate }; //enter the other variable names if used
 }
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
@@ -39,9 +34,8 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
 
 
 const rows = [
-  createData('Machine Learning',"2020-01-15", "2020-03-05"),        //enter data if other variables are used
-  createData('Machine Learning', "2020-01-15", "2020-03-05"), 
-
+  createData('Machine Learning', '2020-01-15', '2020-03-05'), //enter data if other variables are used
+  createData('Machine Learning', '2020-01-15', '2020-03-05'),
 ];
 
 export default function CourseHistoryList() {
@@ -79,6 +73,4 @@ export default function CourseHistoryList() {
   );
 }
 
-// export default function CourseHistoryList(props: any) {
-//     return <div> Course History</div>;
-// }
+

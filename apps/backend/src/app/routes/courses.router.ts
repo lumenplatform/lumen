@@ -23,7 +23,14 @@ coursesRouter.get('/upcoming-events');
 
 // get a specific courses
 // includes additional details like
-coursesRouter.get('/:id');
+coursesRouter.get('/:id', (req, res, next) => {
+  courseController
+    .getCourseByID(req.params.id)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});
 
 coursesRouter.get('/:id/reviews');
 
