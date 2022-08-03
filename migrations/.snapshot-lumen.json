@@ -26,12 +26,13 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "jsonb",
+          "type": "timestamptz",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "length": 6,
+          "mappedType": "datetime"
         }
       },
       "name": "payment",
@@ -261,48 +262,53 @@
         },
         "preferences_weekly_recommendations": {
           "name": "preferences_weekly_recommendations",
-          "type": "jsonb",
+          "type": "boolean",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "default": "true",
+          "mappedType": "boolean"
         },
         "preferences_promotions": {
           "name": "preferences_promotions",
-          "type": "jsonb",
+          "type": "boolean",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "default": "false",
+          "mappedType": "boolean"
         },
         "preferences_course_announcements": {
           "name": "preferences_course_announcements",
-          "type": "jsonb",
+          "type": "boolean",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "default": "true",
+          "mappedType": "boolean"
         },
         "preferences_course_reminders": {
           "name": "preferences_course_reminders",
-          "type": "jsonb",
+          "type": "boolean",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "default": "true",
+          "mappedType": "boolean"
         },
         "preferences_discussion_forums": {
           "name": "preferences_discussion_forums",
-          "type": "jsonb",
+          "type": "boolean",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "default": "true",
+          "mappedType": "boolean"
         },
         "status": {
           "name": "status",
@@ -323,7 +329,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "string"
         }
       },
@@ -352,6 +358,7 @@
             "org_id"
           ],
           "referencedTableName": "public.organization",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
@@ -629,6 +636,26 @@
             "UNPUBLISHED"
           ],
           "mappedType": "enum"
+        },
+        "rating": {
+          "name": "rating",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "0",
+          "mappedType": "integer"
+        },
+        "rating_count": {
+          "name": "rating_count",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "0",
+          "mappedType": "integer"
         }
       },
       "name": "course",

@@ -34,6 +34,12 @@ export function uploadContent(data: any) {
 
 export const fetchUsers = () => client.get('/auth/users');
 
+export function search(params: any) {
+  return client
+    .get<any>('/courses/', { params: params })
+    .then((r) => r.data.data);
+}
+
 export function getCourseById(id: string) {
   return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
 }

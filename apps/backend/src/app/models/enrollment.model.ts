@@ -7,8 +7,8 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Course } from './course.model';
-import { CourseReview } from './CourseReview';
-import { Payment } from './Payment';
+import { CourseReview } from './review.mode';
+import { Payment } from './payment.model';
 import { User } from './user.model';
 
 export enum EnrollmentStatus {

@@ -2,7 +2,14 @@ import { Factory, Faker } from '@mikro-orm/seeder';
 import { Course } from '../../../models/course.model';
 import { AssetFactory } from './AssetFactory';
 
+
 export class CourseFactory extends Factory<Course> {
+  private readonly em_;
+  constructor(em: any)  {
+    super(em);
+    this.em_ = em;
+  }
+
   model = Course;
 
   definition(faker: Faker): Partial<Course> {
@@ -21,6 +28,10 @@ export class CourseFactory extends Factory<Course> {
       intendedAudience: JSON.stringify(
         [...Array(3).keys()].map((r) => faker.lorem.words(4))
       ),
+      courseImage: new AssetFactory(this.em_).makeOne(),
+      promotionalVideo: new AssetFactory(this.em_).makeOne({
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      }),
       price: 100,
       subjectArea: 'Machine Learning',
       level: 'intermediate',
