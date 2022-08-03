@@ -6,6 +6,7 @@ import * as morgan from 'morgan';
 import { InitORM, InjectORM } from './app/config/db';
 
 import { json } from 'express';
+import { urlencoded } from 'express';
 import adminRouter from './app/admin/admin.router';
 import apiRouter from './app/routes';
 import { logger } from './app/utils/logger';
@@ -35,6 +36,7 @@ if (environment.production) {
   );
 }
 app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use(InjectORM);
 
 app.use('/api', apiRouter);

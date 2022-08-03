@@ -8,7 +8,7 @@ export class Payment {
   @Property()
   amount: number;
 
-  @Property()
+  @Property({ columnType: 'timestamptz' })
   createdAt = new Date();
 
   constructor(txnId: string, amount: number) {
