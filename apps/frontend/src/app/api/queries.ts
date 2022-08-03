@@ -37,3 +37,13 @@ export const fetchUsers = () => client.get('/auth/users');
 export function createNewCourse(data: any) {
   return client.post('/manage/courses', data, {});
 }
+
+export function search(params: any) {
+  return client
+    .get<any>('/courses/', { params: params })
+    .then((r) => r.data.data);
+}
+
+export function getCourseById(id: string) {
+  return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
+}

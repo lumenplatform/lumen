@@ -1,1 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+@media screen and (max-width: 1200px) {
+    .calendar{
+        display: none;
+    }
+ 
+  }

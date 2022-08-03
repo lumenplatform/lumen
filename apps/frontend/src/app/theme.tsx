@@ -3,7 +3,7 @@ import { ThemeOptions } from '@mui/material';
 export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
-      main: '#14c753',
+      main: '#019a76',
       contrastText: 'white',
     },
     secondary: {
@@ -14,7 +14,7 @@ export const themeOptions: ThemeOptions = {
     },
   },
   typography: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter,sans-serif',
     button: {
       fontWeight: 600,
     },

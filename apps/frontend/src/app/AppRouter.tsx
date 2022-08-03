@@ -1,6 +1,6 @@
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components/Auth';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/public/HomePage';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
 import CourseCreate from './pages/management/course/CourseCreate';
@@ -15,8 +15,10 @@ import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import Enroll from './components/EnrollPageHeader';
 import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
 import CourseMaterialView from './pages/student/course/CourseMaterialView';
+import ForInstructors from './pages/public/ForInstructors';
 
 const ProtectedPage = () => (
   <RequireAuth>
@@ -29,6 +31,7 @@ export default function () {
     <Routes>
       {/* Site Home Page */}
       <Route path="/" element={<HomePage />} />
+      <Route path="/teaching" element={<ForInstructors />} />
 
       {/* Protected Pages */}
       <Route element={<ProtectedPage />}>
@@ -36,6 +39,7 @@ export default function () {
         <Route path="/student">
           <Route index element={<StudentHome />} />
           <Route path="search" element={<SearchPage />} />
+          <Route path=":courseId/enrollment" element={<Enroll />}></Route>
           <Route path=":courseId" element={<CoursePage />}>
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />

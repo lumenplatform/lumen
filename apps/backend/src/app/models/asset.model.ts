@@ -45,7 +45,7 @@ export class Asset {
   streamingURLs?: StreamingURL[];
 
   @Property({ persist: false })
-  get uri() {
+  get path() {
     return this.streamingURLs ? this.streamingURLs[0] : this.url;
   }
 }

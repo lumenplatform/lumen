@@ -3,12 +3,12 @@ import { Asset } from '../models/asset.model';
 import { CourseMaterial } from '../models/course-material.model';
 import { Course } from '../models/course.model';
 import { Enrollment } from '../models/enrollment.model';
-import { CourseReview } from '../models/CourseReview';
-import { Payment } from '../models/Payment';
+import { CourseReview } from '../models/review.mode';
+import { Payment } from '../models/payment.model';
 import { Organization } from '../models/organization.model';
 import { User } from '../models/user.model';
 import { Logger } from '../utils/logger';
-import { Notification } from '../models/Notification';
+import { Notification } from '../models/notification.model';
 import path = require('path');
 
 const ORMLogger = new Logger('ORM');
