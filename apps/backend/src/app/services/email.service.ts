@@ -25,15 +25,15 @@ export class SMTPMailService {
   private mailer: nodemailer;
   constructor() {
     this.mailer = nodemailer;
-    this.transporter = this.mailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      auth: {
-        user: 'apikey',
-        pass: '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',
-      },
-    });
-    this.transporter.verify();
+    // this.transporter = this.mailer.createTransport({
+    //   host: 'smtp.sendgrid.net',
+    //   port: 587,
+    //   auth: {
+    //     user: 'apikey',
+    //     pass: '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',
+    //   },
+    // });
+    // this.transporter.verify();
   }
 
   async sendMail(recieverEmail, subject, bodyOptions) {

@@ -9,6 +9,9 @@ export const themeOptions: ThemeOptions = {
     secondary: {
       main: '#f50057',
     },
+    error: {
+      main: '#ff0000',
+    },
   },
   typography: {
     fontFamily: 'Inter,sans-serif',

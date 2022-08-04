@@ -1,7 +1,7 @@
 import { RequestContext } from '@mikro-orm/core';
 import { Course } from '../models/course.model';
 import { Enrollment } from '../models/enrollment.model';
-import { Payment } from '../models/Payment';
+import { Payment } from '../models/payment.model';
 import { User } from '../models/user.model';
 
 export class CourseService {
