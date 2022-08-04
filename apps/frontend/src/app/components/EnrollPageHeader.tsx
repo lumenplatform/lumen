@@ -1,7 +1,7 @@
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { useTheme } from '@mui/material';
+import { Skeleton, useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -16,6 +16,10 @@ import Instructors from './EnrollmentInstructors';
 import CourseEnrolmentOptions from './EnrolmentOptions';
 import Faq from './FAQ';
 
+import { useQuery } from 'react-query';
+import { Outlet, useParams } from 'react-router-dom';
+import { getCourseById } from '../api';
+
 export default function EnrollHEader() {
   const theme = useTheme();
   const [value, setValue] = React.useState('one');
@@ -27,6 +31,18 @@ export default function EnrollHEader() {
   const enrollbutton = (event: React.MouseEvent<HTMLButtonElement>) => {
     setValue('5');
   };
+
+  const { courseId } = useParams();
+
+  const {
+    data: course,
+    isLoading,
+    isError,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
+  if (isError || isLoading) {
+    return <Skeleton></Skeleton>;
+  }
 
   return (
     <React.Fragment>
@@ -41,17 +57,21 @@ export default function EnrollHEader() {
         }}
       >
         <Typography variant="h3" component="h3">
-          Operating Systems
+        {course.title}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Rating name="read-only" value={4} readOnly size="small" />
+          <Rating name="read-only" value={4} readOnly size="small" />    
+          {/* get the value from the table (total) */}
+
           <Typography
             display="inline"
             variant="subtitle2"
             component="h3"
             sx={{ lineHeight: 0, ml: 1 }}
           >
-            34 ratings
+            34 ratings  
+            {/* get the count from table */}
+
           </Typography>
         </Box>
 
@@ -89,6 +109,8 @@ export default function EnrollHEader() {
             style={{ marginLeft: 10 }}
           >
             120 Already enrolled
+
+            {/* get the total */}
           </Typography>
         </Box>
       </Box>

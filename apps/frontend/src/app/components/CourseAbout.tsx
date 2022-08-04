@@ -5,8 +5,25 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { Skeleton, useTheme } from '@mui/material';
+
+import { useQuery } from 'react-query';
+import { Outlet, useParams } from 'react-router-dom';
+import { getCourseById } from '../api';
 
 export default function CourseAbout() {
+  const { courseId } = useParams();
+
+  const {
+    data: course,
+    isLoading,
+    isError,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
+  if (isError || isLoading) {
+    return <Skeleton></Skeleton>;
+  }
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -15,13 +32,7 @@ export default function CourseAbout() {
         <Typography variant="subtitle2">125 recent views</Typography>
 
         <Typography variant="body1" sx={{ mt: 4, mb: 4 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          {course.description}
         </Typography>
 
         <Box>
@@ -30,11 +41,16 @@ export default function CourseAbout() {
           </Typography>
           {/* <Stack direction="row" spacing={1}> */}
           <Grid container spacing={1}>
-
-            <Grid item ><Chip label="Operating Systems" /></Grid>
-            <Grid item ><Chip label="Computer Architecture" /></Grid>
-            <Grid item ><Chip label="Memory Management" /></Grid>
-          {/* </Stack> */}
+            <Grid item>
+              <Chip label="Operating Systems" />
+            </Grid>
+            <Grid item>
+              <Chip label="Computer Architecture" />
+            </Grid>
+            <Grid item>
+              <Chip label="Memory Management" />
+            </Grid>
+            {/* </Stack> */}
           </Grid>
         </Box>
       </Container>
