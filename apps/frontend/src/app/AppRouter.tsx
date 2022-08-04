@@ -46,8 +46,8 @@ export default function () {
             <Route path="info" element={<CourseInfo />} />
             <Route path="resources" element={<CourseResources />} />
           </Route>
-          <Route path=":courseId/materialview" element={<CourseMaterialPage />}>
-            <Route path=":materialId" element={<CourseMaterialView />} />
+          <Route path=":courseId/learn/" element={<CourseMaterialPage />}>
+            <Route path=":sectionId/:topicId" element={<CourseMaterialView />} />
           </Route>
         </Route>
 

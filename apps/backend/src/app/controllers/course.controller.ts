@@ -33,18 +33,17 @@ export class CourseController {
 
   async search(params: any) {
     console.log(params);
-    let {
+    const {
       searchQuery,
       language,
       levels,
       subjectArea,
       duration,
-      price,
       tags,
       organization,
     } = params;
 
-    price = price && JSON.parse(price); //TODO: fix this
+    const price = params.price && JSON.parse(params.price); //TODO: fix this
 
     const parameters = {
       $and: [
@@ -67,7 +66,10 @@ export class CourseController {
     const em = RequestContext.getEntityManager() as EntityManager;
     const qb = em.qb(Course, 'c');
     console.log(parameters);
-    qb.select('*').leftJoinAndSelect('c.organization', 'o').where(parameters);
+    qb.select('*')
+      .leftJoinAndSelect('c.organization', 'o')
+      .leftJoinAndSelect('c.courseImage', 'ci')
+      .where(parameters);
 
     const titleWords = searchQuery
       ? searchQuery.replace(/^\s+|\s+$/g, '').split(' ')

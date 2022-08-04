@@ -1,6 +1,6 @@
 import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 import { v4 } from 'uuid';
-import { StreamingURL } from '../services/drm/ams.service';
+import { AMSService, StreamingURL } from '../services/drm/ams.service';
 export enum AssetType {
   FILE = 'FILE',
   IMAGE = 'IMAGE',
@@ -46,6 +46,19 @@ export class Asset {
 
   @Property({ persist: false })
   get path() {
-    return this.streamingURLs ? this.streamingURLs[0] : this.url;
+    if (this.streamingURLs) {
+      return {
+        src: this.streamingURLs[0].url,
+        protectionInfo: [
+          {
+            type: 'Widevine',
+            authenticationToken:
+              'Bearer ' +
+              AMSService.generateToken(this.streamingURLs[0].keyIdentifier),
+          },
+        ],
+      };
+    }
+    return this.url;
   }
 }

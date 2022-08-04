@@ -7,18 +7,23 @@ import {
   Box,
   Button,
   IconButton,
+  Stack,
+  TextField,
   Typography,
 } from '@mui/material';
 import { Identifier } from 'dnd-core';
 import { useCallback, useRef, useState } from 'react';
 import { useDrop, XYCoord } from 'react-dnd';
 import { AddButton } from './AddButton';
-import { DragItem, ItemTypes } from './types';
 import { TopicItem } from './TopicItem';
+import { DragItem, ItemTypes } from './types';
 
 export function SectionItem({ section, index, actions }: any) {
   const ref = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(true);
+
+  const [isTitleEditing, setIsTitleEditing] = useState(false);
+  const [title, setTitle] = useState('section.title');
 
   const renderTopic = useCallback((topic: any, i: number) => {
     return (
@@ -78,7 +83,6 @@ export function SectionItem({ section, index, actions }: any) {
 
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
-      console.log({ r: item.sectionIndex < index, hoverClientY, height });
       if (item.sectionIndex < index && hoverClientY > height) {
         return;
       }
@@ -87,7 +91,6 @@ export function SectionItem({ section, index, actions }: any) {
         return;
       }
 
-      console.warn('MOVE FORM SECTION');
       // actions.moveTopic(item.index, 1, index, item.sectionIndex);
       actions.clearHiddenItems();
       actions.hideItemAt(item.sectionIndex, item.index);
@@ -123,7 +126,15 @@ export function SectionItem({ section, index, actions }: any) {
           <Typography lineHeight={2.1}>
             <b>Section {index + 1}:</b> {section.title}
           </Typography>
-          <IconButton size="small" sx={{ ml: 2 }}>
+          <IconButton
+            size="small"
+            sx={{ ml: 2 }}
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsTitleEditing(true);
+              setExpanded(true);
+            }}
+          >
             <Edit fontSize="small" />
           </IconButton>
           <IconButton
@@ -136,22 +147,48 @@ export function SectionItem({ section, index, actions }: any) {
         </AccordionSummary>
 
         <AccordionDetails>
-          <Box sx={{ px: 3 }}>
-            {section.topics
-              ?.filter((r: any) => !r.isHidden)
-              ?.map((lec: any, j: number) => (
-                <div style={{ position: 'relative' }}>
-                  <AddButton onClick={() => actions.addTopicAt(index, j)} />
-                  {renderTopic(lec, j)}
-                </div>
-              ))}
-            <Button
-              size="small"
-              onClick={() => actions.addTopicAt(index, section.topics.length)}
-            >
-              ADD Topic
-            </Button>
-          </Box>
+          {isTitleEditing && (
+            <Box sx={{ mx: 2, mb: 1 }}>
+              <Stack direction="row">
+                <TextField
+                  onChange={(r) => {
+                    setTitle(r.target.value);
+                  }}
+                  value={title}
+                  label="title"
+                  size="small"
+                  sx={{ flex: 1 }}
+                />
+                <Button
+                  onClick={() => {
+                    // save
+                    actions.updateSection(index, { title });
+                    setIsTitleEditing(false);
+                  }}
+                >
+                  Save
+                </Button>
+              </Stack>
+            </Box>
+          )}
+          {!isTitleEditing && (
+            <Box sx={{ px: 3 }}>
+              {section.topics
+                ?.filter((r: any) => !r.isHidden)
+                ?.map((lec: any, j: number) => (
+                  <div style={{ position: 'relative' }}>
+                    <AddButton onClick={() => actions.addTopicAt(index, j)} />
+                    {renderTopic(lec, j)}
+                  </div>
+                ))}
+              <Button
+                size="small"
+                onClick={() => actions.addTopicAt(index, section.topics.length)}
+              >
+                ADD Topic
+              </Button>
+            </Box>
+          )}
         </AccordionDetails>
       </Accordion>
     </div>

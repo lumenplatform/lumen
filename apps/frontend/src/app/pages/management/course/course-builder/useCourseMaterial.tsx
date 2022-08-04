@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { v1 } from 'uuid';
 import { Section } from './types';
 
 function removePreviews(sections: Section[]): Section[] {
@@ -74,6 +73,14 @@ function hideItem(sections: Section[], sectionIndex: number, location: number) {
       section.topics[location].isHidden = true;
     }
 
+    return section;
+  });
+}
+
+function updateSec(sections: Section[], sectionIndex: number, data: any) {
+  return sections.map((s, index) => {
+    if (index !== sectionIndex) return s;
+    const section = { ...s, ...data };
     return section;
   });
 }
@@ -224,6 +231,10 @@ export function useCourseMaterial(data: Section[]) {
     setSections((s) => updateItem(s, sectionId, topicIndex, data));
   }
 
+  function updateSection(sectionId: number, data: any) {
+    setSections((s) => updateSec(s, sectionId, data));
+  }
+
   return {
     sections,
     actions: {
@@ -237,6 +248,7 @@ export function useCourseMaterial(data: Section[]) {
       clearPreviews,
       hideItemAt,
       clearHiddenItems,
+      updateSection,
     },
   };
 }

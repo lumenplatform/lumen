@@ -7,15 +7,18 @@ import {
   CardMedia,
   Chip,
   Grid,
-  Rating,
-  Typography,
-  useTheme,
-  Stack,
+  Rating, Stack, Typography,
+  useTheme
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-export default function CourseCard(props: any) {
-  const { course } = props
+export default function CourseCard({
+  course,
+  onClick,
+}: {
+  course: any;
+  onClick?: any;
+}) {
   const theme = useTheme();
   return (
     <Link to={course.courseId} style={{ textDecoration: 'none' }}>
@@ -24,7 +27,7 @@ export default function CourseCard(props: any) {
           <CardMedia
             component="img"
             height="160"
-            image={course.courseImage}
+            image={course.courseImage.url}
             alt="course image"
           />
 
@@ -41,7 +44,10 @@ export default function CourseCard(props: any) {
                 sx={{ width: 35, height: 35, mr: 1 }}
                 src={course.organization.customizations_logo}
               />
-              <Link to={'?organization=' + course.organization.name} style={{ color: 'black' }}>
+              <Link
+                to={'?organization=' + course.organization.name}
+                style={{ color: 'black' }}
+              >
                 <Typography gutterBottom variant="body2" component="h2">
                   {course.organization.name}
                 </Typography>
@@ -97,14 +103,20 @@ export default function CourseCard(props: any) {
                 />
               </Grid>
             </Grid>
-            <Typography variant="body2" sx={{
-              fontWeight: 'bold', mt: 3, overflow: 'hidden', display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: { xs: 4, sm: 2 },
-            }} >
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: 'bold',
+                mt: 3,
+                overflow: 'hidden',
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                WebkitLineClamp: { xs: 4, sm: 2 },
+              }}
+            >
               Skills you'll gain :{' '}
               <Typography variant="caption">
-                {course.learningOutcome.join(", ")}
+                {course.learningOutcome.join(', ')}
               </Typography>
             </Typography>
 
@@ -117,17 +129,23 @@ export default function CourseCard(props: any) {
                 sx={{ mr: 0.5 }}
               />
               <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
-                {course.rating && course.rating.includes(".") ? course.rating : course.rating + ".0"}
+                {course.rating && course.rating.includes('.')
+                  ? course.rating
+                  : course.rating + '.0'}
               </Typography>
               <Typography variant="caption">
-                {course.ratingCount > 999999 ? (course.ratingCount / 1000000).toFixed(1) + 'm' : course.ratingCount > 999 ? (course.ratingCount / 1000).toFixed(1) + 'k' : course.ratingCount}
-                {" reviews"}
+                {course.ratingCount > 999999
+                  ? (course.ratingCount / 1000000).toFixed(1) + 'm'
+                  : course.ratingCount > 999
+                  ? (course.ratingCount / 1000).toFixed(1) + 'k'
+                  : course.ratingCount}
+                {' reviews'}
               </Typography>
             </Stack>
             <Typography variant="caption">{course.level}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
-    </Link >
+    </Link>
   );
 }

@@ -44,6 +44,10 @@ export function getCourseById(id: string) {
   return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
 }
 
+export function getCourseMaterial(id: string) {
+  return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
+}
+
 // MANAGEMENT ENDPOINTS
 
 export function createNewCourse(data: any) {

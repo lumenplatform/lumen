@@ -1,7 +1,9 @@
+import { RequestContext } from '@mikro-orm/core';
 import * as express from 'express';
 import * as Yup from 'yup';
 import { CourseController } from '../controllers/course.controller';
 import { validate } from '../middleware/validation';
+import { Course } from '../models/course.model';
 import { CourseService } from '../services/course.service';
 import { SMTPMailService } from '../services/email.service';
 import { StripePaymentService } from '../services/payment.service';
@@ -61,7 +63,16 @@ coursesRouter.post(
   }
 );
 
-coursesRouter.get('/:id/material');
+coursesRouter.get('/:id/material', (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  const { id } = req.params;
+  em.findOneOrFail(Course, { courseId: id }, { populate: ['courseMaterial'] })
+    .then((r) => r.courseMaterial)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});
 
 coursesRouter.post('/:id/enroll', (req, res, next) => {
   courseController
