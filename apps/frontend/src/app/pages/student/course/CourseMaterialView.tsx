@@ -1,41 +1,49 @@
-import React from 'react';
-import List from '@mui/material/List';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItem from '@mui/material/ListItem';
-import Link from '@mui/material/Link';
-import Badge from '@mui/material/Badge';
-import VideoIcon from '@mui/icons-material/VideoFileRounded';
-import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
-import AudioIcon from '@mui/icons-material/AudioFileRounded';
-import LinkIcon from '@mui/icons-material/LinkRounded';
-import { alpha } from '@mui/system';
-import { Box, ListItemText, Typography } from '@mui/material';
-import { useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { getCourseMaterial } from '../../../api';
+import VideoPlayer from '../../../components/VideoPlayer';
 
 function CourseResources() {
-    return (
-        <>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }} gutterBottom>
-                1. Partial Derivatives
-            </Typography>
-            <Box alignItems="center" sx={{ display: "flex", alignContent: "center", justifyContent: "center" }}>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-            </Box>
-            <Box sx={{my:5}}>
-                <Typography variant="body1" gutterBottom>
-                    <h1>Intorduction</h1>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.
-                    <h1>Hello</h1>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.
-                </Typography>
-            </Box>
+  const { courseId, sectionId, topicId } = useParams();
+  const { data } = useQuery('mat', () => getCourseMaterial(courseId!));
 
-        </>
-    );
+  const topic =
+    data &&
+    data
+      .filter((r: any) => r.id == sectionId)[0]
+      .topics.filter((r: any) => r.id == topicId)[0];
+
+  if (!topic) {
+    return null;
+  }
+
+  return (
+    <>
+      <Typography variant="h5" sx={{ fontWeight: 'bold' }} gutterBottom>
+        {topic.title}
+      </Typography>
+
+      <Box sx={{ my: 5 }}>
+        {topic.contentType === 'article' && (
+          <div dangerouslySetInnerHTML={{ __html: topic.article }} />
+        )}
+        {topic.contentType === 'video' &&
+          typeof topic.video.path == 'string' && (
+            <video controls src={topic.video.path} />
+          )}
+        {topic.contentType === 'video' &&
+          typeof topic.video.path == 'object' && (
+            <VideoPlayer src={topic.video.path} />
+          )}
+        {/* <small>
+          <pre style={{ whiteSpace: 'break-spaces' }}>
+            {JSON.stringify(topic, null, 2)}
+          </pre>
+        </small> */}
+      </Box>
+    </>
+  );
 }
 
 export default CourseResources;

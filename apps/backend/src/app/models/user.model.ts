@@ -10,7 +10,7 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Enrollment } from './enrollment.model';
-import { Notification } from './Notification';
+import { Notification } from './notification.model';
 import { Organization } from './organization.model';
 
 export enum UserStatus {
@@ -22,19 +22,19 @@ export class UserPreferences {
   @Property()
   preferredTheme: 'light' | 'dark' = 'light';
 
-  @Property()
+  @Property({default: true, columnType: 'boolean'})
   weeklyRecommendations = true;
 
-  @Property()
+  @Property({default: false, columnType: 'boolean'})
   promotions = false;
 
-  @Property()
+  @Property({default: true, columnType: 'boolean'})
   courseAnnouncements = true;
 
-  @Property()
+  @Property({default: true, columnType: 'boolean'})
   courseReminders = true;
 
-  @Property()
+  @Property({default: true, columnType: 'boolean'})
   discussionForums = true;
 }
 @Entity()
@@ -51,7 +51,7 @@ export class User {
   @Enum(() => UserStatus)
   status: UserStatus = UserStatus.ACTIVE;
 
-  @ManyToOne()
+  @ManyToOne({nullable: true})
   organization: Organization;
 
   @OneToMany(() => Notification, (notification) => notification.user)

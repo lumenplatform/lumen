@@ -1,21 +1,22 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import AudioIcon from '@mui/icons-material/AudioFileRounded';
+import LinkIcon from '@mui/icons-material/LinkRounded';
+import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
+import VideoIcon from '@mui/icons-material/VideoFileRounded';
+import { useTheme } from '@mui/material';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import { Link as L } from 'react-router-dom';
 import Badge from '@mui/material/Badge';
-import VideoIcon from '@mui/icons-material/VideoFileRounded';
-import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
-import AudioIcon from '@mui/icons-material/AudioFileRounded';
-import LinkIcon from '@mui/icons-material/LinkRounded';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/system';
-import { useTheme } from '@mui/material';
+import * as React from 'react';
+import { useQuery } from 'react-query';
+import { Link as L, useParams } from 'react-router-dom';
+import { getCourseMaterial } from '../../../api';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -52,121 +53,19 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-const courseMaterials = [
-  {
-    topic: 'Week_1',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.',
-    items: [
-      {
-        item_topic: 'video and audio',
-        resources: [
-          {
-            type: 'video',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Video 1',
-            checked: false,
-          },
-          {
-            type: 'audio',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Audio 1',
-            checked: false,
-          },
-        ],
-      },
-      {
-        item_topic: 'all',
-        resources: [
-          {
-            type: 'audio',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Audio 1',
-            checked: false,
-          },
-          {
-            type: 'video',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Video 1',
-            checked: true,
-          },
-          {
-            type: 'file',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'File 1',
-            checked: true,
-          },
-          {
-            type: 'link',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Link 1',
-            checked: false,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    topic: 'Week_2',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.',
-    items: [
-      {
-        item_topic: 'video and audio',
-        resources: [
-          {
-            type: 'video',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Video 1',
-            checked: false,
-          },
-          {
-            type: 'audio',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Audio 1',
-            checked: false,
-          },
-        ],
-      },
-      {
-        item_topic: 'all',
-        resources: [
-          {
-            type: 'audio',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Audio 1',
-            checked: false,
-          },
-          {
-            type: 'video',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Video 1',
-            checked: true,
-          },
-          {
-            type: 'file',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'File 1',
-            checked: true,
-          },
-          {
-            type: 'link',
-            url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            title: 'Link 1',
-            checked: false,
-          },
-        ],
-      },
-    ],
-  },
-];
-
 function CourseMaterial(props: any) {
+  const { courseId } = useParams();
+
+  const { data } = useQuery('material' + courseId, () =>
+    getCourseMaterial(courseId!)
+  );
+
   return (
     <div>
-      {courseMaterials.map((courseMaterial: any) => (
-        <CourseMaterialTopics courseMaterial={courseMaterial} />
-      ))}
+      {data &&
+        data.map((courseMaterial: any) => (
+          <CourseMaterialTopics courseMaterial={courseMaterial} />
+        ))}
     </div>
   );
 }
@@ -194,22 +93,34 @@ function CourseMaterialTopics(props: any) {
         }}
       >
         <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
-          {props.courseMaterial.topic}
+          {props.courseMaterial.title}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography sx={{ mb: 2 }}>
           {props.courseMaterial.description}
         </Typography>
-        {props.courseMaterial.items.map((courseMaterialItem: any) => (
-          <CourseMaterialItem courseMaterialItem={courseMaterialItem} />
-        ))}
+        {props.courseMaterial.topics &&
+          props.courseMaterial.topics.map((courseMaterialItem: any) => (
+            <CourseMaterialItem
+              courseMaterialItem={courseMaterialItem}
+              sectionId={props.courseMaterial.id}
+            />
+          ))}
       </AccordionDetails>
     </Accordion>
   );
 }
 
-function CourseMaterialItem(props: any) {
+function CourseMaterialItem({
+  sectionId,
+  courseMaterialItem,
+}: {
+  sectionId: string;
+  courseMaterialItem: any;
+}) {
+  const { courseId } = useParams();
+
   const [expanded, setExpanded] = React.useState<true | false>(false);
 
   const handleChange =
@@ -221,23 +132,28 @@ function CourseMaterialItem(props: any) {
 
   return (
     <Accordion expanded={expanded === true} onChange={handleChange(true)}>
-      <AccordionSummary
-        sx={{
-          background: expanded
-            ? alpha(
-                theme.palette.primary.main,
-                theme.palette.action.selectedOpacity
-              )
-            : '',
-        }}
-      >
+      <AccordionSummary>
         <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
-          {props.courseMaterialItem.item_topic}
+          {courseMaterialItem.title}
         </Typography>
       </AccordionSummary>
-      {props.courseMaterialItem.resources.map((resource: any) => (
+      <AccordionDetails>
+        <L
+          to={
+            '/student/' +
+            courseId +
+            '/learn/' +
+            sectionId +
+            '/' +
+            courseMaterialItem.id
+          }
+        >
+          Learn
+        </L>
+      </AccordionDetails>
+      {/* {props.courseMaterialItem.resources.map((resource: any) => (
         <Resource resource={resource} />
-      ))}
+      ))} */}
     </Accordion>
   );
 }
