@@ -4,7 +4,15 @@ import {
   ExpandLessOutlined,
 } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, IconButton, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Identifier } from 'dnd-core';
 import { useRef, useState } from 'react';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
@@ -89,6 +97,8 @@ export function TopicItem(props: CardProps) {
   drag(drop(ref));
 
   const [expanded, setExpanded] = useState(false);
+  const [isTitleEditing, setIsTitleEditing] = useState(false);
+  const [title, setTitle] = useState(topic.title);
 
   return (
     <Paper
@@ -101,8 +111,41 @@ export function TopicItem(props: CardProps) {
         {...props}
         onExpandBtn={() => setExpanded(!expanded)}
         expanded={expanded}
+        onEditTitle={() => {
+          setIsTitleEditing(true);
+        }}
       />
-      {expanded && <TopicEditor />}
+      {!isTitleEditing && expanded && (
+        <TopicEditor
+          topic={topic}
+          updateItem={(d) => actions.updateTopic(sectionIndex, index, d)}
+        />
+      )}
+
+      {isTitleEditing && (
+        <Box sx={{ mx: 2, mb: 1 }}>
+          <Stack direction="row">
+            <TextField
+              onChange={(r) => {
+                setTitle(r.target.value);
+              }}
+              value={title}
+              label="title"
+              size="small"
+              sx={{ flex: 1 }}
+            />
+            <Button
+              onClick={() => {
+                // save
+                actions.updateTopic(sectionIndex, index, { title });
+                setIsTitleEditing(false);
+              }}
+            >
+              Save
+            </Button>
+          </Stack>
+        </Box>
+      )}
     </Paper>
   );
 }
@@ -113,6 +156,8 @@ export default function TopicItemHeader({
   index,
   onExpandBtn,
   expanded,
+  onEditTitle,
+  sectionIndex,
 }: any) {
   return (
     <Box
@@ -130,15 +175,25 @@ export default function TopicItemHeader({
       {topic.id !== -1 && (
         <Typography lineHeight={2.1}>
           <b>Topic : </b>
-          {topic.text}
+          {topic.title}
         </Typography>
       )}
 
       <Box className="actions">
-        <IconButton size="small" sx={{ ml: 2 }} onClick={() => null}>
+        <IconButton
+          size="small"
+          sx={{ ml: 2 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onEditTitle();
+          }}
+        >
           <EditOutlined fontSize="small" />
         </IconButton>
-        <IconButton size="small" onClick={() => actions.removeTopicAt(index)}>
+        <IconButton
+          size="small"
+          onClick={() => actions.removeTopicAt(sectionIndex, index)}
+        >
           <DeleteOutline fontSize="small" />
         </IconButton>
       </Box>

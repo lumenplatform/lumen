@@ -17,12 +17,12 @@ function CourseMaterialEditor() {
 export default CourseMaterialEditor;
 
 export function SectionsList() {
-  const { sections, actions } = useCourseMaterial();
-  const { setValue: setFormValue } = useFormContext();
+  const { setValue: setFormValue, getValues } = useFormContext();
+  const { sections, actions } = useCourseMaterial(getValues()['courseMaterial'] as Section[]);
   const theme = useTheme();
 
   useEffect(() => {
-    setFormValue('material', sections);
+    setFormValue('courseMaterial', sections);
   }, [sections, setFormValue]);
 
   const renderSection = useCallback((section: Section, secIndex: number) => {
@@ -38,7 +38,7 @@ export function SectionsList() {
 
   return (
     <Box style={{ ...style, padding: '0 2rem' }}>
-      {sections.map((section, i) => renderSection(section, i))}
+      {sections && sections.map((section, i) => renderSection(section, i))}
       <Paper
         elevation={0}
         sx={{ p: 2, border: `1px solid ${theme.palette.divider}` }}

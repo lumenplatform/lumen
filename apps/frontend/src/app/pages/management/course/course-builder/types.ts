@@ -13,14 +13,14 @@ export interface CardProps {
 
 export interface DragItem {
   index: number;
-  id: string;
+  id?: string;
   type: string;
   sectionIndex: number;
 }
 
 export interface Section {
-  id: any;
-  text: string;
+  id?: any;
+  title: string;
   topics: any[];
 }
 

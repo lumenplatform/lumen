@@ -34,10 +34,6 @@ export function uploadContent(data: any) {
 
 export const fetchUsers = () => client.get('/auth/users');
 
-export function createNewCourse(data: any) {
-  return client.post('/manage/courses', data, {});
-}
-
 export function search(params: any) {
   return client
     .get<any>('/courses/', { params: params })
@@ -47,3 +43,25 @@ export function search(params: any) {
 export function getCourseById(id: string) {
   return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
 }
+
+// MANAGEMENT ENDPOINTS
+
+export function createNewCourse(data: any) {
+  return client.post('/manage/courses', data, {});
+}
+
+export function updateCourse(data: any) {
+  return client
+    .put('/manage/courses/' + data.courseId, data, {})
+    .then((r) => r.data.data);
+}
+
+export function getOrgCourses() {
+  return client.get<any>('/manage/courses/', {}).then((r) => r.data.data);
+}
+
+export function getOrgCoursesById(id: string) {
+  return client.get<any>('/manage/courses/' + id, {}).then((r) => r.data.data);
+}
+
+// END MANAGEMENT

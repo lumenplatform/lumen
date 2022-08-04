@@ -13,7 +13,10 @@ import {
 import Chip from '@mui/material/Chip';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createNewCourse, getOrgCoursesById, updateCourse } from '../../../api';
+import { TabPanel } from '../../../components/TabPanel';
 import CourseMaterialEditor from './course-builder/CourseMaterialEditor';
 import { CourseLandingPage } from './sections/CourseLandingPage';
 import { CourseMessage } from './sections/CourseMessage';
@@ -22,39 +25,54 @@ import { FilmAndEdit } from './sections/FilmAndEdit';
 import { IntendedLearners } from './sections/IntendedLearners';
 import { Pricing } from './sections/Pricing';
 import { SetupAndTestVideo } from './sections/SetupAndTestVideo';
-import { TabPanel } from '../../../components/TabPanel';
-import { createNewCourse } from '../../../api';
-import { useMutation } from 'react-query';
+
 export default function CourseCreate() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { courseId } = useParams();
 
   const courseCreateMutation = useMutation(createNewCourse);
+  const courseUpdateMutation = useMutation(updateCourse);
 
+  const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
+    getOrgCoursesById(courseId ?? '')
+  );
+
+  // Active Tab
   const [value, setValue] = useState(0);
 
   const methods = useForm({
     defaultValues: {
-      title: 'Machine Learning For Dummies',
+      title: '',
       learningOutcome: [''],
       intendedAudience: [''],
       prerequisites: [''],
-      price: { currency: 'USD', value: 10 },
+      price: 10,
+      welcomeMessage: '',
+      congratsMessage: '',
     },
     mode: 'onBlur',
   });
+
   const fieldValues = methods.watch();
+
+  useEffect(() => {
+    if (courseData) {
+      methods.reset(courseData);
+    }
+  }, [courseData]);
+
   useEffect(() => {
     methods.reset({
-      title: 'Machine Learning For Dummies',
+      title: '',
       learningOutcome: [''],
       intendedAudience: [''],
       prerequisites: [''],
-      price: { currency: 'USD', value: 10 },
+      price: 10,
+      welcomeMessage: '',
+      congratsMessage: '',
     });
   }, []);
-
-  const onSubmit = (data: any) => console.log(data);
 
   const sections = [
     { component: <CourseLandingPage />, label: 'Course Information' },
@@ -97,7 +115,11 @@ export default function CourseCreate() {
           <Button
             variant="contained"
             onClick={() => {
-              courseCreateMutation.mutate(fieldValues);
+              if (courseId) {
+                courseUpdateMutation.mutate(fieldValues);
+              } else {
+                courseCreateMutation.mutate(fieldValues);
+              }
             }}
           >
             Save

@@ -19,6 +19,7 @@ import Enroll from './components/EnrollPageHeader';
 import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
 import CourseMaterialView from './pages/student/course/CourseMaterialView';
 import ForInstructors from './pages/public/ForInstructors';
+import NotFound from './pages/NotFound';
 
 const ProtectedPage = () => (
   <RequireAuth>
@@ -60,11 +61,13 @@ export default function () {
         </Route>
         <Route path="/manage">
           <Route path="new-course" element={<CourseCreate />}></Route>
+          <Route path="courses/:courseId" element={<CourseCreate />}></Route>
         </Route>
 
         {/* Common pages to all users */}
         <Route path="/profile" element={<UserProfile />} />
       </Route>
+      <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
 }

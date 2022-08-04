@@ -2,34 +2,6 @@ import { useCallback, useState } from 'react';
 import { v1 } from 'uuid';
 import { Section } from './types';
 
-const data = [
-  {
-    id: v1(),
-    text: 'Write a cool JS library',
-    topics: [
-      {
-        id: 3,
-        text: 'Write README',
-      },
-      {
-        id: 4,
-        text: 'Create some examples',
-      },
-    ],
-  },
-  {
-    id: 2,
-    text: 'Make it generic enough',
-    topics: [],
-  },
-
-  {
-    id: 5,
-    text: 'Spam in Twitter  ',
-    topics: [],
-  },
-];
-
 function removePreviews(sections: Section[]): Section[] {
   return sections
     .filter((r) => r && r.id !== -1)
@@ -71,6 +43,26 @@ function moveWithinSection(
   });
 }
 
+function updateItem(
+  sections: Section[],
+  sectionIndex: number,
+  location: number,
+  data: any
+) {
+  return sections.map((s, index) => {
+    if (index !== sectionIndex) return s;
+    console.log(index, sectionIndex);
+    const section = s;
+    const topics = [...(section.topics || [])];
+
+    if (topics && section.topics[location]) {
+      section.topics[location] = { ...section.topics[location], ...data };
+    }
+
+    return section;
+  });
+}
+
 function hideItem(sections: Section[], sectionIndex: number, location: number) {
   return sections.map((s, index) => {
     if (index !== sectionIndex) return s;
@@ -99,8 +91,7 @@ function addPreview(
 
     if (topics) {
       const previewItem = {
-        id: -1,
-        text: 'PREVIEW',
+        title: 'PREVIEW',
       };
       if (location == -1) {
         section.topics.push(previewItem);
@@ -113,7 +104,7 @@ function addPreview(
   });
 }
 
-export function useCourseMaterial() {
+export function useCourseMaterial(data: Section[]) {
   const [sections, setSections] = useState<Section[]>(data);
 
   const showPreviewAt = useCallback(
@@ -181,8 +172,7 @@ export function useCourseMaterial() {
     setSections((p) => {
       const r = [...p];
       r.splice(i, 0, {
-        id: v1(),
-        text: new Date().toISOString(),
+        title: new Date().toISOString(),
         topics: [],
       });
       return r;
@@ -194,14 +184,12 @@ export function useCourseMaterial() {
       const r = [...p];
       if (r[sectionId].topics) {
         r[sectionId].topics.splice(topicIndex, 0, {
-          id: v1(),
-          text: new Date().toISOString(),
+          title: new Date().toISOString(),
         });
       } else {
         r[sectionId].topics = [
           {
-            id: v1(),
-            text: new Date().toISOString(),
+            title: new Date().toISOString(),
           },
         ];
       }
@@ -211,6 +199,7 @@ export function useCourseMaterial() {
 
   function removeTopicAt(sectionId: number, topicIndex: number) {
     setSections((p) => {
+      console.log(sectionId);
       const r = [...p];
       if (r[sectionId].topics) {
         r[sectionId].topics.splice(topicIndex, 1);
@@ -231,10 +220,15 @@ export function useCourseMaterial() {
     setSections((p) => hideItem(p, sec, lec));
   }
 
+  function updateTopic(sectionId: number, topicIndex: number, data: any) {
+    setSections((s) => updateItem(s, sectionId, topicIndex, data));
+  }
+
   return {
     sections,
     actions: {
       moveTopic,
+      updateTopic,
       removeSectionAt,
       addSectionAt,
       removeTopicAt,

@@ -165,7 +165,7 @@ export class FileItemComp extends Component<
         }}
         variant="caption"
       >
-        {formatBytes(file.size, 0)} {mime}{' '}
+        {formatBytes(file?.size, 0)} {mime}{' '}
       </Typography>
     );
 
@@ -231,7 +231,6 @@ type FileInputProps = {
 };
 
 function FilesInput({ multiple, onChange, value, accept }: FileInputProps) {
-  console.log(value);
   const [files, { updateAt, push, removeAt }] = useList<FileItem>(
     // @ts-ignore
     multiple ? (value ? value : []) : value ? [value] : []

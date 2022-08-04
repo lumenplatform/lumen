@@ -121,7 +121,7 @@ export function SectionItem({ section, index, actions }: any) {
           }}
         >
           <Typography lineHeight={2.1}>
-            <b>Section {index + 1}:</b> {section.text}
+            <b>Section {index + 1}:</b> {section.title}
           </Typography>
           <IconButton size="small" sx={{ ml: 2 }}>
             <Edit fontSize="small" />
@@ -138,7 +138,7 @@ export function SectionItem({ section, index, actions }: any) {
         <AccordionDetails>
           <Box sx={{ px: 3 }}>
             {section.topics
-              .filter((r: any) => !r.isHidden)
+              ?.filter((r: any) => !r.isHidden)
               ?.map((lec: any, j: number) => (
                 <div style={{ position: 'relative' }}>
                   <AddButton onClick={() => actions.addTopicAt(index, j)} />

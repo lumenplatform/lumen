@@ -20,7 +20,7 @@ export class Asset {
   @PrimaryKey()
   id: string = v4();
 
-  @Property( )
+  @Property()
   url: string;
 
   @Enum({ items: () => AssetType, hidden: true })
@@ -35,7 +35,7 @@ export class Asset {
   @Property()
   name: string;
 
-  @Property({ hidden: true })
+  @Property({ nullable: true })
   config: Record<string, unknown>;
 
   @Property({ nullable: true, hidden: true })

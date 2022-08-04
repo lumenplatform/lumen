@@ -1,31 +1,51 @@
 import { Add, AddToQueue, PlaylistAdd } from '@mui/icons-material';
 import { Box, Button, Divider, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FilesInput from '../../../../components/FilesInput';
 import Tiptap from '../../../../components/Tiptap';
 
-export default function TopicEditor() {
+export default function TopicEditor({
+  updateItem,
+  topic,
+}: {
+  updateItem: (e: any) => void;
+  topic: any;
+}) {
   const [view, setView] = useState('default');
+  const [data, setData] = useState<{
+    contentType?: string;
+    article?: string;
+    video?: any;
+  }>(topic ?? {});
 
-  const [{ contentType }, setData] = useState<{ contentType?: string }>({});
+  useEffect(() => {
+    updateItem(data);
+  }, [data]);
 
   return (
     <Box>
       <Divider />
-
       {view === 'default' && (
         <Box>
-          {contentType &&
-            (contentType === 'video' ? (
+          {data.contentType &&
+            (data.contentType === 'video' ? (
               <Box>
-                <FilesInput />
+                <FilesInput
+                  value={data.video}
+                  onChange={(video: any) => setData((d) => ({ ...d, video }))}
+                />
               </Box>
             ) : (
               <Box>
-                <Tiptap />
+                <Tiptap
+                  onChange={(article: string) =>
+                    setData((d) => ({ ...d, article }))
+                  }
+                  content={data.article}
+                />
               </Box>
             ))}
-          {!contentType && (
+          {!data.contentType && (
             <Box sx={{ p: 1 }}>
               <Button
                 size="small"
