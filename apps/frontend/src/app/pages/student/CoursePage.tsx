@@ -30,6 +30,11 @@ const sideBarItems = [
     path: 'info',
     label: 'Course Info',
   },
+  {
+    path: 'grades',
+    label: 'Grades',
+  },
+
 ];
 
 export function CourseNav() {
