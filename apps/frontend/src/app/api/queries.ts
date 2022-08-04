@@ -23,5 +23,8 @@ export function login() {
     password: 'ee®',
   });
 }
+export function getCourseById(id: string) {
+  return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
+}
 
 export const fetchUsers = () => client.get('/auth/users');
