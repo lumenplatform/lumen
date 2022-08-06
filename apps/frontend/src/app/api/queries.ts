@@ -1,6 +1,6 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
-const getToken = () => localStorage.getItem('token');
+const getToken = () => localStorage.getItem('lumen_token');
 
 const client = axios.create({
   baseURL: '/api/',
@@ -10,18 +10,15 @@ const client = axios.create({
 client.interceptors.request.use(function (config) {
   const token = getToken();
   if (token) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    config.headers!['Authorization'] = token;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    config.headers['Authorization'] = 'Bearer ' + token;
   }
-
   return config;
 });
 
-export function login() {
-  return client.post<{ token: 'string' }>('/auth/login', {
-    username: 'ee',
-    password: 'ee®',
-  });
+export function fetchUser() {
+  return client.get<any>('/auth/me', {}).then((r) => r.data);
 }
 
 export function getUploadConfig() {

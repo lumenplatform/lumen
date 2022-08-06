@@ -34,13 +34,14 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
 
 
 const rows = [
-  createData('Machine Learning', '2020-01-15', '2020-03-05'), //enter data if other variables are used
-  createData('Machine Learning', '2020-01-15', '2020-03-05'),
+  createData('Machine Learnineg',"2020-01-15", "2020-03-05"),        //enter data if other variables are used
+  createData('Machine Learning', "2020-01-15", "2020-03-05"), 
+
 ];
 
 export default function CourseHistoryList() {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer   >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

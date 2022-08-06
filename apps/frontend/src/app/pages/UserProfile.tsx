@@ -26,6 +26,8 @@ import {
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
 import React from 'react';
+import { useQuery } from 'react-query';
+import { fetchUser } from '../api';
 import { useAuth } from '../components/Auth';
 import CourseHistoryList from '../components/CourseHistoryList';
 import StudentHeader from '../components/StudentHeader';
@@ -54,14 +56,14 @@ function TabPanel(props: TabPanelProps) {
 function OverviewTab() {
   return (
     <div>
-      <Paper sx={{ p: 3, mb: 2 }}>
-        <Typography variant="h6" sx={{ lineHeight: 1, mb: 2 }}>
+      <Paper sx={{ py: 3, mb: 2 }}>
+        <Typography variant="h6" sx={{ mx: 3, lineHeight: 1 }}>
           Course History
         </Typography>
         <CourseHistoryList />
       </Paper>
       <Paper sx={{ p: 3, mb: 2 }}>
-        <Typography variant="h6" sx={{ lineHeight: 1, mb: 2 }}>
+        <Typography variant="h6" sx={{ lineHeight: 1, mb: 3 }}>
           Profile Information
         </Typography>
         <Box
@@ -240,13 +242,14 @@ function ProfileSections() {
 function ProfileCard() {
   const theme = useTheme();
   const { user, signOut } = useAuth();
+  const { isLoading, data } = useQuery('fetchUser', fetchUser);
 
   if (!user) {
     return <Skeleton variant="rectangular" width={210} height={118} />;
   }
 
   return (
-    <Paper sx={{ p: theme.spacing(2) }}>
+    <Box sx={{ p: theme.spacing(2) }}>
       <Box
         sx={{
           display: 'flex',
@@ -277,18 +280,18 @@ function ProfileCard() {
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Button variant="outlined" sx={{ mr: 2 }} onClick={signOut}>
-          Logout
-        </Button>
         <Button variant="outlined" sx={{ mr: 2 }}>
           Edit
         </Button>
-
         <Button variant="outlined" color="error">
           Deactivate
         </Button>
+        <br></br>
       </Box>
-    </Paper>
+      <Button variant="outlined" sx={{ mr: 2 }} onClick={signOut}>
+        Logout
+      </Button>
+    </Box>
   );
 }
 
@@ -297,10 +300,10 @@ export default function UserProfile(props: any) {
     <Container>
       <StudentHeader />
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={12} md={4}>
+        <Grid item xs={12} sm={12} md={3}>
           <ProfileCard />
         </Grid>
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid item xs={12} sm={12} md={9}>
           <ProfileSections />
         </Grid>
       </Grid>

@@ -1,6 +1,6 @@
 import { useAuth0, User } from '@auth0/auth0-react';
 import { Backdrop, CircularProgress } from '@mui/material';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 
 interface AuthContextType {
   user?: User;
@@ -13,8 +13,27 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { user, isAuthenticated, isLoading, logout, loginWithRedirect } =
-    useAuth0();
+  const {
+    user,
+    isAuthenticated,
+    isLoading,
+    logout,
+    loginWithRedirect,
+    getIdTokenClaims,
+  } = useAuth0();
+
+  useEffect(() => {
+    const setToken = async () => {
+      const token = await getIdTokenClaims();
+      if (token) {
+        localStorage.setItem('lumen_token', token.__raw);
+      } else {
+        localStorage.removeItem('lumen_token');
+      }
+    };
+
+    setToken();
+  }, [isAuthenticated, getIdTokenClaims, user?.sub]);
 
   const signIn = (opt: { redirectURL: string }) => {
     loginWithRedirect({

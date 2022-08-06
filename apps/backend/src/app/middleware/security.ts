@@ -5,7 +5,7 @@ export async function injectUser(req, res, next) {
   try {
     if (req.header('authorization')) {
       const token = req.header('authorization').split(' ').pop();
-      req.user = AuthService.getUserFromToken(token);
+      req.user = await AuthService.getUserFromToken(token);
       req.isLoggedIn = true;
     }
     next();
