@@ -2,12 +2,10 @@ import { Container, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
+import TextField from '@mui/material/TextField';
 
-export default function MCQ() {
+export default function EssayQ() {
   return (
     <Container sx={{ padding: 5 }}>
       <Card sx={{ Width: 800, minHeight: 300 }}>
@@ -26,33 +24,14 @@ export default function MCQ() {
               aliquip ex ea commodo consequat
             </FormLabel>
 
-            <RadioGroup
-              aria-labelledby="quiz"
-              defaultValue="female"
-              name="radio-buttons-group"
-              sx={{ paddingLeft: 5 }}
-            >
-              <FormControlLabel
-                value="c1"
-                control={<Radio />}
-                label="Choice 1"
-              />
-              <FormControlLabel
-                value="c2"
-                control={<Radio />}
-                label="Choice 2"
-              />
-              <FormControlLabel
-                value="c3"
-                control={<Radio />}
-                label="Choice 3"
-              />
-              <FormControlLabel
-                value="c4"
-                control={<Radio />}
-                label="Choice 4"
-              />
-            </RadioGroup>
+            <TextField
+              id="essay"
+              multiline
+              maxRows={20}
+              variant="outlined"
+              fullWidth
+              rows={10}
+            />
           </FormControl>
         </Box>
       </Card>
