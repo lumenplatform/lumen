@@ -18,6 +18,7 @@ import UserProfile from './pages/UserProfile';
 import Enroll from './components/EnrollPageHeader';
 import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
 import CourseMaterialView from './pages/student/course/CourseMaterialView';
+import Quizpage from './pages/student/QuizPage';
 
 const ProtectedPage = () => (
   <RequireAuth>
@@ -46,6 +47,7 @@ export default function () {
           <Route path=":courseId/materialview" element={<CourseMaterialPage />}>
             <Route path=":materialId" element={<CourseMaterialView />} />
           </Route>
+          <Route path="quiz" element={<Quizpage />}></Route>
         </Route>
 
         {/* Pages accessed by the teacher / admin / moderator */}
