@@ -6,8 +6,9 @@ import * as morgan from 'morgan';
 import { InitORM, InjectORM } from './app/config/db';
 
 import { json } from 'express';
+import { urlencoded } from 'express';
 import adminRouter from './app/admin/admin.router';
-import { indexRouter } from './app/routes';
+import apiRouter from './app/routes';
 import { logger } from './app/utils/logger';
 import { environment } from './environments/environment';
 declare global {
@@ -35,9 +36,10 @@ if (environment.production) {
   );
 }
 app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use(InjectORM);
 
-app.use('/api', indexRouter);
+app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
 
 const port = process.env.PORT;

@@ -3,15 +3,18 @@ import { ThemeOptions } from '@mui/material';
 export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
-      main: '#14c753',
-      contrastText:'white'
+      main: '#019a76',
+      contrastText: 'white',
     },
     secondary: {
       main: '#f50057',
     },
+    error: {
+      main: '#ff0000',
+    },
   },
   typography: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter,sans-serif',
     button: {
       fontWeight: 600,
     },

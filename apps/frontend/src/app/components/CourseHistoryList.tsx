@@ -12,13 +12,8 @@ import Box from '@mui/material/Box';
 import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 
-
-function createData(
-  name: string,
-  EnrolledDate: string,
-  CompletedDate: string,
-) {
-  return { name, EnrolledDate, CompletedDate };  //enter the other variable names if used
+function createData(name: string, EnrolledDate: string, CompletedDate: string) {
+  return { name, EnrolledDate, CompletedDate }; //enter the other variable names if used
 }
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
@@ -79,6 +74,4 @@ export default function CourseHistoryList() {
   );
 }
 
-// export default function CourseHistoryList(props: any) {
-//     return <div> Course History</div>;
-// }
+
