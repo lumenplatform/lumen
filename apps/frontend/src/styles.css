@@ -4,6 +4,11 @@
     display: none;
   }
 }
+
+body {
+  /* user-select: none; */
+}
+
 .ProseMirror {
   outline: none;
   padding: 0.5em;

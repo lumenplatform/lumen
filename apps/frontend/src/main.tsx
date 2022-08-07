@@ -11,7 +11,9 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { cacheTime: 1000 * 60 * 5 } },
+});
 
 root.render(
   <StrictMode>

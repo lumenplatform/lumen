@@ -9,6 +9,7 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+import { v4 } from 'uuid';
 import { Enrollment } from './enrollment.model';
 import { Notification } from './notification.model';
 import { Organization } from './organization.model';
@@ -22,41 +23,52 @@ export class UserPreferences {
   @Property()
   preferredTheme: 'light' | 'dark' = 'light';
 
-  @Property({default: true, columnType: 'boolean'})
+  @Property({ default: true, columnType: 'boolean' })
   weeklyRecommendations = true;
 
-  @Property({default: false, columnType: 'boolean'})
+  @Property({ default: false, columnType: 'boolean' })
   promotions = false;
 
-  @Property({default: true, columnType: 'boolean'})
+  @Property({ default: true, columnType: 'boolean' })
   courseAnnouncements = true;
 
-  @Property({default: true, columnType: 'boolean'})
+  @Property({ default: true, columnType: 'boolean' })
   courseReminders = true;
 
-  @Property({default: true, columnType: 'boolean'})
+  @Property({ default: true, columnType: 'boolean' })
   discussionForums = true;
 }
 @Entity()
 export class User {
   @PrimaryKey()
-  uid: string;
+  uid: string = v4();
+
+  @Property()
+  email: string;
 
   @Property()
   timeZone: string;
 
-  @Embedded(() => UserPreferences)
+  @Embedded({ entity: () => UserPreferences })
   preferences: UserPreferences;
 
   @Enum(() => UserStatus)
   status: UserStatus = UserStatus.ACTIVE;
 
-  @ManyToOne({nullable: true})
+  @ManyToOne({ nullable: true, eager: true })
   organization: Organization;
 
-  @OneToMany(() => Notification, (notification) => notification.user)
+  @OneToMany({
+    entity: () => Notification,
+    mappedBy: (notification) => notification.user,
+    lazy: true,
+  })
   notifications = new Collection<Notification>(this);
 
-  @OneToMany(() => Notification, (notification) => notification.user)
+  @OneToMany({
+    entity: () => Enrollment,
+    mappedBy: (notification) => notification.user,
+    lazy: true,
+  })
   enrollments = new Collection<Enrollment>(this);
 }

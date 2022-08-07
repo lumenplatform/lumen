@@ -1,4 +1,4 @@
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components/Auth';
 import HomePage from './pages/public/HomePage';
 import AdminLayout from './pages/management/AdminLayout';
@@ -16,13 +16,17 @@ import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
 import Enroll from './components/EnrollPageHeader';
-import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
-import CourseMaterialView from './pages/student/course/CourseMaterialView';
+import CourseViewer from './pages/student/course/CourseMaterialPage';
+import ContentView from './pages/student/course/CourseMaterialView';
 import ForInstructors from './pages/public/ForInstructors';
 import NotFound from './pages/NotFound';
 
-const ProtectedPage = () => (
-  <RequireAuth>
+const ProtectedPage = ({
+  userRole,
+}: {
+  userRole: 'instructor' | 'student' | 'any';
+}) => (
+  <RequireAuth role={userRole}>
     <Outlet />
   </RequireAuth>
 );
@@ -34,9 +38,8 @@ export default function () {
       <Route path="/" element={<HomePage />} />
       <Route path="/teaching" element={<ForInstructors />} />
 
-      {/* Protected Pages */}
-      <Route element={<ProtectedPage />}>
-        {/* Pages accessed by the student */}
+      {/* Pages accessed by the student */}
+      <Route element={<ProtectedPage userRole="student" />}>
         <Route path="/student">
           <Route index element={<StudentHome />} />
           <Route path="search" element={<SearchPage />} />
@@ -45,13 +48,16 @@ export default function () {
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />
             <Route path="resources" element={<CourseResources />} />
+            <Route path="" element={<Navigate replace to="material" />}></Route>
           </Route>
-          <Route path=":courseId/learn/" element={<CourseMaterialPage />}>
-            <Route path=":sectionId/:topicId" element={<CourseMaterialView />} />
+          <Route path=":courseId/learn/" element={<CourseViewer />}>
+            <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
         </Route>
+      </Route>
 
-        {/* Pages accessed by the teacher / admin / moderator */}
+      {/* Pages accessed by the teacher / admin / moderator */}
+      <Route element={<ProtectedPage userRole="instructor" />}>
         <Route path="/manage" element={<AdminLayout />}>
           <Route index element={<Dashboard />}></Route>
           <Route path="courses" element={<Courses />}></Route>
@@ -63,10 +69,13 @@ export default function () {
           <Route path="new-course" element={<CourseCreate />}></Route>
           <Route path="courses/:courseId" element={<CourseCreate />}></Route>
         </Route>
+      </Route>
 
-        {/* Common pages to all users */}
+      {/* Common pages to all users */}
+      <Route element={<ProtectedPage userRole="any" />}>
         <Route path="/profile" element={<UserProfile />} />
       </Route>
+
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );

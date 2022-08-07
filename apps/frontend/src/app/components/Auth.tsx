@@ -1,9 +1,13 @@
 import { useAuth0, User } from '@auth0/auth0-react';
 import { Backdrop, CircularProgress } from '@mui/material';
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { fetchUser } from '../api';
+import InstructorOnboarding from '../pages/auth/InstructorOnboarding';
 
 interface AuthContextType {
   user?: User;
+  appUser: any;
   isAuthenticated: boolean;
   isLoading: boolean;
   signIn: (opt: { redirectURL: string }) => void;
@@ -13,10 +17,12 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [tokenFetched, setTokenFetched] = useState(false);
+
   const {
     user,
     isAuthenticated,
-    isLoading,
+    isLoading: auth0Loading,
     logout,
     loginWithRedirect,
     getIdTokenClaims,
@@ -30,10 +36,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         localStorage.removeItem('lumen_token');
       }
+      setTokenFetched(true);
     };
 
     setToken();
   }, [isAuthenticated, getIdTokenClaims, user?.sub]);
+
+  const { data: appUser, isLoading: userLoading } = useQuery('me', fetchUser, {
+    enabled: !!tokenFetched,
+  });
 
   const signIn = (opt: { redirectURL: string }) => {
     loginWithRedirect({
@@ -45,7 +56,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logout();
   };
 
-  const value = { user, isLoading, signIn, signOut, isAuthenticated };
+  const isLoading = auth0Loading || userLoading;
+
+  const value = { user, isLoading, signIn, signOut, isAuthenticated, appUser };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -54,10 +67,22 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-export function RequireAuth({ children }: { children: JSX.Element }) {
+export function RequireAuth({
+  children,
+  role,
+}: {
+  children: JSX.Element;
+  role: 'instructor' | 'student' | 'any';
+}) {
   const auth = useAuth();
   if (!auth.isLoading) {
-    if (auth.isAuthenticated) return children;
+    console.log(auth);
+    if (auth.isAuthenticated && auth.appUser) {
+      if (role === 'instructor' && !auth.appUser.organization) {
+        return <InstructorOnboarding />;
+      }
+      return children;
+    }
 
     auth.signIn({
       // eslint-disable-next-line no-restricted-globals

@@ -17,9 +17,17 @@ client.interceptors.request.use(function (config) {
   return config;
 });
 
+// AUTHENTICATION
 export function fetchUser() {
-  return client.get<any>('/auth/me', {}).then((r) => r.data);
+  return client.get<any>('/auth/me').then((r) => r.data.data);
 }
+
+export function registerOrganization(data: any) {
+  return client
+    .post<any>('/auth/register-organization', data)
+    .then((r) => r.data.data);
+}
+// END AUTHENTICATION
 
 export function getUploadConfig() {
   return client.get<any>('/asset/upload-config').then((r) => r.data.data);
@@ -28,8 +36,6 @@ export function getUploadConfig() {
 export function uploadContent(data: any) {
   return client.post('/asset', data);
 }
-
-export const fetchUsers = () => client.get('/auth/users');
 
 export function search(params: any) {
   return client

@@ -23,6 +23,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useQueries, useQuery } from 'react-query';
 import { useList } from 'react-use';
 import { getUploadConfig } from '../api';
 
@@ -48,16 +49,18 @@ function StorageProvider({ children }: { children: React.ReactNode }) {
   const [containerClient, setContainerClient] = useState<ContainerClient>(
     null!
   );
-
-  const getAffiliates = async () => {
-    const response = await getUploadConfig();
-    const client = new ContainerClient(response.sas);
-    setContainerClient(client);
-  };
+  const { data: uploadConfig } = useQuery(
+    'fetchUploadConfig',
+    getUploadConfig,
+    { staleTime: 1000 * 60 * 10 }
+  );
 
   useEffect(() => {
-    getAffiliates();
-  }, []);
+    if (uploadConfig) {
+      const client = new ContainerClient(uploadConfig.sas);
+      setContainerClient(client);
+    }
+  }, [uploadConfig]);
 
   return (
     <StorageContext.Provider value={{ containerClient }}>
@@ -232,6 +235,7 @@ type FileInputProps = {
 
 function FilesInput({ multiple, onChange, value, accept }: FileInputProps) {
   const [files, { updateAt, push, removeAt }] = useList<FileItem>(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     multiple ? (value ? value : []) : value ? [value] : []
   );
