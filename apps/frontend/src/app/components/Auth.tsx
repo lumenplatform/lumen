@@ -2,6 +2,7 @@ import { useAuth0, User } from '@auth0/auth0-react';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchUser } from '../api';
 import InstructorOnboarding from '../pages/auth/InstructorOnboarding';
 
@@ -10,14 +11,14 @@ interface AuthContextType {
   appUser: any;
   isAuthenticated: boolean;
   isLoading: boolean;
-  signIn: (opt: { redirectURL: string }) => void;
+  signIn: (opt: { redirectPath: string }) => void;
   signOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [tokenFetched, setTokenFetched] = useState(false);
+  const navigate = useNavigate();
 
   const {
     user,
@@ -36,23 +37,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         localStorage.removeItem('lumen_token');
       }
-      setTokenFetched(true);
+
+      const path = localStorage.getItem('redirect_path');
+      if (path) {
+        localStorage.removeItem('redirect_path');
+        navigate(path);
+      }
     };
 
     setToken();
   }, [isAuthenticated, getIdTokenClaims, user?.sub]);
 
   const { data: appUser, isLoading: userLoading } = useQuery('me', fetchUser, {
-    enabled: !!tokenFetched,
+    enabled: isAuthenticated,
   });
 
-  const signIn = (opt: { redirectURL: string }) => {
-    loginWithRedirect({
-      redirectUri: opt.redirectURL,
-    });
+  const signIn = (opt: { redirectPath: string }) => {
+    localStorage.setItem('redirect_path', opt.redirectPath);
+    // eslint-disable-next-line no-restricted-globals
+    loginWithRedirect({ redirectUri: location.origin });
   };
 
   const signOut = () => {
+    localStorage.removeItem('lumen_token');
     logout();
   };
 
@@ -75,8 +82,9 @@ export function RequireAuth({
   role: 'instructor' | 'student' | 'any';
 }) {
   const auth = useAuth();
+  const location = useLocation();
+
   if (!auth.isLoading) {
-    console.log(auth);
     if (auth.isAuthenticated && auth.appUser) {
       if (role === 'instructor' && !auth.appUser.organization) {
         return <InstructorOnboarding />;
@@ -84,10 +92,7 @@ export function RequireAuth({
       return children;
     }
 
-    auth.signIn({
-      // eslint-disable-next-line no-restricted-globals
-      redirectURL: location.href,
-    });
+    auth.signIn({ redirectPath: location.pathname });
   }
 
   return (

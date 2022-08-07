@@ -22,6 +22,14 @@ export function fetchUser() {
   return client.get<any>('/auth/me').then((r) => r.data.data);
 }
 
+export function getPendingInvites() {
+  return client.get<any>('/auth/invites').then((r) => r.data.data);
+}
+
+export function acceptInvite(id: string) {
+  return client.post<any>('/auth/accept-invite/' + id).then((r) => r.data.data);
+}
+
 export function registerOrganization(data: any) {
   return client
     .post<any>('/auth/register-organization', data)
@@ -74,4 +82,11 @@ export function getOrgUsers() {
   return client.get<any>('/manage/users/').then((r) => r.data.data);
 }
 
+export function inviteUserToOrg(data: any) {
+  return client.post('/manage/users/invites', data).then((r) => r.data.data);
+}
+
+export function getPendingOrgInvitations() {
+  return client.get('/manage/users/invites').then((r) => r.data.data);
+}
 // END MANAGEMENT

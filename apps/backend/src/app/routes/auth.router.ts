@@ -18,7 +18,21 @@ authRouter.use(guard.isAuthenticated);
 
 authRouter.get('/me', (req, res, next) => {
   authController
-    .getUserFromRequest(req.user)
+    .getUserFromRequest({ ...req.user })
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+authRouter.get('/invites', (req, res, next) => {
+  authController
+    .getPendingOrgInvitesForEmail({ email: req.user.email })
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+authRouter.post('/accept-invite/:id', (req, res, next) => {
+  authController
+    .acceptInvite({ email: req.user.email, inviteId: req.params.id })
     .then(sendJSON(res))
     .catch(next);
 });

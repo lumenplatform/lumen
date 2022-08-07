@@ -25,11 +25,11 @@ root.render(
       scope="read:current_user update:current_user_metadata"
     >
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <AuthProvider>
             <App />
-          </BrowserRouter>
-        </AuthProvider>
+          </AuthProvider>
+        </BrowserRouter>
       </QueryClientProvider>
     </Auth0Provider>
   </StrictMode>

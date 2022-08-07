@@ -1,6 +1,6 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components/Auth';
-import HomePage from './pages/public/HomePage';
+import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
 import CourseCreate from './pages/management/course/CourseCreate';
@@ -8,18 +8,18 @@ import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
 import Users from './pages/management/Users';
+import NotFound from './pages/NotFound';
+import ForInstructors from './pages/public/ForInstructors';
+import HomePage from './pages/public/HomePage';
 import CourseInfo from './pages/student/course/CourseInfo';
 import CourseMaterial from './pages/student/course/CourseMaterial';
+import CourseViewer from './pages/student/course/CourseMaterialPage';
+import ContentView from './pages/student/course/CourseMaterialView';
 import CourseResources from './pages/student/course/CourseResources';
 import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
-import Enroll from './components/EnrollPageHeader';
-import CourseViewer from './pages/student/course/CourseMaterialPage';
-import ContentView from './pages/student/course/CourseMaterialView';
-import ForInstructors from './pages/public/ForInstructors';
-import NotFound from './pages/NotFound';
 
 const ProtectedPage = ({
   userRole,

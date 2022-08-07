@@ -1,5 +1,7 @@
-import { string } from 'yup';
+import { RequestContext } from '@mikro-orm/core';
+import { assert } from 'console';
 import { Asset } from '../models/asset.model';
+import { InviteType, UserInvite } from '../models/user-invite.model';
 import { OrganizationService } from '../services/organization.service';
 import { UserService } from '../services/user.service';
 
@@ -50,5 +52,66 @@ export class AuthController {
 
     this.userService.saveUser(user);
     return user;
+  }
+
+  async inviteEmailToOrganization(data: { orgId: string; email: string }) {
+    const em = RequestContext.getEntityManager();
+    const expireAt = new Date();
+    expireAt.setDate(expireAt.getDate() + 7);
+
+    const invite = em.create(UserInvite, {
+      type: InviteType.ORGANIZATION,
+      expiresAt: expireAt,
+      email: data.email,
+      organization: { orgId: data.orgId },
+    });
+
+    em.persistAndFlush(invite);
+    return invite;
+  }
+
+  async getPendingUserInvitesForOrg(data: { orgId: string }) {
+    const em = RequestContext.getEntityManager();
+
+    return em.find(UserInvite, {
+      organization: { orgId: data.orgId },
+      used: false,
+      type: InviteType.ORGANIZATION,
+    });
+  }
+
+  async getPendingOrgInvitesForEmail(data: { email: string }) {
+    const em = RequestContext.getEntityManager();
+
+    return em.find(
+      UserInvite,
+      {
+        email: data.email,
+        used: false,
+        type: InviteType.ORGANIZATION,
+      },
+      { populate: ['organization'] }
+    );
+  }
+
+  async acceptInvite(data: { email: string; inviteId: string }) {
+    const em = RequestContext.getEntityManager();
+
+    const invite = await em.findOneOrFail(UserInvite, {
+      id: data.inviteId,
+      email: data.email,
+    });
+
+    assert(invite.expiresAt <= new Date());
+
+    invite.used = true;
+
+    if (invite.type === InviteType.ORGANIZATION) {
+      const user = await this.userService.getUserByEmail(data.email);
+      user.organization = invite.organization;
+    } else if (invite.type === InviteType.COURSE) {
+      // todo: enroll in course
+    }
+    em.flush();
   }
 }
