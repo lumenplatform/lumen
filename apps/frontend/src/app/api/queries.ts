@@ -51,8 +51,7 @@ export function getCourseMaterial(id: string) {
   return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
 }
 
-// MANAGEMENT ENDPOINTS
-
+// MANAGEMENT
 export function createNewCourse(data: any) {
   return client.post('/manage/courses', data, {});
 }
@@ -69,6 +68,10 @@ export function getOrgCourses() {
 
 export function getOrgCoursesById(id: string) {
   return client.get<any>('/manage/courses/' + id, {}).then((r) => r.data.data);
+}
+
+export function getOrgUsers() {
+  return client.get<any>('/manage/users/').then((r) => r.data.data);
 }
 
 // END MANAGEMENT

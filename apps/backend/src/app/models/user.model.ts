@@ -47,9 +47,15 @@ export class User {
   email: string;
 
   @Property()
+  name: string;
+
+  @Property({ default: 'https://www.gravatar.com/avatar/0?d=mp' })
+  picture: string;
+
+  @Property()
   timeZone: string;
 
-  @Embedded({ entity: () => UserPreferences })
+  @Embedded(() => UserPreferences)
   preferences: UserPreferences;
 
   @Enum(() => UserStatus)

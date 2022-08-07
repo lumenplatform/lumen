@@ -1,3 +1,4 @@
+import { string } from 'yup';
 import { Asset } from '../models/asset.model';
 import { OrganizationService } from '../services/organization.service';
 import { UserService } from '../services/user.service';
@@ -8,14 +9,22 @@ export class AuthController {
     private orgService: OrganizationService
   ) {}
 
-  async getUserFromTokenPayload(payload: any) {
+  async getUserFromRequest(payload: {
+    email: string;
+    uid: string;
+    name: string;
+    picture: string;
+  }) {
     // TODO: does every payload has a email ?
-
     let user = await this.userService.getUserByEmail(payload.email);
-
     if (!user) {
       // create a user if a user does not exist in the db
-      user = await this.userService.createUser({ email: payload.email });
+      user = await this.userService.createUser({
+        email: payload.email,
+        uid: payload.uid,
+        name: payload.name,
+        picture: payload.picture,
+      });
     }
 
     return user;

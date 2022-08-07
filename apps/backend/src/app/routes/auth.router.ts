@@ -18,7 +18,7 @@ authRouter.use(guard.isAuthenticated);
 
 authRouter.get('/me', (req, res, next) => {
   authController
-    .getUserFromTokenPayload(req.user)
+    .getUserFromRequest(req.user)
     .then(sendJSON(res))
     .catch(next);
 });

@@ -36,8 +36,11 @@ export class UserService {
    * @param data user data
    * @returns persisted user with uid
    */
-  async createUser(data: { email: string }) {
+  async createUser(data: Partial<User>) {
     const user = this.userRepo.create({
+      name: data.name || data.email,
+      picture: data.picture,
+      uid: data.uid,
       email: data.email,
       timeZone: 'Asia/Colombo',
       preferences: new UserPreferences(),
@@ -49,5 +52,9 @@ export class UserService {
   async saveUser(user: User) {
     await this.userRepo.persistAndFlush(user);
     RequestContext.getEntityManager().clearCache(`user-${user.email}`);
+  }
+
+  getUsersByOrgId(orgId: string) {
+    return this.userRepo.find({ organization: { orgId } });
   }
 }

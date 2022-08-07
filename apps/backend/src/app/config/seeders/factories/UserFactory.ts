@@ -9,6 +9,7 @@ export class UserFactory extends Factory<User> {
       timeZone: faker.address.timeZone(),
       preferences: new UserPreferences(),
       email: faker.internet.email(),
+      name: faker.name.firstName() + ' ' + faker.name.lastName(),
     };
   }
 }

@@ -1,10 +1,11 @@
+import { Request } from 'express';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 import { ServerException } from '../utils/errors';
 
 const userService = new UserService();
 
-export async function injectUser(req, res, next) {
+export async function injectUser(req: Request, res, next) {
   try {
     if (req.header('authorization')) {
       const token = req.header('authorization').split(' ').pop();
@@ -16,8 +17,10 @@ export async function injectUser(req, res, next) {
       );
       req.user = {
         email: payload.email,
-        uid: user.uid,
-        orgId: user.organization?.orgId,
+        uid: user?.uid || payload.sub,
+        orgId: user?.organization?.orgId,
+        name: user?.name || payload.name,
+        picture: user?.picture || payload.picture,
       };
       req.isLoggedIn = true;
     }
