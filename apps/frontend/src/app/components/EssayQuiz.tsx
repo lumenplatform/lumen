@@ -10,7 +10,7 @@ export default function EssayQ() {
     <Container sx={{ padding: 5 }}>
       <Card sx={{ Width: 800, minHeight: 300 }}>
         <Box
-          sx={{ backgroundColor: 'primary.dark', minHeight: 40, padding: 2 }}
+          sx={{ backgroundColor: 'primary.main', minHeight: 40, padding: 2 }}
         >
           <Typography variant="subtitle1">Question 1 of 15</Typography>
         </Box>
