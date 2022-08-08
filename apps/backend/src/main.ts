@@ -15,7 +15,14 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
-      user: any;
+      user: {
+        email: string;
+        uid: string;
+        orgId: string;
+        name: string;
+        picture: string;
+      };
+      isLoggedIn: boolean;
     }
   }
 }

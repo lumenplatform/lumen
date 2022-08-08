@@ -23,7 +23,7 @@ export function SectionItem({ section, index, actions }: any) {
   const [expanded, setExpanded] = useState(true);
 
   const [isTitleEditing, setIsTitleEditing] = useState(false);
-  const [title, setTitle] = useState('section.title');
+  const [title, setTitle] = useState(section.title);
 
   const renderTopic = useCallback((topic: any, i: number) => {
     return (

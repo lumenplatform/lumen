@@ -4,17 +4,17 @@ import {
   Box,
   Breadcrumbs,
   Collapse,
-  Link,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   Typography,
   useTheme,
+  Link as MuiLink,
 } from '@mui/material';
 import * as React from 'react';
 import { useQuery } from 'react-query';
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { Link, NavLink, Outlet, useParams } from 'react-router-dom';
 import { getCourseById, getCourseMaterial } from '../../../api';
 import StudentHeader from '../../../components/StudentHeader';
 
@@ -108,27 +108,36 @@ export default function CoursePage(props: any) {
 
   const section = data && data.filter((r: any) => r.id == sectionId)[0];
 
+  if (!course || !data) {
+    return null;
+  }
+
   return (
     <div>
       <StudentHeader />
       <Box sx={{ maxWidth: '1440px', px: 3 }}>
         <Box sx={{ py: 1 }}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/student">
+            <MuiLink component={Link} underline="hover" color="inherit" to="/">
               Home
-            </Link>
-            <Link underline="hover" color="inherit" href="/student/">
+            </MuiLink>
+            <MuiLink
+              component={Link}
+              underline="hover"
+              color="inherit"
+              to="/student/"
+            >
               Courses
-            </Link>
-            <Typography color="text.primary">
-              {course && course.title}
-            </Typography>
-            <Link underline="hover" color="inherit" href="/student">
-              Material
-            </Link>
-            <Link underline="hover" color="inherit" href="/student/">
-              {section && section.title}
-            </Link>
+            </MuiLink>
+            <MuiLink
+              component={Link}
+              color="inherit"
+              underline="hover"
+              to={'/student/' + course.courseId}
+            >
+              {course.title}
+            </MuiLink>
+            <Typography color="inherit">{section.title}</Typography>
           </Breadcrumbs>
         </Box>
 

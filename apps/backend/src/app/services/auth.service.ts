@@ -1,6 +1,5 @@
 import * as jwt from 'jsonwebtoken';
 import { JwksClient } from 'jwks-rsa';
-
 const secret = new JwksClient({
   cache: true,
   rateLimit: true,
@@ -9,7 +8,7 @@ const secret = new JwksClient({
 });
 
 export class AuthService {
-  static async getUserFromToken(token: string) {
+  static async getPayloadFromToken(token: string) {
     const decodedToken = jwt.decode(token, { complete: true });
 
     const key = await secret.getSigningKey(decodedToken.header.kid);
@@ -18,10 +17,6 @@ export class AuthService {
       // audience: 'https://lumen.app',
       issuer: 'https://lumn.eu.auth0.com/',
       algorithms: ['RS256'],
-    });
+    }) as jwt.JwtPayload;
   }
-
-
-
-  
 }

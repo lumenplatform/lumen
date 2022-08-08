@@ -9,7 +9,7 @@ import { userRouter } from './user.router';
 
 const router = express.Router();
 
-indexRouter.use(injectUser);
+router.use(injectUser);
 
 router.use('/auth', authRouter);
 router.use('/asset', assetRouter);

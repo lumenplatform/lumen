@@ -1,9 +1,8 @@
 import { Grid, Paper, Typography, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
-import StatCard from '../../components/StatCard';
-import { alpha } from '@mui/system';
 import { Component } from 'react';
 import Chart from 'react-apexcharts';
+import StatCard from '../../components/StatCard';
 
 export default function Dashboard() {
   const theme = useTheme();
@@ -12,7 +11,7 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item md={3}>
           <Paper
-            elevation={4}
+            elevation={2}
             sx={{
               height: '150px',
               background:
@@ -21,7 +20,7 @@ export default function Dashboard() {
               backgroundPositionX: 'right',
               backgroundSize: '160px 170px',
               p: 3,
-              borderRadius: 4,
+              borderRadius: theme.shape.borderRadius,
             }}
           >
             <Typography variant="h6"> New Enrollments</Typography>
@@ -46,7 +45,7 @@ export default function Dashboard() {
         </Grid>
         <Grid item md={4}>
           <Paper
-            elevation={4}
+            elevation={2}
             sx={{
               borderRadius: 4,
               height: '45%',
@@ -56,9 +55,9 @@ export default function Dashboard() {
             <HeatMapChart />
           </Paper>
           <Paper
-            elevation={4}
+            elevation={2}
             sx={{
-              borderRadius: 4,
+              borderRadius: theme.shape.borderRadius,
               height: '50%',
             }}
           >
@@ -67,9 +66,9 @@ export default function Dashboard() {
         </Grid>
         <Grid item md={8}>
           <Paper
-            elevation={4}
+            elevation={2}
             sx={{
-              borderRadius: 4,
+              borderRadius: theme.shape.borderRadius,
               pt: 1,
             }}
           >
@@ -170,7 +169,7 @@ function HeatMapChart() {
     },
   ];
 
-  var options = {
+  const options = {
     dataLabels: {
       enabled: false,
     },

@@ -10,6 +10,7 @@ import { User } from '../models/user.model';
 import { Logger } from '../utils/logger';
 import { Notification } from '../models/notification.model';
 import path = require('path');
+import { UserInvite } from '../models/user-invite.model';
 
 const ORMLogger = new Logger('ORM');
 
@@ -24,6 +25,7 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     CourseMaterial,
     Payment,
     CourseReview,
+    UserInvite,
   ],
   type: 'postgresql',
   clientUrl: process.env.PG_CONNECTION_STRING,
