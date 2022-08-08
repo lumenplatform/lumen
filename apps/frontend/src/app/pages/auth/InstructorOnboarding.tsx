@@ -18,21 +18,16 @@ import {
 } from '../../api';
 import FilesInput from '../../components/FilesInput';
 
-export default function InstructorOnboarding() {
-  const { data: invites } = useQuery('user-invites', getPendingInvites);
-  const navigate = useNavigate();
+const RegisterForm = () => {
   const { register, watch, control } = useForm();
   const formValue = watch();
+  const navigate = useNavigate();
 
   const registerOrganizationMutation = useMutation(registerOrganization, {
     onSuccess: () => navigate(0),
   });
 
-  const acceptInviteMutation = useMutation(acceptInvite, {
-    onSuccess: () => navigate(0),
-  });
-
-  const RegisterForm = () => (
+  return (
     <Stack spacing={2}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography>Register As : &nbsp;</Typography>
@@ -71,8 +66,16 @@ export default function InstructorOnboarding() {
       </Box>
     </Stack>
   );
+};
 
-  const AcceptInvite = () => (
+const AcceptInvite = ({ invites }: { invites: any[] }) => {
+  const navigate = useNavigate();
+
+  const acceptInviteMutation = useMutation(acceptInvite, {
+    onSuccess: () => navigate(0),
+  });
+
+  return (
     <Stack alignItems="center">
       <Typography>
         You have been invited to join <b>{invites[0].organization.name}</b>
@@ -90,6 +93,10 @@ export default function InstructorOnboarding() {
       </Box>
     </Stack>
   );
+};
+
+export default function InstructorOnboarding() {
+  const { data: invites } = useQuery('user-invites', getPendingInvites);
 
   return (
     <Container maxWidth="xs" sx={{ minHeight: '100vh' }}>
@@ -103,7 +110,7 @@ export default function InstructorOnboarding() {
           Instructor Registration
         </Typography>
         {invites && invites.length === 0 && <RegisterForm />}
-        {invites && invites.length !== 0 && <AcceptInvite />}
+        {invites && invites.length !== 0 && <AcceptInvite invites={invites} />}
       </Stack>
     </Container>
   );
