@@ -125,7 +125,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "json"
         },
         "content_key": {
@@ -240,6 +240,34 @@
           "autoincrement": false,
           "primary": false,
           "nullable": false,
+          "mappedType": "string"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "picture": {
+          "name": "picture",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "'https://www.gravatar.com/avatar/0?d=mp'",
           "mappedType": "string"
         },
         "time_zone": {
@@ -928,6 +956,120 @@
     },
     {
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "organization_org_id": {
+          "name": "organization_org_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
+        "course_course_id": {
+          "name": "course_course_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "COURSE",
+            "ORGANIZATION"
+          ],
+          "mappedType": "enum"
+        },
+        "used": {
+          "name": "used",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        }
+      },
+      "name": "user_invite",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "user_invite_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "user_invite_organization_org_id_foreign": {
+          "constraintName": "user_invite_organization_org_id_foreign",
+          "columnNames": [
+            "organization_org_id"
+          ],
+          "localTableName": "public.user_invite",
+          "referencedColumnNames": [
+            "org_id"
+          ],
+          "referencedTableName": "public.organization",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "user_invite_course_course_id_foreign": {
+          "constraintName": "user_invite_course_course_id_foreign",
+          "columnNames": [
+            "course_course_id"
+          ],
+          "localTableName": "public.user_invite",
+          "referencedColumnNames": [
+            "course_id"
+          ],
+          "referencedTableName": "public.course",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
         "course_course_id": {
           "name": "course_course_id",
           "type": "varchar(255)",
@@ -1078,12 +1220,12 @@
         },
         "description": {
           "name": "description",
-          "type": "varchar(255)",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
-          "mappedType": "string"
+          "nullable": true,
+          "mappedType": "text"
         },
         "time_estimate": {
           "name": "time_estimate",
@@ -1091,16 +1233,34 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "integer"
         },
-        "content_id": {
-          "name": "content_id",
+        "article": {
+          "name": "article",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
+        "content_type": {
+          "name": "content_type",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
+          "mappedType": "string"
+        },
+        "video_id": {
+          "name": "video_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
           "mappedType": "string"
         },
         "parent_id": {
@@ -1109,7 +1269,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "string"
         },
         "course_course_id": {
@@ -1118,7 +1278,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "string"
         }
       },
@@ -1137,16 +1297,17 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "course_material_content_id_foreign": {
-          "constraintName": "course_material_content_id_foreign",
+        "course_material_video_id_foreign": {
+          "constraintName": "course_material_video_id_foreign",
           "columnNames": [
-            "content_id"
+            "video_id"
           ],
           "localTableName": "public.course_material",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "public.asset",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "course_material_parent_id_foreign": {
@@ -1159,6 +1320,7 @@
             "id"
           ],
           "referencedTableName": "public.course_material",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "course_material_course_course_id_foreign": {
@@ -1171,6 +1333,7 @@
             "course_id"
           ],
           "referencedTableName": "public.course",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
