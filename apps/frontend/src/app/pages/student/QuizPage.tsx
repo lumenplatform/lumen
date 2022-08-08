@@ -5,19 +5,30 @@ import Typography from '@mui/material/Typography';
 import EssayQ from '../../components/EssayQuiz';
 import MCQ from '../../components/MCQQuiz';
 import NumberCard from '../../components/QuizNumberCard';
+import { useState } from 'react';
+import * as React from 'react';
 
-const quizCount = 15;
-let i: number;
+function QBox(props:any){
+  return(
+    <Box border={1} sx={{width:30, height:50, padding:1, margin:0.5}}>
+        <Typography variant='subtitle2'>{props.val}</Typography>
+    </Box>
+  )
+}
 
 export default function Quizpage() {
+
+  const quizcount=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
   return (
     <Box>
       <Box
         sx={{
-          height: 30,
-          backgroundColor: 'primary.light',
+          // height: 100,
+          backgroundColor: 'primary.light', padding:5
         }}
-      ></Box>
+      >
+        <Typography variant='h6'>Exam Title</Typography>
+      </Box>
 
       <Grid container>
         <Grid item xs={9}>
@@ -34,26 +45,21 @@ export default function Quizpage() {
 
         <Grid item xs={3}>
           <Card sx={{ minHeight: 500, margin: 5, padding: 3 }}>
-            <Box sx={{ marginBottom: 5, border: '3px primary.dark' }}>
+            <Box sx={{ marginBottom: 5, padding:1}} border = {2} >
               <Typography variant="subtitle1">Questions</Typography>
 
               <Grid container>
-                for(i in quizCount) {
-                  console.log(i)
-                }
-                {/* <Box border={1} sx={{width:30, height:50, padding:1.5, margin:0.5}}><Typography variant="subtitle2">1</Typography></Box>
-                <Box border={1} sx={{width:30, height:50, padding:1.5,margin:0.5}}><Typography variant="subtitle2">1</Typography></Box>
-                <Box border={1} sx={{width:30, height:50, padding:1.5,margin:0.5}}><Typography variant="subtitle2">1</Typography></Box>
-                <Box border={1} sx={{width:30, height:50, padding:1.5,margin:0.5}}><Typography variant="subtitle2">1</Typography></Box>
-                <Box border={1} sx={{width:30, height:50, padding:1.5,margin:0.5}}><Typography variant="subtitle2">1</Typography></Box> */}
-              
-
+                
+                {/* <QBox/> */}
+                {quizcount.map((r:number)=>(
+                  <QBox val={r}></QBox>
+                ))}
                 
               </Grid>
             </Box>
-
+            <Box sx={{ marginBottom: 5, padding:1}} border = {2} >
             <Typography variant="subtitle2">Time Remaining</Typography>
-
+</Box>
             <Button
               variant="contained"
               sx={{ marginTop: 5, marginRight: 5, marginLeft: 15, width: 120 }}

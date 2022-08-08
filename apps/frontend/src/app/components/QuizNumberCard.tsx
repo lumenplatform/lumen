@@ -1,7 +1,12 @@
 import { Card, CardContent } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import * as React from 'react';
 
 export default function NumberCard() {
+
+    const [value, setValue] = React.useState('one');
+
   return (
     <Card
       sx={{
