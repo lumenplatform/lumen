@@ -23,5 +23,6 @@ WORKDIR /app
 
 # copy from build image
 COPY --from=BUILD_IMAGE /app/dist ./dist
+COPY --from=BUILD_IMAGE /app/migrations ./migrations
 
 CMD ["node", "dist/apps/backend/main.js"]
