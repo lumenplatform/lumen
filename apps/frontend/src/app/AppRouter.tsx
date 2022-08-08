@@ -19,6 +19,7 @@ import Enroll from './components/EnrollPageHeader';
 import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
 import CourseMaterialView from './pages/student/course/CourseMaterialView';
 import AssignmentGrades from './pages/student/course/AssignmentGrades';
+import SubmissionStatus from './pages/student/course/SubmissionStatus';
 const ProtectedPage = () => (
   <RequireAuth>
     <Outlet />
@@ -42,7 +43,8 @@ export default function () {
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />
             <Route path="resources" element={<CourseResources />} />
-           
+            <Route path="grades" element={<AssignmentGrades />} />
+            <Route path="SubmissionStatus" element={<SubmissionStatus />} />
           </Route>
           <Route path=":courseId/materialview" element={<CourseMaterialPage />}>
             <Route path=":materialId" element={<CourseMaterialView />} />

@@ -34,6 +34,10 @@ const sideBarItems = [
     path: 'grades',
     label: 'Grades',
   },
+  {
+    path: 'SubmissionStatus',
+    label: 'Submission Status',
+  },
 
 ];
 
