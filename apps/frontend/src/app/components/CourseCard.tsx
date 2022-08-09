@@ -7,8 +7,11 @@ import {
   CardMedia,
   Chip,
   Grid,
-  Rating, Stack, Typography,
-  useTheme
+  Link as MuiLink,
+  Rating,
+  Stack,
+  Typography,
+  useTheme,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -21,7 +24,7 @@ export default function CourseCard({
 }) {
   const theme = useTheme();
   return (
-    <Link to={course.courseId} style={{ textDecoration: 'none' }}>
+    <Link to={'/courses/' + course.courseId} style={{ textDecoration: 'none' }}>
       <Card>
         <CardActionArea>
           <CardMedia
@@ -32,6 +35,14 @@ export default function CourseCard({
           />
 
           <CardContent>
+            <Typography
+              gutterBottom
+              variant="body1"
+              component="div"
+              sx={{ fontWeight: 'bold', minHeight: '3em' }}
+            >
+              {course.title}
+            </Typography>
             <Box
               sx={{
                 display: 'flex',
@@ -41,86 +52,31 @@ export default function CourseCard({
               }}
             >
               <Avatar
-                sx={{ width: 35, height: 35, mr: 1 }}
-                src={course.organization.customizations_logo}
+                sx={{ mr: 1 }}
+                src={course.organization.customizations?.logo?.path}
               />
-              <Link
-                to={'?organization=' + course.organization.name}
-                style={{ color: 'black' }}
-              >
-                <Typography gutterBottom variant="body2" component="h2">
-                  {course.organization.name}
-                </Typography>
-              </Link>
+              <Box sx={{ minWidth: 0, overflow: 'hidden' }}>
+                <MuiLink
+                  to={'?organization=' + course.organization.name}
+                  component={Link}
+                  sx={{
+                    color: 'inherit',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  underline="hover"
+                >
+                  <Typography sx={{}}>{course.organization.name}</Typography>
+                </MuiLink>
+                <Typography variant="body2">By Prof. Gilbert Strang</Typography>
+              </Box>
             </Box>
-            <Typography
-              gutterBottom
-              variant="body1"
-              component="div"
-              sx={{ fontWeight: 'bold' }}
-            >
-              {course.title}
-            </Typography>
-            <Grid container spacing={0.8}>
-              <Grid item>
-                <Chip
-                  label="@machine-learning"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@python"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@octave"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@python"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@octave"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-            </Grid>
-            <Typography
-              variant="body2"
-              sx={{
-                fontWeight: 'bold',
-                mt: 3,
-                overflow: 'hidden',
-                display: '-webkit-box',
-                WebkitBoxOrient: 'vertical',
-                WebkitLineClamp: { xs: 4, sm: 2 },
-              }}
-            >
-              Skills you'll gain :{' '}
-              <Typography variant="caption">
-                {course.learningOutcome.join(', ')}
-              </Typography>
+
+            <Typography variant="caption">
+              {course.subjectArea} - {course.tags}
             </Typography>
 
-            <Stack direction="row" spacing={0.7} sx={{ mt: 5 }}>
+            <Stack direction="row" spacing={0.7}>
               <Rating
                 name="size-small"
                 defaultValue={course.rating}
@@ -128,21 +84,23 @@ export default function CourseCard({
                 readOnly
                 sx={{ mr: 0.5 }}
               />
+
               <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
                 {course.rating && String(course.rating).includes('.')
                   ? course.rating
                   : course.rating + '.0'}
               </Typography>
               <Typography variant="caption">
+                (
                 {course.ratingCount > 999999
                   ? (course.ratingCount / 1000000).toFixed(1) + 'm'
                   : course.ratingCount > 999
                   ? (course.ratingCount / 1000).toFixed(1) + 'k'
                   : course.ratingCount}
-                {' reviews'}
+                )
               </Typography>
+              <Typography variant="caption">{course.level}</Typography>
             </Stack>
-            <Typography variant="caption">{course.level}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
