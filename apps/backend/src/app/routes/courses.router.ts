@@ -3,6 +3,8 @@ import * as express from 'express';
 import { CourseController } from '../controllers/course.controller';
 import { CourseMaterial } from '../models/course-material.model';
 import { createResponse } from './../utils/response-mapper';
+import { quizRouter } from './../routes/quiz.router';
+
 export const coursesRouter = express.Router();
 
 const courseController = new CourseController();
@@ -30,3 +32,5 @@ coursesRouter.get('/:id', (req, res, next) => {
 coursesRouter.get('/:id/reviews');
 
 coursesRouter.get('/:id/material');
+
+coursesRouter.use('/:id/quiz', quizRouter);

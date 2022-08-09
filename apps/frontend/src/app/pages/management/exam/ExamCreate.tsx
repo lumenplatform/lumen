@@ -1,27 +1,31 @@
 import AddLocationAltOutlinedIcon from '@mui/icons-material/AddLocationAltOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { Box, Button, ButtonGroup, Card, IconButton, List, ListItem, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { EssayQuestion, McqQuestion } from "../../../components/Questions";
 
-type Questions = {
+export type Questions = {
     question: string;
     type?: string;
     marks?: number;
     answers?: any[];
+    durationSeconds? : number;
 }
 
-export default function ExamCreate() {
-    const [questions, setQuestions] = useState<Questions[]>([]);
+export default function ExamCreate(props: any) {
+    const { changeQuestions , examQuestions } = props;
+    const [questions, setQuestions] = useState<Questions[]>(examQuestions || []);
+
+    useEffect(() => {
+        changeQuestions(questions);
+    } , [questions]);
 
     const handleAddQuestion = (type: string) => {
-        setQuestions(prevState => [...prevState, { question: '', type: type, marks: 0, answers: [] }]);
+        setQuestions(prevState => [...prevState, { question: '', type: type, marks: 0, answers: [] , durationSeconds: 0}]);
     }
 
     const handleRemoveQuestion = (index: number) => {
-        console.log(index);
         const x = questions;
-        console.log(x);
         x.splice(index, 1);
         setQuestions([...x]);
     }
@@ -29,7 +33,6 @@ export default function ExamCreate() {
     const handleQuestionChange = (index: number, question: any) => {
         const x = questions;
         x.splice(index, 1, question);
-        console.log(x);
         setQuestions([...x]);
     }
 

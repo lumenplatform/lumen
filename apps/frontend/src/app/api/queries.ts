@@ -37,3 +37,15 @@ export const fetchUsers = () => client.get('/auth/users');
 export function getCourseById(id: string) {
   return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
 }
+
+export function createNewExam(data: any) {
+  return client.post(`/courses/${data.form.course}/quiz/`, data.form);
+}
+
+export function updateExam( data: any) {
+  return client.put(`/courses/${data.course}/exams/${data.examId}`, data.form);
+}
+
+export function getExamById(courseId: string, examId: string) {
+  return client.get<any>(`/courses/${courseId}/exams/${examId}`).then((r) => r.data.data);
+}

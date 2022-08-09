@@ -31,9 +31,20 @@ export function McqQuestion(props: any) {
         changeQuestion(questionIndex, { ...question, question: e.target.value });
     }
 
+    const handleMarksChange = (e: any) => {
+        changeQuestion(questionIndex, { ...question, marks: e.target.value });
+    }
+    
+    const handleTimeChange = (e: any) => {
+        changeQuestion(questionIndex, { ...question, time: e.target.value });
+    }
+    
     return (
         <Box >
-            <TextField fullWidth autoFocus value={question.question} label="Question" variant="filled" onChange={(e) => handleQuestionChange(e)} />
+            <TextField 
+            //error when not focused
+            error= {question.question === '' }
+            fullWidth autoFocus value={question.question} label="Question" variant="filled" onChange={(e) => handleQuestionChange(e)} />
             <List >
                 {question.answers.map((answer: any, index: number) => (
                     <>
@@ -51,17 +62,34 @@ export function McqQuestion(props: any) {
                         Add Answer
                     </Typography>
                 </Button>
-                <TextField
-                    size="small"
-                    id="outlined-number"
-                    label="Marks"
-                    type="number"
-                    defaultValue={0.0}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    sx={{ width: '10ch' }}
-                />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <TextField
+                        size="small"
+                        label="seconds"
+                        type="number"
+                        defaultValue={0.0}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        sx={{ width: '10ch', mr: 2 }}
+                        InputProps={{ inputProps: { min: 0, max: 60 } }}
+                        onChange={(e) => handleTimeChange(e)}
+                        value={question.time}
+                    />
+
+                    <TextField
+                        size="small"
+                        id="outlined-number"
+                        label="Marks"
+                        type="number"
+                        defaultValue={0.0}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        sx={{ width: '10ch', }}
+                        onChange={(e) => handleMarksChange(e)}
+                    />
+                </Box>
             </Box>
         </Box>
     )
@@ -74,12 +102,17 @@ function McqAnswers(props: any) {
     const handleAnswerChange = (e: any) => {
         setAnswer(index, { ...answer, answer: e.target.value });
     }
+
+    const handleCorrectChange = (e: any) => {
+        setAnswer(index, { ...answer, correct: e.target.checked });
+    }
+
     return (
         <Box sx={{ py: 1, px: 2, display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
             <TextField fullWidth autoFocus value={answer.answer} size="small" label="answer" variant="standard" sx={{ mr: 3 }} onChange={(e) => handleAnswerChange(e)} />
             <FormControlLabel
                 value="top"
-                control={<Switch color="primary" />}
+                control={<Switch color="primary" onChange={(e) => handleCorrectChange(e)} />}
                 label="Correct"
                 labelPlacement="end"
             />
@@ -96,6 +129,15 @@ export function EssayQuestion(props: any) {
     const handleQuestionChange = (e: any) => {
         changeQuestion(questionIndex, { ...question, question: e.target.value });
     }
+
+    const handleMarksChange = (e: any) => {
+        changeQuestion(questionIndex, { ...question, marks: e.target.value });
+    }
+
+    const handleTimeChange = (e: any) => {
+        changeQuestion(questionIndex, { ...question, time: e.target.value });
+    }
+
     return (
         <>
             <TextField
@@ -111,6 +153,20 @@ export function EssayQuestion(props: any) {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 2 }}>
                 <TextField
                     size="small"
+                    label="seconds"
+                    type="number"
+                    defaultValue={0.0}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    sx={{ width: '10ch', mr: 2 }}
+                    InputProps={{ inputProps: { min: 0, max: 60 } }}
+                    onChange={(e) => handleTimeChange(e)}
+                    value={question.time}
+                />
+
+                <TextField
+                    size="small"
                     label="Marks"
                     type="number"
                     defaultValue={0.0}
@@ -118,6 +174,7 @@ export function EssayQuestion(props: any) {
                         shrink: true,
                     }}
                     sx={{ width: '10ch' }}
+                    onChange={(e) => handleMarksChange(e)}
                 />
             </Box>
         </>
