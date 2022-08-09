@@ -8,30 +8,28 @@ import Grid from '@mui/material/Grid';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import * as React from 'react';
+import Checkbox from '@mui/material/Checkbox';
 
-export default function MCQ() {
-  const [flag, setFlag] = React.useState(true);
-
-  const handleClick = () => {
-    setFlag(!flag);
-  };
+export default function MCQ(props: any) {
+  const { questionId, answers, setFlag, setAnswer, question, isFlagged } = props;
 
   return (
     <Container sx={{ padding: 5 }}>
+      {/* {quizArray.map((item, index) => ( */}
       <Card sx={{ Width: 800, minHeight: 300 }}>
-        <Box
-          sx={{ backgroundColor: 'primary.main', minHeight: 40, padding: 2 }}
-        >
+        <Box sx={{ backgroundColor: '#a0a69d', minHeight: 40, padding: 2 }}>
           <Grid container>
             <Grid item xs={10}>
-              <Typography variant="subtitle1">Question 1 of 15</Typography>
+              <Typography variant="subtitle1">
+                Question {questionId} of 15
+              </Typography>
             </Grid>
 
             <Grid item xs={2}>
               <IconButton
                 sx={{ padding: 0, paddingRight: 1, display: 'inline' }}
-                onClick={handleClick}
-                color={flag ? 'default' : 'secondary'}
+                onClick={() => setFlag(questionId)}
+                color={isFlagged ? 'secondary' : 'default'}
               >
                 <FlagOutlinedIcon />
               </IconButton>
@@ -44,40 +42,13 @@ export default function MCQ() {
 
         <Box sx={{ padding: 5 }}>
           <FormControl>
-            <FormLabel id="quiz" sx={{ paddingBottom: 3 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim
-              ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat
-            </FormLabel>
+            <Typography variant="body1" paddingBottom={3}>
+              {question}
+            </Typography>
 
-            <RadioGroup
-              aria-labelledby="quiz"
-              defaultValue="female"
-              name="radio-buttons-group"
-              sx={{ paddingLeft: 5 }}
-            >
-              <FormControlLabel
-                value="c1"
-                control={<Radio />}
-                label="Choice 1"
-              />
-              <FormControlLabel
-                value="c2"
-                control={<Radio />}
-                label="Choice 2"
-              />
-              <FormControlLabel
-                value="c3"
-                control={<Radio />}
-                label="Choice 3"
-              />
-              <FormControlLabel
-                value="c4"
-                control={<Radio />}
-                label="Choice 4"
-              />
-            </RadioGroup>
+            {answers.map((object: any) => (
+              <FormControlLabel control={<Checkbox onChange={()=>setAnswer(questionId,object.answerId,'mcq')} />} label={object.answer} />
+            ))}
           </FormControl>
         </Box>
       </Card>

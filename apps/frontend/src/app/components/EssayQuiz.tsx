@@ -8,60 +8,57 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import * as React from 'react';
 
-export default function EssayQ() {
-  const [flag, setFlag] = React.useState(true);
-
-  const handleClick = () => { 
-    setFlag(!flag);
-  };
+export default function EssayQ(props:any) {
+  const { questionId, setFlag, setAnswer, question, isFlagged } = props;
 
   return (
     <Container sx={{ padding: 5 }}>
-      <Card sx={{ Width: 800, minHeight: 300 }}>
-        <Box
-          sx={{ backgroundColor: 'primary.main', minHeight: 40, padding: 2 }}
-        >
-          <Grid container>
-            <Grid item xs={10}>
-              <Typography variant="subtitle1">Question 1 of 15</Typography>
+        <Card sx={{ Width: 800, minHeight: 300 }}>
+          <Box sx={{ backgroundColor: '#a0a69d', minHeight: 40, padding: 2 }}>
+            <Grid container>
+              <Grid item xs={10}>
+                <Typography variant="subtitle1">
+                  Question {questionId} of 15
+                </Typography>
+              </Grid>
+
+              <Grid item xs={2}>
+                <IconButton
+                  sx={{ padding: 0, paddingRight: 1, display: 'inline' }}
+                  onClick={() => setFlag(questionId)}
+                  color={isFlagged ? 'default' : 'secondary'}
+                >
+                  <FlagOutlinedIcon />
+                </IconButton>
+                <Typography variant="body2" display={'inline'}>
+                  Flag Question
+                </Typography>
+              </Grid>
             </Grid>
 
-            <Grid item xs={2}>
-              <IconButton
-                sx={{ padding: 0, paddingRight: 1, display: 'inline' }}
-                onClick={handleClick}
-                color={flag ? 'default' : 'secondary'}
-              >
-                <FlagOutlinedIcon />
-              </IconButton>
-              <Typography variant="body2" display={'inline'}>
-                Flag Question
+          </Box>
+
+          <Box sx={{ padding: 5 }}>
+            <FormControl>
+             
+              <Typography variant="body1" paddingBottom={3}>
+                {question}
               </Typography>
-            </Grid>
-          </Grid>
-          {/* <Typography variant="subtitle1">Question 1 of 15</Typography> */}
-        </Box>
 
-        <Box sx={{ padding: 5 }}>
-          <FormControl>
-            <FormLabel id="quiz" sx={{ paddingBottom: 3 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim
-              ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat
-            </FormLabel>
+              <TextField
+                id="essay"
+                multiline
+                maxRows={20}
+                variant="outlined"
+                fullWidth
+                rows={10}
+                onChange={(e)=>setAnswer(questionId,e.target.value,'essay')}
+              />
+            </FormControl>
+          </Box>
+        </Card>
 
-            <TextField
-              id="essay"
-              multiline
-              maxRows={20}
-              variant="outlined"
-              fullWidth
-              rows={10}
-            />
-          </FormControl>
-        </Box>
-      </Card>
+      
     </Container>
   );
 }
