@@ -7,8 +7,8 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Course } from './course.model';
-import { CourseReview } from './CourseReview';
-import { Payment } from './Payment';
+import { CourseReview } from './review.mode';
+import { Payment } from './payment.model';
 import { User } from './user.model';
 
 export enum EnrollmentStatus {
@@ -39,4 +39,13 @@ export class Enrollment {
 
   @OneToMany(() => CourseReview, (review) => review.enrollment)
   review: CourseReview;
+
+  constructor(enrollmentId,user,course,payment,enrollmentDate = new Date(),status = EnrollmentStatus.ACTIVE){
+    this.enrollmentId = enrollmentId;
+    this.user = user;
+    this.course = course;
+    this.payment = payment;
+    this.enrollmentDate = enrollmentDate;
+    this.status = status;
+  }
 }

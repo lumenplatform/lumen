@@ -6,6 +6,7 @@ import * as morgan from 'morgan';
 import { InitORM, InjectORM } from './app/config/db';
 
 import { json } from 'express';
+import { urlencoded } from 'express';
 import adminRouter from './app/admin/admin.router';
 import apiRouter from './app/routes';
 import { logger } from './app/utils/logger';
@@ -14,7 +15,14 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
-      user: any;
+      user: {
+        email: string;
+        uid: string;
+        orgId: string;
+        name: string;
+        picture: string;
+      };
+      isLoggedIn: boolean;
     }
   }
 }
@@ -35,10 +43,15 @@ if (environment.production) {
   );
 }
 app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use(InjectORM);
 
 app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
+
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, '../frontend', 'index.html'));
+});
 
 const port = process.env.PORT;
 

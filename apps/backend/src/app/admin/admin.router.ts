@@ -44,7 +44,7 @@ app.get('/', async (req, res, next) => {
           ...r,
           streamingURLs: r.streamingURLs?.map((k) => ({
             ...k,
-            token: ams.generateToken(k.keyIdentifier),
+            token: AMSService.generateToken(k.keyIdentifier),
           })),
         })),
       });

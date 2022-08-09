@@ -49,9 +49,9 @@ export interface StreamingURL {
   keyIdentifier: string;
 }
 
-export interface DRMService {
-  getStreamingURLsFormURL(inputUrl: string): Promise<StreamingURL[]>;
-  generateToken(keyIdentifier: string): string;
+export abstract class DRMService {
+  abstract getStreamingURLsFormURL(inputUrl: string): Promise<StreamingURL[]>;
+  static generateToken: (keyIdentifier: string) => string;
 }
 
 export class AMSService implements DRMService {
@@ -117,7 +117,7 @@ export class AMSService implements DRMService {
     );
   }
 
-  generateToken(keyIdentifier: string) {
+  static generateToken(keyIdentifier: string) {
     const tokenSigningKey = new Uint8Array(Buffer.from(symmetricKey, 'base64'));
     return getToken(issuer, audience, keyIdentifier, tokenSigningKey);
   }
@@ -260,7 +260,7 @@ export class AMSService implements DRMService {
           const manifestPath =
             'https://' + streamingEndpoint.hostName + formatPath;
 
-          const token: string = this.generateToken(keyIdentifier);
+          const token: string = AMSService.generateToken(keyIdentifier);
           console.log(
             `AMP player: https://ampdemo.azureedge.net/?url=${manifestPath}&widevine=true&token=Bearer%20${token} \n\n`
           );
