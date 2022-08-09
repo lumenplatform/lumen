@@ -30,10 +30,10 @@ function SubmissionStatus(){
 
         </TableRow>
      </TableHead>
-     /*<TableHead>
+     <TableHead>
         <TableRow>
            <TableCell sx={{height:70}}>Grading Status</TableCell>
-          <TableCell><Typography >Not graded</Typography></TableCell> /
+          <TableCell><Typography >Not graded</Typography></TableCell> 
 
         </TableRow>
      </TableHead>
@@ -61,7 +61,7 @@ function SubmissionStatus(){
     
      </Table>
      </TableContainer>
-     <Button sx={{marginBottom:5,marginTop:5,marginLeft:50}} variant="contained" disabled>
+     <Button sx={{marginBottom:5,marginTop:5,marginLeft:50}} variant="contained" disabled href='/Add Submission'>
   Add Submission
 </Button>
         </div>

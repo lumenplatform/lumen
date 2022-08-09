@@ -65,6 +65,7 @@ export default function () {
         </Route>
         {/* Common pages to all users */}
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/Add Submission" element={<FileUpload />} />
       </Route>
     </Routes>
   );
