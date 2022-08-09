@@ -1,13 +1,11 @@
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { Asset } from '../../models/asset.model';
-import { AssetFactory } from './factories/AssetFactory';
 import { CourseFactory } from './factories/CourseFactory';
 import { EnrollmentFactory } from './factories/EnrollmentFactory';
 import { OrganizationFactory } from './factories/OrganizationFactory';
 import { PaymentFactory } from './factories/PaymentFactory';
 import { UserFactory } from './factories/UserFactory';
-
+import { courses as dummyCorses } from './data/data';
 declare global {
   interface Array<T> {
     sample(): T;
@@ -24,11 +22,17 @@ export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     const organizations = new OrganizationFactory(em).make(5);
     const users = new UserFactory(em).make(5);
-    const courses = new CourseFactory(em).make(5);
+    const courses = new CourseFactory(em).make(2);
     const enrollments = new EnrollmentFactory(em).make(5);
-    
+
     users.forEach((user) => {
-      user.organization = [null,...organizations].sample();
+      user.organization = [null, ...organizations].sample();
+    });
+
+    dummyCorses.forEach((i: any) => {
+      const course = new CourseFactory(em).makeOne();
+      em.assign(course, i);
+      courses.push(course);
     });
 
     courses.forEach((r) => {

@@ -83,7 +83,9 @@ export class Course {
   @Property({ type: 'jsonb' })
   intendedAudience: any;
 
-  @OneToMany(() => CourseMaterial, (material) => material.course)
+  @OneToMany(() => CourseMaterial, (material) => material.course, {
+    orderBy: { order: 1 },
+  })
   courseMaterial = new Collection<CourseMaterial>(this);
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
@@ -92,9 +94,9 @@ export class Course {
   @Enum(() => CourseStatus)
   status = CourseStatus.DRAFT;
 
-  @Property({default:0})
-  rating:number;
+  @Property({ default: 0 })
+  rating: number;
 
-  @Property({default:0})
-  ratingCount:number;
+  @Property({ default: 0 })
+  ratingCount: number;
 }

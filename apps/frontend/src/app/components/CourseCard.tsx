@@ -129,7 +129,7 @@ export default function CourseCard({
                 sx={{ mr: 0.5 }}
               />
               <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
-                {course.rating && course.rating.includes('.')
+                {course.rating && String(course.rating).includes('.')
                   ? course.rating
                   : course.rating + '.0'}
               </Typography>
