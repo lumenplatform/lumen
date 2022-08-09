@@ -3,13 +3,18 @@ import { Asset } from '../models/asset.model';
 import { CourseMaterial } from '../models/course-material.model';
 import { Course } from '../models/course.model';
 import { Enrollment } from '../models/enrollment.model';
-import { CourseReview } from '../models/CourseReview';
-import { Payment } from '../models/Payment';
+import { CourseReview } from '../models/review.mode';
+import { Payment } from '../models/payment.model';
 import { Organization } from '../models/organization.model';
 import { User } from '../models/user.model';
 import { Logger } from '../utils/logger';
-import { Notification } from '../models/Notification';
+import { Notification } from '../models/notification.model';
+import { Question } from '../models/question.model';
+import { Quiz } from '../models/quiz.model';
+import {Answer} from '../models/answer.model';
+
 import path = require('path');
+import { UserInvite } from '../models/user-invite.model';
 
 const ORMLogger = new Logger('ORM');
 
@@ -24,6 +29,10 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     CourseMaterial,
     Payment,
     CourseReview,
+    UserInvite,
+    Question,
+    Quiz,
+    Answer,
   ],
   type: 'postgresql',
   clientUrl: process.env.PG_CONNECTION_STRING,

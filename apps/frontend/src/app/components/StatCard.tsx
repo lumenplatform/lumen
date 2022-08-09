@@ -11,7 +11,7 @@ export default function StatCard(props: any) {
           height: '150px',
           borderRadius: 4,
         }}
-        elevation={4}
+        elevation={2}
       >
         <CardActionArea>
           <CardContent>

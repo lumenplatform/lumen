@@ -63,5 +63,5 @@ assetRouter.delete('/video/:id', (req, res) => {
 });
 
 assetRouter.get('/token', async (req, res) => {
-  res.send(ams.generateToken('14bfd13e-dcb2-4aeb-8873-f9dceae52112'));
+  res.send(AMSService.generateToken('14bfd13e-dcb2-4aeb-8873-f9dceae52112'));
 });

@@ -9,6 +9,7 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+import { v4 } from 'uuid';
 import { Asset } from './asset.model';
 import { CourseMaterial } from './course-material.model';
 import { Enrollment } from './enrollment.model';
@@ -23,7 +24,7 @@ export enum CourseStatus {
 @Entity()
 export class Course {
   @PrimaryKey()
-  courseId: string;
+  courseId: string = v4();
 
   @Property()
   title: string;
@@ -90,4 +91,10 @@ export class Course {
 
   @Enum(() => CourseStatus)
   status = CourseStatus.DRAFT;
+
+  @Property({default:0})
+  rating:number;
+
+  @Property({default:0})
+  ratingCount:number;
 }

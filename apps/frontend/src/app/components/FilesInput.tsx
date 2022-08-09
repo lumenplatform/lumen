@@ -23,12 +23,13 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useQueries, useQuery } from 'react-query';
 import { useList } from 'react-use';
-import { getUploadConfig, uploadContent } from '../api';
+import { getUploadConfig } from '../api';
 
 function formatBytes(bytes: number, decimals: number) {
   if (bytes == 0) return '0 Bytes';
-  var k = 1024,
+  const k = 1024,
     dm = decimals || 2,
     sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
     i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -38,25 +39,28 @@ interface StorageContextType {
   containerClient?: ContainerClient | null;
 }
 
-let StorageContext = createContext<StorageContextType>(null!);
+const StorageContext = createContext<StorageContextType>(null!);
 /**
  * TODO: Mode upload logic to provider
  *
  *
  */
 function StorageProvider({ children }: { children: React.ReactNode }) {
-  const [containerClient, setContainerClient] = useState(null);
-
-  const getAffiliates = async () => {
-    const response = await getUploadConfig();
-    const client = new ContainerClient(response.sas);
-    // @ts-ignore
-    setContainerClient(client);
-  };
+  const [containerClient, setContainerClient] = useState<ContainerClient>(
+    null!
+  );
+  const { data: uploadConfig } = useQuery(
+    'fetchUploadConfig',
+    getUploadConfig,
+    { staleTime: 1000 * 60 * 10 }
+  );
 
   useEffect(() => {
-    getAffiliates();
-  }, []);
+    if (uploadConfig) {
+      const client = new ContainerClient(uploadConfig.sas);
+      setContainerClient(client);
+    }
+  }, [uploadConfig]);
 
   return (
     <StorageContext.Provider value={{ containerClient }}>
@@ -68,17 +72,19 @@ function StorageProvider({ children }: { children: React.ReactNode }) {
 function useStorage() {
   return useContext(StorageContext);
 }
+
 export class FileItemComp extends Component<
   {
     fileItem: FileItem;
     handleRemove: any;
     updateItem: any;
+    removeType: 'replace' | 'delete';
   },
   {
     progress: number;
   }
 > {
-  private started: boolean = false;
+  private started = false;
   static override contextType = StorageContext;
   override context!: ContextType<typeof StorageContext>;
 
@@ -135,11 +141,21 @@ export class FileItemComp extends Component<
     } = this.props;
 
     const UploadIndicator = () => (
-      <LinearProgress
-        sx={{ height: '1.66em' }}
-        variant={progress == 100 && uploading ? 'indeterminate' : 'determinate'}
-        value={progress}
-      />
+      <Box
+        sx={{
+          minHeight: '1.66em',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <LinearProgress
+          variant={
+            progress === 100 && uploading ? 'indeterminate' : 'determinate'
+          }
+          value={progress}
+        />
+      </Box>
     );
 
     const FileInfo = () => (
@@ -152,16 +168,23 @@ export class FileItemComp extends Component<
         }}
         variant="caption"
       >
-        {formatBytes(file.size, 0)} {mime}{' '}
+        {formatBytes(file?.size, 0)} {mime}{' '}
       </Typography>
     );
 
     return (
       <ListItem
+        dense
         secondaryAction={
-          <IconButton edge="end" onClick={handleRemove}>
-            <DeleteIcon />
-          </IconButton>
+          this.props.removeType === 'delete' ? (
+            <IconButton edge="end" onClick={handleRemove}>
+              <DeleteIcon />
+            </IconButton>
+          ) : (
+            <Button onClick={handleRemove} color="secondary">
+              Replace
+            </Button>
+          )
         }
       >
         <ListItemAvatar>
@@ -200,9 +223,29 @@ type FileItem = {
   config: any;
 };
 
-function FilesInput({ multiple }: { multiple?: boolean }) {
-  const [files, { updateAt, push, removeAt }] = useList<FileItem>([]);
+type FileInputProps = {
+  multiple?: boolean;
+  onChange?: any;
+  onBlur?: any;
+  onPreviewChange?: any;
+  name?: string;
+  accept?: string;
+  value?: FileItem[] | FileItem;
+};
+
+function FilesInput({ multiple, onChange, value, accept }: FileInputProps) {
+  const [files, { updateAt, push, removeAt }] = useList<FileItem>(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    multiple ? (value ? value : []) : value ? [value] : []
+  );
   const fileInputElement = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(multiple ? files : files[0]);
+    }
+  }, [files]);
 
   const onFileChange = (fileInput: any) => {
     for (const file of fileInput.files) {
@@ -219,21 +262,24 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
 
   const addFiles = () => fileInputElement.current?.click();
 
-  const upload = () => uploadContent(files);
-
   return (
     <StorageProvider>
-      <List>
-        {files.map((file, index) => (
-          <FileItemComp
-            key={index}
-            fileItem={file}
-            handleRemove={() => removeAt(index)}
-            updateItem={(c: any) => updateAt(index, { ...file, ...c })}
-          />
-        ))}
-      </List>
-
+      {files.length > 0 && (
+        <List dense={true}>
+          {files.map((file, index) => (
+            <FileItemComp
+              key={index}
+              fileItem={file}
+              handleRemove={() => {
+                removeAt(index);
+                if (!multiple) addFiles();
+              }}
+              updateItem={(c: any) => updateAt(index, { ...file, ...c })}
+              removeType={multiple ? 'delete' : 'replace'}
+            />
+          ))}
+        </List>
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -248,21 +294,22 @@ function FilesInput({ multiple }: { multiple?: boolean }) {
           multiple={multiple}
           onChange={(event) => onFileChange(event.target)}
           hidden
+          accept={accept ? accept : '*/**'}
         />
-        <Button onClick={() => upload()} variant="contained">
-          Upload
-        </Button>
         <StorageContext.Consumer>
-          {(value) => (
-            <Button
-              size="small"
-              onClick={addFiles}
-              disabled={!value.containerClient}
-              variant="outlined"
-            >
-              Add
-            </Button>
-          )}
+          {(value) =>
+            (multiple === true || files.length === 0) && (
+              <Button
+                size="small"
+                onClick={addFiles}
+                sx={{ m: 1 }}
+                disabled={!value.containerClient}
+                variant="outlined"
+              >
+                {multiple === true ? 'Add' : 'Choose'} File
+              </Button>
+            )
+          }
         </StorageContext.Consumer>
       </Box>
     </StorageProvider>
