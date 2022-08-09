@@ -38,14 +38,14 @@ export function getCourseById(id: string) {
   return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
 }
 
-export function createNewExam(data: any) {
-  return client.post(`/courses/${data.form.course}/quiz/`, data.form);
+export function createNewQuiz(data: any) {
+  return client.post(`/courses/${data.form.course}/quiz/`, data.form).then((r) => r.data.data);
 }
 
-export function updateExam( data: any) {
-  return client.put(`/courses/${data.course}/exams/${data.examId}`, data.form);
+export function updateQuiz( data: any) {
+  return client.put(`/courses/${data.course}/quiz/${data.examId}`, data.form).then((r) => r.data.data);
 }
 
-export function getExamById(courseId: string, examId: string) {
-  return client.get<any>(`/courses/${courseId}/exams/${examId}`).then((r) => r.data.data);
+export function getQuizById(courseId: string, examId: string) {
+  return client.get<any>(`/courses/${courseId}/quiz/${examId}`).then((r) => r.data.data);
 }

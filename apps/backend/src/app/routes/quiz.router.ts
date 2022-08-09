@@ -24,3 +24,12 @@ quizRouter.get('/:id', (req, res, next) => {
     })
     .catch(next);
 });
+
+quizRouter.put('/:id', (req, res, next) => {
+  quizController
+    .updateQuiz(req.params.id, req.body, req.user)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});

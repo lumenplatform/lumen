@@ -18,6 +18,7 @@ import UserProfile from './pages/UserProfile';
 import Enroll from './components/EnrollPageHeader';
 import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
 import CourseMaterialView from './pages/student/course/CourseMaterialView';
+import ExamPage from './pages/management/exam/ExamPage';
 
 const ProtectedPage = () => (
   <RequireAuth>
@@ -56,6 +57,8 @@ export default function () {
           <Route path="users" element={<Users />}></Route>
           <Route path="billing" element={<Billing />}></Route>
           <Route path="customize" element={<Customizations />}></Route>
+          <Route path=":courseId/exam/newexam" element={<ExamPage />} />
+          <Route path=":courseId/exam/:examId" element={<ExamPage />} />
         </Route>
         {/* Common pages to all users */}
         <Route path="/profile" element={<UserProfile />} />

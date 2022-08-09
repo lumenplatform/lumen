@@ -1,8 +1,8 @@
-import { Box, Button, Container, Divider, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Container, Divider, Skeleton, Tab, Tabs, Typography } from '@mui/material';
 import * as React from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { createNewExam, updateExam } from '../../../api';
+import { createNewQuiz, updateQuiz, getQuizById } from '../../../api';
 import ExamCreate, { Questions } from './ExamCreate';
 import ExamSettings, { Settings, defaultSettings } from './ExamSettings';
 interface TabPanelProps {
@@ -49,16 +49,22 @@ export default function ExamPage() {
     const { examId, courseId } = useParams();
     const [value, setValue] = React.useState(0);
     const [exam, setExam] = React.useState<Exam>({ settings: defaultSettings, questions: [], course: 'harum-eum-similique' });
-    const examCreateMutation = useMutation(createNewExam);
-    const examUpdateMutation = useMutation(updateExam);
+    const examCreateMutation = useMutation(createNewQuiz);
+    const examUpdateMutation = useMutation(updateQuiz);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
+    const {
+        data: examData,
+    } = useQuery(['courses', courseId], () => getQuizById(courseId!, examId ?? ''));
+
     React.useEffect(() => {
-        console.log(exam);
-    }, [exam]);
+        if (examData) {
+            setExam(examData);
+        }
+    }, [examData]);
 
     const handleQusetionsChange = (questions: any[]) => {
         setExam({ ...exam, questions: questions });
@@ -67,9 +73,6 @@ export default function ExamPage() {
     const handleSettingsChange = (settings: any) => {
         setExam({ ...exam, settings: settings });
     }
-
-
-
 
     return (
         <Container sx={{ mt: 4 }}>
