@@ -22,7 +22,7 @@ export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     const organizations = new OrganizationFactory(em).make(5);
     const users = new UserFactory(em).make(5);
-    const courses = new CourseFactory(em).make(2);
+    const courses = [];
     const enrollments = new EnrollmentFactory(em).make(5);
 
     users.forEach((user) => {

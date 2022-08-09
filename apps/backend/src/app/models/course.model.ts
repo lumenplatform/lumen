@@ -32,7 +32,7 @@ export class Course {
   @Property()
   subtitle: string;
 
-  @Property()
+  @Property({ type: 'text' })
   description: string;
 
   @Property()

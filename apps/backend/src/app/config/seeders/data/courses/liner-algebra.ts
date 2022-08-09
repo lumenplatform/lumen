@@ -2,7 +2,7 @@ import { AssetStatus, AssetType } from '../../../../models/asset.model';
 import { v1, v4 } from 'uuid';
 import { Course, CourseStatus } from '../../../../models/course.model';
 
-type DeepPartial<T> = T extends object
+export  type DeepPartial<T> = T extends object
   ? {
       [P in keyof T]?: DeepPartial<T[P]>;
     }
@@ -38,10 +38,6 @@ export const linerAlgebra: DeepPartial<Course> = {
   },
 
   //   instructors = new Collection<User>(this),
-
-  //   moderators = new Collection<User>(this),
-
-  //   organization: Organization,
 
   welcomeMessage: '',
   congratsMessage: '',
