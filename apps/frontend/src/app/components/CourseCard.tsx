@@ -15,13 +15,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-export default function CourseCard({
-  course,
-  onClick,
-}: {
-  course: any;
-  onClick?: any;
-}) {
+export default function CourseCard({ course }: { course: any }) {
   const theme = useTheme();
   return (
     <Link to={'/courses/' + course.courseId} style={{ textDecoration: 'none' }}>

@@ -2,7 +2,7 @@ import { AssetStatus, AssetType } from '../../../../models/asset.model';
 import { v1, v4 } from 'uuid';
 import { Course, CourseStatus } from '../../../../models/course.model';
 
-export  type DeepPartial<T> = T extends object
+export type DeepPartial<T> = T extends object
   ? {
       [P in keyof T]?: DeepPartial<T[P]>;
     }
@@ -26,7 +26,7 @@ export const linerAlgebra: DeepPartial<Course> = {
     status: AssetStatus.ACTIVE,
     mime: 'image/jpeg',
     name: '',
-    url: 'https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/ad862b68e2323331fd3ee944ed704f38_18-06scf11.jpg',
+    url: 'https://miro.medium.com/max/378/1*okJw0bCYkZS9wYm7f0DfYw.png',
   },
 
   promotionalVideo: {
