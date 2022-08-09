@@ -20,6 +20,7 @@ import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import ExamPage from './pages/management/exam/ExamPage';
 
 const ProtectedPage = ({
   userRole,
@@ -64,6 +65,8 @@ export default function () {
           <Route path="users" element={<Users />}></Route>
           <Route path="billing" element={<Billing />}></Route>
           <Route path="customize" element={<Customizations />}></Route>
+          <Route path=":courseId/exam/newexam" element={<ExamPage />} />
+          <Route path=":courseId/exam/:examId" element={<ExamPage />} />
         </Route>
         <Route path="/manage">
           <Route path="new-course" element={<CourseCreate />}></Route>

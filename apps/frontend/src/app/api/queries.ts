@@ -90,3 +90,15 @@ export function getPendingOrgInvitations() {
   return client.get('/manage/users/invites').then((r) => r.data.data);
 }
 // END MANAGEMENT
+
+export function createNewQuiz(data: any) {
+  return client.post(`/courses/${data.form.course}/quiz/`, data.form).then((r) => r.data.data);
+}
+
+export function updateQuiz( data: any) {
+  return client.put(`/courses/${data.course}/quiz/${data.examId}`, data.form).then((r) => r.data.data);
+}
+
+export function getQuizById(courseId: string, examId: string) {
+  return client.get<any>(`/courses/${courseId}/quiz/${examId}`).then((r) => r.data.data);
+}

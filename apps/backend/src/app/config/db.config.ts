@@ -9,6 +9,10 @@ import { Organization } from '../models/organization.model';
 import { User } from '../models/user.model';
 import { Logger } from '../utils/logger';
 import { Notification } from '../models/notification.model';
+import { Question } from '../models/question.model';
+import { Quiz } from '../models/quiz.model';
+import {Answer} from '../models/answer.model';
+
 import path = require('path');
 import { UserInvite } from '../models/user-invite.model';
 
@@ -26,6 +30,9 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     Payment,
     CourseReview,
     UserInvite,
+    Question,
+    Quiz,
+    Answer,
   ],
   type: 'postgresql',
   clientUrl: process.env.PG_CONNECTION_STRING,

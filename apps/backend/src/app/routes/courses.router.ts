@@ -8,6 +8,7 @@ import { CourseService } from '../services/course.service';
 import { SMTPMailService } from '../services/email.service';
 import { StripePaymentService } from '../services/payment.service';
 import { createResponse } from './../utils/response-mapper';
+import { quizRouter } from './../routes/quiz.router';
 
 export const coursesRouter = express.Router();
 
@@ -91,3 +92,5 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
     })
     .catch(next);
 });
+
+coursesRouter.use('/:id/quiz', quizRouter);
