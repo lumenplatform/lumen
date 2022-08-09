@@ -38,6 +38,10 @@ const sideBarItems = [
     path: 'SubmissionStatus',
     label: 'Submission Status',
   },
+  {
+    path: 'AssignmentSettings',
+    label: 'Assignment Settings',
+  },
 
 ];
 

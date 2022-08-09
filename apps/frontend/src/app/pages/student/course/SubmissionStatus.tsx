@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import TextField from '@mui/material/TextField';
 import Popover from '@mui/material/Popover';
@@ -14,8 +14,13 @@ import Button from '@mui/material/Button';
 
 function SubmissionStatus(){
     return(
+        
         <div>
-        <TableContainer component={Paper}>
+         <Typography variant='h4'sx={{marginBottom:5,marginTop:5}}>SCS3203 Middleware Architecture </Typography>
+         <Divider></Divider>
+           <Typography variant='h5'sx={{marginBottom:5,marginTop:5}}>Submission Status</Typography>
+        <TableContainer component={Paper} >
+       
      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
       <TableHead>
         <TableRow>
@@ -25,24 +30,11 @@ function SubmissionStatus(){
 
         </TableRow>
      </TableHead>
-     <TableHead>
+     /*<TableHead>
         <TableRow>
            <TableCell sx={{height:70}}>Grading Status</TableCell>
-          <TableCell><Typography >Not graded</Typography></TableCell> 
+          <TableCell><Typography >Not graded</Typography></TableCell> /
 
-        </TableRow>
-     </TableHead>
-     <TableHead>
-        <TableRow>
-           <TableCell sx={{height:70}}>Due date</TableCell>
-           <TableCell><Typography >Thursday</Typography></TableCell>
-
-        </TableRow>
-     </TableHead>
-     <TableHead>
-        <TableRow>
-           <TableCell sx={{height:70}}>Time remaining</TableCell>
-           <TableCell><Typography >Assignmnet was submitted 2 hours 6 mins early</Typography></TableCell>
         </TableRow>
      </TableHead>
      <TableHead>
@@ -69,6 +61,9 @@ function SubmissionStatus(){
     
      </Table>
      </TableContainer>
+     <Button sx={{marginBottom:5,marginTop:5,marginLeft:50}} variant="contained" disabled>
+  Add Submission
+</Button>
         </div>
     );
 }
@@ -114,3 +109,8 @@ export  function BasicPopover() {
     </div>
   );
 }
+
+
+
+
+ 
