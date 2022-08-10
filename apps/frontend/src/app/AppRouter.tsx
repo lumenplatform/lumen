@@ -13,8 +13,8 @@ import ForInstructors from './pages/public/ForInstructors';
 import HomePage from './pages/public/HomePage';
 import CourseInfo from './pages/student/course/CourseInfo';
 import CourseMaterial from './pages/student/course/CourseMaterial';
-import CourseViewer from './pages/student/course/CourseMaterialPage';
-import ContentView from './pages/student/course/CourseMaterialView';
+import CourseViewer from './pages/student/course-viewer/CourseViewer';
+import ContentView from './pages/student/course-viewer/ContentView';
 import CourseResources from './pages/student/course/CourseResources';
 import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
@@ -35,16 +35,16 @@ const ProtectedPage = ({
 export default function () {
   return (
     <Routes>
-      {/* Site Home Page */}
+      {/* Public Pages */}
       <Route path="/" element={<HomePage />} />
       <Route path="/teaching" element={<ForInstructors />} />
+      <Route path="/courses" element={<SearchPage />} />
+      <Route path="/courses/:courseId" element={<Enroll />}></Route>
 
       {/* Pages accessed by the student */}
       <Route element={<ProtectedPage userRole="student" />}>
         <Route path="/student">
           <Route index element={<StudentHome />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path=":courseId/enrollment" element={<Enroll />}></Route>
           <Route path=":courseId" element={<CoursePage />}>
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />

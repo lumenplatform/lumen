@@ -14,6 +14,9 @@ export class CourseMaterial {
   @PrimaryKey()
   id: string = v4();
 
+  @Property({ type: 'integer' })
+  order = 0;
+
   @Property()
   title: string;
 

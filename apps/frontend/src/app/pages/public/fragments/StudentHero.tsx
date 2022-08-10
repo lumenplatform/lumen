@@ -28,6 +28,7 @@ export function StudentHero() {
               <Button
                 variant="contained"
                 // color="secondary"
+                disableElevation
                 size="large"
                 onClick={() => navigate('/student')}
               >
