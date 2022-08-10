@@ -3,7 +3,7 @@ import { RequireAuth } from './components/Auth';
 import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
-import CourseCreate from './pages/management/course/CourseCreate';
+import CourseCreate from './pages/management/Course/CourseCreate';
 import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
@@ -21,6 +21,7 @@ import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
 import ExamPage from './pages/management/exam/ExamPage';
+import Quizpage from './pages/student/QuizPage';
 
 const ProtectedPage = ({
   userRole,
@@ -54,6 +55,7 @@ export default function () {
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
+          <Route path="quiz" element={<Quizpage/>}></Route>
         </Route>
       </Route>
 

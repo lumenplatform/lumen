@@ -1,17 +1,14 @@
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import { Card, Container, IconButton, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import * as React from 'react';
-import Checkbox from '@mui/material/Checkbox';
 
 export default function MCQ(props: any) {
-  const { questionId, answers, setFlag, setAnswer, question, isFlagged } = props;
+  const { questionId, answers, setFlag, setAnswer, question, isFlagged } =
+    props;
 
   return (
     <Container sx={{ padding: 5 }}>
@@ -29,7 +26,7 @@ export default function MCQ(props: any) {
               <IconButton
                 sx={{ padding: 0, paddingRight: 1, display: 'inline' }}
                 onClick={() => setFlag(questionId)}
-                color={isFlagged ? 'secondary' : 'default'}
+                color={isFlagged ? 'error' : 'default'}
               >
                 <FlagOutlinedIcon />
               </IconButton>
@@ -47,7 +44,16 @@ export default function MCQ(props: any) {
             </Typography>
 
             {answers.map((object: any) => (
-              <FormControlLabel control={<Checkbox onChange={()=>setAnswer(questionId,object.answerId,'mcq')} />} label={object.answer} />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={() =>
+                      setAnswer(questionId, object.answerId, 'mcq')
+                    }
+                  />
+                }
+                label={object.answer}
+              />
             ))}
           </FormControl>
         </Box>
