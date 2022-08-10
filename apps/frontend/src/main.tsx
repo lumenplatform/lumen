@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
-
+import { StorageProvider } from './app/components/StorageProvider';
 import App from './app/app';
 import { AuthProvider } from './app/components/Auth';
 
@@ -27,7 +27,9 @@ root.render(
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <AuthProvider>
-            <App />
+            <StorageProvider>
+              <App />
+            </StorageProvider>
           </AuthProvider>
         </BrowserRouter>
       </QueryClientProvider>

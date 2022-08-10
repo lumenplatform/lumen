@@ -1,9 +1,15 @@
-import { BlockBlobClient, ContainerClient } from '@azure/storage-blob';
+import { BlockBlobClient } from '@azure/storage-blob';
+import { PersonAddAlt } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageIcon from '@mui/icons-material/Image';
 import {
   Avatar,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   LinearProgress,
   Link,
@@ -11,21 +17,17 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Stack,
+  TextField,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import {
-  Component,
-  ContextType,
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { useQueries, useQuery } from 'react-query';
+import { Component, ContextType, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import { useList } from 'react-use';
-import { getUploadConfig } from '../api';
+import { inviteUserToOrg } from '../api';
+import { StorageContext, useStorage } from './StorageProvider';
 
 function formatBytes(bytes: number, decimals: number) {
   if (bytes == 0) return '0 Bytes';
@@ -35,42 +37,57 @@ function formatBytes(bytes: number, decimals: number) {
     i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
-interface StorageContextType {
-  containerClient?: ContainerClient | null;
-}
 
-const StorageContext = createContext<StorageContextType>(null!);
-/**
- * TODO: Mode upload logic to provider
- *
- *
- */
-function StorageProvider({ children }: { children: React.ReactNode }) {
-  const [containerClient, setContainerClient] = useState<ContainerClient>(
-    null!
-  );
-  const { data: uploadConfig } = useQuery(
-    'fetchUploadConfig',
-    getUploadConfig,
-    { staleTime: 1000 * 60 * 10 }
-  );
+function AssetOptions() {
+  const [open, setOpen] = useState(false);
+  const inviteUserMutation = useMutation(inviteUserToOrg, {
+    onSuccess: () => {
+      handleClose();
+    },
+  });
+  const { register, getValues } = useForm();
 
-  useEffect(() => {
-    if (uploadConfig) {
-      const client = new ContainerClient(uploadConfig.sas);
-      setContainerClient(client);
-    }
-  }, [uploadConfig]);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <StorageContext.Provider value={{ containerClient }}>
-      {children}
-    </StorageContext.Provider>
+    <>
+      <Button variant="contained" onClick={() => setOpen(true)}>
+        Invite User
+      </Button>
+      <Dialog open={open} maxWidth="xs" hideBackdrop={false}>
+        <DialogTitle>
+          <Stack direction={'row'} alignItems="center">
+            <PersonAddAlt sx={{ mr: 2 }} /> Invite an user
+          </Stack>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            We will send an email to the user asking them to join.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            {...register('email')}
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions sx={{ mx: 2, mb: 2 }}>
+          <Button color="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={() => {}}>
+            Invite
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
-}
-
-function useStorage() {
-  return useContext(StorageContext);
 }
 
 export class FileItemComp extends Component<
@@ -176,15 +193,18 @@ export class FileItemComp extends Component<
       <ListItem
         dense
         secondaryAction={
-          this.props.removeType === 'delete' ? (
-            <IconButton edge="end" onClick={handleRemove}>
-              <DeleteIcon />
-            </IconButton>
-          ) : (
-            <Button onClick={handleRemove} color="secondary">
-              Replace
-            </Button>
-          )
+          <Box>
+            <AssetOptions />
+            {this.props.removeType === 'delete' ? (
+              <IconButton edge="end" onClick={handleRemove}>
+                <DeleteIcon />
+              </IconButton>
+            ) : (
+              <Button onClick={handleRemove} color="secondary">
+                Replace
+              </Button>
+            )}
+          </Box>
         }
       >
         <ListItemAvatar>
@@ -240,6 +260,7 @@ function FilesInput({ multiple, onChange, value, accept }: FileInputProps) {
     multiple ? (value ? value : []) : value ? [value] : []
   );
   const fileInputElement = useRef<HTMLInputElement>(null);
+  const storage = useStorage();
 
   useEffect(() => {
     if (onChange) {
@@ -263,7 +284,7 @@ function FilesInput({ multiple, onChange, value, accept }: FileInputProps) {
   const addFiles = () => fileInputElement.current?.click();
 
   return (
-    <StorageProvider>
+    <>
       {files.length > 0 && (
         <List dense={true}>
           {files.map((file, index) => (
@@ -296,23 +317,20 @@ function FilesInput({ multiple, onChange, value, accept }: FileInputProps) {
           hidden
           accept={accept ? accept : '*/**'}
         />
-        <StorageContext.Consumer>
-          {(value) =>
-            (multiple === true || files.length === 0) && (
-              <Button
-                size="small"
-                onClick={addFiles}
-                sx={{ m: 1 }}
-                disabled={!value.containerClient}
-                variant="outlined"
-              >
-                {multiple === true ? 'Add' : 'Choose'} File
-              </Button>
-            )
-          }
-        </StorageContext.Consumer>
+
+        {(multiple === true || files.length === 0) && (
+          <Button
+            size="small"
+            onClick={addFiles}
+            sx={{ m: 1 }}
+            disabled={!storage.containerClient}
+            variant="outlined"
+          >
+            {multiple === true ? 'Add' : 'Choose'} File
+          </Button>
+        )}
       </Box>
-    </StorageProvider>
+    </>
   );
 }
 

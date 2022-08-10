@@ -41,7 +41,7 @@ export default function Users() {
           <TableBody>
             {data &&
               data.map((row: any) => (
-                <TableRow key={row.name}>
+                <TableRow key={row.title}>
                   <TableCell sx={{ pl: theme.spacing(3) }}>
                     <Typography variant="body2">{row.title}</Typography>
                   </TableCell>
