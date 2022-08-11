@@ -23,7 +23,7 @@ type Exam = {
 export default function ExamPage() {
     const { examId, courseId } = useParams();
     const [value, setValue] = React.useState(0);
-    const [exam, setExam] = React.useState<Exam>({ settings: {}, questions: [], course: courseId });
+    const [exam, setExam] = React.useState<Exam>({ settings: {}, questions: [], course: courseId! });
     const examCreateMutation = useMutation(createNewQuiz);
     const examUpdateMutation = useMutation(updateQuiz);
 
