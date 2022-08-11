@@ -8,77 +8,102 @@ export function StudentHero() {
   const theme = useTheme();
   const styles_1 = useSpring({
     loop: { reverse: true },
-    from: { x: -10, y: -10, },
+    from: { x: -10, y: -10 },
     to: { x: 10, y: 10 },
-    config: { duration: 3000, mass: 1, tension: 120, friction: 20, easing: easings.easeInOutSine, },
-  })
+    config: {
+      duration: 3000,
+      mass: 1,
+      tension: 120,
+      friction: 20,
+      easing: easings.easeInOutSine,
+    },
+  });
 
   const styles_2 = useSpring({
     loop: { reverse: true },
     from: { x: -30 },
     to: { x: 50 },
-    config: { duration: 4000, mass: 1, tension: 120, friction: 20, easing: easings.easeInOutSine, },
-  })
+    config: {
+      duration: 4000,
+      mass: 1,
+      tension: 120,
+      friction: 20,
+      easing: easings.easeInOutSine,
+    },
+  });
 
   const styles_3 = useSpring({
     loop: { reverse: true },
-    from: { x: -10, y: -10, },
+    from: { x: -10, y: -10 },
     to: { x: 10, y: 10 },
-    config: { duration: 2000, mass: 1, tension: 120, friction: 20, easing: easings.easeInOutSine, },
-  })
+    config: {
+      duration: 2000,
+      mass: 1,
+      tension: 120,
+      friction: 20,
+      easing: easings.easeInOutSine,
+    },
+  });
 
   const styles_4 = useSpring({
     loop: { reverse: true },
     from: { x: -10, y: -10, rotateZ: 0 },
     to: { x: 10, y: 10, rotateZ: 60 },
-    config: { duration: 2000, mass: 1, tension: 120, friction: 20, easing: easings.easeInOutSine, },
-  })
+    config: {
+      duration: 2000,
+      mass: 1,
+      tension: 120,
+      friction: 20,
+      easing: easings.easeInOutSine,
+    },
+  });
 
   const text = {
     color: '#f5f5f5',
-    textShadow: "1px 1px 1px #919191,1px 2px 1px #919191,1px 3px 1px #919191,1px 4px 1px #919191,1px 5px 1px #919191,1px 6px 1px #919191,1px 7px 1px #919191,1px 8px 1px #919191,1px 9px 1px #919191,1px 10px 1px #919191,1px 18px 6px rgba(16,16,16,0.4),1px 22px 10px rgba(16,16,16,0.2),1px 25px 35px rgba(16,16,16,0.2),1px 30px 60px rgba(16,16,16,0.4)",
-}
+    textShadow:
+      '1px 1px 1px #919191,1px 2px 1px #919191,1px 3px 1px #919191,1px 4px 1px #919191,1px 5px 1px #919191,1px 6px 1px #919191,1px 7px 1px #919191,1px 8px 1px #919191,1px 9px 1px #919191,1px 10px 1px #919191,1px 18px 6px rgba(16,16,16,0.4),1px 22px 10px rgba(16,16,16,0.2),1px 25px 35px rgba(16,16,16,0.2),1px 30px 60px rgba(16,16,16,0.4)',
+  };
 
-
-return (
-  <Box sx={{ background: alpha(theme.palette.primary.main, 0.1) }}>
-    <Container>
-      <Box sx={{ display: 'flex' }}>
-        <Box
-          sx={{
-            flex: 1,
-            pl: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="h2" fontWeight={600} my={3}>
-            Learning, Reimagined.
-          </Typography>
-          <Typography mb={3}>
-            Improve to your knowledge, wherever you are.
-          </Typography>
-          <Box>
-            <Button
-              variant="contained"
-              // color="secondary"
-              disableElevation
-              size="large"
-              onClick={() => navigate('/student')}
-            >
-              Get Started
-            </Button>
-          </Box>
-        </Box>
-        <Box>
+  return (
+    <Box sx={{ background: alpha(theme.palette.primary.main, 0.1) }}>
+      <Container>
+        <Box sx={{ display: 'flex' }}>
           <Box
             sx={{
+              flex: 1,
+              pl: 3,
               display: 'flex',
-              justifyContent: 'end',
-              position: 'relative',
+              flexDirection: 'column',
+              justifyContent: 'center',
             }}
           >
+            <Typography variant="h2" fontWeight={600} my={3}>
+              Learning, Reimagined.
+            </Typography>
+            <Typography mb={3}>
+              Improve to your knowledge, wherever you are.
+            </Typography>
+            <Box>
+              <Button
+                variant="contained"
+                // color="secondary"
+                disableElevation
+                size="large"
+                onClick={() => navigate('/student')}
+              >
+                Get Started
+              </Button>
+            </Box>
+          </Box>
+          <Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'end',
+                position: 'relative',
+              }}
+            >
+              {/*  
             <animated.img
               src="/assets/images/icon_1.png"
               style={{ ...styles_1, width: '20%', position: 'absolute', right: '12%', top: '15%' }}
@@ -106,15 +131,16 @@ return (
                 E=mc<sup>2</sup>
               </Typography>
             </animated.div>
-            <img
-              src="/assets/images/img_1.png"
-              alt=""
-              style={{ minWidth: '150%' }}
-            />
+            */}
+              <img
+                src="/assets/images/img_1.png"
+                alt=""
+                style={{ minWidth: '150%' }}
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </Container>
-  </Box>
-);
+      </Container>
+    </Box>
+  );
 }
