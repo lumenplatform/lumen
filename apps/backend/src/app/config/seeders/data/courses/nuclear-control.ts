@@ -15,6 +15,7 @@ export const nuclearControlSystems: DeepPartial<Course> = {
   subjectArea: 'Engineering ',
   duration: 0,
   price: 0,
+  settings: { isDesktopOnly: true },
 
   courseImage: {
     type: AssetType.IMAGE,

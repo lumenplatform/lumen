@@ -1,5 +1,7 @@
 import {
   Collection,
+  Embeddable,
+  Embedded,
   Entity,
   Enum,
   ManyToMany,
@@ -15,6 +17,15 @@ import { CourseMaterial } from './course-material.model';
 import { Enrollment } from './enrollment.model';
 import { Organization } from './organization.model';
 import { User } from './user.model';
+
+@Embeddable()
+export class CourseSettings {
+  @Property({ default: false, columnType: 'boolean' })
+  isDesktopOnly? = false;
+
+  @Property({ default: false, columnType: 'boolean' })
+  isPrivate? = false;
+}
 
 export enum CourseStatus {
   DRAFT = 'DRAFT',
@@ -99,4 +110,7 @@ export class Course {
 
   @Property({ default: 0 })
   ratingCount: number;
+
+  @Embedded(() => CourseSettings)
+  settings?: CourseSettings = new CourseSettings();
 }
