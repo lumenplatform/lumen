@@ -1,3 +1,4 @@
+import { Edit, EditOutlined } from '@mui/icons-material';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import { Button, Chip, Typography, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -49,14 +50,25 @@ export default function Users() {
                   <TableCell>{row.price}$</TableCell>
                   <TableCell>{draftChip(row.status)}</TableCell>
                   <TableCell>
-                    <Button
-                      startIcon={<RemoveRedEyeOutlinedIcon />}
-                      onClick={() => {
-                        navigate(`/manage/courses/${row.courseId}`);
-                      }}
-                    >
-                      View
-                    </Button>
+                    <Box style={{ display: 'flex', alignItems: 'center' }}>
+                      <Button
+                        startIcon={<RemoveRedEyeOutlinedIcon />}
+                        onClick={() => {
+                          navigate(`/manage/courses/${row.courseId}`);
+                        }}
+                      >
+                        View
+                      </Button>
+                      &nbsp; | &nbsp;
+                      <Button
+                        startIcon={<EditOutlined />}
+                        onClick={() => {
+                          navigate(`/manage/courses/${row.courseId}/edit`);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}
