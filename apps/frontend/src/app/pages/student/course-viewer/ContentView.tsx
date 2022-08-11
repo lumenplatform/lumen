@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getCourseById, getCourseMaterial } from '../../../api';
+import FilesInput from '../../../components/FilesInput';
 import VideoPlayer from '../../../components/VideoPlayer';
 
 export default function ContentView() {
@@ -28,40 +29,57 @@ export default function ContentView() {
       </Box>
 
       <Box sx={{}}>
-        {topic.contentType === 'article' && (
-          <div dangerouslySetInnerHTML={{ __html: topic.article }} />
-        )}
-        {topic.contentType === 'video' && typeof topic.video.path == 'string' && (
-          <Box style={{ aspectRatio: '16/9' }}>
-            <video
-              style={{ width: '100%', height: '100%', background: 'black' }}
-              controls
-              src={topic.video.path}
+        <Box mb={2}>
+          {topic.contentType == 'video' &&
+            topic.video &&
+            typeof topic.video.path == 'string' && (
+              <Box style={{ aspectRatio: '16/9' }}>
+                <VideoPlayer
+                  options={{ poster: course.courseImage.path }}
+                  src={[{ src: topic.video.path }]}
+                />
+              </Box>
+            )}
+
+          {topic.contentType == 'video' &&
+            topic.video &&
+            typeof topic.video?.path == 'object' && (
+              <VideoPlayer
+                src={topic.video.path}
+                options={{ poster: course.courseImage.path }}
+              />
+            )}
+
+          {topic.contentType == 'article' && (
+            <div
+              className="ProseMirror"
+              dangerouslySetInnerHTML={{ __html: topic.article }}
             />
-          </Box>
-        )}
-
-        {topic.contentType === 'video' &&
-          typeof topic.video.path == 'object' && (
-            <VideoPlayer src={topic.video.path} />
           )}
-
+        </Box>
         <Typography my={1} variant="body1" fontWeight={600}>
-          Description
+          Description / Notes
         </Typography>
         <Box px={1}>{topic.description}</Box>
         <Typography my={1} variant="body1" fontWeight={600}>
           Resources
         </Typography>
-        <Box px={1}>
+        <Box>
+          <FilesInput
+            viewOnly={true}
+            multiple
+            value={topic.resources?.map((r: any) => r.asset)}
+          />
+        </Box>
+        {/* <Typography my={1} variant="body1" fontWeight={600}>
+          Activities
+        </Typography>
+        <Box px={1}>N/A</Box> */}
+        {/* <small>
           <pre style={{ whiteSpace: 'break-spaces' }}>
             {JSON.stringify(topic, null, 2)}
           </pre>
-        </Box>
-        <Typography my={1} variant="body1" fontWeight={600}>
-          Activities
-        </Typography>
-        <Box px={1}>'N/A'</Box>
+        </small> */}
       </Box>
     </>
   );

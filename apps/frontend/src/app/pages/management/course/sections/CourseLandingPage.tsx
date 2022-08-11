@@ -29,77 +29,146 @@ export function CourseLandingPage() {
           '& .MuiTextField-root': { mt: 2, mb: 2, width: '100%' },
         }}
       >
-        <TextField
-          label="Course Title"
-          variant="outlined"
-          {...register('title', { required: 'Title is Required' })}
-          error={!!errors['title']}
-          helperText={errors['title']?.['message']!.toString()}
+        <Controller
+          name="title"
+          control={control}
+          rules={{ required: 'Title is Required' }}
+          render={({ field }) => (
+            <TextField
+              label="Course Title"
+              variant="outlined"
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              value={field.value || ''}
+              error={!!errors['title']}
+              helperText={errors['title']?.['message']!.toString()}
+            />
+          )}
         />
-        <TextField
-          label="Course Subtitle"
-          variant="outlined"
-          {...register('subtitle')}
-          error={!!errors['subtitle']}
-          helperText={errors['subtitle']?.['message']!.toString()}
+        <Controller
+          name="subtitle"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Course Subtitle"
+              variant="outlined"
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              value={field.value || ''}
+              error={!!errors['subtitle']}
+              helperText={errors['subtitle']?.['message']!.toString()}
+            />
+          )}
         />
-        <TextField
-          label="Course description"
-          variant="outlined"
-          multiline
-          rows={4}
-          {...register('description', {
+        <Controller
+          name="description"
+          rules={{
             required: 'Description is required',
             minLength: {
               value: 100,
               message: 'Description should have at least 100 characters',
             },
-          })}
-          error={!!errors['description']}
-          helperText={errors['description']?.['message']!.toString()}
+          }}
+          control={control}
+          render={({ field }) => (
+            <TextField
+              label="Course description"
+              variant="outlined"
+              multiline
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              value={field.value || ''}
+              rows={4}
+              error={!!errors['description']}
+              helperText={errors['description']?.['message']!.toString()}
+            />
+          )}
         />
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <FormControl fullWidth>
               <InputLabel>Language</InputLabel>
-              <Select label="Language" {...register('language')}>
-                <MenuItem value="English">English</MenuItem>
-                <MenuItem value="Spanish">Spanish</MenuItem>
-                <MenuItem value="Sinhala">Sinhala</MenuItem>
-              </Select>
+              <Controller
+                name="language"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    label="Language"
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                    value={field.value || ''}
+                  >
+                    <MenuItem value="English">English</MenuItem>
+                    <MenuItem value="Spanish">Spanish</MenuItem>
+                    <MenuItem value="Sinhala">Sinhala</MenuItem>
+                  </Select>
+                )}
+              />
             </FormControl>
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
               <InputLabel>Level</InputLabel>
-              <Select label="Level" {...register('level')}>
-                <MenuItem value="Beginner">Beginner </MenuItem>
-                <MenuItem value="Intermediate">Intermediate </MenuItem>
-                <MenuItem value="Expert">Expert </MenuItem>
-              </Select>
+
+              <Controller
+                name="level"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    label="Level"
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    value={field.value || ''}
+                  >
+                    <MenuItem value="Beginner">Beginner </MenuItem>
+                    <MenuItem value="Intermediate">Intermediate </MenuItem>
+                    <MenuItem value="Expert">Expert </MenuItem>
+                  </Select>
+                )}
+              />
             </FormControl>
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
               <InputLabel>Course Subject Area</InputLabel>
-              <Select label="Course Subject Area" {...register('subjectArea')}>
-                <MenuItem value={'Computer Science'}>Computer Science</MenuItem>
-                <MenuItem value={'Physics'}>Physics</MenuItem>
-                <MenuItem value={'Mathematics'}>Mathematics</MenuItem>
-              </Select>
+              <Controller
+                name="subjectArea"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    label="Course Subject Area"
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    value={field.value || ''}
+                  >
+                    <MenuItem value={'Computer Science'}>
+                      Computer Science
+                    </MenuItem>
+                    <MenuItem value={'Physics'}>Physics</MenuItem>
+                    <MenuItem value={'Mathematics'}>Mathematics</MenuItem>
+                  </Select>
+                )}
+              />
             </FormControl>
           </Grid>
 
           <Grid item xs={6}>
-            <Typography variant="body1" gutterBottom>
-              <Box sx={{ fontWeight: 'bold' }}>Course Image</Box>
+            <Typography
+              variant="body1"
+              gutterBottom
+              sx={{ fontWeight: 'bold' }}
+            >
+              Course Image
             </Typography>
 
             <Card sx={{ maxWidth: '100%' }}>
               <CardMedia
                 component="img"
                 height="194"
-                image={values['courseImage']?.url ?? 'https://via.placeholder.com/750x425.png'}
+                image={
+                  values['courseImage']?.url ??
+                  'https://via.placeholder.com/750x425.png'
+                }
                 alt="Paella dish"
               />
             </Card>
@@ -107,11 +176,9 @@ export function CourseLandingPage() {
 
           <Grid item xs={6}>
             <Typography variant="body1" gutterBottom mt={3}>
-              <Box>
-                Upload your course image here. It must meet our course image
-                quality standards to be accepted. Important guidelines: 750x425
-                pixels; .jpg, .jpeg,. gif, or .png. no text on the image.
-              </Box>
+              Upload your course image here. It must meet our course image
+              quality standards to be accepted. Important guidelines: 750x425
+              pixels; .jpg, .jpeg,. gif, or .png. no text on the image.
             </Typography>
             <Controller
               name="courseImage"
@@ -120,14 +187,14 @@ export function CourseLandingPage() {
                 <FilesInput
                   accept="image/*"
                   onChange={onChange}
-                  value={value}
+                  value={value || ''}
                 />
               )}
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body1" gutterBottom>
-              <Box sx={{ fontWeight: 'bold' }}>Promotianal video</Box>
+            <Typography variant="body1" fontWeight="bold" gutterBottom>
+              Promotional video
             </Typography>
           </Grid>
 
@@ -144,12 +211,9 @@ export function CourseLandingPage() {
 
           <Grid item xs={6}>
             <Typography variant="body1" gutterBottom mt={3}>
-              <Box>
-                Students who watch a well-made promo video are 5X more likely to
-                enroll in your course. We've seen that statistic go up to 10X
-                for exceptionally awesome videos. Learn how to make yours
-                awesome!
-              </Box>
+              Students who watch a well-made promo video are 5X more likely to
+              enroll in your course. We've seen that statistic go up to 10X for
+              exceptionally awesome videos. Learn how to make yours awesome!
             </Typography>
             <Controller
               name="promotionalVideo"

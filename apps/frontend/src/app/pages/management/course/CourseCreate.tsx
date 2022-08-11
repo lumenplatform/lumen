@@ -44,6 +44,10 @@ export default function CourseCreate() {
   const methods = useForm({
     defaultValues: {
       title: '',
+      description: '',
+      language: '',
+      level: '',
+      subjectArea: '',
       learningOutcome: [''],
       intendedAudience: [''],
       prerequisites: [''],
@@ -84,6 +88,8 @@ export default function CourseCreate() {
     { component: <Pricing />, label: 'Pricing' },
     { component: <CourseMessage />, label: 'Messages' },
   ];
+
+  if (courseId && !courseData) return null;
 
   return (
     <FormProvider {...methods}>
@@ -137,7 +143,7 @@ export default function CourseCreate() {
               orientation="vertical"
             >
               {sections.map(({ label }) => (
-                <Tab sx={{ alignItems: 'end' }} label={label} />
+                <Tab sx={{ alignItems: 'end' }} key={label} label={label} />
               ))}
             </Tabs>
           </Box>
@@ -146,7 +152,7 @@ export default function CourseCreate() {
               {sections[value].label}
             </Typography>
             {sections.map(({ component }, index) => (
-              <TabPanel value={value} index={index}>
+              <TabPanel value={value} key={index} index={index}>
                 {component}
               </TabPanel>
             ))}

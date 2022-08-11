@@ -11,10 +11,11 @@ import { Logger } from '../utils/logger';
 import { Notification } from '../models/notification.model';
 import { Question } from '../models/question.model';
 import { Quiz } from '../models/quiz.model';
-import {Answer} from '../models/answer.model';
+import { Answer } from '../models/answer.model';
 
 import path = require('path');
 import { UserInvite } from '../models/user-invite.model';
+import { CourseResource } from '../models/course-resource.model';
 
 const ORMLogger = new Logger('ORM');
 
@@ -27,6 +28,7 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     Enrollment,
     Course,
     CourseMaterial,
+    CourseResource,
     Payment,
     CourseReview,
     UserInvite,

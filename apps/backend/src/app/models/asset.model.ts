@@ -35,6 +35,9 @@ export class Asset {
   @Property()
   name: string;
 
+  @Property({ default: 0 })
+  size: number;
+
   @Property({ nullable: true })
   config?: Record<string, unknown>;
 
