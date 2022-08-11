@@ -9,11 +9,11 @@ import TableRow from '@mui/material/TableRow';
 
 //sample data array with objects containg username,email,enrolled date,course title
 const data = [
-    { username: 'John Doe', time:'10:00 2022-08-12',ip:'127.0.0.122',application:'Chrome browser',os:'Windows 11' },
-    { username: 'John Doe', time:'10:00 2022-08-12',ip:'127.0.0.122',application:'Chrome browser',os:'Windows 11' },
-    { username: 'John Doe', time:'10:00 2022-08-12',ip:'127.0.0.122',application:'Chrome browser',os:'Windows 11' },
-    { username: 'John Doe', time:'10:00 2022-08-12',ip:'127.0.0.122',application:'Chrome browser',os:'Windows 11' },
-    { username: 'John Doe', time:'10:00 2022-08-12',ip:'127.0.0.122',application:'Chrome browser',os:'Windows 11' },
+    { username: 'John Doe', time: '10:00 2022-08-12', ip: '127.0.0.122', application: 'Chrome browser', os: 'Windows 11' },
+    { username: 'John Doe', time: '10:00 2022-08-12', ip: '127.0.0.122', application: 'Chrome browser', os: 'Windows 11' },
+    { username: 'John Doe', time: '10:00 2022-08-12', ip: '127.0.0.122', application: 'Chrome browser', os: 'Windows 11' },
+    { username: 'John Doe', time: '10:00 2022-08-12', ip: '127.0.0.122', application: 'Chrome browser', os: 'Windows 11' },
+    { username: 'John Doe', time: '10:00 2022-08-12', ip: '127.0.0.122', application: 'Chrome browser', os: 'Windows 11' },
 ];
 export default function UserLogs() {
     const theme = useTheme();

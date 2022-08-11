@@ -46,7 +46,7 @@ export default function ManageCourse() {
         </ButtonGroup>
       </Box>
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1,mb:2, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, mb: 2, borderColor: 'divider' }}>
           <Tabs
             value={value}
             onChange={(event, newValue: number) => setValue(newValue)}

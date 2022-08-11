@@ -40,7 +40,7 @@ export default function CourseInstructors() {
                                     <Typography variant="body2">{row.role}</Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Button size="small"variant="outlined" color="secondary" startIcon={<DeleteOutlineIcon />}>
+                                    <Button size="small" variant="outlined" color="secondary" startIcon={<DeleteOutlineIcon />}>
                                         Remove
                                     </Button>
                                 </TableCell>

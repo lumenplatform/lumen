@@ -10,11 +10,11 @@ import TableRow from '@mui/material/TableRow';
 
 //sample data array with objects containg username,email,enrolled date,course title
 const data = [
-    {title: 'Quiz 1', submissions: '50', quizId: '1'},
-    {title: 'Lab 1', submissions: '20', quizId: '1'},
-    {title: 'Lab 2', submissions: '40', quizId: '1'},
-    {title: 'Quiz 2', submissions: '60', quizId: '1'},
-    {title: 'Quiz 3', submissions: '100', quizId: '1'},
+    { title: 'Quiz 1', submissions: '50', quizId: '1' },
+    { title: 'Lab 1', submissions: '20', quizId: '1' },
+    { title: 'Lab 2', submissions: '40', quizId: '1' },
+    { title: 'Quiz 2', submissions: '60', quizId: '1' },
+    { title: 'Quiz 3', submissions: '100', quizId: '1' },
 ];
 export default function QuizAndAssignments() {
     const theme = useTheme();
