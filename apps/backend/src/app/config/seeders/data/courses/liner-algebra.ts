@@ -76,7 +76,7 @@ export const linerAlgebra: DeepPartial<Course> = {
             type: AssetType.VIDEO,
             url: 'https://ia902308.us.archive.org/35/items/MIT18.06S05_MP4/01.mp4',
             status: AssetStatus.ACTIVE,
-            mime: 'video/jpeg',
+            mime: 'video/mp4',
             name: 'THE GEOMETRY OF LINEAR EQUATIONS.mp4',
           },
         },
