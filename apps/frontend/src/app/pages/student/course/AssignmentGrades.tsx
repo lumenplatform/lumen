@@ -74,15 +74,7 @@ export default function Users() {
             </TableRow>
           </TableBody>
         </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={5}
-          page={0}
-          onPageChange={() => {}}
-          onRowsPerPageChange={() => {}}
-        />
+        
         
       </TableContainer>
     </Box>

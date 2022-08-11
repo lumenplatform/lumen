@@ -25,43 +25,50 @@ function SubmissionStatus(){
       <TableHead>
         <TableRow>
         
-           <TableCell sx={{height:70}}>Submission status</TableCell>
-           <TableCell><Typography >submitted for grading</Typography></TableCell>
+           <TableCell  style={{backgroundColor:'#F2F3F5'}} sx={{height:60, width:150}}>Submission status</TableCell>
+           <TableCell style={{backgroundColor:'#F2F3F5'}}><Typography >submitted for grading</Typography></TableCell>
 
         </TableRow>
      </TableHead>
      <TableHead>
         <TableRow>
-           <TableCell sx={{height:70}}>Grading Status</TableCell>
-          <TableCell><Typography >Not graded</Typography></TableCell> 
+           <TableCell sx={{height:60}}>Grading Status</TableCell>
+          <TableCell style={{backgroundColor:'#F2F3F5'}}><Typography >Not graded</Typography></TableCell> 
 
         </TableRow>
      </TableHead>
      <TableHead>
         <TableRow>
-           <TableCell sx={{height:70}}>Last modified</TableCell>
-          <TableCell> <Typography > Thursday</Typography></TableCell>
+           <TableCell style={{backgroundColor:'#F2F3F5'}} sx={{height:60}}>Due Date</TableCell>
+          <TableCell style={{backgroundColor:'#F2F3F5'}}><Typography >Sunday</Typography></TableCell> 
 
         </TableRow>
      </TableHead>
      <TableHead>
         <TableRow>
-           <TableCell sx={{height:70}}>File submission</TableCell>
+           <TableCell style={{backgroundColor:'#F2F3F5'}} sx={{height:60}}>Last modified</TableCell>
+          <TableCell style={{backgroundColor:'#F2F3F5'}}> <Typography > Thursday</Typography></TableCell>
+
+        </TableRow>
+     </TableHead>
+     <TableHead>
+        <TableRow>
+           <TableCell sx={{height:60}}>File submission</TableCell>
            <TableCell> <Typography >-</Typography></TableCell>
 
         </TableRow>
      </TableHead>
      <TableHead>
         <TableRow>
-           <TableCell sx={{height:70}}>Submission comments</TableCell>
-           <TableCell> <Typography ><BasicPopover></BasicPopover></Typography></TableCell>
+           <TableCell  style={{backgroundColor:'#F2F3F5'}} sx={{height:60}}>Submission comments</TableCell>
+           <TableCell style={{backgroundColor:'#F2F3F5'}}><TextField /></TableCell>
 
         </TableRow>
      </TableHead>
     
      </Table>
      </TableContainer>
-     <Button sx={{marginBottom:5,marginTop:5,marginLeft:50}} variant="contained" disabled href='/Add Submission'>
+     <Button  sx={{marginBottom:5,marginTop:5,marginLeft:50}} variant="contained"  href='/Add Submission/' >
   Add Submission
 </Button>
         </div>
