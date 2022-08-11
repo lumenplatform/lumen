@@ -7,13 +7,13 @@ import {
   ListItemText,
   Typography,
   useTheme,
-  Link,
+  Link as MuiLink,
   Avatar,
   Container,
   Skeleton,
 } from '@mui/material';
 import { useQuery } from 'react-query';
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { Link, NavLink, Outlet, useParams } from 'react-router-dom';
 import { getCourseById } from '../../api';
 import StudentHeader from '../../components/StudentHeader';
 
@@ -96,12 +96,17 @@ export default function CoursePage(props: any) {
       <Container maxWidth="xl">
         <Box sx={{ py: 1 }}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/student">
+            <MuiLink component={Link} underline="hover" color="inherit" to="/">
               Home
-            </Link>
-            <Link underline="hover" color="inherit" href="/student/">
+            </MuiLink>
+            <MuiLink
+              component={Link}
+              underline="hover"
+              color="inherit"
+              to="/student/"
+            >
               Courses
-            </Link>
+            </MuiLink>
             <Typography color="text.primary">{course.title}</Typography>
           </Breadcrumbs>
         </Box>

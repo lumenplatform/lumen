@@ -1,8 +1,6 @@
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DisplaySettingsOutlinedIcon from '@mui/icons-material/DisplaySettingsOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import MenuIcon from '@mui/icons-material/Menu';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutlined';
@@ -10,7 +8,6 @@ import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutl
 import { ListSubheader } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -20,7 +17,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import HeaderActions from '../../components/HeaderActions';
 
 const drawerWidth = 220;
@@ -151,15 +148,15 @@ const SideNavItems = () => {
                 key={item.label}
                 disablePadding
                 selected={isActive}
-                style={{
-                  color: isActive ? theme.palette.primary.dark : '',
+                sx={{
+                  color: isActive ? theme.palette.primary.main : '',
                 }}
               >
                 <ListItemButton>
                   <ListItemIcon
-                    sx={{ minWidth: '38px' }}
-                    style={{
-                      color: isActive ? theme.palette.primary.dark : '',
+                    sx={{
+                      minWidth: '38px',
+                      color: isActive ? theme.palette.primary.main : '',
                     }}
                   >
                     {item.icon}

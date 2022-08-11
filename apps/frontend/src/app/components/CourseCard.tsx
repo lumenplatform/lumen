@@ -7,25 +7,36 @@ import {
   CardMedia,
   Chip,
   Grid,
+  Link as MuiLink,
   Rating,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-export default function CourseCard(props: any) {
+export default function CourseCard({ course }: { course: any }) {
   const theme = useTheme();
   return (
-    <div onClick={props.onClick}>
+    <Link to={'/courses/' + course.courseId} style={{ textDecoration: 'none' }}>
       <Card>
         <CardActionArea>
           <CardMedia
             component="img"
             height="160"
-            image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRLJVGf2FyO7PH2UPREdmXQH7at_MIqy-g9cu9kdphiLYzlRf5BogQtvs8ucVJtKE5GsY&usqp=CAU"
-            alt="green iguana"
+            image={course.courseImage.url}
+            alt="course image"
           />
 
           <CardContent>
+            <Typography
+              gutterBottom
+              variant="body1"
+              component="div"
+              sx={{ fontWeight: 'bold', minHeight: '3em' }}
+            >
+              {course.title}
+            </Typography>
             <Box
               sx={{
                 display: 'flex',
@@ -35,92 +46,58 @@ export default function CourseCard(props: any) {
               }}
             >
               <Avatar
-                sx={{ width: 35, height: 35, mr: 1 }}
-                src="https://demos.themeselection.com/marketplace/materio-mui-react-nextjs-admin-template/demo-3/images/avatars/1.png"
+                sx={{ mr: 1 }}
+                src={course.organization.customizations?.logo?.path}
               />
-              <Typography gutterBottom variant="body2" component="h2">
-                University of LMNOP
-              </Typography>
+              <Box sx={{ minWidth: 0, overflow: 'hidden' }}>
+                <MuiLink
+                  to={'?organization=' + course.organization.name}
+                  component={Link}
+                  sx={{
+                    color: 'inherit',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  underline="hover"
+                >
+                  <Typography sx={{}}>{course.organization.name}</Typography>
+                </MuiLink>
+                <Typography variant="body2">By Prof. Gilbert Strang</Typography>
+              </Box>
             </Box>
-            <Typography
-              gutterBottom
-              variant="body1"
-              component="div"
-              sx={{ fontWeight: 'bold' }}
-            >
-              SCS3208 Software Project Management
+
+            <Typography variant="caption">
+              {course.subjectArea} - {course.tags}
             </Typography>
-            <Grid container spacing={0.8}>
-              <Grid item>
-                <Chip
-                  label="@machine-learning"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@python"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@octave"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@python"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item>
-                <Chip
-                  label="@octave"
-                  color="success"
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-            </Grid>
-            <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 3 }}>
-              Skills you'll gain :{' '}
-              <Typography variant="caption">
-                Mcahine learning is important
-              </Typography>
-            </Typography>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                mt: 5,
-              }}
-            >
+
+            <Stack direction="row" spacing={0.7}>
               <Rating
                 name="size-small"
-                defaultValue={3}
+                defaultValue={course.rating}
                 size="small"
                 readOnly
                 sx={{ mr: 0.5 }}
               />
+
               <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
-                3.0 <Typography variant="caption">(250k reviews)</Typography>
+                {course.rating && String(course.rating).includes('.')
+                  ? course.rating
+                  : course.rating + '.0'}
               </Typography>
-            </Box>
-            <Typography variant="caption">Beginner</Typography>
+              <Typography variant="caption">
+                (
+                {course.ratingCount > 999999
+                  ? (course.ratingCount / 1000000).toFixed(1) + 'm'
+                  : course.ratingCount > 999
+                  ? (course.ratingCount / 1000).toFixed(1) + 'k'
+                  : course.ratingCount}
+                )
+              </Typography>
+              <Typography variant="caption">{course.level}</Typography>
+            </Stack>
           </CardContent>
         </CardActionArea>
       </Card>
-    </div>
+    </Link>
   );
 }

@@ -1,38 +1,26 @@
+import { Edit, EditOutlined } from '@mui/icons-material';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import { Button, Chip, Typography, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Button, Chip, Typography, useTheme } from '@mui/material';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import TablePagination from '@mui/material/TablePagination';
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { getOrgCourses } from '../../api';
 
 export default function Users() {
   const theme = useTheme();
-  const activeChip = <Chip label="Active" color="success" size="small" variant="outlined"/>
-  const draftChip = <Chip label="Draft" color="warning" size="small" variant="outlined"/>
-  const discontinuedChip = <Chip label="Discontinued" color="error" size="small" variant="outlined"/>
+  const navigate = useNavigate();
+  const { data, isLoading } = useQuery('org-courses', () => getOrgCourses());
+
+  const draftChip = (status: string) => (
+    <Chip label={status} color="warning" size="small" variant="outlined" />
+  );
 
   return (
     <Box>
@@ -52,24 +40,41 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell sx={{ pl: theme.spacing(3) }}>
-                <Typography variant="body2" >Operating Systems</Typography>
-                </TableCell>
-                <TableCell>10</TableCell>
-                <TableCell>20.00$</TableCell>
-                <TableCell>
-                  {draftChip}
-                </TableCell>
-                <TableCell>
-                  <Button startIcon={<RemoveRedEyeOutlinedIcon />}>View</Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {data &&
+              data.map((row: any) => (
+                <TableRow key={row.title}>
+                  <TableCell sx={{ pl: theme.spacing(3) }}>
+                    <Typography variant="body2">{row.title}</Typography>
+                  </TableCell>
+                  <TableCell>{row.price}</TableCell>
+                  <TableCell>{row.price}$</TableCell>
+                  <TableCell>{draftChip(row.status)}</TableCell>
+                  <TableCell>
+                    <Box style={{ display: 'flex', alignItems: 'center' }}>
+                      <Button
+                        startIcon={<RemoveRedEyeOutlinedIcon />}
+                        onClick={() => {
+                          navigate(`/manage/courses/${row.courseId}`);
+                        }}
+                      >
+                        View
+                      </Button>
+                      &nbsp; | &nbsp;
+                      <Button
+                        startIcon={<EditOutlined />}
+                        onClick={() => {
+                          navigate(`/manage/courses/${row.courseId}/edit`);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
@@ -77,7 +82,7 @@ export default function Users() {
           page={0}
           onPageChange={() => {}}
           onRowsPerPageChange={() => {}}
-        />
+        /> */}
       </TableContainer>
     </Box>
   );

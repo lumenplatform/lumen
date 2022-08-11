@@ -1,5 +1,7 @@
 import {
   Collection,
+  Embeddable,
+  Embedded,
   Entity,
   Enum,
   ManyToMany,
@@ -9,11 +11,21 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+import { v4 } from 'uuid';
 import { Asset } from './asset.model';
 import { CourseMaterial } from './course-material.model';
 import { Enrollment } from './enrollment.model';
 import { Organization } from './organization.model';
 import { User } from './user.model';
+
+@Embeddable()
+export class CourseSettings {
+  @Property({ default: false, columnType: 'boolean' })
+  isDesktopOnly? = false;
+
+  @Property({ default: false, columnType: 'boolean' })
+  isPrivate? = false;
+}
 
 export enum CourseStatus {
   DRAFT = 'DRAFT',
@@ -23,7 +35,7 @@ export enum CourseStatus {
 @Entity()
 export class Course {
   @PrimaryKey()
-  courseId: string;
+  courseId: string = v4();
 
   @Property()
   title: string;
@@ -31,7 +43,7 @@ export class Course {
   @Property()
   subtitle: string;
 
-  @Property()
+  @Property({ type: 'text' })
   description: string;
 
   @Property()
@@ -82,7 +94,9 @@ export class Course {
   @Property({ type: 'jsonb' })
   intendedAudience: any;
 
-  @OneToMany(() => CourseMaterial, (material) => material.course)
+  @OneToMany(() => CourseMaterial, (material) => material.course, {
+    orderBy: { order: 1 },
+  })
   courseMaterial = new Collection<CourseMaterial>(this);
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
@@ -90,4 +104,13 @@ export class Course {
 
   @Enum(() => CourseStatus)
   status = CourseStatus.DRAFT;
+
+  @Property({ default: 0 })
+  rating: number;
+
+  @Property({ default: 0 })
+  ratingCount: number;
+
+  @Embedded(() => CourseSettings)
+  settings?: CourseSettings = new CourseSettings();
 }

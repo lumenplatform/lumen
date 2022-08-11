@@ -2,8 +2,24 @@ import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Skeleton, useTheme } from '@mui/material';
+
+import { useQuery } from 'react-query';
+import { Outlet, useParams } from 'react-router-dom';
+import { getCourseById } from '../api';
 
 export default function Instructors() {
+  const { courseId } = useParams();
+
+  const {
+    data: course,
+    isLoading,
+    isError,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
+  if (isError || isLoading) {
+    return <Skeleton></Skeleton>;
+  }
   return (
     <Container>
       <Stack
@@ -19,7 +35,7 @@ export default function Instructors() {
         />
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            Remy Sharp
+            {course.instructors.name} {course.instructors.last_name}
           </Typography>
           <Typography variant="subtitle1">1250 learners</Typography>
           <Typography variant="subtitle1">12 courses</Typography>
@@ -39,7 +55,7 @@ export default function Instructors() {
         />
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            Kevin Wayne
+            {course.instructors.first_name} {course.instructors.last_name}
           </Typography>
           <Typography variant="subtitle1">1340 learners</Typography>
           <Typography variant="subtitle1">10 courses</Typography>

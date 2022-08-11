@@ -1,46 +1,53 @@
-import { Outlet, Route, Routes } from 'react-router-dom';
-import { RequireAuth } from './components/Auth';
-import HomePage from './pages/HomePage';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { RequireAuth, RequireDesktop, UserRole } from './components/Auth';
+import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
-import CourseCreate from './pages/management/Course/CourseCreate/CourseCreate';
+import CourseCreate from './pages/management/course/CourseCreate';
+import ManageCourse from './pages/management/course/ManageCourse';
 import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
+import ExamPage from './pages/management/exam/ExamPage';
 import Users from './pages/management/Users';
+import NotFound from './pages/NotFound';
+import ForInstructors from './pages/public/ForInstructors';
+import HomePage from './pages/public/HomePage';
+import ContentView from './pages/student/course-viewer/ContentView';
+import CourseViewer from './pages/student/course-viewer/CourseViewer';
+import AssignmentGrades from './pages/student/course/AssignmentGrades';
+import AssignmentSettings from './pages/student/course/AssignmentSetting';
 import CourseInfo from './pages/student/course/CourseInfo';
 import CourseMaterial from './pages/student/course/CourseMaterial';
 import CourseResources from './pages/student/course/CourseResources';
+import FileUpload from './pages/student/course/FileUpload';
+import SubmissionStatus from './pages/student/course/SubmissionStatus';
 import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
-import Enroll from './components/EnrollPageHeader';
-import CourseMaterialPage from './pages/student/course/CourseMaterialPage';
-import CourseMaterialView from './pages/student/course/CourseMaterialView';
-import AssignmentGrades from './pages/student/course/AssignmentGrades';
-import SubmissionStatus from './pages/student/course/SubmissionStatus';
-import AssignmentSettings from './pages/student/course/AssignmentSetting';
-import FileUpload from './pages/student/course/FileUpload';
-const ProtectedPage = () => (
-  <RequireAuth>
-    <Outlet />
+
+const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
+  <RequireAuth role={userRole}>
+    <RequireDesktop bypass={userRole === 'instructor'}>
+      <Outlet />
+    </RequireDesktop>
   </RequireAuth>
 );
 
 export default function () {
   return (
     <Routes>
-      {/* Site Home Page */}
+      {/* Public Pages */}
       <Route path="/" element={<HomePage />} />
+      <Route path="/teaching" element={<ForInstructors />} />
+      <Route path="/courses" element={<SearchPage />} />
+      <Route path="/courses/:courseId" element={<Enroll />}></Route>
 
-      {/* Protected Pages */}
-      <Route element={<ProtectedPage />}>
-        {/* Pages accessed by the student */}
+      {/* Pages accessed by the student */}
+      <Route element={<ProtectedPage userRole="student" />}>
         <Route path="/student">
           <Route index element={<StudentHome />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path=":courseId/enrollment" element={<Enroll />}></Route>
           <Route path=":courseId" element={<CoursePage />}>
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />
@@ -48,25 +55,43 @@ export default function () {
             <Route path="grades" element={<AssignmentGrades />} />
             <Route path="SubmissionStatus" element={<SubmissionStatus />} />
             <Route path="AssignmentSettings" element={<AssignmentSettings />} />
+            <Route path="" element={<Navigate replace to="material" />}></Route>
           </Route>
-          <Route path=":courseId/materialview" element={<CourseMaterialPage />}>
-            <Route path=":materialId" element={<CourseMaterialView />} />
+          <Route path=":courseId/learn/" element={<CourseViewer />}>
+            <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
         </Route>
+      </Route>
 
-        {/* Pages accessed by the teacher / admin / moderator */}
+      {/* Pages accessed by the teacher / admin / moderator */}
+      <Route element={<ProtectedPage userRole="instructor" />}>
         <Route path="/manage" element={<AdminLayout />}>
           <Route index element={<Dashboard />}></Route>
           <Route path="courses" element={<Courses />}></Route>
-          <Route path="new-course" element={<CourseCreate />}></Route>
           <Route path="users" element={<Users />}></Route>
           <Route path="billing" element={<Billing />}></Route>
           <Route path="customize" element={<Customizations />}></Route>
+          <Route path="courses/:courseId">
+            <Route path="exam/newexam" element={<ExamPage />} />
+            <Route path="exam/:examId" element={<ExamPage />} />
+            <Route index element={<ManageCourse />} />
+          </Route>
         </Route>
-        {/* Common pages to all users */}
+        <Route path="/manage">
+          <Route path="new-course" element={<CourseCreate />}></Route>
+          <Route path="courses/:courseId">
+            <Route path="edit" element={<CourseCreate />}></Route>
+          </Route>
+        </Route>
+      </Route>
+
+      {/* Common pages to all users */}
+      <Route element={<ProtectedPage userRole="any" />}>
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/Add Submission" element={<FileUpload />} />
       </Route>
+
+      <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
 }

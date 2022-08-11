@@ -1,27 +1,58 @@
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { Asset } from '../../models/asset.model';
-import { AssetFactory } from './factories/AssetFactory';
 import { CourseFactory } from './factories/CourseFactory';
+import { EnrollmentFactory } from './factories/EnrollmentFactory';
 import { OrganizationFactory } from './factories/OrganizationFactory';
+import { PaymentFactory } from './factories/PaymentFactory';
+import { UserFactory } from './factories/UserFactory';
+import { courses as dummyCorses } from './data/data';
+import { organizations_data } from './data/organizations';
+import { Organization } from '../../models/organization.model';
+declare global {
+  interface Array<T> {
+    sample(): T;
+  }
+}
+
+if (!Array.prototype.sample) {
+  Array.prototype.sample = function () {
+    return this[Math.floor(Math.random() * this.length)];
+  };
+}
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    new AssetFactory(em).create(5);
+    const users = new UserFactory(em).make(5);
 
-    const courses = new CourseFactory(em).make(5);
+    const organizations = organizations_data.map((r: any) =>
+      em.create(Organization, r)
+    );
 
-    courses.forEach((r) => {
-      r.courseImage = new AssetFactory(em).makeOne();
-      r.promotionalVideo = new AssetFactory(em).makeOne({
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      });
-      r.organization = new OrganizationFactory(em).makeOne();
-      r.organization.customizations = {
-        logo: new AssetFactory(em).makeOne(),
-      };
+    const courses = [];
+    const enrollments = new EnrollmentFactory(em).make(5);
+
+    users.forEach((user) => {
+      user.organization = [null, ...organizations].sample();
     });
 
+    dummyCorses.forEach((i: any) => {
+      const course = new CourseFactory(em).makeOne();
+      em.assign(course, i);
+      courses.push(course);
+    });
+
+    courses.forEach((r) => {
+      r.organization = organizations.sample();
+    });
+
+    enrollments.forEach((r) => {
+      r.user = users.sample();
+      r.course = courses.sample();
+      r.payment = new PaymentFactory(em).makeOne();
+    });
+
+    em.persist(enrollments);
+    em.persist(organizations);
     em.persist(courses);
   }
 }
