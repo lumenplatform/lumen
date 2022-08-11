@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
 export default function EssayQ(props: any) {
-  const { questionId, setFlag, setAnswer, question, isFlagged } = props;
+  const { questionId, setFlag, setAnswer, question, isFlagged,noOfQuestions,index } = props;
 
   return (
     <Container sx={{ padding: 5 }}>
@@ -16,7 +16,7 @@ export default function EssayQ(props: any) {
           <Grid container>
             <Grid item xs={10}>
               <Typography variant="subtitle1">
-                Question {questionId} of 15
+              Question {index} of {noOfQuestions}
               </Typography>
             </Grid>
 
@@ -24,7 +24,7 @@ export default function EssayQ(props: any) {
               <IconButton
                 sx={{ padding: 0, paddingRight: 1, display: 'inline' }}
                 onClick={() => setFlag(questionId)}
-                color={isFlagged ? 'error' : 'secondary'}
+                color={isFlagged ? 'error' : 'default'}
               >
                 <FlagOutlinedIcon />
               </IconButton>

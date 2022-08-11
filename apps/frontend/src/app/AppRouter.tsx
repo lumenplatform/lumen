@@ -55,7 +55,7 @@ export default function () {
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
-          <Route path="quiz" element={<Quizpage/>}></Route>
+          <Route path=":courseId/quiz/:quizId" element={<Quizpage/>}></Route>
         </Route>
       </Route>
 

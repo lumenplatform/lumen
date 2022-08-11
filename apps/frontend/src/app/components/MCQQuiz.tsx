@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 
 export default function MCQ(props: any) {
-  const { questionId, answers, setFlag, setAnswer, question, isFlagged } =
+  const { questionId, answers, setFlag, setAnswer, question, isFlagged ,index,noOfQuestions } =
     props;
 
   return (
@@ -18,7 +18,7 @@ export default function MCQ(props: any) {
           <Grid container>
             <Grid item xs={10}>
               <Typography variant="subtitle1">
-                Question {questionId} of 15
+                Question {index} of {noOfQuestions}
               </Typography>
             </Grid>
 
@@ -48,7 +48,7 @@ export default function MCQ(props: any) {
                 control={
                   <Checkbox
                     onChange={() =>
-                      setAnswer(questionId, object.answerId, 'mcq')
+                      setAnswer(questionId, object.id, 'mcq')
                     }
                   />
                 }

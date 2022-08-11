@@ -36,4 +36,8 @@ export class QuizController {
     em.flush();
     return quiz;
   }
+
+  async submitQuiz(id: string, data: any, user) {
+    return '/';
+  }
 }
