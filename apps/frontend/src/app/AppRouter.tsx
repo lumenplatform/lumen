@@ -1,5 +1,5 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import { RequireAuth } from './components/Auth';
+import { RequireAuth, RequireDesktop, UserRole } from './components/Auth';
 import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
@@ -22,13 +22,11 @@ import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
 import ExamPage from './pages/management/exam/ExamPage';
 
-const ProtectedPage = ({
-  userRole,
-}: {
-  userRole: 'instructor' | 'student' | 'any';
-}) => (
+const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
-    <Outlet />
+    <RequireDesktop bypass={userRole === 'instructor'}>
+      <Outlet />
+    </RequireDesktop>
   </RequireAuth>
 );
 
