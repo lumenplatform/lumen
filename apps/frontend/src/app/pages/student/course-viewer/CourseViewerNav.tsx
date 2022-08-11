@@ -53,7 +53,6 @@ export function CourseViewerNav({ topics }: { topics: any[] }) {
   return (
     <Box
       sx={{
-        borderLeft: `1px solid ${theme.palette.divider}`,
         backgroundColor: darken(theme.palette.background.paper, 0.02),
         minWidth: '280px',
         maxWidth: '320px',
@@ -71,8 +70,9 @@ export function CourseViewerNav({ topics }: { topics: any[] }) {
           >
             <ChevronLeft />
           </Link>
+
           <Link
-            sx={sectionIndex === material.length - 1 ? st : { }}
+            sx={sectionIndex === material.length - 1 ? st : {}}
             component={RouterLink}
             to={getSectionLink(1)}
           >
@@ -85,7 +85,7 @@ export function CourseViewerNav({ topics }: { topics: any[] }) {
         </small>
         <Stack direction="row" spacing={'6px'}>
           {material.map((r: unknown, index: number) => (
-            <Box sx={{ flex: '1' }}>
+            <Box sx={{ flex: '1' }} key={index}>
               <LinearProgress
                 variant="determinate"
                 value={sectionIndex === index ? 100 : 0}

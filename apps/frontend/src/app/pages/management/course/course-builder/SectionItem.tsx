@@ -176,7 +176,7 @@ export function SectionItem({ section, index, actions }: any) {
               {section.topics
                 ?.filter((r: any) => !r.isHidden)
                 ?.map((lec: any, j: number) => (
-                  <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'relative' }} key={j}>
                     <AddButton onClick={() => actions.addTopicAt(index, j)} />
                     {renderTopic(lec, j)}
                   </div>

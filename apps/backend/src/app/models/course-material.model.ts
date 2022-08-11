@@ -1,4 +1,5 @@
 import {
+  Cascade,
   Entity,
   ManyToOne,
   OneToMany,
@@ -8,6 +9,7 @@ import {
 import { v4 } from 'uuid';
 import { Asset } from './asset.model';
 import { Course } from './course.model';
+import { CourseResource } from './course-resource.model';
 
 @Entity()
 export class CourseMaterial {
@@ -29,8 +31,8 @@ export class CourseMaterial {
   @Property({ type: 'text', nullable: true })
   article?: string;
 
-  @Property({})
-  contentType?: string = 'section';
+  @Property({ nullable: true })
+  contentType?: string;
 
   @ManyToOne({ entity: () => Asset, nullable: true, eager: true })
   video?: Asset;
@@ -48,4 +50,14 @@ export class CourseMaterial {
 
   @ManyToOne({ entity: () => Course, hidden: true, nullable: true })
   course?: Course;
+
+  @OneToMany({
+    entity: () => CourseResource,
+    mappedBy: (r) => r.topic,
+    nullable: true,
+    eager: true,
+    orphanRemoval: true,
+    cascade: [Cascade.ALL],
+  })
+  resources?: CourseResource[];
 }

@@ -1,19 +1,30 @@
 import styled from '@emotion/styled';
+import {
+  CodeOutlined,
+  FormatBoldOutlined,
+  FormatItalicOutlined,
+  FormatListBulleted,
+  FormatQuote,
+  FormatStrikethroughOutlined,
+  HorizontalRule,
+  IntegrationInstructionsOutlined,
+} from '@mui/icons-material';
+import { Button } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
-const Tool = styled.button`
-  font-size: inherit;
-  font-family: inherit;
-  color: #000;
+const ToolX = styled(Button)`
   margin: 0.1rem;
-  border: 1px solid black;
-  border-radius: 0.3rem;
-  padding: 0.1rem 0.4rem;
   background: white;
-  accent-color: black;
+  line-height: 1;
+  min-width: unset;
+  &.is-active {
+    background: #eee;
+  }
 `;
+
+const Tool = (props: any) => <ToolX {...props} size="small" color="inherit" />;
 
 const MenuBar = ({ editor }: any) => {
   if (!editor) {
@@ -21,42 +32,71 @@ const MenuBar = ({ editor }: any) => {
   }
 
   return (
-    <>
+    <Box sx={{ borderBottom: '1px solid lightgray', p: 1 }}>
       <Tool
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={editor.isActive('bold') ? 'is-active' : ''}
       >
-        bold
+        <FormatBoldOutlined fontSize="small" />
       </Tool>
       <Tool
         onClick={() => editor.chain().focus().toggleItalic().run()}
         className={editor.isActive('italic') ? 'is-active' : ''}
       >
-        italic
+        <FormatItalicOutlined />
       </Tool>
       <Tool
         onClick={() => editor.chain().focus().toggleStrike().run()}
         className={editor.isActive('strike') ? 'is-active' : ''}
       >
-        strike
+        <FormatStrikethroughOutlined />
       </Tool>
       <Tool
         onClick={() => editor.chain().focus().toggleCode().run()}
         className={editor.isActive('code') ? 'is-active' : ''}
       >
-        code
+        <CodeOutlined />
       </Tool>
-      <Tool onClick={() => editor.chain().focus().unsetAllMarks().run()}>
+      <Tool
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={editor.isActive('bulletList') ? 'is-active' : ''}
+      >
+        <FormatListBulleted />
+      </Tool>
+      <Tool
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={editor.isActive('orderedList') ? 'is-active' : ''}
+      >
+        <FormatListBulleted />
+      </Tool>
+      <Tool
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        className={editor.isActive('codeBlock') ? 'is-active' : ''}
+      >
+        <IntegrationInstructionsOutlined />
+      </Tool>
+      <Tool
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        className={editor.isActive('blockquote') ? 'is-active' : ''}
+      >
+        <FormatQuote />
+      </Tool>
+      <Tool onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+        <HorizontalRule />
+      </Tool>
+      <br></br>
+      {/* <Tool onClick={() => editor.chain().focus().unsetAllMarks().run()}>
         clear marks
       </Tool>
       <Tool onClick={() => editor.chain().focus().clearNodes().run()}>
         clear nodes
-      </Tool>
+      </Tool> */}
+      &nbsp;
       <Tool
         onClick={() => editor.chain().focus().setParagraph().run()}
         className={editor.isActive('paragraph') ? 'is-active' : ''}
       >
-        paragraph
+        P
       </Tool>
       <Tool
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -94,53 +134,32 @@ const MenuBar = ({ editor }: any) => {
       >
         h6
       </Tool>
-      <Tool
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive('bulletList') ? 'is-active' : ''}
-      >
-        bullet list
-      </Tool>
-      <Tool
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive('orderedList') ? 'is-active' : ''}
-      >
-        ordered list
-      </Tool>
-      <Tool
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={editor.isActive('codeBlock') ? 'is-active' : ''}
-      >
-        code block
-      </Tool>
-      <Tool
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive('blockquote') ? 'is-active' : ''}
-      >
-        blockquote
-      </Tool>
-      <Tool onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-        horizontal rule
-      </Tool>
       <Tool onClick={() => editor.chain().focus().setHardBreak().run()}>
-        hard break
+        BR
       </Tool>
-      <Tool onClick={() => editor.chain().focus().undo().run()}>undo</Tool>
-      <Tool onClick={() => editor.chain().focus().redo().run()}>redo</Tool>
-    </>
+      {/* <Tool onClick={() => editor.chain().focus().undo().run()}>undo</Tool> */}
+      {/* <Tool onClick={() => editor.chain().focus().redo().run()}>redo</Tool> */}
+    </Box>
   );
 };
 
 const Tiptap = ({ onChange, content }: { onChange: any; content?: string }) => {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: content ?? '<p>Hello World!</p>',
+    content: content ?? '<p>Enter your content Here</p>',
     onUpdate({ editor }) {
-      onChange(editor.getHTML());
+      if (onChange) onChange(editor.getHTML());
     },
   });
 
   return (
-    <Box sx={{ m: 1 }}>
+    <Box
+      sx={{
+        border: '1px solid lightgray',
+        m: 1,
+        borderRadius: '5px',
+      }}
+    >
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
     </Box>

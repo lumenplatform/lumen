@@ -18,7 +18,9 @@ export default CourseMaterialEditor;
 
 export function SectionsList() {
   const { setValue: setFormValue, getValues } = useFormContext();
-  const { sections, actions } = useCourseMaterial(getValues()['courseMaterial'] as Section[]);
+  const { sections, actions } = useCourseMaterial(
+    getValues()['courseMaterial'] as Section[]
+  );
   const theme = useTheme();
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export function SectionsList() {
   const renderSection = useCallback((section: Section, secIndex: number) => {
     return (
       <SectionItem
-        key={'sec' + section.id}
+        key={'sec' + section.id + '' + secIndex}
         index={secIndex}
         section={section}
         actions={actions}
