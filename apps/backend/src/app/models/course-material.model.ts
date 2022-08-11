@@ -42,6 +42,7 @@ export class CourseMaterial {
     mappedBy: (item) => item.parent,
     nullable: true,
     eager: true,
+    orderBy: { order: 1 },
   })
   topics?: CourseMaterial[];
 
