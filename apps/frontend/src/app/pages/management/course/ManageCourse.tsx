@@ -1,21 +1,29 @@
-import { Box, Button, ButtonGroup, Skeleton, Tab, Tabs, Typography } from "@mui/material";
-import { Container } from "@mui/system";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Skeleton,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
+import { Container } from '@mui/system';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getCourseById } from '../../../api';
 import { TabPanel } from '../../../components/TabPanel';
-import CourseInstructors from "./sections/CourseInstructors";
-import EnrolledStudents from "./sections/EnrolledStudents";
-import QuizAndAssignments from "./sections/QuizAndAssignments";
-import UserLogs from "./sections/UserLogs";
+import CourseInstructors from './sections/CourseInstructors';
+import EnrolledStudents from './sections/EnrolledStudents';
+import QuizAndAssignments from './sections/QuizAndAssignments';
+import UserLogs from './sections/UserLogs';
 
 const sections = [
   { component: <EnrolledStudents />, label: 'Enrolled Users' },
   { component: <CourseInstructors />, label: 'Instructors' },
   { component: <QuizAndAssignments />, label: 'Quizzes and Assignments' },
   { component: <UserLogs />, label: 'User Logs' },
-]
+];
 
 export default function ManageCourse() {
   const { courseId } = useParams();
@@ -38,26 +46,32 @@ export default function ManageCourse() {
   return (
     <Container sx={{ heigh: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h4" component="span">{course.title}</Typography>
-        <ButtonGroup variant="text">
+        <Typography variant="h5">{course.title}</Typography>
+        <Box>
           <Button color="primary">Publish</Button>
-          <Button color="warning" >Edit</Button>
+          <Button>Edit</Button>
           <Button color="error">Delete</Button>
-        </ButtonGroup>
+        </Box>
       </Box>
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, mb: 2, borderColor: 'divider' }}>
           <Tabs
             value={value}
             onChange={(event, newValue: number) => setValue(newValue)}
-            sx={{ textAlign: 'right', pt: 2 }}>
+            sx={{ textAlign: 'right', pt: 2 }}
+          >
             {sections.map(({ label }) => (
               <Tab sx={{ alignItems: 'end' }} key={label} label={label} />
             ))}
           </Tabs>
         </Box>
         {sections.map(({ component }, index) => (
-          <TabPanel value={value} key={index} index={index}>
+          <TabPanel
+            value={value}
+            key={index}
+            index={index}
+            style={{ padding: '1rem ' }}
+          >
             {component}
           </TabPanel>
         ))}

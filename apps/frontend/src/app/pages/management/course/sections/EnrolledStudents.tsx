@@ -9,43 +9,67 @@ import TableRow from '@mui/material/TableRow';
 
 //sample data array with objects containg username,email,enrolled date,course title
 const data = [
-    { username: 'John Doe', email: 'sample@gmail.com', enrolledDate: '2022-08-12', course: 'machine learning' },
-    { username: 'John Doe', email: 'sample@gmail.com', enrolledDate: '2022-08-12', course: 'machine learning' },
-    { username: 'John Doe', email: 'sample@gmail.com', enrolledDate: '2022-08-12', course: 'machine learning' },
-    { username: 'John Doe', email: 'sample@gmail.com', enrolledDate: '2022-08-12', course: 'machine learning' },
-    { username: 'John Doe', email: 'sample@gmail.com', enrolledDate: '2022-08-12', course: 'machine learning' },
+  {
+    username: 'John Doe',
+    email: 'sample@gmail.com',
+    enrolledDate: '2022-08-12',
+    course: 'machine learning',
+  },
+  {
+    username: 'John Doe',
+    email: 'sample@gmail.com',
+    enrolledDate: '2022-08-12',
+    course: 'machine learning',
+  },
+  {
+    username: 'John Doe',
+    email: 'sample@gmail.com',
+    enrolledDate: '2022-08-12',
+    course: 'machine learning',
+  },
+  {
+    username: 'John Doe',
+    email: 'sample@gmail.com',
+    enrolledDate: '2022-08-12',
+    course: 'machine learning',
+  },
+  {
+    username: 'John Doe',
+    email: 'sample@gmail.com',
+    enrolledDate: '2022-08-12',
+    course: 'machine learning',
+  },
 ];
 export default function EnrolledStudents() {
-    const theme = useTheme();
+  const theme = useTheme();
 
-    return (
-        <Container>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ pl: theme.spacing(3) }}>User</TableCell>
-                            <TableCell>User mail</TableCell>
-                            <TableCell>Enrolled Date</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map((row: any) => (
-                            <TableRow key={row.title}>
-                                <TableCell sx={{ pl: theme.spacing(3) }}>
-                                    <Typography variant="body2">{row.username}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography variant="body2">{row.email}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography variant="body2">{row.enrolledDate}</Typography>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                {/* <TablePagination
+  return (
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ pl: theme.spacing(3) }}>User</TableCell>
+            <TableCell>User mail</TableCell>
+            <TableCell>Enrolled Date</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row: any) => (
+            <TableRow key={row.title}>
+              <TableCell sx={{ pl: theme.spacing(3) }}>
+                <Typography variant="body2">{row.username}</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="body2">{row.email}</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="body2">{row.enrolledDate}</Typography>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {/* <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
@@ -54,7 +78,6 @@ export default function EnrolledStudents() {
           onPageChange={() => {}}
           onRowsPerPageChange={() => {}}
         /> */}
-            </TableContainer>
-        </Container>
-    );
+    </TableContainer>
+  );
 }
