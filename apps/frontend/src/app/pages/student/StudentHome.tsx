@@ -29,7 +29,8 @@ import { Container } from '@mui/system';
 export function InProgressCourseCard(props: { course: any; onClick: any }) {
   const { course, onClick } = props;
 
-  const completion = Math.floor(10 + Math.random() * 50);
+  const completion = ((course.price * 3) % 100) + 5;
+
   return (
     <Paper sx={{ my: 2, overflow: 'clip' }}>
       <Stack direction="row">
@@ -73,7 +74,7 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
           <Typography variant="body2" fontWeight={600}>
             Next
           </Typography>
-          <Typography variant="body2">What is a Matrix</Typography>
+          <Typography variant="body2">...........</Typography>
         </Stack>
         <Box>
           <Link sx={{ m: 1 }} component="div">
@@ -115,13 +116,21 @@ export default function CoursePage(props: any) {
               </Stack>
 
               <Box>
-                {data?.slice(0, 3).map((r: any) => (
-                  <InProgressCourseCard
-                    course={r}
-                    key={r}
-                    onClick={() => navigate('/student/' + r.courseId)}
-                  />
-                ))}
+                {data
+                  ?.filter(
+                    (r: any) =>
+                      r.title.includes('Nuclear') ||
+                      r.title.includes('Linear') ||
+                      r.title.includes('COSMIC')
+                  )
+                  .slice(0, 3)
+                  .map((r: any) => (
+                    <InProgressCourseCard
+                      course={r}
+                      key={r}
+                      onClick={() => navigate('/student/' + r.courseId)}
+                    />
+                  ))}
               </Box>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="h6">Recommended For You</Typography>
@@ -137,7 +146,14 @@ export default function CoursePage(props: any) {
                 }}
               >
                 {data &&
-                  data.map((r: any) => <CourseCard course={r} key={r} />)}
+                  data
+                    ?.filter(
+                      (r: any) =>
+                        !r.title.includes('Nuclear') &&
+                        !r.title.includes('Linear') &&
+                        !r.title.includes('COSMIC')
+                    )
+                    .map((r: any) => <CourseCard course={r} key={r} />)}
               </Box>
             </Box>
           </Grid>

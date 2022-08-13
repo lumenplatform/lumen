@@ -19,7 +19,7 @@ export const linerAlgebra: DeepPartial<Course> = {
   tags: 'Algebra',
   subjectArea: 'Mathematics',
   duration: 0,
-  price: 0,
+  price: 10,
 
   courseImage: {
     type: AssetType.IMAGE,
@@ -56,9 +56,9 @@ export const linerAlgebra: DeepPartial<Course> = {
     'The basic operations of linear algebra are those you learned in grade school – addition and multiplication to produce “linear combinations.” But with vectors, we move into four-dimensional space and n-dimensional space!',
   ]),
   intendedAudience: JSON.stringify(['Undergrads', 'CS Majors']),
-  status: CourseStatus.DRAFT,
+  status: CourseStatus.PUBLISHED,
   rating: 4.3,
-  ratingCount: 10,
+  ratingCount: 12,
   courseMaterial: [
     {
       contentType: 'section',

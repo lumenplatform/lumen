@@ -14,7 +14,7 @@ export const nuclearControlSystems: DeepPartial<Course> = {
   tags: 'Nuclear Engineering',
   subjectArea: 'Engineering ',
   duration: 0,
-  price: 0,
+  price: 50,
   settings: { isDesktopOnly: true },
 
   courseImage: {
@@ -38,12 +38,14 @@ export const nuclearControlSystems: DeepPartial<Course> = {
   learningOutcome: JSON.stringify([]),
   prerequisites: JSON.stringify([' ']),
   intendedAudience: JSON.stringify(['Undergraduate', 'CS Majors']),
-  status: CourseStatus.DRAFT,
+  status: CourseStatus.PUBLISHED,
   rating: 2.3,
-  ratingCount: 10,
+  ratingCount: 2,
   courseMaterial: [
     {
       title: 'Nuclear Power Plant Dynamics And Control',
+      description:
+        'A nuclear power plant (NPP) contains thousands of components and equipment, such as motors, pumps or valves that have to be operated in a well-coordinated way. This coordination is performed by instrumentation and control (I&C) systems. ',
       topics: [
         { title: 'Introduction' },
         { title: 'Nuclear Power Plant Layout' },

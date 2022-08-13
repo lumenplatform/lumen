@@ -14,7 +14,7 @@ export const propulsionSystems: DeepPartial<Course> = {
   tags: 'Propulsion',
   subjectArea: 'Engineering',
   duration: 0,
-  price: 0,
+  price: 12,
   settings: { isDesktopOnly: true },
 
   courseImage: {
@@ -38,9 +38,9 @@ export const propulsionSystems: DeepPartial<Course> = {
   learningOutcome: JSON.stringify([]),
   prerequisites: JSON.stringify([' ']),
   intendedAudience: JSON.stringify(['Undergraduate', 'CS Majors']),
-  status: CourseStatus.DRAFT,
-  rating: 2.3,
-  ratingCount: 10,
+  status: CourseStatus.PUBLISHED,
+  rating: 4.8,
+  ratingCount: 1,
   courseMaterial: [
     {
       title: 'An appreciation of propulsion and jet engine rotordynamics',

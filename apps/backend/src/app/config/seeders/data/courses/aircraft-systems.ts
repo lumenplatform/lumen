@@ -3,7 +3,7 @@ import { Course, CourseStatus } from '../../../../models/course.model';
 import { v4 } from 'uuid';
 import { DeepPartial } from './liner-algebra';
 
-export const bionookBiologySystems: DeepPartial<Course> = {
+export const aircraftSystems: DeepPartial<Course> = {
   courseId: v4(),
   title: 'AIRCRAFT SYSTEMS ENGINEERING',
   subtitle: '',
@@ -14,7 +14,7 @@ export const bionookBiologySystems: DeepPartial<Course> = {
   tags: 'Aircraft Engineering',
   subjectArea: 'Engineering',
   duration: 0,
-  price: 0,
+  price: 18,
   settings: { isDesktopOnly: true },
 
   courseImage: {
@@ -38,9 +38,9 @@ export const bionookBiologySystems: DeepPartial<Course> = {
   learningOutcome: JSON.stringify([]),
   prerequisites: JSON.stringify([' ']),
   intendedAudience: JSON.stringify(['Undergraduate', 'CS Majors']),
-  status: CourseStatus.DRAFT,
-  rating: 2.3,
-  ratingCount: 10,
+  status: CourseStatus.PUBLISHED,
+  rating: 3.7,
+  ratingCount: 8,
   courseMaterial: [
     {
       title: 'An appreciation of an aircraft as a system',

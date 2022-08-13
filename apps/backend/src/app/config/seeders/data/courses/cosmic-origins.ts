@@ -14,7 +14,7 @@ export const cosmicOrigins: DeepPartial<Course> = {
   tags: 'Astrophysics',
   subjectArea: 'Science',
   duration: 0,
-  price: 0,
+  price: 5,
 
   courseImage: {
     type: AssetType.IMAGE,
@@ -37,9 +37,9 @@ export const cosmicOrigins: DeepPartial<Course> = {
   learningOutcome: JSON.stringify([]),
   prerequisites: JSON.stringify([' ']),
   intendedAudience: JSON.stringify(['Undergraduate', 'CS Majors']),
-  status: CourseStatus.DRAFT,
+  status: CourseStatus.PUBLISHED,
   rating: 4.3,
-  ratingCount: 10,
+  ratingCount: 3,
   courseMaterial: [
     {
       title: '',
