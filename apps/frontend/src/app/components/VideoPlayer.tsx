@@ -6,7 +6,7 @@ const DEFAULT_RATIO = [16, 9];
 const DEFAULT_OPTIONS = {
   controls: true,
   autoplay: false,
-  poster: '',
+  // poster: '',
   muted: true,
   logo: {
     enabled: false,
@@ -80,14 +80,14 @@ export default class VideoPlayer extends PureComponent<IVideoPlayerProps> {
 
   override render(): JSX.Element {
     return (
-      <div style={{ width: '100%', height: '100%' }}>
         <video
           className="azuremediaplayer amp-flush-skin"
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', maxHeight:'480px'}}
+          // width="1024"
+          // height="768"
           controls
           ref={this.videoNode}
         />
-      </div>
     );
   }
 }

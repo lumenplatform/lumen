@@ -44,7 +44,7 @@ const BreadcrumbsNav = (props: { course: any; section: any }) => {
         >
           {course.title}
         </MuiLink>
-        <Typography color="inherit">{section.title}</Typography>
+        <Typography color="inherit">{section?.title}</Typography>
       </Breadcrumbs>
     </Stack>
   );

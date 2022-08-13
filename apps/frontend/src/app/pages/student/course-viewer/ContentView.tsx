@@ -44,10 +44,7 @@ export default function ContentView() {
           {topic.contentType == 'video' &&
             topic.video &&
             typeof topic.video?.path == 'object' && (
-              <VideoPlayer
-                src={topic.video.path}
-                options={{ poster: course.courseImage.path }}
-              />
+                <VideoPlayer src={topic.video.path} />
             )}
 
           {topic.contentType == 'article' && (
