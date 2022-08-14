@@ -1,11 +1,15 @@
+/* eslint-disable no-restricted-globals */
 import { useAuth0, User } from '@auth0/auth0-react';
-import { Backdrop, CircularProgress } from '@mui/material';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { Backdrop, CircularProgress, Stack } from '@mui/material';
+import { type } from 'os';
+import { createContext, useContext, useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { fetchUser } from '../api';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { fetchUser, getCourseById } from '../api';
 import InstructorOnboarding from '../pages/auth/InstructorOnboarding';
+import AppBanner from './AppBanner';
 
+export type UserRole = 'instructor' | 'student' | 'any';
 interface AuthContextType {
   user?: User;
   appUser: any;
@@ -79,7 +83,7 @@ export function RequireAuth({
   role,
 }: {
   children: JSX.Element;
-  role: 'instructor' | 'student' | 'any';
+  role: UserRole;
 }) {
   const auth = useAuth();
   const location = useLocation();
@@ -96,8 +100,37 @@ export function RequireAuth({
   }
 
   return (
-    <Backdrop sx={{}} open={true} invisible>
-      <CircularProgress color="inherit" />
+    <Backdrop open={true} invisible>
+      <Stack spacing={3} alignItems="center">
+        <img src="/assets/icons/logo_horiz.png" style={{ width: '12rem' }} />
+        <CircularProgress color="inherit" />
+      </Stack>
     </Backdrop>
   );
+}
+
+export function RequireDesktop({
+  children,
+  bypass,
+}: {
+  children: JSX.Element;
+  bypass: boolean;
+}) {
+  const { courseId } = useParams();
+  const { data: course } = useQuery(
+    ['courses', courseId],
+    () => getCourseById(courseId!),
+    { enabled: !!courseId }
+  );
+
+  if (!bypass && courseId) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (course && course.settings?.isDesktopOnly && !window.electron) {
+      return <AppBanner link={'lumen-desktop://open?url=' + location.href} />;
+    }
+    return children;
+  } else {
+    return children;
+  }
 }

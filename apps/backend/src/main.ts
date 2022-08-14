@@ -49,6 +49,10 @@ app.use(InjectORM);
 app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
 
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, '../frontend', 'index.html'));
+});
+
 const port = process.env.PORT;
 
 InitORM().then((e) => {

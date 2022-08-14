@@ -6,6 +6,7 @@ const DEFAULT_RATIO = [16, 9];
 const DEFAULT_OPTIONS = {
   controls: true,
   autoplay: false,
+  // poster: '',
   muted: true,
   logo: {
     enabled: false,
@@ -15,7 +16,7 @@ const DEFAULT_OPTIONS = {
 declare const window: any;
 
 export interface IVideoPlayerProps {
-  readonly src: { src: string; protectionInfo: any }[];
+  readonly src: { src: string; protectionInfo?: any }[];
   readonly options: any;
   readonly skin: string;
   readonly className: string;
@@ -33,9 +34,11 @@ export default class VideoPlayer extends PureComponent<IVideoPlayerProps> {
   videoNode: RefObject<any>;
   player: any;
   initialization: any;
+  options = DEFAULT_OPTIONS;
 
   constructor(props: IVideoPlayerProps) {
     super(props);
+    this.options = { ...DEFAULT_OPTIONS, ...props.options };
     this.videoNode = createRef();
   }
 
@@ -65,26 +68,26 @@ export default class VideoPlayer extends PureComponent<IVideoPlayerProps> {
     if (this.player) {
       const { src } = this.props;
       this.player.src(src);
+      // showOverlay();
     }
   }
 
   _createPlayer() {
     if (window.amp)
-      this.player = window.amp(this.videoNode.current, this.props.options);
+      this.player = window.amp(this.videoNode.current, this.options);
     // this.player.on('progress', () => alert('on progress called'));
   }
 
   override render(): JSX.Element {
     return (
-      <div>
         <video
           className="azuremediaplayer amp-flush-skin"
-          width="640"
-          height="400"
+          style={{ width: '100%', maxHeight:'480px'}}
+          // width="1024"
+          // height="768"
           controls
           ref={this.videoNode}
         />
-      </div>
     );
   }
 }
@@ -106,4 +109,20 @@ function loader(skin = 'amp-flush') {
     document.head.insertBefore(linkTag, document.head.firstChild);
     scriptTag.onload = () => resolve({ skin: skin });
   });
+}
+
+function showOverlay() {
+  const el = document.querySelector('.azuremediaplayer');
+  document.querySelectorAll('.video-overlay').forEach((e) => e.remove());
+
+  if (el) {
+    const overlay = document.createElement('div');
+    overlay.className = 'video-overlay';
+    overlay.innerHTML = 'OVERLAY';
+    overlay.style.color = 'yellow';
+    overlay.style.fontSize = '1rem';
+    overlay.style.zIndex = '100000';
+    overlay.style.position = 'absolute';
+    el.appendChild(overlay);
+  }
 }

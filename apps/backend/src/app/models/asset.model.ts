@@ -18,7 +18,7 @@ export enum AssetStatus {
 @Entity()
 export class Asset {
   @PrimaryKey()
-  id: string = v4();
+  id?: string = v4();
 
   @Property()
   url: string;
@@ -35,8 +35,11 @@ export class Asset {
   @Property()
   name: string;
 
+  @Property({ default: 0, nullable: true })
+  size: number;
+
   @Property({ nullable: true })
-  config: Record<string, unknown>;
+  config?: Record<string, unknown>;
 
   @Property({ nullable: true, hidden: true })
   contentKey?: string;
