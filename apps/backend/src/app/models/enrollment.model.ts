@@ -37,10 +37,19 @@ export class Enrollment {
   @Enum(() => EnrollmentStatus)
   status: EnrollmentStatus;
 
-  @OneToMany(() => CourseReview, (review) => review.enrollment)
+  @OneToMany(() => CourseReview, (review) => review.enrollment, {
+    nullable: true,
+  })
   review: CourseReview;
 
-  constructor(enrollmentId,user,course,payment,enrollmentDate = new Date(),status = EnrollmentStatus.ACTIVE){
+  constructor(
+    enrollmentId,
+    user,
+    course,
+    payment,
+    enrollmentDate = new Date(),
+    status = EnrollmentStatus.ACTIVE
+  ) {
     this.enrollmentId = enrollmentId;
     this.user = user;
     this.course = course;

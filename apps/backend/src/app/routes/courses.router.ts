@@ -77,9 +77,9 @@ coursesRouter.get('/:id/material', (req, res, next) => {
 
 coursesRouter.post('/:id/enroll', (req, res, next) => {
   courseController
-    .enroll(req, req.user, req.params.id)
+    .enroll(req, req.user.uid, req.params.id)
     .then((result) => {
-      res.redirect(303, result);
+      res.json(createResponse({ paymentUrl: result }));
     })
     .catch(next);
 });
@@ -88,6 +88,7 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
   courseController
     .enrollSuccess(req.query.session_id)
     .then((result) => {
+      // give the front end url to redirect to
       res.redirect(result);
     })
     .catch(next);

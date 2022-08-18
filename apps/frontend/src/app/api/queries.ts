@@ -91,6 +91,11 @@ export function getPendingOrgInvitations() {
 }
 // END MANAGEMENT
 
+
+export function enrollInCourse(id:string){
+  return client.post(`/courses/${id}/enroll/`, {}).then((r) => r.data.data);
+}
+
 export function createNewQuiz(data: any) {
   return client.post(`/courses/${data.form.course}/quiz/`, data.form).then((r) => r.data.data);
 }
