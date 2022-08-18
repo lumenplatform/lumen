@@ -33,3 +33,11 @@ quizRouter.put('/:id', (req, res, next) => {
     })
     .catch(next);
 });
+
+quizRouter.post('/:id/submit', (req, res, next) => {
+  quizController
+    .submitQuiz(req.params.id, req.body, req.user)
+    .then((result) => {
+      res.redirect(301,result);
+    })
+});

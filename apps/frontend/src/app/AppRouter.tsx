@@ -22,6 +22,7 @@ import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import Quizpage from './pages/student/QuizPage';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -53,6 +54,7 @@ export default function () {
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
+          <Route path=":courseId/quiz/:quizId" element={<Quizpage/>}></Route>
         </Route>
       </Route>
 
