@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import { getCourseById, getCourseMaterial } from '../../../api';
 import FilesInput from '../../../components/FilesInput';
 import VideoPlayer from '../../../components/VideoPlayer';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const isElectron = window.electron;
 
 export default function ContentView() {
   const { courseId, sectionId, topicId } = useParams();
@@ -32,19 +35,19 @@ export default function ContentView() {
         <Box mb={2}>
           {topic.contentType == 'video' &&
             topic.video &&
-            typeof topic.video.path == 'string' && (
+            (typeof topic.video.path == 'string' || isElectron) && (
               <Box style={{ aspectRatio: '16/9' }}>
                 <VideoPlayer
                   options={{ poster: course.courseImage.path }}
-                  src={[{ src: topic.video.path }]}
+                  src={[{ src: topic.video.url }]}
                 />
               </Box>
             )}
 
           {topic.contentType == 'video' &&
             topic.video &&
-            typeof topic.video?.path == 'object' && (
-                <VideoPlayer src={topic.video.path} />
+            (typeof topic.video.path == 'string' || !isElectron) && (
+              <VideoPlayer src={topic.video.path} />
             )}
 
           {topic.contentType == 'article' && (

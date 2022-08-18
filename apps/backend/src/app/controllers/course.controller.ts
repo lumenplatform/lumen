@@ -5,7 +5,7 @@ import { Enrollment } from '../models/enrollment.model';
 import { CourseReview } from '../models/review.mode';
 import { User } from '../models/user.model';
 import { CourseService } from '../services/course.service';
-import { MailService } from '../services/email.service';
+import { MailService } from '../services/mail/email-types';
 import { PaymentService } from '../services/payment.service';
 export class CourseController {
   constructor(
