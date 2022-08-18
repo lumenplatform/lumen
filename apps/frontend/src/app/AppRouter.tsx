@@ -22,7 +22,6 @@ import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
-import ExamPage from './pages/management/exam/ExamPage';
 import Quizpage from './pages/student/QuizPage';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
