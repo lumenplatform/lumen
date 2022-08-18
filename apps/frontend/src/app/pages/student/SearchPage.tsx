@@ -248,11 +248,11 @@ export default function SearchPage() {
 
     const handleSearchQuery = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         queryParams.set('query', event.target.value);
-        navigate(`/student?${queryParams.toString()}`);
+        navigate(`/courses?${queryParams.toString()}`);
     }
     const handleOrgChipDelete = () => {
         queryParams.delete('organization');
-        navigate(`/student?${queryParams.toString()}`);
+        navigate(`/courses?${queryParams.toString()}`);
     }
     React.useEffect(() => {
         console.log(queryParams.has('query'));

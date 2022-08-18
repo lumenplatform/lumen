@@ -8,7 +8,7 @@ t
     return {
       name: faker.system.commonFileName('jpeg'),
       mime: 'image/jpeg',
-      url: faker.image.business(),
+      url: faker.image.abstract(),
       config: {},
       type: AssetType.IMAGE,
       status: AssetStatus.ACTIVE,

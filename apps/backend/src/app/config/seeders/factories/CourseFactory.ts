@@ -2,10 +2,9 @@ import { Factory, Faker } from '@mikro-orm/seeder';
 import { Course } from '../../../models/course.model';
 import { AssetFactory } from './AssetFactory';
 
-
 export class CourseFactory extends Factory<Course> {
   private readonly em_;
-  constructor(em: any)  {
+  constructor(em: any) {
     super(em);
     this.em_ = em;
   }
@@ -39,6 +38,8 @@ export class CourseFactory extends Factory<Course> {
       duration: 3,
       welcomeMessage: 'Welcome to the course !!! ',
       tags: 'ML',
+      rating: 4,
+      ratingCount: 3,
     };
   }
 }

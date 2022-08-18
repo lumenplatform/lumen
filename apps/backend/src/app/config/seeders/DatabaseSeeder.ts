@@ -1,13 +1,13 @@
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { Asset } from '../../models/asset.model';
-import { AssetFactory } from './factories/AssetFactory';
 import { CourseFactory } from './factories/CourseFactory';
 import { EnrollmentFactory } from './factories/EnrollmentFactory';
 import { OrganizationFactory } from './factories/OrganizationFactory';
 import { PaymentFactory } from './factories/PaymentFactory';
 import { UserFactory } from './factories/UserFactory';
-
+import { courses as dummyCorses } from './data/data';
+import { organizations_data } from './data/organizations';
+import { Organization } from '../../models/organization.model';
 declare global {
   interface Array<T> {
     sample(): T;
@@ -22,13 +22,23 @@ if (!Array.prototype.sample) {
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    const organizations = new OrganizationFactory(em).make(5);
     const users = new UserFactory(em).make(5);
-    const courses = new CourseFactory(em).make(5);
+
+    const organizations = organizations_data.map((r: any) =>
+      em.create(Organization, r)
+    );
+
+    const courses = [];
     const enrollments = new EnrollmentFactory(em).make(5);
-    
+
     users.forEach((user) => {
-      user.organization = [null,...organizations].sample();
+      user.organization = [null, ...organizations].sample();
+    });
+
+    dummyCorses.forEach((i: any) => {
+      const course = new CourseFactory(em).makeOne();
+      em.assign(course, i);
+      courses.push(course);
     });
 
     courses.forEach((r) => {

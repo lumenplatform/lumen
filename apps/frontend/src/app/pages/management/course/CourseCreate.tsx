@@ -20,6 +20,7 @@ import { TabPanel } from '../../../components/TabPanel';
 import CourseMaterialEditor from './course-builder/CourseMaterialEditor';
 import { CourseLandingPage } from './sections/CourseLandingPage';
 import { CourseMessage } from './sections/CourseMessage';
+import CourseSettings from './sections/CourseSettings';
 import { CourseStructure } from './sections/CourseStructure';
 import { FilmAndEdit } from './sections/FilmAndEdit';
 import { IntendedLearners } from './sections/IntendedLearners';
@@ -44,6 +45,10 @@ export default function CourseCreate() {
   const methods = useForm({
     defaultValues: {
       title: '',
+      description: '',
+      language: '',
+      level: '',
+      subjectArea: '',
       learningOutcome: [''],
       intendedAudience: [''],
       prerequisites: [''],
@@ -77,13 +82,16 @@ export default function CourseCreate() {
   const sections = [
     { component: <CourseLandingPage />, label: 'Course Information' },
     { component: <IntendedLearners />, label: 'Intended Learners' },
-    { component: <CourseStructure />, label: 'Course Structure' },
-    { component: <SetupAndTestVideo />, label: 'Video Test' },
-    { component: <FilmAndEdit />, label: 'Film & Edit' },
+    // { component: <CourseStructure />, label: 'Course Structure' },
+    // { component: <SetupAndTestVideo />, label: 'Video Test' },
+    // { component: <FilmAndEdit />, label: 'Film & Edit' },
     { component: <CourseMaterialEditor />, label: 'Course Material' },
-    { component: <Pricing />, label: 'Pricing' },
     { component: <CourseMessage />, label: 'Messages' },
+    // { component: <Pricing />, label: 'Pricing' },
+    { component: <CourseSettings />, label: 'Settings' },
   ];
+
+  if (courseId && !courseData) return null;
 
   return (
     <FormProvider {...methods}>
@@ -137,7 +145,7 @@ export default function CourseCreate() {
               orientation="vertical"
             >
               {sections.map(({ label }) => (
-                <Tab sx={{ alignItems: 'end' }} label={label} />
+                <Tab sx={{ alignItems: 'end' }} key={label} label={label} />
               ))}
             </Tabs>
           </Box>
@@ -146,15 +154,15 @@ export default function CourseCreate() {
               {sections[value].label}
             </Typography>
             {sections.map(({ component }, index) => (
-              <TabPanel value={value} index={index}>
+              <TabPanel value={value} key={index} index={index}>
                 {component}
               </TabPanel>
             ))}
           </Box>
         </Container>
-        <small>
+        {/* <small>
           <pre>{JSON.stringify(fieldValues, null, 3)}</pre>
-        </small>
+        </small> */}
       </Box>
     </FormProvider>
   );
