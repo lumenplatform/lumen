@@ -5,19 +5,19 @@ import { CourseController } from '../controllers/course.controller';
 import { validate } from '../middleware/validation';
 import { Course } from '../models/course.model';
 import { CourseService } from '../services/course.service';
-import { SMTPMailService } from '../services/email.service';
+import { MailJetService } from '../services/mail/mailjet.service';
 import { StripePaymentService } from '../services/payment.service';
-import { createResponse } from './../utils/response-mapper';
 import { quizRouter } from './../routes/quiz.router';
+import { createResponse } from './../utils/response-mapper';
 
 export const coursesRouter = express.Router();
 
 const stripePaymentService = new StripePaymentService();
-const smtpMailService = new SMTPMailService();
+const mailService = new MailJetService();
 const courseService = new CourseService();
 const courseController = new CourseController(
   stripePaymentService,
-  smtpMailService,
+  mailService,
   courseService
 );
 

@@ -105,3 +105,7 @@ export function getCourseById(id: string) {
 export function getQuizById(courseId: string, examId: string) {
   return client.get<any>(`/courses/${courseId}/quiz/${examId}`).then((r) => r.data.data);
 }
+
+export function submitQuiz( data: any) {
+  return client.post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data).then((r) => r.data.data);
+}
