@@ -71,7 +71,7 @@ function CourseMaterial(props: any) {
 }
 
 function CourseMaterialTopics(props: any) {
-  const [expanded, setExpanded] = React.useState<true | false>(false);
+  const [expanded, setExpanded] = React.useState<true | false>(true);
 
   const handleChange =
     (panel: boolean) => (event: React.SyntheticEvent, isExpanded: boolean) => {

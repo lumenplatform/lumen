@@ -5,37 +5,6 @@ import { useParams } from 'react-router-dom';
 import { createNewQuiz, updateQuiz, getQuizById } from '../../../api';
 import ExamCreate, { Questions } from './ExamCreate';
 import ExamSettings, { Settings, defaultSettings } from './ExamSettings';
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-type Exam = {
-    examId?: string;
-    course: string;
-    settings: Settings;
-    questions?: Questions[];
-}
-
-function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
 
 function a11yProps(index: number) {
     return {
@@ -44,16 +13,23 @@ function a11yProps(index: number) {
     };
 }
 
-export default function ExamPage() {
+type Exam = {
+    examId?: string;
+    course: string;
+    settings: any;
+    questions?: Questions[];
+}
 
+export default function ExamPage() {
     const { examId, courseId } = useParams();
     const [value, setValue] = React.useState(0);
-    const [exam, setExam] = React.useState<Exam>({ settings: defaultSettings, questions: [], course: courseId! });
+    const [exam, setExam] = React.useState<Exam>({ settings: {}, questions: [], course: courseId! });
     const examCreateMutation = useMutation(createNewQuiz);
     const examUpdateMutation = useMutation(updateQuiz);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
+        setExam({ ...exam});
     };
 
     const {
@@ -104,12 +80,12 @@ export default function ExamPage() {
                         </Box>
                         <Divider sx={{ mt: 2 }} />
                     </Box>
-                    <TabPanel value={value} index={0}>
+                    <Box sx={{ display: value === 0? 'block': 'none' , ml:2,mt:2}}>
                         <ExamCreate examQuestions={exam.questions} changeQuestions={handleQusetionsChange} />
-                    </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        <ExamSettings changeSettings={handleSettingsChange} />
-                    </TabPanel>
+                    </Box>
+                    <Box sx={{ display: value === 1? 'block': 'none' , ml:2,mt:2}}>
+                        <ExamSettings examSettings={exam.settings} changeSettings={handleSettingsChange} />
+                    </Box>
                 </Box>
             </Box>
         </Container>

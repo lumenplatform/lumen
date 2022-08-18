@@ -45,6 +45,10 @@ export class CourseController {
 
     const price = params.price && JSON.parse(params.price); //TODO: fix this
 
+    const titleWords = searchQuery
+      ? searchQuery.replace(/^\s+|\s+$/g, '').split(' ')
+      : [];
+
     const parameters = {
       $and: [
         language ? { language: language } : {},
@@ -58,22 +62,20 @@ export class CourseController {
         price && price.end ? { price: { $lte: price.end } } : {},
         tags ? { tags: { $like: '%' + tags + '%' } } : {},
         organization ? { organization: { name: organization } } : {},
-        /* status: 'PUBLISHED', */
+        searchQuery
+          ? {
+              $or: [{ title: { $like: `%${searchQuery}%` } }],
+            }
+          : {},
       ],
     };
 
-    console.log();
     const em = RequestContext.getEntityManager() as EntityManager;
     const qb = em.qb(Course, 'c');
-    console.log(parameters);
     qb.select('*')
       .leftJoinAndSelect('c.organization', 'o')
       .leftJoinAndSelect('c.courseImage', 'ci')
       .where(parameters);
-
-    const titleWords = searchQuery
-      ? searchQuery.replace(/^\s+|\s+$/g, '').split(' ')
-      : [];
 
     //chain Where if only title is true
     if (searchQuery) {
@@ -83,7 +85,7 @@ export class CourseController {
       );
     }
 
-    const courses = await qb.execute('all');
+    const courses = em.find(Course, parameters);
     //console.log(courses);
     return courses;
   }
