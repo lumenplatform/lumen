@@ -1,23 +1,17 @@
-import { CssBaseline } from '@mui/material';
-import { login } from './api';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { green, orange } from '@mui/material/colors';
 import AppRouter from './AppRouter';
+import { themeOptions } from './theme';
 
 // https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
 export function App() {
-  // const { data, refetch } = useQuery('users', fetchUsers);
-
-  function getToken() {
-    login().then((r) => {
-      localStorage.setItem('token', r.data.token);
-      // refetch();
-    });
-  }
+  const theme = createTheme(themeOptions);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppRouter />
-    </>
+    </ThemeProvider>
   );
 }
 

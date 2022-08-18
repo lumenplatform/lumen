@@ -1,25 +1,28 @@
-import { Knex } from 'knex';
+import { MikroORM, RequestContext } from '@mikro-orm/core';
+import { ORMConfig, ORMLogger } from './db.config';
 
-const knex = require('knex')({
-  client: 'pg',
-  connection: process.env.PG_CONNECTION_STRING,
-});
+let orm: MikroORM;
 
-export const db: Knex = knex;
+async function InitORM() {
+  if (orm) return orm;
+  ORMLogger.info('Connecting to Database...');
+  orm = await MikroORM.init(ORMConfig);
+  ORMLogger.info('Successfully Connected to Database');
+  const migrator = orm.getMigrator();
+  await migrator.up();
+  ORMLogger.info('Database Migration Complete');
+  return orm;
+}
 
-(async () => {
-  await db.schema.dropTableIfExists('users');
+async function InjectORM(req: any, res, next) {
+  // req.orm = orm;
+  // if (!req.orm) {
+  //   req.orm = await InitORM();
+  // }
 
-  await db.schema.createTable('users', function (t) {
-    t.increments('id').primary();
-    t.string('first_name', 100);
-    t.string('last_name', 100);
-    t.string('email', 100);
-  });
+  // req.orm.em.setFilterParams('user', { ...req.user });
 
-  await db('users').insert({
-    email: 'ignore@example.com',
-    first_name: 'John Doe',
-    last_name: 'John Doe',
-  });
-})();
+  RequestContext.create(orm.em, next);
+}
+
+export { InjectORM, orm, InitORM };

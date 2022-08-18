@@ -12,10 +12,12 @@ import ListItemText from '@mui/material/ListItemText';
 import Popover from '@mui/material/Popover';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './Auth';
 
 function HeaderActions() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <>
@@ -29,8 +31,8 @@ function HeaderActions() {
       <BasicPopover />
 
       <Avatar
-        alt="Remy Sharp"
-        src="https://demos.themeselection.com/marketplace/materio-mui-react-nextjs-admin-template/demo-3/images/avatars/1.png"
+        alt={user?.name}
+        src={user?.picture}
         onClick={() => navigate('/profile')}
       />
     </>

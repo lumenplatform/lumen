@@ -1,19 +1,22 @@
-const jwt = require('jsonwebtoken');
-
-const TOKEN_SECRET = process.env.TOKEN_SECRET || 'test';
+import * as jwt from 'jsonwebtoken';
+import { JwksClient } from 'jwks-rsa';
+const secret = new JwksClient({
+  cache: true,
+  rateLimit: true,
+  jwksRequestsPerMinute: 5,
+  jwksUri: 'https://lumn.eu.auth0.com/.well-known/jwks.json',
+});
 
 export class AuthService {
-  static generateAccessToken(payload) {
-    const options = {
-      expiresIn: '1800s',
-    };
+  static async getPayloadFromToken(token: string) {
+    const decodedToken = jwt.decode(token, { complete: true });
 
-    return jwt.sign(payload, TOKEN_SECRET, options);
+    const key = await secret.getSigningKey(decodedToken.header.kid);
+
+    return jwt.verify(token, key.getPublicKey(), {
+      // audience: 'https://lumen.app',
+      issuer: 'https://lumn.eu.auth0.com/',
+      algorithms: ['RS256'],
+    }) as jwt.JwtPayload;
   }
-
-  static getUserFromToken(token: string) {
-    return jwt.verify(token, TOKEN_SECRET);
-  }
-
-  validateUser(username, password) {}
 }

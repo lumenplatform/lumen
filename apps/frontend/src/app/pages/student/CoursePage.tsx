@@ -7,13 +7,17 @@ import {
   ListItemText,
   Typography,
   useTheme,
-  Link,
+  Link as MuiLink,
   Avatar,
+  Container,
+  Skeleton,
 } from '@mui/material';
-import { NavLink, Outlet } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { Link, NavLink, Outlet, useParams } from 'react-router-dom';
+import { getCourseById } from '../../api';
 import StudentHeader from '../../components/StudentHeader';
 
-let sideBarItems = [
+const sideBarItems = [
   {
     path: 'material',
     label: 'Course Material',
@@ -61,29 +65,46 @@ export function CourseNav() {
 }
 
 export default function CoursePage(props: any) {
+  const { courseId } = useParams();
+
+  const {
+    data: course,
+    isLoading,
+    isError,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
+  if (isLoading || isError) {
+    return <Skeleton></Skeleton>;
+  }
+
   return (
     <div>
       <StudentHeader />
-      <Box sx={{ maxWidth: '1440px', px: 3 }}>
+      <Container maxWidth="xl">
         <Box sx={{ py: 1 }}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/student">
+            <MuiLink component={Link} underline="hover" color="inherit" to="/">
               Home
-            </Link>
-            <Link underline="hover" color="inherit" href="/student/">
+            </MuiLink>
+            <MuiLink
+              component={Link}
+              underline="hover"
+              color="inherit"
+              to="/student/"
+            >
               Courses
-            </Link>
-            <Typography color="text.primary">Operating Systems I</Typography>
+            </MuiLink>
+            <Typography color="text.primary">{course.title}</Typography>
           </Breadcrumbs>
         </Box>
         <Box sx={{ py: 1, display: 'flex' }}>
-          <Avatar sx={{ mr: 2 }} />
+          <Avatar sx={{ mr: 2 }} src={course.courseImage.path} />
           <Box>
             <Typography variant="h6" lineHeight={1}>
-              Operating Systems I
+              {course.title}
             </Typography>
             <Typography variant="caption">
-              University of Colombo School of Computing
+              {course.organization.name}
             </Typography>
           </Box>
         </Box>
@@ -91,11 +112,11 @@ export default function CoursePage(props: any) {
           <Box sx={{ width: '200px' }}>
             <CourseNav />
           </Box>
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2, flex: 1, mr: 10 }}>
             <Outlet />
           </Box>
         </Box>
-      </Box>
+      </Container>
     </div>
   );
 }

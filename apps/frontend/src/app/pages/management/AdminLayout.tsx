@@ -1,24 +1,13 @@
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import MenuIcon from '@mui/icons-material/Menu';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import AnalyticsIcon from '@mui/icons-material/AnalyticsOutlined';
-import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
-import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
-import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutlined';
-import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import DisplaySettingsOutlinedIcon from '@mui/icons-material/DisplaySettingsOutlined';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutlined';
 
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { ListSubheader } from '@mui/material';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -28,8 +17,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Avatar, ListSubheader } from '@mui/material';
+import { NavLink, Outlet } from 'react-router-dom';
 import HeaderActions from '../../components/HeaderActions';
 
 const drawerWidth = 220;
@@ -106,7 +94,7 @@ const AdminToolbar = (props: {
 
   return (
     <Toolbar>
-      <IconButton
+      {/* <IconButton
         color="inherit"
         onClick={props.handleDrawerClose}
         sx={{ mr: 2, ...(!props.open && { display: 'none' }) }}
@@ -123,7 +111,7 @@ const AdminToolbar = (props: {
         sx={{ mr: 2, ...(props.open && { display: 'none' }) }}
       >
         <MenuIcon />
-      </IconButton>
+      </IconButton> */}
       <Typography
         variant="h6"
         component="div"
@@ -142,7 +130,7 @@ const SideNavItems = () => {
       {sideBarItems.map((item, index) => {
         if (item.subHeading) {
           return (
-            <ListSubheader key={item.label} component="div">
+            <ListSubheader key={index} component="div">
               {item.subHeading}
             </ListSubheader>
           );
@@ -150,6 +138,7 @@ const SideNavItems = () => {
 
         return (
           <NavLink
+            key={index}
             to={item.path}
             style={{ color: 'unset', textDecoration: 'unset' }}
             end={item.path === '/manage'}
@@ -159,15 +148,15 @@ const SideNavItems = () => {
                 key={item.label}
                 disablePadding
                 selected={isActive}
-                style={{
-                  color: isActive ? theme.palette.primary.dark : '',
+                sx={{
+                  color: isActive ? theme.palette.primary.main : '',
                 }}
               >
                 <ListItemButton>
                   <ListItemIcon
-                    sx={{ minWidth: '38px' }}
-                    style={{
-                      color: isActive ? theme.palette.primary.dark : '',
+                    sx={{
+                      minWidth: '38px',
+                      color: isActive ? theme.palette.primary.main : '',
                     }}
                   >
                     {item.icon}
@@ -185,7 +174,6 @@ const SideNavItems = () => {
 
 export default function AdminLayout() {
   const theme = useTheme();
-  let navigate = useNavigate();
 
   const [open, setOpen] = React.useState(true);
 

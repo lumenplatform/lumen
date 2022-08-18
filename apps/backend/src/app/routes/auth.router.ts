@@ -1,35 +1,50 @@
 import * as express from 'express';
-import { db } from '../config/db';
 import { AuthController } from '../controllers';
 import { guard } from '../middleware/security';
 import { AuthService } from '../services/auth.service';
-import { createResponse } from '../utils/response-mapper';
+import { OrganizationService } from '../services/organization.service';
+import { UserService } from '../services/user.service';
+import { sendJSON } from '../utils/response-mapper';
 
 export const authRouter = express.Router();
 
-const authController = new AuthController();
 const authService = new AuthService();
+const userService = new UserService();
+const orgService = new OrganizationService();
 
-authRouter.post('/login', (req, res) => {
-  console.log(req.body);
-  const { username, password } = req.body;
-
-  const user = authController.validateUser(username, password);
-  console.log(user);
-  const token = AuthService.generateAccessToken(user);
-
-  res.json({ token });
-});
+const authController = new AuthController(userService, orgService);
 
 authRouter.use(guard.isAuthenticated);
 
-authRouter.get('/users', async (req, res) => {
-  db.select()
-    .table('users')
-    .then((r) => {
-      res.json(createResponse(r));
+authRouter.get('/me', (req, res, next) => {
+  authController
+    .getUserFromRequest({ ...req.user })
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+authRouter.get('/invites', (req, res, next) => {
+  authController
+    .getPendingOrgInvitesForEmail({ email: req.user.email })
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+authRouter.post('/accept-invite/:id', (req, res, next) => {
+  authController
+    .acceptInvite({ email: req.user.email, inviteId: req.params.id })
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+authRouter.post('/register-organization', (req, res, next) => {
+  authController
+    .registerAsOrganization({
+      userEmail: req.user.email,
+      orgName: req.body.orgName,
+      logo: req.body.logo,
+      description: req.body.description,
     })
-    .catch((r) => {
-      res.json({ message: 'error' });
-    });
+    .then(sendJSON(res))
+    .catch(next);
 });

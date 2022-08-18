@@ -1,29 +1,103 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
-import { Margin } from '@mui/icons-material';
+import {
+  Avatar,
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Chip,
+  Grid,
+  Link as MuiLink,
+  Rating,
+  Stack,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { Link } from 'react-router-dom';
 
-export default function CourseCard(props: any) {
-  return <div><Card sx={{ width:350 }}>
-  <CardActionArea>
-    <CardMedia
-      component="img"
-      height="140"
-     image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRLJVGf2FyO7PH2UPREdmXQH7at_MIqy-g9cu9kdphiLYzlRf5BogQtvs8ucVJtKE5GsY&usqp=CAU"
-    
-     alt="green iguana"
-     
-    />
-    <CardContent>
-      <Typography gutterBottom variant="h6" component="div">
-        SCS3208 Software Project Management
-      </Typography>
-     
-    </CardContent>
-  </CardActionArea>
-</Card>
-</div>;
+export default function CourseCard({ course }: { course: any }) {
+  const theme = useTheme();
+  return (
+    <Link to={'/courses/' + course.courseId} style={{ textDecoration: 'none' }}>
+      <Card>
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            height="160"
+            image={course.courseImage.url}
+            alt="course image"
+          />
+
+          <CardContent>
+            <Typography
+              gutterBottom
+              variant="body1"
+              component="div"
+              sx={{ fontWeight: 'bold', minHeight: '3em' }}
+            >
+              {course.title}
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                mb: 2,
+              }}
+            >
+              <Avatar
+                sx={{ mr: 1 }}
+                src={course.organization.customizations?.logo?.path}
+              />
+              <Box sx={{ minWidth: 0, overflow: 'hidden' }}>
+                <MuiLink
+                  to={'?organization=' + course.organization.name}
+                  component={Link}
+                  sx={{
+                    color: 'inherit',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  underline="hover"
+                >
+                  <Typography sx={{}}>{course.organization.name}</Typography>
+                </MuiLink>
+                <Typography variant="body2">By Prof. Gilbert Strang</Typography>
+              </Box>
+            </Box>
+
+            <Typography variant="caption">
+              {course.subjectArea} - {course.tags}
+            </Typography>
+
+            <Stack direction="row" spacing={0.7}>
+              <Rating
+                name="size-small"
+                defaultValue={course.rating}
+                size="small"
+                readOnly
+                sx={{ mr: 0.5 }}
+              />
+
+              <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
+                {course.rating && String(course.rating).includes('.')
+                  ? course.rating
+                  : course.rating + '.0'}
+              </Typography>
+              <Typography variant="caption">
+                (
+                {course.ratingCount > 999999
+                  ? (course.ratingCount / 1000000).toFixed(1) + 'm'
+                  : course.ratingCount > 999
+                  ? (course.ratingCount / 1000).toFixed(1) + 'k'
+                  : course.ratingCount}
+                )
+              </Typography>
+              <Typography variant="caption">{course.level}</Typography>
+            </Stack>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Link>
+  );
 }
