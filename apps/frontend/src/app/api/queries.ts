@@ -98,9 +98,6 @@ export function createNewQuiz(data: any) {
 export function updateQuiz( data: any) {
   return client.put(`/courses/${data.course}/quiz/${data.examId}`, data.form).then((r) => r.data.data);
 }
-export function getCourseById(id: string) {
-  return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
-}
 
 export function getQuizById(courseId: string, examId: string) {
   return client.get<any>(`/courses/${courseId}/quiz/${examId}`).then((r) => r.data.data);
