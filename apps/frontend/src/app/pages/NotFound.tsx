@@ -3,8 +3,15 @@ import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import { Button, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import {Typography } from '@mui/material';
 
+const Item = styled(Paper)(({ theme }) => ({
+
+  padding: theme.spacing(0),
+  textAlign: 'center',
+  
+}));
 
 const theme = createTheme();
 
@@ -20,29 +27,32 @@ theme.typography.h3 = {
 
 export default function NotFound() {
   return (
+
     
-    <div style={{height: '100%'}}> 
-      <Grid>
-        <Grid item xs={12} sx={{ background: '#35523A', height: '50%', maxHeight: '100%', display: 'flex', justifyContent: 'center',}}>
-          <img src="/assets/images/404_img.png" style={{height: '400px'}} />
+    <Grid item container spacing={2} columns={{ xs: 4, md: 12 }}   sx={{ background: '#229954'}}
+    justifyContent="space-evenly"
+    alignItems="stretch">
+<Item></Item>
+      <Grid item xs={8} sx={{height: '120'}}  justifyContent="space-evenly"
+    alignItems="stretch" >
+        <ThemeProvider theme={theme}>
+          <Typography variant="h1" lineHeight={1.5} sx={{ display: 'flex', justifyContent: 'center', color: '#FEFEDF'}}>Oops!</Typography>
+        </ThemeProvider> 
+        <Typography variant="h5" lineHeight={2} sx={{ display: 'flex', justifyContent: 'center', color: '#FEFEDF'}}>Error Code: 404</Typography>
+        <Typography variant="h5" lineHeight={2} sx={{ display: 'flex', justifyContent: 'center', color: '#FEFEDF'}}>We can't seem to find the page that you are looking for...</Typography>
+   
+        <Grid sx={{display: 'flex', justifyContent: 'center', mt: '30px', padding: '12px'}}  justifyContent="space-evenly"
+    alignItems="stretch">
+          <Button variant="contained" sx={{color: '#FEFEDF'}} > Back to Home</Button>
         </Grid>
-
-        <Grid item xs={12} sx={{ background: '#E4C7FF', height: '50%'}}>
-          <ThemeProvider theme={theme}>
-            <Typography variant="h1" lineHeight={1} sx={{ display: 'flex', justifyContent: 'center'}}>Oops!</Typography>
-          </ThemeProvider>    
-      <Typography variant="h5" lineHeight={2} sx={{ display: 'flex', justifyContent: 'center'}}>We can't seem to find the page that you are looking for...</Typography>
-      <Grid container spacing={0} rowSpacing={0} sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        mt: '30px'
-        }}> <Button variant="contained" sx={{display: 'flex', justifyContent: 'center'}}>Back to Home</Button></Grid>
       </Grid>
-      
-      
+
+      <Grid item xs={4} sx={{ background: '#FEFEDF', display: 'flex', justifyContent: 'center',}}  justifyContent="space-evenly"
+    alignItems="stretch">
+        <img src="/assets/images/404_img.png" style={{height: '400px', marginBottom: '30px'}} />
+      </Grid>
+
     </Grid>
-
-
-    </div>
+    
   )
 }
