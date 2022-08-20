@@ -1,11 +1,18 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import { green, orange } from '@mui/material/colors';
+import { useContext, useMemo } from 'react';
 import AppRouter from './AppRouter';
+import { ThemeContext } from './providers/ThemeModeProvider';
 import { themeOptions } from './theme';
+import { deepmerge } from '@mui/utils';
 
-// https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2FApp.tsx
 export function App() {
-  const theme = createTheme(themeOptions);
+  const themeMode = useContext(ThemeContext);
+
+  const theme = useMemo(() => {
+    return createTheme(
+      deepmerge(themeOptions, { palette: { mode: themeMode.mode } })
+    );
+  }, [themeMode]);
 
   return (
     <ThemeProvider theme={theme}>
