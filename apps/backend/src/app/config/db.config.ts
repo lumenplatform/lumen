@@ -2,7 +2,7 @@ import { Connection, IDatabaseDriver, Options } from '@mikro-orm/core';
 import { Asset } from '../models/asset.model';
 import { CourseMaterial } from '../models/course-material.model';
 import { Course } from '../models/course.model';
-import { Enrollment } from '../models/enrollment.model';
+import { CompletedTopic, Enrollment } from '../models/enrollment.model';
 import { CourseReview } from '../models/review.mode';
 import { Payment } from '../models/payment.model';
 import { Organization } from '../models/organization.model';
@@ -26,6 +26,7 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     Notification,
     Organization,
     Enrollment,
+    CompletedTopic,
     Course,
     CourseMaterial,
     CourseResource,

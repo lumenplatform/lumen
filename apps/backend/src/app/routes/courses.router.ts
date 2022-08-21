@@ -8,7 +8,7 @@ import { CourseService } from '../services/course.service';
 import { MailJetService } from '../services/mail/mailjet.service';
 import { StripePaymentService } from '../services/payment.service';
 import { quizRouter } from './../routes/quiz.router';
-import { createResponse } from './../utils/response-mapper';
+import { createResponse, sendJSON } from './../utils/response-mapper';
 
 export const coursesRouter = express.Router();
 
@@ -28,8 +28,20 @@ coursesRouter.get('/', async (req, res) => {
   res.json(createResponse(courses));
 });
 
-// get enrolled courses
-coursesRouter.get('/enrolled');
+coursesRouter.get('/enrolled', async (req, res, next) => {
+  courseController
+    .getEnrolledCourses(req.user.uid)
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+coursesRouter.get('/recommended', async (req, res, next) => {
+  courseController
+    .getRecommendedCourses(req.user.uid)
+    .then(sendJSON(res))
+    .catch(next);
+});
+
 
 // get enrolled courses
 coursesRouter.get('/upcoming-events');
@@ -90,6 +102,13 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
     .then((result) => {
       res.redirect(result);
     })
+    .catch(next);
+});
+
+coursesRouter.post('/:id/complete-topic/:topicId', (req, res, next) => {
+  courseController
+    .markTopicAsCompleted(req.user.uid, req.params.id, req.params.topicId)
+    .then(sendJSON(res))
     .catch(next);
 });
 

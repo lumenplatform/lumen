@@ -59,6 +59,18 @@ export function getCourseMaterial(id: string) {
   return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
 }
 
+export function getEnrolledCourses() {
+  return client.get<any>('/courses/enrolled').then((r) => r.data.data);
+}
+
+export function getRecommendedCourses() {
+  return client.get<any>('/courses/recommended').then((r) => r.data.data);
+}
+
+export function markTopicAsCompleted(courseId: string, topicId: string) {
+  return client.post(`/courses/${courseId}/complete-topic/${topicId}`);
+}
+
 // MANAGEMENT
 export function createNewCourse(data: any) {
   return client.post('/manage/courses', data, {});
@@ -92,17 +104,25 @@ export function getPendingOrgInvitations() {
 // END MANAGEMENT
 
 export function createNewQuiz(data: any) {
-  return client.post(`/courses/${data.form.course}/quiz/`, data.form).then((r) => r.data.data);
+  return client
+    .post(`/courses/${data.form.course}/quiz/`, data.form)
+    .then((r) => r.data.data);
 }
 
-export function updateQuiz( data: any) {
-  return client.put(`/courses/${data.course}/quiz/${data.examId}`, data.form).then((r) => r.data.data);
+export function updateQuiz(data: any) {
+  return client
+    .put(`/courses/${data.course}/quiz/${data.examId}`, data.form)
+    .then((r) => r.data.data);
 }
 
 export function getQuizById(courseId: string, examId: string) {
-  return client.get<any>(`/courses/${courseId}/quiz/${examId}`).then((r) => r.data.data);
+  return client
+    .get<any>(`/courses/${courseId}/quiz/${examId}`)
+    .then((r) => r.data.data);
 }
 
-export function submitQuiz( data: any) {
-  return client.post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data).then((r) => r.data.data);
+export function submitQuiz(data: any) {
+  return client
+    .post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data)
+    .then((r) => r.data.data);
 }
