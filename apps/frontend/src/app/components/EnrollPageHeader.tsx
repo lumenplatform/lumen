@@ -18,7 +18,7 @@ import Faq from './FAQ';
 
 import { useQuery } from 'react-query';
 import { Outlet, useParams } from 'react-router-dom';
-import { getCourseById } from '../api';
+import { enrollInCourse, getCourseById } from '../api';
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -29,7 +29,10 @@ export default function EnrollHEader() {
   };
 
   const enrollbutton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setValue('5');
+    enrollInCourse(courseId!).then((r) => {
+      // eslint-disable-next-line no-restricted-globals
+      location.href = r.paymentUrl;
+    });
   };
 
   const { courseId } = useParams();
@@ -57,10 +60,10 @@ export default function EnrollHEader() {
         }}
       >
         <Typography variant="h3" component="h3">
-        {course.title}
+          {course.title}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Rating name="read-only" value={4} readOnly size="small" />    
+          <Rating name="read-only" value={4} readOnly size="small" />
           {/* get the value from the table (total) */}
 
           <Typography
@@ -69,9 +72,8 @@ export default function EnrollHEader() {
             component="h3"
             sx={{ lineHeight: 0, ml: 1 }}
           >
-            34 ratings  
+            34 ratings
             {/* get the count from table */}
-
           </Typography>
         </Box>
 
@@ -109,7 +111,6 @@ export default function EnrollHEader() {
             style={{ marginLeft: 10 }}
           >
             120 Already enrolled
-
             {/* get the total */}
           </Typography>
         </Box>

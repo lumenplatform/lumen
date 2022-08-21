@@ -40,7 +40,9 @@ export class Enrollment {
   @Enum(() => EnrollmentStatus)
   status: EnrollmentStatus;
 
-  @OneToMany(() => CourseReview, (review) => review.enrollment)
+  @OneToMany(() => CourseReview, (review) => review.enrollment, {
+    nullable: true,
+  })
   review: CourseReview;
 
   @ManyToMany({

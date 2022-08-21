@@ -98,9 +98,8 @@ export class CourseController {
 
   async enroll(req, userId, courseId) {
     const course = await this.getCourseByID(courseId);
-    const user: User = new User();
     const em = RequestContext.getEntityManager();
-    /* const user = await em.findOneOrFail(User,{}); */
+    const user = await em.findOneOrFail(User, { uid: userId });
     const domain = `${req.protocol == 'https' ? 'https:' : 'http'}://${req.get(
       'host'
     )}`;
