@@ -39,6 +39,19 @@ const sideBarItems = [
     label: 'Course Info',
     icon: <InfoOutlinedIcon />,
   },
+  {
+    path: 'grades',
+    label: 'Grades',
+  },
+  {
+    path: 'SubmissionStatus',
+    label: 'Submission Status',
+  },
+  {
+    path: 'AssignmentSettings',
+    label: 'Assignment Settings',
+  },
+
 ];
 
 export function CourseNav() {

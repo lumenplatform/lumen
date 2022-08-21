@@ -15,9 +15,13 @@ import ForInstructors from './pages/public/ForInstructors';
 import HomePage from './pages/public/HomePage';
 import ContentView from './pages/student/course-viewer/ContentView';
 import CourseViewer from './pages/student/course-viewer/CourseViewer';
+import AssignmentGrades from './pages/student/course/AssignmentGrades';
+import AssignmentSettings from './pages/student/course/AssignmentSetting';
 import CourseInfo from './pages/student/course/CourseInfo';
 import CourseMaterial from './pages/student/course/CourseMaterial';
 import CourseResources from './pages/student/course/CourseResources';
+import FileUpload from './pages/student/course/FileUpload';
+import SubmissionStatus from './pages/student/course/SubmissionStatus';
 import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
@@ -50,6 +54,9 @@ export default function () {
             <Route path="material" element={<CourseMaterial />} />
             <Route path="info" element={<CourseInfo />} />
             <Route path="resources" element={<CourseResources />} />
+            <Route path="grades" element={<AssignmentGrades />} />
+            <Route path="SubmissionStatus" element={<SubmissionStatus />} />
+            <Route path="AssignmentSettings" element={<AssignmentSettings />} />
             <Route path="" element={<Navigate replace to="material" />}></Route>
           </Route>
           <Route path=":courseId/learn/" element={<CourseViewer />}>
@@ -85,6 +92,7 @@ export default function () {
       <Route element={<ProtectedPage userRole="any" />}>
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/notification" element={<Notification />} />
+        <Route path="/Add Submission" element={<FileUpload />} />
       </Route>
 
       <Route path="*" element={<NotFound />}></Route>
