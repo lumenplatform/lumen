@@ -1,93 +1,113 @@
-import { useState } from "react";
-import ReactDOM from "react-dom/client";
-import * as React from 'react';
-import { Box, Grid, Paper } from "@mui/material";
-export  function Customization() {
+import { DisplaySettingsOutlined } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Grid,
+  InputAdornment,
+  Stack,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useState } from 'react';
+import FilesInput from '../../components/FilesInput';
+
+export default function Customization() {
   const [inputs, setInputs] = useState<any>({});
   const [selectedFile, setSelectedFile] = useState<any>(null);
 
-  const handleChange = (event:any) => {
+  const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs((values: any) => ({...values, [name]: value}))
-  }
+    setInputs((values: any) => ({ ...values, [name]: value }));
+  };
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
+  const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     console.log(inputs);
-  }
+  };
 
   return (
-    <Paper sx={{ p: 3, mb: 2 ,width:"500px"}}>
-      
-        
-    <form onSubmit={handleSubmit}>
-    <Box
+    <Box sx={{ p: 3, mb: 2 }}>
+      <Stack direction="row" alignItems="center">
+        <DisplaySettingsOutlined />
+        <Typography ml={1} variant="h6">
+          Organization Settings
+        </Typography>
+      </Stack>
+      <Typography my={1} variant="subtitle2">
+        Basic Information
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <Box
           sx={{
             my: 2,
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: 2,
           }}
-          >
-      <label><b>Organization Name</b>
-       <Box marginTop={2}>
-      <input 
-        style={{width: "370px",height:"40px"}}
-        type="text" 
-        name="Organization Name" 
-        value={inputs.Organization_Name || ""}
-        onChange={handleChange}
-      />
-      </Box> 
-      
-      </label>
-      
-      <br></br>
-      <label><b>Description</b>
-        <Box marginTop={2} >
-        <input 
-         style={{width: "370px",height:"40px"}}
-          type="text" 
-          name="Description" 
-          value={inputs.Desription || ""} 
-          onChange={handleChange}
+        >
+          <TextField variant="filled" label="Organization Name" />
+          <Stack direction={'row'} alignItems="center">
+            <span>Logo : </span>
+            <FilesInput />
+          </Stack>
+          <TextField variant="filled" multiline rows={3} label="Description" />
+          <div></div>
+        </Box>
+      </form>
+      <Typography my={1} mt={4} variant="subtitle2">
+        Domain Mappings
+      </Typography>
+      <Box>
+        <TextField
+          label="Subdomain"
+          variant="filled"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">.lumenlms.xyz</InputAdornment>
+            ),
+          }}
         />
-        </Box>
-        </label>
-        <br></br>
-        <label><b>Logo</b>
-          <br></br>
-          <input
-          type="file"
-          value={selectedFile}
-          onChange={handleChange}
-          />
-        </label>
-        </Box>
-        <Grid container justifyContent={"right"}>
-        <input type="submit" />
-        </Grid>
+        <Table sx={{ minWidth: 650, mt: 2 }} size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Domain</TableCell>
+              <TableCell>Date Added</TableCell>
+              <TableCell>Added By</TableCell>
+              <TableCell> </TableCell>
+            </TableRow>
+          </TableHead>
 
-    </form>
-    </Paper>
-  )
-}
-
-import CssBaseline from '@mui/material/CssBaseline';
-
-import Container from '@mui/material/Container';
-
-export default function FixedContainer() {
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <Container fixed>
-        <Customization></Customization>
-      </Container>
-    </React.Fragment>
+          <TableRow>
+            <TableCell>ucec.cmb.ec.lk</TableCell>
+            <TableCell>Aug 14, 2022</TableCell>
+            <TableCell>dalana.dhar@gmail.com</TableCell>
+            <TableCell>
+              <Button color="inherit" size="small">
+                DNS Records 
+              </Button>{' '}
+              |
+              <Button color="error" size="small">
+                Delete
+              </Button>
+            </TableCell>
+          </TableRow>
+        </Table>
+      </Box>
+      <Typography my={1} mt={4} variant="subtitle2">
+        Theming
+      </Typography>
+      Primary Color : <input type="color" value="#1dbf7b" />
+      &nbsp; Secondary Color : <input type="color" value={'#ffff00'} />
+      <Box sx={{ mt: 4 }}>
+        <Button variant="contained" disableElevation>
+          Save
+        </Button>
+      </Box>
+    </Box>
   );
 }
-
-
-

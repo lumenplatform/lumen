@@ -79,7 +79,7 @@ const sideBarItems = [
     icon: <PaymentsOutlinedIcon />,
   },
   {
-    label: 'Customizations',
+    label: 'Settings',
     path: '/manage/customize',
     icon: <DisplaySettingsOutlinedIcon />,
   },
