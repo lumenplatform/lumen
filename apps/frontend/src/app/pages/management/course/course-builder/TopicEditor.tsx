@@ -1,4 +1,4 @@
-import { Add, AddToQueue, PlaylistAdd } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { AnyConfig } from '@tiptap/react';
 import { useEffect, useState } from 'react';
 import FilesInput from '../../../../components/FilesInput';
 import Tiptap from '../../../../components/Tiptap';
@@ -26,6 +25,7 @@ export default function TopicEditor({
     description?: string;
     resources?: any;
     showDescription?: boolean;
+    timeEstimate: number;
   }>({ ...(topic ?? {}), showDescription: topic.description?.length > 0 });
 
   useEffect(() => {
@@ -94,7 +94,24 @@ export default function TopicEditor({
             content={data.article}
           />
         )}
-
+        <Stack direction="row" alignItems="flex-end" mb={2} mx={2}>
+          <Typography component={'span'} variant="body2">
+            Time to Complete :{' '}
+          </Typography>
+          <TextField
+            size="small"
+            inputProps={{
+              step: '5',
+            }}
+            variant="standard"
+            onChange={(e) =>
+              setData((d) => ({ ...d, timeEstimate: parseInt(e.target.value) }))
+            }
+            value={data.timeEstimate || 0}
+            type="number"
+          />
+          Minutes
+        </Stack>
         <Typography>Supplementary Material</Typography>
 
         {data.showDescription && (
@@ -105,6 +122,9 @@ export default function TopicEditor({
             label="Description"
             value={data.description}
             rows={2}
+            onChange={(e) =>
+              setData((d) => ({ ...d, description: e.target.value }))
+            }
           />
         )}
 

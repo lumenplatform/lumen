@@ -72,6 +72,7 @@ export const linerAlgebra: DeepPartial<Course> = {
           title: 'The Geometry Of Linear Equations',
           description:
             'A major application of linear algebra is to solving systems of linear equations. This lecture presents three ways of thinking about these systems. The “row method” focuses on the individual equations, the “column method” focuses on combining the columns, and the “matrix method” is an even more compact and powerful way of describing systems of linear equations.',
+          timeEstimate: 10,
           video: {
             id: 'aa145ac8-67b9-4827-9619-921c06a509be',
             url: 'https://lumenlmsstorage.blob.core.windows.net/test/Liner%20Algebra.mp4?sv=2021-08-06&se=2022-08-14T15%3A51%3A21Z&sr=c&sp=rcw&sig=XWQnOohK0FgV1ymAzlKQkFKp3%2B5rm3IABPYkknt2Pl0%3D',
@@ -116,6 +117,7 @@ export const linerAlgebra: DeepPartial<Course> = {
         {
           order: 1,
           title: 'An Overview Of key ideas',
+          timeEstimate: 25,
         },
         { order: 2, title: 'Elimination With Matrices' },
         { order: 3, title: 'Multiplication And Inverse Matrices' },
@@ -157,7 +159,7 @@ export const linerAlgebra: DeepPartial<Course> = {
         { order: 10, title: 'The Four Fundamental Subspaces' },
         { order: 11, title: 'Matrix Spaces; Rank 1; Small World Graphs' },
         { order: 12, title: 'Graphs, Networks, Incidence Matrices' },
-        { order: 13, title: 'Exam' },
+        { order: 13, title: 'Exam', contentType: 'quiz' },
       ],
     },
     {

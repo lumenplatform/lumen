@@ -264,15 +264,18 @@ function AssetView(props: { url?: any; name: string }) {
   };
 
   useEffect(() => {
-    const processedBlob = async () => {
-      const data = await addWatermark(
-        props.url,
-        `${user?.email}\n${new Date().toLocaleString()}`
-      );
-      setBlobURL(() => data);
-    };
+    const ext = getExtension(props.name);
+    if (['pdf'].includes(ext.toLowerCase())) {
+      const processedBlob = async () => {
+        const data = await addWatermark(
+          props.url,
+          `${user?.email}\n${new Date().toLocaleString()}`
+        );
+        setBlobURL(() => data);
+      };
 
-    processedBlob().catch(console.log);
+      processedBlob().catch(console.log);
+    }
   }, [props]);
 
   const handleClose = () => setOpen(false);
