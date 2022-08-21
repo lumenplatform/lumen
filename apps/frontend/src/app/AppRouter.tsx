@@ -26,6 +26,8 @@ import CoursePage from './pages/student/CoursePage';
 import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
+import Notification from './pages/Notification/AllNotification';
+import Quizpage from './pages/student/QuizPage';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -60,6 +62,7 @@ export default function () {
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
+          <Route path=":courseId/quiz/:quizId" element={<Quizpage/>}></Route>
         </Route>
       </Route>
 
@@ -88,6 +91,7 @@ export default function () {
       {/* Common pages to all users */}
       <Route element={<ProtectedPage userRole="any" />}>
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/notification" element={<Notification />} />
         <Route path="/Add Submission" element={<FileUpload />} />
       </Route>
 

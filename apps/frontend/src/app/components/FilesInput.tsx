@@ -12,6 +12,7 @@ import {
 import {
   Avatar,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -34,6 +35,8 @@ import { Box } from '@mui/system';
 import { Component, ContextType, useEffect, useRef, useState } from 'react';
 import { useList } from 'react-use';
 import { StorageContext, useStorage } from './StorageProvider';
+import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { useAuth } from './Auth';
 
 function formatBytes(bytes: number, decimals: number) {
   if (bytes == 0) return '0 Bytes';
@@ -67,15 +70,16 @@ function getExtensionColor(r: string) {
   const colors: Record<string, string> = {
     pdf: 'red',
   };
-  console.log(colors[r.toLowerCase()]);
   return colors[r.toLowerCase()] ? colors[r.toLowerCase()] : '#03a9f4';
 }
 
-function AssetOptions(props: { onChange?: any; value?: any }) {
+function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(props.value);
 
   const handleClose = () => setOpen(false);
+  const isVideo = props.mime?.startsWith('video');
+  const isPdf = props.mime === 'application/pdf';
 
   return (
     <>
@@ -92,53 +96,106 @@ function AssetOptions(props: { onChange?: any; value?: any }) {
           </Stack>
         </DialogTitle>
         <DialogContent>
-          Downloading
-          <RadioGroup
-            row={true}
-            onChange={(r) => {
-              setValue((e: any) => ({ ...e, down: r.target.value }));
-            }}
-          >
-            <FormControlLabel
-              value={true}
-              control={<Radio defaultChecked />}
-              label="Yes"
-            />
-            <FormControlLabel value={false} control={<Radio />} label="No" />
-          </RadioGroup>
-          Screen Capture
-          <RadioGroup
-            row={true}
-            onChange={(r) => {
-              setValue((e: any) => ({ ...e, sc: r.target.value }));
-            }}
-          >
-            <FormControlLabel
-              value={true}
-              control={<Radio defaultChecked />}
-              label="Yes"
-            />
-            <FormControlLabel value={false} control={<Radio />} label="No" />
-          </RadioGroup>
-          Verified Media Path
-          <RadioGroup
-            row={true}
-            onChange={(r) => {
-              setValue((e: any) => ({ ...e, vmp: r.target.value }));
-            }}
-          >
-            <FormControlLabel
-              control={<Radio defaultChecked />}
-              value={true}
-              label="Active"
-            />
-            <FormControlLabel
-              control={<Radio />}
-              value={false}
-              label="Disable"
-            />
-          </RadioGroup>
-          <pre>{JSON.stringify(value, null, 2)}</pre>
+          <table style={{ lineHeight: 1 }}>
+            <tr>
+              <td>Disable Downloading&nbsp; &nbsp;</td>
+              <td>
+                <RadioGroup
+                  row={true}
+                  onChange={(r) => {
+                    setValue((e: any) => ({ ...e, down: r.target.value }));
+                  }}
+                >
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio defaultChecked />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="No"
+                  />
+                </RadioGroup>
+              </td>
+            </tr>
+            <tr style={{ opacity: isVideo || isPdf ? 1 : '.3' }}>
+              <td>
+                Watermark &nbsp; &nbsp;
+                <br /> <small>video / pdf</small>
+              </td>
+              <td>
+                <RadioGroup
+                  row={true}
+                  onChange={(r) => {
+                    setValue((e: any) => ({ ...e, down: r.target.value }));
+                  }}
+                >
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio defaultChecked />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="No"
+                  />
+                </RadioGroup>
+              </td>
+            </tr>
+            <tr style={{ opacity: isVideo ? 1 : '.3' }}>
+              <td>
+                No Screen Capture
+                <br /> <small>video </small>
+              </td>
+              <td>
+                <RadioGroup
+                  row={true}
+                  onChange={(r) => {
+                    setValue((e: any) => ({ ...e, sc: r.target.value }));
+                  }}
+                >
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio defaultChecked />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="No"
+                  />
+                </RadioGroup>
+              </td>
+            </tr>
+            <tr style={{ opacity: isVideo ? 1 : '.3' }}>
+              <td>
+                Verified Media Path <br /> <small>video</small>
+              </td>
+              <td>
+                <RadioGroup
+                  row={true}
+                  onChange={(r) => {
+                    setValue((e: any) => ({ ...e, vmp: r.target.value }));
+                  }}
+                >
+                  <FormControlLabel
+                    control={<Radio defaultChecked />}
+                    value={true}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    value={false}
+                    label="No"
+                  />
+                </RadioGroup>
+              </td>
+            </tr>
+          </table>
+
+          {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
         </DialogContent>
         <DialogActions sx={{ mx: 2, mb: 2 }}>
           <Button color="secondary" onClick={handleClose}>
@@ -160,16 +217,64 @@ function AssetOptions(props: { onChange?: any; value?: any }) {
   );
 }
 
+async function addWatermark(url: string, watermark: string) {
+  const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+  const pages = pdfDoc.getPages();
+  for (let i = 0; i < pages.length; i++) {
+    const page = pages[i];
+
+    const { width, height } = page.getSize();
+
+    for (let x = 0; x < width; x += 100) {
+      for (let y = 0; y < height; y += 100) {
+        page.drawText(watermark, {
+          x: x + (y % 200 === 0 ? -20 : 0),
+          y: y,
+          size: 10,
+          font: helveticaFont,
+          color: rgb(0.95, 0.1, 0.1),
+          rotate: degrees(45),
+          lineHeight: 12,
+          opacity: 0.2,
+        });
+      }
+    }
+  }
+
+  const pdfDataURL = await pdfDoc.saveAsBase64({ dataUri: true });
+
+  return pdfDataURL;
+}
+
 function AssetView(props: { url?: any; name: string }) {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
+  const [blobURL, setBlobURL] = useState<string>(null!);
+
   const handleOpen = () => {
     const ext = getExtension(props.name);
-    if (['pdf'].includes(ext)) {
+    if (['pdf'].includes(ext.toLowerCase())) {
       setOpen(true);
     } else {
       window.open(props.url, '_blank')?.focus();
     }
   };
+
+  useEffect(() => {
+    const processedBlob = async () => {
+      const data = await addWatermark(
+        props.url,
+        `${user?.email}\n${new Date().toLocaleString()}`
+      );
+      setBlobURL(() => data);
+    };
+
+    processedBlob().catch(console.log);
+  }, [props]);
+
   const handleClose = () => setOpen(false);
 
   return (
@@ -197,23 +302,21 @@ function AssetView(props: { url?: any; name: string }) {
         hideBackdrop={false}
       >
         <DialogContent>
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              width: '100%',
-              height: '100%',
-              boxSizing: 'border-box',
-              // background: 'url(/assets/icons/logo_horiz.png)',
-              opacity: 0.1,
-              backgroundSize: '180px',
-              pointerEvents: 'none',
-            }}
-          ></div>
-          <embed
-            style={{ minWidth: '80vw', minHeight: '80vh' }}
-            src={props.url}
-          ></embed>
+          {blobURL && (
+            <embed
+              style={{ minWidth: '80vw', minHeight: '80vh' }}
+              src={blobURL}
+            ></embed>
+          )}
+          {!blobURL && (
+            <Stack spacing={3} alignItems="center">
+              <img
+                src="/assets/icons/logo_horiz.png"
+                style={{ width: '12rem' }}
+              />
+              <CircularProgress color="inherit" />
+            </Stack>
+          )}
         </DialogContent>
       </Dialog>
     </>
@@ -331,6 +434,7 @@ export class FileItemComp extends Component<
             <Box>
               <AssetOptions
                 value={config}
+                mime={mime}
                 onChange={(config: any) => this.props.updateItem({ config })}
               />
               {this.props.removeType === 'delete' ? (

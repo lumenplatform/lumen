@@ -35,7 +35,7 @@ export class Asset {
   @Property()
   name: string;
 
-  @Property({ default: 0 })
+  @Property({ default: 0, nullable: true })
   size: number;
 
   @Property({ nullable: true })

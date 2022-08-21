@@ -33,7 +33,7 @@ export default function Users() {
           <TableHead>
             <TableRow>
               <TableCell sx={{ pl: theme.spacing(3) }}>Course</TableCell>
-              <TableCell>Enrolled</TableCell>
+              {/* <TableCell>Enrolled</TableCell> */}
               <TableCell>Price</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Actions</TableCell>
@@ -46,7 +46,7 @@ export default function Users() {
                   <TableCell sx={{ pl: theme.spacing(3) }}>
                     <Typography variant="body2">{row.title}</Typography>
                   </TableCell>
-                  <TableCell>{row.price}</TableCell>
+                  {/* <TableCell>{row.price}</TableCell> */}
                   <TableCell>{row.price}$</TableCell>
                   <TableCell>{draftChip(row.status)}</TableCell>
                   <TableCell>

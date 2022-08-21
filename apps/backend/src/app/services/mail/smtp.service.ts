@@ -2,23 +2,7 @@ import ejs from 'ejs';
 import path = require('path');
 import nodemailer = require('nodemailer');
 
-const containsHTML = (str) => /<[a-z][\s\S]*>/i.test(str);
-
-type Body = {
-  htmlFile?: {
-    filePath: string;
-    data: object;
-  };
-  html?: {
-    body: string;
-  }; 
-  text?: {
-    body: string;
-  };
-};
-export interface MailService {
-  sendMail(recieverEmail: string, subject: string, bodyOptions: Body)
-}
+export const containsHTML = (str) => /<[a-z][\s\S]*>/i.test(str);
 
 export class SMTPMailService {
   private transporter;
@@ -49,12 +33,13 @@ export class SMTPMailService {
       body = bodyOptions.text.body;
     }
 
-    if (!body) throw new Error('No body found');
+    if (!body)
+      throw new Error('No body found');
 
     this.transporter.sendMail({
-      from: '"Your Name" <youremail@gmail.com>', // sender address
-      to: 'receiverone@gmail.com, receivertwo@outlook.com', // list of receivers
-      subject: 'Medium @edigleyssonsilva ✔', // Subject line
+      from: '"Your Name" <youremail@gmail.com>',
+      to: 'receiverone@gmail.com, receivertwo@outlook.com',
+      subject: 'Medium @edigleyssonsilva ✔',
       text: !containsHTML(body) ? body : undefined,
       html: containsHTML(body) ? body : undefined,
     });
