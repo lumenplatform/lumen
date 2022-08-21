@@ -63,16 +63,17 @@ export default function ContentView() {
               dangerouslySetInnerHTML={{ __html: topic.article }}
             />
           )}
+          <Stack direction="row" justifyContent='end'>
+            <Button
+              variant="outlined"
+              disabled={completionMutation.isLoading}
+              onClick={() => completionMutation.mutate()}
+            >
+              Mark as Completed
+            </Button>
+          </Stack>
         </Box>
-        <Stack direction='row'>
-          <Button
-            variant="outlined"
-            disabled={completionMutation.isLoading}
-            onClick={() => completionMutation.mutate()}
-          >
-            Mark as Completed
-          </Button>
-        </Stack>
+
         <Typography my={1} variant="body1" fontWeight={600}>
           Description / Notes
         </Typography>

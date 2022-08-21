@@ -113,10 +113,10 @@ export class CourseController {
   }
 
   async enrollSuccess(sessionId) {
-    const { user, course, price } = await this.payment.getPaymentDetails(
+    const { user, course, price, txnId } = await this.payment.getPaymentDetails(
       sessionId
     );
-    this.courseService.addEnrollment(user, course, price);
+    this.courseService.addEnrollment(txnId, user, course, price);
     //this.mail.sendMail()
     return `/student/${course.courseId}`;
   }

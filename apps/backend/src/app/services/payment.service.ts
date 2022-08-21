@@ -6,6 +6,7 @@ import { User } from '../models/user.model';
 const stripeSecretKey = process.env.STRIPE_SK;
 
 type PaymentBill = {
+  txnId: string;
   user: User;
   course: Course;
   price: any;
@@ -54,12 +55,12 @@ export class StripePaymentService {
   async getPaymentDetails(session_id) {
     const session = await this.stripe.checkout.sessions.retrieve(session_id);
     const em = RequestContext.getEntityManager();
-    console.log(session)
     const user = await em.findOneOrFail(User, { uid: session.metadata.user });
     const course = await em.findOneOrFail(Course, {
       courseId: session.metadata.course,
     });
     const paymentDetails: PaymentBill = {
+      txnId: session_id,
       user: user,
       course: course,
       price: course.price,

@@ -8,6 +8,7 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+import { v4 } from 'uuid';
 import { CourseMaterial } from './course-material.model';
 import { Course } from './course.model';
 import { Payment } from './payment.model';
@@ -23,7 +24,7 @@ export enum EnrollmentStatus {
 @Entity()
 export class Enrollment {
   @PrimaryKey()
-  enrollmentId: string;
+  enrollmentId: string = v4();
 
   @ManyToOne(() => User)
   user: User;
@@ -52,14 +53,12 @@ export class Enrollment {
   completedTopics = new Collection<CourseMaterial>(this);
 
   constructor(
-    enrollmentId,
     user,
     course,
     payment,
     enrollmentDate = new Date(),
     status = EnrollmentStatus.ACTIVE
   ) {
-    this.enrollmentId = enrollmentId;
     this.user = user;
     this.course = course;
     this.payment = payment;

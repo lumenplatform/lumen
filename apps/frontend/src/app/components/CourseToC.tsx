@@ -80,7 +80,7 @@ export default function CourseToC(props: {
   const itemLink = (item: any) => (
     <NavItem
       display="block"
-      href={`#${item.hash}`}
+      // href={`#${item.hash}`}
       underline="none"
       active={item.active}
     >

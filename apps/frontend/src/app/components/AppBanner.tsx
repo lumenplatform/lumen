@@ -1,7 +1,9 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import StudentHeader from './StudentHeader';
 
 export default function AppBanner({ link }: { link: string }) {
+  const navigate = useNavigate();
   return (
     <>
       <StudentHeader />
@@ -23,7 +25,7 @@ export default function AppBanner({ link }: { link: string }) {
         >
           Continue in App
         </Button>
-        <Button sx={{ my: 3 }} onClick={() => history.back()}>
+        <Button sx={{ my: 3 }} onClick={() => navigate('/student')}>
           Go Back
         </Button>
       </Stack>
