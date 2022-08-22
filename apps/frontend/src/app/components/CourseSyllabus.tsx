@@ -5,10 +5,26 @@ import Typography from '@mui/material/Typography';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ImportContactsOutlinedIcon from '@mui/icons-material/ImportContactsOutlined';
 import Divider from '@mui/material/Divider';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { Skeleton } from '@mui/material';
+import { getCourseById } from '../api';
+import React from 'react';
 
 export default function Syllabus() {
-    
+  const { courseId } = useParams();
+
+  const {
+    data: course_material,
+    isLoading,
+    isError,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
+  if (isError || isLoading) {
+    return <Skeleton></Skeleton>;
+  } 
   return (
+    
     <Container>
       <Typography variant="h6">What you will learn from this course</Typography>
 
@@ -20,8 +36,8 @@ export default function Syllabus() {
 
         <Stack sx={{ margin: '10% 0' }}>
 
-          <Typography variant='h6' sx={{mb:2}}>Virtualization</Typography>
-          <Typography variant='subtitle2' display="inline" > 1 hour to complete</Typography>
+          <Typography variant='h6' sx={{mb:2}}>{course_material.title}</Typography>
+          <Typography variant='subtitle2' display="inline" placeholder='Not Specified'> {course_material.time_estimate}</Typography>
           <Typography variant='subtitle2' display="inline"> 1 reading</Typography>
 
         </Stack>
@@ -63,5 +79,6 @@ export default function Syllabus() {
       
 
     </Container>
+    
   );
 }

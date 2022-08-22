@@ -22,7 +22,7 @@ import { getCourseById } from '../api';
 
 export default function EnrollHEader() {
   const theme = useTheme();
-  const [value, setValue] = React.useState('one');
+  const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -35,7 +35,7 @@ export default function EnrollHEader() {
   const { courseId } = useParams();
 
   const {
-    data: course,
+    data: course, 
     isLoading,
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
