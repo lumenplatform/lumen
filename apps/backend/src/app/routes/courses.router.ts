@@ -32,12 +32,19 @@ coursesRouter.get('/', async (req, res) => {
 // get enrolled courses
 coursesRouter.get('/enrolled');
 
-// get enrolled courses
+// course enrollment email
 coursesRouter.get('/upcoming-events');
 coursesRouter.get('/testemail', async (req, res, next) => {
   const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
   mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.COURSE_ENROLLMENT,data:{course}}).then(k=>res.json(k))
 });
+
+// platform invitation email
+coursesRouter.get('/testemail2', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.PLATFORM_INVITATION,data:{course}}).then(k=>res.json(k))
+});
+
 // get a specific courses
 // includes additional details like
 coursesRouter.get('/:id', (req, res, next) => {

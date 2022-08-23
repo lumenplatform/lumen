@@ -11,4 +11,13 @@ export const mailTemplates: MailTemplates = {
     subject: (r: any) => `Welcome to the ${r.course.title} Course  `,
     template: 'course-enrollment',
   },
+
+  PLATFORM_INVITATION: {
+    text: (r: any) => `Welcome to Lumén!
+    If you are looking for a secure online platform to launch your courses, join now!!! You can join as 
+    a course content creator or a student.
+      `,
+    subject: (r: any) => `Hello there, let's learn or earn with Lumén!`,
+    template: 'platform-invitation',
+  }
 };
