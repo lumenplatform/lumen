@@ -249,7 +249,7 @@ async function addWatermark(url: string, watermark: string) {
   return pdfDataURL;
 }
 
-function AssetView(props: { url?: any; name: string }) {
+function AssetView(props: { url?: any; name: string; path?: string }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [blobURL, setBlobURL] = useState<string>(null!);
@@ -259,7 +259,7 @@ function AssetView(props: { url?: any; name: string }) {
     if (['pdf'].includes(ext.toLowerCase())) {
       setOpen(true);
     } else {
-      window.open(props.url, '_blank')?.focus();
+      window.open(props.path, '_blank')?.focus();
     }
   };
 
@@ -268,7 +268,7 @@ function AssetView(props: { url?: any; name: string }) {
     if (['pdf'].includes(ext.toLowerCase())) {
       const processedBlob = async () => {
         const data = await addWatermark(
-          props.url,
+          props.path!,
           `${user?.email}\n${new Date().toLocaleString()}`
         );
         setBlobURL(() => data);
@@ -390,7 +390,7 @@ export class FileItemComp extends Component<
   override render() {
     const { progress } = this.state;
     const {
-      fileItem: { uploading, size, name, url, mime, config },
+      fileItem: { uploading, size, name, url, mime, config, path },
       handleRemove,
       fileActions,
     } = this.props;
@@ -466,7 +466,7 @@ export class FileItemComp extends Component<
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary={<AssetView name={name} url={url} />}
+          primary={<AssetView name={name} path={path} />}
           secondary={uploading ? <UploadIndicator /> : <FileInfo />}
         />
       </SwitchedListItem>
@@ -479,6 +479,7 @@ type FileItem = {
   name: string;
   file: File;
   url?: string;
+  path?: string;
   mime: string;
   size: number;
   config: any;

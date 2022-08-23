@@ -1,6 +1,7 @@
 import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { AMSService, StreamingURL } from '../services/drm/ams.service';
+import { StorageService } from '../services/storage.service';
 export enum AssetType {
   FILE = 'FILE',
   IMAGE = 'IMAGE',
@@ -49,6 +50,7 @@ export class Asset {
 
   @Property({ persist: false })
   get path() {
+    // generate a token for the drm server
     if (this.streamingURLs) {
       return {
         src: this.streamingURLs[0].url,
@@ -62,6 +64,8 @@ export class Asset {
         ],
       };
     }
-    return this.url;
+
+    // generate a signed url allowing access for 1hr
+    return StorageService.generateSignedURL(this.url);
   }
 }

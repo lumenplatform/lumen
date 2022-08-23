@@ -103,7 +103,7 @@ export const linerAlgebra: DeepPartial<Course> = {
               id: '1b326fb6-7b99-4df6-afc1-6a9ea5d1d671',
               asset: {
                 id: '1b326fb6-7b99-4df6-afc1-6a9ea5d1d671',
-                url: 'https://lumenlmsstorage.blob.core.windows.net/test/Problem%20Set%201.pdf?sv=2021-08-06&se=2022-08-14T16%3A14%3A52Z&sr=c&sp=rcw&sig=rZNQdOwOAggEYRExlOCRwBmw0HSbkU%2F7vZ2FDxP0qD8%3D',
+                url: 'https://lumenlmsstorage.blob.core.windows.net/test/Problem%20Set%201.pdf?sv=2021-08-06&se=2022-08-23T01%3A35%3A05Z&sr=c&sp=rcw&sig=uaoZYnbiTtXAPMC8gcgKbNpyOwB%2FmcXGo%2FffAJTVDqw%3D',
                 type: AssetType.FILE,
                 status: AssetStatus.ACTIVE,
                 mime: 'application/pdf',
