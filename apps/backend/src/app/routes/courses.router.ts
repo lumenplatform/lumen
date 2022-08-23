@@ -5,6 +5,7 @@ import { CourseController } from '../controllers/course.controller';
 import { validate } from '../middleware/validation';
 import { Course } from '../models/course.model';
 import { CourseService } from '../services/course.service';
+import { EmailTemplate } from '../services/mail/email-types';
 import { MailJetService } from '../services/mail/mailjet.service';
 import { StripePaymentService } from '../services/payment.service';
 import { quizRouter } from './../routes/quiz.router';
@@ -33,7 +34,10 @@ coursesRouter.get('/enrolled');
 
 // get enrolled courses
 coursesRouter.get('/upcoming-events');
-
+coursesRouter.get('/testemail', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.COURSE_ENROLLMENT,data:{course}}).then(k=>res.json(k))
+});
 // get a specific courses
 // includes additional details like
 coursesRouter.get('/:id', (req, res, next) => {
@@ -94,3 +98,4 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
 });
 
 coursesRouter.use('/:id/quiz', quizRouter);
+
