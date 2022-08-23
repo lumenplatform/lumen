@@ -25,10 +25,19 @@ export default function Billing() {
       <Typography my={1} variant="subtitle2">
         Summery
       </Typography>
-      <Typography>Account Balance : <b>$62.00</b></Typography>
-      <Box>
-        Plan : <b>Basic</b> <Button size="small">Change</Button>
-      </Box>
+
+      <Stack direction={'row'} justifyContent='space-between' alignItems='center'>
+        <Box>
+          <Typography>
+            Account Balance : <b>$62.00</b>
+          </Typography>
+          <Box>
+            Plan : <b>Basic</b> <Button size="small">Change</Button>
+          </Box>
+        </Box>
+        <Button variant='contained' disableElevation>Withdraw</Button>
+      </Stack>
+
       <Typography mt={1} mb={0} variant="subtitle2">
         Transactions
       </Typography>
