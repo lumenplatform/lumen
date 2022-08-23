@@ -19,5 +19,5 @@ export const mailTemplates: MailTemplates = {
       `,
     subject: (r: any) => `Hello there, let's learn or earn with Lumén!`,
     template: 'platform-invitation',
-  }
+  },
 };
