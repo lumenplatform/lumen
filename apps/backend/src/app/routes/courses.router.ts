@@ -5,6 +5,7 @@ import { CourseController } from '../controllers/course.controller';
 import { validate } from '../middleware/validation';
 import { Course } from '../models/course.model';
 import { CourseService } from '../services/course.service';
+import { EmailTemplate } from '../services/mail/email-types';
 import { MailJetService } from '../services/mail/mailjet.service';
 import { StripePaymentService } from '../services/payment.service';
 import { quizRouter } from './../routes/quiz.router';
@@ -30,6 +31,16 @@ coursesRouter.get('/', async (req, res) => {
 
 // get enrolled courses
 coursesRouter.get('/enrolled');
+coursesRouter.get('/testemail4', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('sumuduwathsala80@gmail.com',{template:EmailTemplate.COURSE_COMPLETION,data:{course}}).then(k=>res.json(k))
+});
+
+//Email 
+coursesRouter.get('/testmail3', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('sumuduwathsala80@gmail.com',{template:EmailTemplate.COURSE_INVITATION,data:{course}}).then(k=>res.json(k))
+});
 
 // get enrolled courses
 coursesRouter.get('/upcoming-events');
@@ -44,6 +55,7 @@ coursesRouter.get('/:id', (req, res, next) => {
     })
     .catch(next);
 });
+
 
 coursesRouter.get('/:id/reviews');
 
@@ -92,5 +104,6 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
     })
     .catch(next);
 });
+
 
 coursesRouter.use('/:id/quiz', quizRouter);
