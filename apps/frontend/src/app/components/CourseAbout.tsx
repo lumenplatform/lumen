@@ -42,14 +42,15 @@ export default function CourseAbout() {
           {/* <Stack direction="row" spacing={1}> */}
           <Grid container spacing={1}>
             <Grid item>
-              <Chip label="Operating Systems" />
+              {/* <Chip label="Operating Systems" /> */}
+              {course.description}   
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Chip label="Computer Architecture" />
             </Grid>
             <Grid item>
               <Chip label="Memory Management" />
-            </Grid>
+            </Grid> */}
             {/* </Stack> */}
           </Grid>
         </Box>
