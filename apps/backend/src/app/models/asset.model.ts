@@ -64,8 +64,12 @@ export class Asset {
         ],
       };
     }
-
-    // generate a signed url allowing access for 1hr
-    return StorageService.generateSignedURL(this.url);
+    try {
+      // generate a signed url allowing access for 1hr
+      return StorageService.generateSignedURL(this.url);
+    } catch (e) {
+      // if an error occurs during generation (eg:invalid url) just return the url
+      return this.url;
+    }
   }
 }

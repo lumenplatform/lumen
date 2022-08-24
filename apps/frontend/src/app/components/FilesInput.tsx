@@ -169,7 +169,7 @@ function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
                 </RadioGroup>
               </td>
             </tr>
-            <tr style={{ opacity: isVideo ? 1 : '.3' }}>
+            {/* <tr style={{ opacity: isVideo ? 1 : '.3' }}>
               <td>
                 Verified Media Path <br /> <small>video</small>
               </td>
@@ -192,7 +192,7 @@ function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
                   />
                 </RadioGroup>
               </td>
-            </tr>
+            </tr> */}
           </table>
 
           {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}

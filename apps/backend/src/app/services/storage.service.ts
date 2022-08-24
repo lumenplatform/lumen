@@ -44,7 +44,7 @@ export class StorageService {
       AZURE_STORAGE_ACCOUNT_NAME,
       AZURE_STORAGE_ACCOUNT_KEY
     );
-
+    // TODO: make this 1hr
     expiresOn.setDate(expiresOn.getDate() + 2);
     const u = new URL(url);
     const parts = u.pathname.substring(1).split('/');
