@@ -1,5 +1,8 @@
 export enum EmailTemplate {
   COURSE_ENROLLMENT = 'COURSE_ENROLLMENT',
+  COURSE_INVITATION = 'COURSE_INVITATION',
+  COURSE_COMPLETION = 'COURSE_COMPLETION',
+  
 }
 
 export type MailTemplates = Record<

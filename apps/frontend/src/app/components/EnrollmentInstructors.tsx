@@ -12,13 +12,13 @@ export default function Instructors() {
   const { courseId } = useParams();
 
   const {
-    data: course,
+    data: course_instructors,
     isLoading,
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
   if (isError || isLoading) {
-    return <Skeleton></Skeleton>;
+    return <Typography variant="subtitle1">No instructors</Typography>;
   }
   return (
     <Container>
@@ -35,7 +35,7 @@ export default function Instructors() {
         />
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            {course.instructors.name} {course.instructors.last_name}
+          {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
           <Typography variant="subtitle1">1250 learners</Typography>
           <Typography variant="subtitle1">12 courses</Typography>
@@ -55,7 +55,7 @@ export default function Instructors() {
         />
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            {course.instructors.first_name} {course.instructors.last_name}
+            {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
           <Typography variant="subtitle1">1340 learners</Typography>
           <Typography variant="subtitle1">10 courses</Typography>
