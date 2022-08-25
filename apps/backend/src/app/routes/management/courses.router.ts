@@ -1,13 +1,25 @@
 import { RequestContext } from '@mikro-orm/core';
 import { assert } from 'console';
 import * as express from 'express';
+import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
 import { Course } from '../../models/course.model';
 import { Organization } from '../../models/organization.model';
+import { CourseService } from '../../services/course.service';
+import { MailJetService } from '../../services/mail/mailjet.service';
+import { StripePaymentService } from '../../services/payment.service';
 import { createResponse } from '../../utils/response-mapper';
 import { quizRouter } from './quiz.router';
 
 export const coursesRouter = express.Router();
+const stripePaymentService = new StripePaymentService();
+const mailService = new MailJetService();
+const courseService = new CourseService();
+const courseController = new CourseController(
+  stripePaymentService,
+  mailService,
+  courseService
+);
 
 // list courses
 coursesRouter.get('/', (req, res, next) => {
@@ -98,6 +110,14 @@ coursesRouter.put('/:id', async (req, res, next) => {
       res.json(createResponse(course, 201, 'Successfully updated the course'));
     })
     .catch(next);
+});
+
+coursesRouter.get('/:id/quizzes', (req, res, next) => {
+  courseController
+  .getQuizzesByCourseId(req.params.id)
+  .then((r) => {
+    res.json(createResponse(r));
+  }).catch(next);
 });
 
 coursesRouter.use('/:id/quiz', quizRouter);

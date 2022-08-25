@@ -82,10 +82,12 @@ export default function () {
           <Route path="billing" element={<Billing />}></Route>
           <Route path="customize" element={<Customizations />}></Route>
           <Route path="courses/:courseId">
-            <Route path="new-exam" element={<ExamPage />} />
-            <Route path="exam/:examId" element={<ExamPage />} />
             <Route index element={<ManageCourse />} />
           </Route>
+        </Route>
+        <Route path="/manage/courses/:courseId">
+            <Route path="new-exam" element={<ExamPage />} />
+            <Route path="exam/:examId" element={<ExamPage />} />
         </Route>
         <Route path="/manage">
           <Route path="new-course" element={<CourseCreate />}></Route>

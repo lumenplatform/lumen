@@ -1,5 +1,6 @@
 import { RequestContext, wrap } from '@mikro-orm/core';
 import { Attempt } from '../models/attempt.model';
+import { Course } from '../models/course.model';
 import { Quiz } from '../models/quiz.model';
 import { AttemptService } from '../services/attempt.service';
 
