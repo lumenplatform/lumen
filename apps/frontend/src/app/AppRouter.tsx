@@ -23,7 +23,10 @@ import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
 import Notification from './pages/Notification/AllNotification';
-import Quizpage from './pages/student/QuizPage';
+import QuizPage from './pages/student/quiz/QuizPage';
+import AttemptQuizPage from './pages/student/quiz/QuizAttemptPage';
+import QuizResultPage from './pages/student/quiz/QuizResultPage';
+import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -55,7 +58,11 @@ export default function () {
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
-          <Route path=":courseId/quiz/:quizId" element={<Quizpage/>}></Route>
+          <Route path=":courseId/quiz/" element={<QuizTemplatePage />} >
+            <Route path=":quizId" element={<AttemptQuizPage />} />
+            <Route path=":quizId/attempt/:attemptId" element={<QuizPage />} />
+            <Route path=":quizId/attempt/:attemptId/results" element={<QuizResultPage />} />
+          </Route>
         </Route>
       </Route>
 
@@ -68,7 +75,7 @@ export default function () {
           <Route path="billing" element={<Billing />}></Route>
           <Route path="customize" element={<Customizations />}></Route>
           <Route path="courses/:courseId">
-            <Route path="exam/newexam" element={<ExamPage />} />
+            <Route path="new-exam" element={<ExamPage />} />
             <Route path="exam/:examId" element={<ExamPage />} />
             <Route index element={<ManageCourse />} />
           </Route>

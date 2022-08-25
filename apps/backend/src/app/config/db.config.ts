@@ -12,6 +12,7 @@ import { Notification } from '../models/notification.model';
 import { Question } from '../models/question.model';
 import { Quiz } from '../models/quiz.model';
 import { Answer } from '../models/answer.model';
+import { Attempt } from '../models/attempt.model';
 
 import path = require('path');
 import { UserInvite } from '../models/user-invite.model';
@@ -35,6 +36,7 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     Question,
     Quiz,
     Answer,
+    Attempt,
   ],
   type: 'postgresql',
   clientUrl: process.env.PG_CONNECTION_STRING,

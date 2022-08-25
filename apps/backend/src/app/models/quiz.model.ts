@@ -16,6 +16,9 @@ import { Question } from './question.model';
 @Embeddable()
 export class QuizDuration {
   @Property()
+  unlimited: boolean;
+
+  @Property()
   durationMinutes: number;
 
   @Property()
@@ -72,7 +75,10 @@ export class Quiz {
   @ManyToOne(() => Course)
   course: Course;
 
-  @OneToMany(() => Question, (question) => question.exam)
+  @OneToMany(() => Question, (question) => question.exam, {
+    orderBy: { order: 1 },
+    orphanRemoval: true,
+  })
   questions = new Collection<Question>(this);
 
   @Property()

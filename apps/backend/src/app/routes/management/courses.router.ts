@@ -5,6 +5,7 @@ import { Asset } from '../../models/asset.model';
 import { Course } from '../../models/course.model';
 import { Organization } from '../../models/organization.model';
 import { createResponse } from '../../utils/response-mapper';
+import { quizRouter } from './quiz.router';
 
 export const coursesRouter = express.Router();
 
@@ -98,3 +99,5 @@ coursesRouter.put('/:id', async (req, res, next) => {
     })
     .catch(next);
 });
+
+coursesRouter.use('/:id/quiz', quizRouter);

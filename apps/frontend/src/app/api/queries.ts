@@ -92,20 +92,37 @@ export function getPendingOrgInvitations() {
 // END MANAGEMENT
 
 export function createNewQuiz(data: any) {
-  return client.post(`/courses/${data.form.course}/quiz/`, data.form).then((r) => r.data.data);
+  return client.post(`/manage/courses/${data.form.course}/quiz/`, data.form).then((r) => r.data.data);
 }
 
 export function updateQuiz( data: any) {
-  return client.put(`/courses/${data.course}/quiz/${data.examId}`, data.form).then((r) => r.data.data);
-}
-export function getCourseById(id: string) {
-  return client.get<any>(`/courses/${id}`).then((r) => r.data.data);
+  return client.put(`/manage/courses/${data.course}/quiz/${data.examId}`, data.form).then((r) => r.data.data);
 }
 
-export function getQuizById(courseId: string, examId: string) {
-  return client.get<any>(`/courses/${courseId}/quiz/${examId}`).then((r) => r.data.data);
+export function getQuizById(courseId: string, quizId: string) {
+  return client.get<any>(`/manage/courses/${courseId}/quiz/${quizId}`).then((r) => r.data.data);
 }
 
-export function submitQuiz( data: any) {
-  return client.post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data).then((r) => r.data.data);
+export function getQuizDetails(courseId: string, quizId: string) {
+  return client.get<any>(`/courses/${courseId}/quiz/${quizId}`).then((r) => r.data.data);
+}
+
+export function getAttemptById(courseId: string, quizId: string, attemptId: string) {
+  return client.get<any>(`/courses/${courseId}/quiz/${quizId}/attempt/${attemptId}`).then((r) => r.data.data);
+}
+
+export function createNewAttempt(data: any) {
+  return client.post(`/courses/${data.courseId}/quiz/${data.quizId}/attempt/create`, data.form).then((r) => r.data.data);
+}
+
+export function updateAttempt( data: any) {
+  return client.post(`/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/update`, data.submissions).then((r) => r.data.data);
+}
+
+export function completeAttempt( data: any) {
+  return client.post(`/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/complete`, data.submissions).then((r) => r.data.data);
+}
+
+export function getResults(courseId: string, quizId: string ,attemptId:string) {
+  return client.get<any>(`/courses/${courseId}/quiz/${quizId}/attempt/${attemptId}/results`).then((r) => r.data.data);
 }
