@@ -26,10 +26,10 @@ export default function CourseSettings() {
       <Box>
         <RadioGroup row={true} {...register('settings.isPrivate')}>
           <FormControlLabel
-            control={<Radio value={'0'} defaultChecked />}
+            control={<Radio value={false} defaultChecked />}
             label="Public"
           />
-          <FormControlLabel control={<Radio />} value={'1'} label="Private" />
+          <FormControlLabel control={<Radio />} value={true} label="Private" />
         </RadioGroup>
       </Box>
 
@@ -60,7 +60,7 @@ export default function CourseSettings() {
         </FormControl>
         <TextField
           label="Amount"
-          variant="standard"
+          variant="standard" value={10}
           InputProps={{
             startAdornment: <InputAdornment position="start">$</InputAdornment>,
           }}

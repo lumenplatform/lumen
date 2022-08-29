@@ -1,3 +1,4 @@
+import { Grade } from '@mui/icons-material';
 import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
@@ -35,23 +36,24 @@ const sideBarItems = [
     icon: <CollectionsBookmarkOutlinedIcon />,
   },
   {
+    path: 'grades',
+    label: 'Grades',
+    icon: <Grade />,
+  },
+  {
     path: 'info',
     label: 'Course Info',
     icon: <InfoOutlinedIcon />,
   },
-  {
-    path: 'grades',
-    label: 'Grades',
-  },
-  {
-    path: 'SubmissionStatus',
-    label: 'Submission Status',
-  },
-  {
-    path: 'AssignmentSettings',
-    label: 'Assignment Settings',
-  },
-
+  // {
+  //   path: 'SubmissionStatus',
+  //   label: 'Submission Status',
+  //   icon: <InfoOutlinedIcon />,
+  // },
+  // {
+  //   path: 'AssignmentSettings',
+  //   label: 'Assignment Settings',
+  // },
 ];
 
 export function CourseNav() {

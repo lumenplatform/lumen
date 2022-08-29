@@ -7,16 +7,15 @@ import {
   TextField,
   Toolbar,
   Typography,
-  useTheme
+  useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
 
 export function Header() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const HeaderLink = ({ text, link }: { text: string; link: string; }) => (
+  const HeaderLink = ({ text, link }: { text: string; link: string }) => (
     <MuiLink
       sx={{
         color: 'black',
@@ -39,7 +38,9 @@ export function Header() {
       <Toolbar sx={{ my: 2 }}>
         <img
           src="/assets/icons/logo_avatar.png"
-          style={{ height: '48px', marginRight: '1rem' }} />
+          style={{ height: '48px', marginRight: '1rem' }}
+          alt=""
+        />
         <Typography fontWeight={700} fontSize="1.5rem">
           Lum<span style={{ color: theme.palette.primary.main }}>ė</span>n
         </Typography>
@@ -53,7 +54,8 @@ export function Header() {
               </InputAdornment>
             ),
           }}
-          sx={{ ml: 2 }} />
+          sx={{ ml: 2 }}
+        />
         {/* <Button sx={{ mr: 2 }} onClick={() => navigate('/manage')}>
               Teach
             </Button>  */}
@@ -62,12 +64,15 @@ export function Header() {
         <HeaderLink text="Courses" link="/courses" />
         <HeaderLink text="For Instructors" link="/teaching" />
         <HeaderLink text="About" link="/courses" />
+        <Button sx={{ mr: 2 }} onClick={() => navigate('/student')}>
+          Login
+        </Button>
         <Button
           variant="contained"
           disableElevation
           onClick={() => navigate('/student')}
         >
-          Start Learning
+          Sign Up
         </Button>
       </Toolbar>
     </Box>

@@ -15,7 +15,6 @@ export const aircraftSystems: DeepPartial<Course> = {
   subjectArea: 'Engineering',
   duration: 0,
   price: 18,
-  settings: { isDesktopOnly: true },
 
   courseImage: {
     type: AssetType.IMAGE,

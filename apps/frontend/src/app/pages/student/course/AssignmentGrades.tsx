@@ -13,18 +13,17 @@ import TablePagination from '@mui/material/TablePagination';
 function createData(
   Grade_item: string,
   grade: number,
-  range: number,
-  Precentage: number,
+  range: string,
+  Precentage: string,
   contribution_to_course_total: number
 ) {
   return { Grade_item, grade, range, Precentage, contribution_to_course_total };
 }
 
 const rows = [
-  createData('Activity 1', 159, 50, 24, 4.0),
-  createData('Activity 2', 237, 70, 37, 4.3),
-  createData('Activity 3', 262, 16, 24, 6.0),
-  
+  createData('Activity 1', 88, '0-100', '24%', 4.0),
+  createData('End Section Quiz', 157, '0-200', '78.5%', 4.3),
+  createData('Activity 2', 4, '0-10', '40%', 6.0),
 ];
 
 export default function Users() {
@@ -41,11 +40,10 @@ export default function Users() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell  align="center">Grade item</TableCell>
+              <TableCell  align="center">Activity / Quiz</TableCell>
               <TableCell align="center">Grade</TableCell>
-              <TableCell align="center">range</TableCell>
-              <TableCell align="center">preccentage</TableCell>
-             
+              <TableCell align="center">Graded Range</TableCell>
+              <TableCell align="center">Percentage</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -53,14 +51,13 @@ export default function Users() {
             {rows.map((row) => (
               <TableRow key={row.Grade_item}>
                 <TableCell align="center">
-                <Typography variant="body2" >Ativity 1</Typography>
+                <Typography variant="body2" >{row.Grade_item}</Typography>
                 </TableCell>
-                <TableCell align="center">10</TableCell>
-                <TableCell align="center">0-40</TableCell>
+                <TableCell align="center">{row.grade}</TableCell>
+                <TableCell align="center">{row.range}</TableCell>
                 <TableCell align="center">
-                 50%
+                {row.Precentage}
                 </TableCell>
-                
               </TableRow>
             ))}
             <TableRow>
