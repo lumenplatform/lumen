@@ -64,6 +64,7 @@ export default function CourseReviews(props: any) {
           1 Stars <Slider disabled defaultValue={3} aria-label="Default" valueLabelDisplay="auto" /> 3%
         </Box>
       </Box>
+      <LinearProgress variant="determinate" value={23} />
       
  
     
