@@ -45,6 +45,12 @@ coursesRouter.get('/testemail2', async (req, res, next) => {
   mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.PLATFORM_INVITATION,data:{course}}).then(k=>res.json(k))
 });
 
+//course completion 
+coursesRouter.get('/testemail3', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.COURSE_COMPLETION,data:{course}}).then(k=>res.json(k))
+});
+
 // get a specific courses
 // includes additional details like
 coursesRouter.get('/:id', (req, res, next) => {
