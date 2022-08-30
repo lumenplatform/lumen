@@ -84,6 +84,9 @@ export class Quiz {
   @Property()
   createdAt: Date = new Date();
 
+  @Property({ default: 0 })
+  noOfAttempts: number;
+
   @Embedded(() => QuizSettings)
   settings: QuizSettings;
 }
