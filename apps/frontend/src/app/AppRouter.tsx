@@ -3,13 +3,13 @@ import { RequireAuth, RequireDesktop, UserRole } from './components/Auth';
 import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
-import CourseCreate from './pages/management/course/CourseCreate';
-import ManageCourse from './pages/management/course/ManageCourse';
+import CourseCreate from './pages/management/Course/CourseCreate';
+import ManageCourse from './pages/management/Course/ManageCourse';
 import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
 import ExamPage from './pages/management/exam/ExamPage';
-import Users from './pages/management/Users';
+import Users from './pages/management/Users'; 
 import NotFound from './pages/NotFound';
 import ForInstructors from './pages/public/ForInstructors';
 import HomePage from './pages/public/HomePage';
@@ -28,6 +28,7 @@ import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
 import Notification from './pages/Notification/AllNotification';
 import Quizpage from './pages/student/QuizPage';
+import QuizMarking from './pages/management/exam/Marking'
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -77,6 +78,7 @@ export default function () {
           <Route path="courses/:courseId">
             <Route path="exam/newexam" element={<ExamPage />} />
             <Route path="exam/:examId" element={<ExamPage />} />
+            <Route path="exam/:examId/marking" element={<QuizMarking/>} />
             <Route index element={<ManageCourse />} />
           </Route>
         </Route>
