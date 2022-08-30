@@ -9,28 +9,40 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export function Header() {
   const navigate = useNavigate();
   const theme = useTheme();
 
   const HeaderLink = ({ text, link }: { text: string; link: string }) => (
-    <MuiLink
-      sx={{
-        color: 'black',
-        mr: 3,
-        cursor: 'pointer',
-        fontWeight: 600,
-        '&:hover': {
-          color: theme.palette.primary.main,
-        },
-      }}
-      onClick={() => navigate(link)}
-      underline="none"
+    <NavLink
+      to={link}
+      style={({ isActive }) => ({
+        textDecoration: 'none',
+      })}
     >
-      {text}
-    </MuiLink>
+      {({ isActive }) => (
+        <MuiLink
+          sx={{
+            color: 'black',
+            mr: 3,
+            cursor: 'pointer',
+            textDecoration: isActive ? 'underline' : 'none',
+            textDecorationColor: (t) => theme.palette.primary.main,
+            textDecorationThickness: '3px',
+            fontWeight: isActive ? 600 : 400,
+            '&:hover': {
+              color: theme.palette.primary.main,
+            },
+          }}
+          // style={({ isActive }: any) => ({ color: 'red' })}
+          underline="none"
+        >
+          {text}
+        </MuiLink>
+      )}
+    </NavLink>
   );
 
   return (
@@ -44,6 +56,9 @@ export function Header() {
         <Typography fontWeight={700} fontSize="1.5rem">
           Lum<span style={{ color: theme.palette.primary.main }}>ė</span>n
         </Typography>
+        <Button sx={{ ml: 2 }} variant="outlined" disableElevation>
+          Courses
+        </Button>
         <TextField
           size="small"
           placeholder="Search"
@@ -54,7 +69,6 @@ export function Header() {
               </InputAdornment>
             ),
           }}
-          sx={{ ml: 2 }}
         />
         {/* <Button sx={{ mr: 2 }} onClick={() => navigate('/manage')}>
               Teach
@@ -64,7 +78,11 @@ export function Header() {
         <HeaderLink text="Courses" link="/courses" />
         <HeaderLink text="For Instructors" link="/teaching" />
         <HeaderLink text="About" link="/courses" />
-        <Button sx={{ mr: 2 }} onClick={() => navigate('/student')}>
+        <Button
+          sx={{ mr: 2 }}
+          variant="outlined"
+          onClick={() => navigate('/student')}
+        >
           Login
         </Button>
         <Button

@@ -11,8 +11,10 @@ import Dashboard from './pages/management/Dashboard';
 import ExamPage from './pages/management/exam/ExamPage';
 import Users from './pages/management/Users';
 import NotFound from './pages/NotFound';
+import Notification from './pages/Notification/AllNotification';
 import ForInstructors from './pages/public/ForInstructors';
 import HomePage from './pages/public/HomePage';
+import SearchPage from './pages/public/SearchPage';
 import ContentView from './pages/student/course-viewer/ContentView';
 import CourseViewer from './pages/student/course-viewer/CourseViewer';
 import AssignmentGrades from './pages/student/course/AssignmentGrades';
@@ -23,11 +25,9 @@ import CourseResources from './pages/student/course/CourseResources';
 import FileUpload from './pages/student/course/FileUpload';
 import SubmissionStatus from './pages/student/course/SubmissionStatus';
 import CoursePage from './pages/student/CoursePage';
-import SearchPage from './pages/student/SearchPage';
+import Quizpage from './pages/student/QuizPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
-import Notification from './pages/Notification/AllNotification';
-import Quizpage from './pages/student/QuizPage';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -62,7 +62,7 @@ export default function () {
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
-          <Route path=":courseId/quiz/:quizId" element={<Quizpage/>}></Route>
+          <Route path=":courseId/quiz/:quizId" element={<Quizpage />}></Route>
         </Route>
       </Route>
 
