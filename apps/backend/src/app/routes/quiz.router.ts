@@ -1,43 +1,62 @@
 import * as express from 'express';
 import { QuizController } from '../controllers/quiz.controller';
 import { createResponse } from './../utils/response-mapper';
-
+import { AttemptService } from '../services/attempt.service';
 
 export const quizRouter = express.Router();
-const quizController = new QuizController();
 
-
-quizRouter.post('/', (req, res, next) => {
-  quizController
-    .createNewQuiz(req.body)
-    .then((result) => {
-      res.json(createResponse(result));
-    })
-    .catch(next);
-});
+const attemptService = new AttemptService();
+const quizController = new QuizController(attemptService);
 
 quizRouter.get('/:id', (req, res, next) => {
   quizController
-    .getQuizByID(req.params.id, req.user)
+    .getQuizById(req.params.id, req.user)
     .then((result) => {
       res.json(createResponse(result));
     })
     .catch(next);
 });
 
-quizRouter.put('/:id', (req, res, next) => {
+quizRouter.post('/:id/attempt/create', (req, res, next) => {
   quizController
-    .updateQuiz(req.params.id, req.body, req.user)
+    .createAttempt(req.params.id, req.user)
     .then((result) => {
       res.json(createResponse(result));
     })
     .catch(next);
 });
 
-quizRouter.post('/:id/submit', (req, res, next) => {
+quizRouter.get('/:id/attempt/:attemptId', (req, res, next) => {
   quizController
-    .submitQuiz(req.params.id, req.body, req.user)
+    .getAttemptById(req.params.attemptId)
     .then((result) => {
-      res.redirect(301,result);
+      res.json(createResponse(result));
     })
+    .catch(next);
+});
+
+quizRouter.post('/:id/attempt/:attemptId/update', (req, res, next) => {
+  quizController
+    .updateAttempt(req.params.attemptId, req.body)
+    .then((result) => {
+      res.json(createResponse(result));
+    }).catch(next);
+  });
+  
+quizRouter.post('/:id/attempt/:attemptId/complete', (req, res, next) => {
+  quizController
+    .completeAttempt(req.params.id, req.params.attemptId, req.body)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});
+
+quizRouter.get('/:id/attempt/:attemptId/results', (req, res, next) => {
+  quizController
+    .getResults(req.params.attemptId)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
 });

@@ -1,29 +1,33 @@
 import {
-    Button,
-    Grid,
-    List,
-    ListItem,
-    TextField,
-    Typography,
-  } from '@mui/material';
-  import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-  import { useState } from 'react';
-  import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-  import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-  import { useQuery } from 'react-query';
-  import { useNavigate } from 'react-router-dom';
-  import { search } from '../api';
+  Button,
+  Grid,
+  List,
+  ListItem,
+  Skeleton,
+  Typography,
+  Container,
+} from '@mui/material';
+import { useQuery } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getQuizDetails } from '../api';
+
   
   export default function CoursePage(props: any) {
     const navigate = useNavigate();
-    const { data } = useQuery('courses', () => search({}));
-    return (
-      <div>
+    const { quizId, courseId } = useParams();
+    const { data : details, isLoading,isError } = useQuery('quiz', () => getQuizDetails(courseId!, quizId!));
 
+    if(isLoading || isError) {
+        return <Skeleton />
+    }
+
+    return (
+      <Container>
       <Grid container spacing={2} sx={{ px: 3 }}>
         <Grid item xs={12} >
           <Typography variant="h5" lineHeight={2}>Assignment 1 </Typography>
           <Typography variant="body1" lineHeight={1}>
+            
             <List>
               <ListItem>This quiz contains 20 multiple choice questions and 1 structured essay question from Lessons 1,2 and 3</ListItem>   
               <ListItem>The quiz will open exactly at 8.30 AM  and close at 9.20 A.M. The duration of the quiz will be 35 minutes.</ListItem>
@@ -54,24 +58,6 @@ import {
         mt: '30px'
         }}> <Button variant="contained" sx={{display: 'flex', justifyContent: 'center'}}>Start the Quiz</Button></Grid>
       
-    </div>
+    </Container>
     );
   }
-  
-  export function DatePickerDemo() {
-    const [value, setValue] = useState<Date | null>(new Date());
-  
-    return (
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <StaticDatePicker
-          displayStaticWrapperAs="desktop"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-    );
-  }
-  

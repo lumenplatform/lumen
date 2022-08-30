@@ -4,6 +4,7 @@ import { Course } from '../models/course.model';
 import { Enrollment } from '../models/enrollment.model';
 import { CourseReview } from '../models/review.mode';
 import { User } from '../models/user.model';
+import { Quiz } from '../models/quiz.model';
 import { CourseService } from '../services/course.service';
 import { MailService } from '../services/mail/email-types';
 import { PaymentService } from '../services/payment.service';
@@ -119,5 +120,12 @@ export class CourseController {
     this.courseService.addEnrollment(user, course, price);
     //this.mail.sendMail()
     return `/student/${course.courseId}`;
+  }
+
+  async getQuizzesByCourseId(id: string) {
+    const em = RequestContext.getEntityManager();
+    const course = await em.findOneOrFail(Course,{courseId: id});
+    const quizzes = await em.find(Quiz, { course: course });
+    return quizzes;
   }
 }
