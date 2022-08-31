@@ -42,8 +42,24 @@ coursesRouter.get('/testmail3', async (req, res, next) => {
   mailService.sendMail('sumuduwathsala80@gmail.com',{template:EmailTemplate.COURSE_INVITATION,data:{course}}).then(k=>res.json(k))
 });
 
-// get enrolled courses
+// course enrollment email
 coursesRouter.get('/upcoming-events');
+coursesRouter.get('/testemail', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.COURSE_ENROLLMENT,data:{course}}).then(k=>res.json(k))
+});
+
+// platform invitation email
+coursesRouter.get('/testemail2', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.PLATFORM_INVITATION,data:{course}}).then(k=>res.json(k))
+});
+
+//course completion 
+coursesRouter.get('/testemail3', async (req, res, next) => {
+  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
+  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.COURSE_COMPLETION,data:{course}}).then(k=>res.json(k))
+});
 
 // get a specific courses
 // includes additional details like
@@ -107,3 +123,4 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
 
 
 coursesRouter.use('/:id/quiz', quizRouter);
+

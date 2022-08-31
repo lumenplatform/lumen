@@ -38,7 +38,7 @@ export default function CourseCreate() {
   const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
     getOrgCoursesById(courseId ?? '')
   );
-
+  
   // Active Tab
   const [value, setValue] = useState(0);
 
