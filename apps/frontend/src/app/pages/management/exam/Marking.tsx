@@ -1,12 +1,14 @@
-import { Stack } from '@mui/material';
+import { Card, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import EssayQ from '../../../components/EssayQuiz';
 import MCQ from '../../../components/MCQQuiz';
+import Divider from '@mui/material/Divider';
 
 const quizArray = {
   title: 'exam title',
+
   id: '01',
   questions: [
     {
@@ -49,36 +51,40 @@ export default function QuizMarking() {
       <Typography variant="h5">{quizArray.title}</Typography>
       <Typography variant="body1">Student Name or ID</Typography>
 
-      {/* <Grid container sx={{ marginTop: 5 }}> */}
       {quizArray.questions.map((quiz: any, index: number, arr: any) => (
         <Stack>
           {quiz.qtype == 'essay' && (
-            <Box border={1} sx={{ marginTop: 2 }}>
-              <EssayQ
-                index={index + 1}
-                noOfQuestions={arr.length}
-                questionId={quiz.id}
-                question={quiz.question}
-              />
-              <MarkingBox flag="false" />
+            <Box>
+              <Card>
+                <EssayQ
+                  index={index + 1}
+                  noOfQuestions={arr.length}
+                  questionId={quiz.id}
+                  question={quiz.question}
+                />
+                <MarkingBox flag="false" />
+              </Card>
+              <Divider />
             </Box>
           )}
+
           {quiz.qtype == 'mcq' && (
-            <Box border={1} sx={{ marginTop: 2 }}>
-              <MCQ
-                index={index + 1}
-                noOfQuestions={arr.length}
-                questionId={quiz.id}
-                answers={quiz.answers}
-                question={quiz.question}
-              />
-              <MarkingBox flag="true" />
+            <Box>
+              <Card>
+                <MCQ
+                  index={index + 1}
+                  noOfQuestions={arr.length}
+                  questionId={quiz.id}
+                  answers={quiz.answers}
+                  question={quiz.question}
+                />
+                <MarkingBox flag="true" />
+              </Card>
+              <Divider />
             </Box>
           )}
         </Stack>
       ))}
-
-      {/* </Grid> */}
     </Box>
   );
 }
