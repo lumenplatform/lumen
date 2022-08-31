@@ -4,6 +4,7 @@ import * as express from 'express';
 import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
 import { Course } from '../../models/course.model';
+import { Enrollment } from '../../models/enrollment.model';
 import { Organization } from '../../models/organization.model';
 import { CourseService } from '../../services/course.service';
 import { MailJetService } from '../../services/mail/mailjet.service';
@@ -31,6 +32,12 @@ coursesRouter.get('/', (req, res, next) => {
     .catch(next);
 });
 
+// // get all details about a course
+// coursesRouter.get('/:id',(req,res,next) => {
+//   const em = RequestContext.getEntityManager();
+
+// });
+
 // create courses
 coursesRouter.post('/', async (req, res, next) => {
   const em = RequestContext.getEntityManager();
@@ -55,13 +62,27 @@ coursesRouter.post('/', async (req, res, next) => {
     .catch(next);
 });
 
-// list courses
+// get course details
 coursesRouter.get('/:id', (req, res, next) => {
   const em = RequestContext.getEntityManager();
   em.findOneOrFail(
     Course,
     { courseId: req.params.id },
-    { populate: ['courseMaterial'] }
+    { populate: ['courseMaterial', 'instructors'] }
+  )
+    .then((r) => {
+      res.json(createResponse(r));
+    })
+    .catch(next);
+});
+
+// get users enrolled in the given course
+coursesRouter.get('/:id/users', (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  em.find(
+    Enrollment,
+    { course: { courseId: req.params.id } },
+    { populate: ['user'] }
   )
     .then((r) => {
       res.json(createResponse(r));

@@ -78,6 +78,10 @@ export function getOrgCoursesById(id: string) {
   return client.get<any>('/manage/courses/' + id, {}).then((r) => r.data.data);
 }
 
+export function getOrgCourseUsers(id: string) {
+  return client.get<any>('/manage/courses/'+id+'/users',{}).then((r)=>r.data.data);
+}
+
 export function getOrgUsers() {
   return client.get<any>('/manage/users/').then((r) => r.data.data);
 }
