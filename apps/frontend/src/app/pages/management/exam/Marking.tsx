@@ -1,5 +1,4 @@
-import { GifBoxSharp } from '@mui/icons-material';
-import { Card, Container, Divider, InputAdornment, Skeleton, Stack, TextField } from '@mui/material';
+import { Card, Divider, InputAdornment, Skeleton, Stack, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
@@ -9,7 +8,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { getAttemptById, getQuizById, markSubmssion } from '../../../api';
 import EssayQ from '../../../components/EssayQuiz';
 import MCQ from '../../../components/MCQQuiz';
-import Divider from '@mui/material/Divider';
+
 
 function MarkingBox(props: any) {
   const { markEnabled, maxMarks, submissionId, marks = 0 } = props;
