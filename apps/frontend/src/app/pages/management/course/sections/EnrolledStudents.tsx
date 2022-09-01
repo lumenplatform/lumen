@@ -6,6 +6,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { getOrgCourseUsers } from '../../../../api';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 
 //sample data array with objects containg username,email,enrolled date,course title
 const data = [
@@ -42,7 +45,14 @@ const data = [
 ];
 export default function EnrolledStudents() {
   const theme = useTheme();
+  const { courseId } = useParams();
+  const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
+    getOrgCourseUsers(courseId ?? '')
+  );
 
+  // console.log("metana metana metana");
+  // console.log(courseData);
+  if (!courseData) return null;
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -54,16 +64,16 @@ export default function EnrolledStudents() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row: any) => (
-            <TableRow key={row.title}>
+          {courseData && courseData.length && courseData.map((row: any) => (
+            <TableRow key={row.enrollmentId}>
               <TableCell sx={{ pl: theme.spacing(3) }}>
-                <Typography variant="body2">{row.username}</Typography>
+                <Typography variant="body2">{row.user.name}</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2">{row.email}</Typography>
+                <Typography variant="body2">{row.user.email}</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2">{row.enrolledDate}</Typography>
+                <Typography variant="body2">{row.enrollmentDate}</Typography>
               </TableCell>
             </TableRow>
           ))}

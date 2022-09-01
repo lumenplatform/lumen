@@ -1,21 +1,30 @@
-import { RequestContext } from '@mikro-orm/core';
-import { Question } from '../models/question.model';
+import { RequestContext, wrap } from '@mikro-orm/core';
+import { Attempt, MarkingStatus } from '../models/attempt.model';
+import { Course } from '../models/course.model';
 import { Quiz } from '../models/quiz.model';
+import { Submission } from '../models/submission.model';
+import { AttemptService } from '../services/attempt.service';
 
 export class QuizController {
+  constructor(private attempt: AttemptService) {}
+
   async createNewQuiz(data: any) {
     const em = RequestContext.getEntityManager();
     const quiz = await em.create(Quiz, data);
     em.persist(quiz);
     em.flush();
-    return quiz;
+    return quiz.id;
   }
 
-  async getQuizByID(id: string ,user) {
+  async getQuizById(id: string, user) {
     let result;
     const em = RequestContext.getEntityManager();
-    result =await em.findOneOrFail(Quiz, { id: id },{populate:['questions','questions.answers']});
-/*     result = await em.findOneOrFail(
+    result = await em.findOneOrFail(
+      Quiz,
+      { id: id },
+      { populate: ['questions', 'questions.answers'] }
+    );
+    /*     result = await em.findOneOrFail(
       Quiz,
       { id: id },
       {
@@ -28,16 +37,80 @@ export class QuizController {
     return result;
   }
 
-  async updateQuiz(id: string, data: any, user) {
+  async updateQuiz(id: string, data: any) {
     const em = RequestContext.getEntityManager();
-    const quiz = await em.findOneOrFail(Quiz, { id: id });
-    quiz.settings = data.settings;
-    quiz.questions = data.questions;
-    em.flush();
+    const quiz = await em.findOneOrFail(
+      Quiz,
+      { id: id },
+      { populate: ['questions', 'questions.answers'] }
+    );
+    quiz.questions.removeAll();
+    wrap(quiz).assign({
+      settings: data.settings,
+      questions: data.questions,
+    });
+    await em.flush();
+
+    const attempts = await em.find(Attempt, { quiz: id });
+    attempts.forEach(async (attempt) => {
+      await this.attempt.completeAttempt(quiz.id, attempt.id);
+    });
+    return quiz;
+    await em.flush();
+  }
+
+  async getQuizDetailsById(id: string) {
+    const em = RequestContext.getEntityManager();
+    const quiz = await em.findOneOrFail(Quiz, { id: id }); //TODO send only required fields
     return quiz;
   }
 
-  async submitQuiz(id: string, data: any, user) {
-    return '/';
+  async getAttemptById(id: string) {
+    return await this.attempt.getAttemptById(id);
+  }
+
+  async getAttempts(quizId: string) {
+    const em = RequestContext.getEntityManager();
+    const attempts = await em.find(Attempt, { quiz: quizId }, { populate: ['user'] });
+    return attempts;
+  }
+
+  async updateAttempt(attemptId: string, data: any) {
+    return await this.attempt.updateSubmssion(attemptId, data);
+  }
+
+  async createAttempt(id: string, user) {
+    const em = RequestContext.getEntityManager();
+    const attemptId = await this.attempt.createNewAttempt(id, user.uid);
+    return attemptId;
+  }
+
+  async completeAttempt(quizId: string, attemptId: string, data: any) {
+    await this.attempt.updateSubmssion(attemptId, data);
+    return await this.attempt.completeAttempt(quizId, attemptId);    
+  }
+
+  async getResults(attemptId: string) {
+    const em = RequestContext.getEntityManager();
+    const attempt = await em.findOneOrFail(
+      Attempt,
+      { id: attemptId },
+      { populate: ['quiz', 'submission', 'submission.question'] }
+    ); //TODO send only required fields
+    return attempt;
+  }
+
+  async markSubmission(
+    quizId: string,
+    attemptId: string,
+    submissionId: string,
+    data: any
+  ) {
+    return await this.attempt.markSubmission(
+      quizId,
+      attemptId,
+      submissionId,
+      data.marks
+    );
   }
 }

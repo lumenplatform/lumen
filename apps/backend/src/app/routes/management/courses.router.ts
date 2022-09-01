@@ -1,12 +1,26 @@
 import { RequestContext } from '@mikro-orm/core';
 import { assert } from 'console';
 import * as express from 'express';
+import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
 import { Course } from '../../models/course.model';
+import { Enrollment } from '../../models/enrollment.model';
 import { Organization } from '../../models/organization.model';
+import { CourseService } from '../../services/course.service';
+import { MailJetService } from '../../services/mail/mailjet.service';
+import { StripePaymentService } from '../../services/payment.service';
 import { createResponse } from '../../utils/response-mapper';
+import { quizRouter } from './quiz.router';
 
 export const coursesRouter = express.Router();
+const stripePaymentService = new StripePaymentService();
+const mailService = new MailJetService();
+const courseService = new CourseService();
+const courseController = new CourseController(
+  stripePaymentService,
+  mailService,
+  courseService
+);
 
 // list courses
 coursesRouter.get('/', (req, res, next) => {
@@ -17,6 +31,12 @@ coursesRouter.get('/', (req, res, next) => {
     })
     .catch(next);
 });
+
+// // get all details about a course
+// coursesRouter.get('/:id',(req,res,next) => {
+//   const em = RequestContext.getEntityManager();
+
+// });
 
 // create courses
 coursesRouter.post('/', async (req, res, next) => {
@@ -42,13 +62,27 @@ coursesRouter.post('/', async (req, res, next) => {
     .catch(next);
 });
 
-// list courses
+// get course details
 coursesRouter.get('/:id', (req, res, next) => {
   const em = RequestContext.getEntityManager();
   em.findOneOrFail(
     Course,
     { courseId: req.params.id },
-    { populate: ['courseMaterial'] }
+    { populate: ['courseMaterial', 'instructors'] }
+  )
+    .then((r) => {
+      res.json(createResponse(r));
+    })
+    .catch(next);
+});
+
+// get users enrolled in the given course
+coursesRouter.get('/:id/users', (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  em.find(
+    Enrollment,
+    { course: { courseId: req.params.id } },
+    { populate: ['user'] }
   )
     .then((r) => {
       res.json(createResponse(r));
@@ -98,3 +132,13 @@ coursesRouter.put('/:id', async (req, res, next) => {
     })
     .catch(next);
 });
+
+coursesRouter.get('/:id/quizzes', (req, res, next) => {
+  courseController
+  .getQuizzesByCourseId(req.params.id)
+  .then((r) => {
+    res.json(createResponse(r));
+  }).catch(next);
+});
+
+coursesRouter.use('/:id/quiz', quizRouter);

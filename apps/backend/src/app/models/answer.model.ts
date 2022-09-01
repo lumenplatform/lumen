@@ -14,6 +14,9 @@ export class Answer {
   @PrimaryKey()
   id: string = v4();
 
+  @Property({ columnType: 'SERIAL' })
+  order: number;
+
   @ManyToOne(() => Question)
   question: Question;
 

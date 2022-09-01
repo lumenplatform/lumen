@@ -3,8 +3,8 @@ import { RequireAuth, RequireDesktop, UserRole } from './components/Auth';
 import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
-import CourseCreate from './pages/management/Course/CourseCreate';
-import ManageCourse from './pages/management/Course/ManageCourse';
+import CourseCreate from './pages/management/course/CourseCreate';
+import ManageCourse from './pages/management/course/ManageCourse';
 import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
@@ -27,8 +27,12 @@ import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
 import Notification from './pages/Notification/AllNotification';
-import Quizpage from './pages/student/QuizPage';
+import QuizPage from './pages/student/quiz/QuizPage';
+import AttemptQuizPage from './pages/student/quiz/QuizAttemptPage';
+import QuizResultPage from './pages/student/quiz/QuizResultPage';
+import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
 import QuizMarking from './pages/management/exam/Marking'
+import Attempts from './pages/management/exam/Attempts';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -63,7 +67,11 @@ export default function () {
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>
-          <Route path=":courseId/quiz/:quizId" element={<Quizpage/>}></Route>
+          <Route path=":courseId/quiz/" element={<QuizTemplatePage />} >
+            <Route path=":quizId" element={<AttemptQuizPage />} />
+            <Route path=":quizId/attempt/:attemptId" element={<QuizPage />} />
+            <Route path=":quizId/attempt/:attemptId/results" element={<QuizResultPage />} />
+          </Route>
         </Route>
       </Route>
 
@@ -76,11 +84,14 @@ export default function () {
           <Route path="billing" element={<Billing />}></Route>
           <Route path="customize" element={<Customizations />}></Route>
           <Route path="courses/:courseId">
-            <Route path="exam/newexam" element={<ExamPage />} />
-            <Route path="exam/:examId" element={<ExamPage />} />
-            <Route path="exam/:examId/marking" element={<QuizMarking/>} />
             <Route index element={<ManageCourse />} />
+            <Route path="exam/:examId/attempt/:attemptId" element={<QuizMarking/>} />
+            <Route path="exam/:examId/attempts" element={<Attempts />} />
           </Route>
+        </Route>
+        <Route path="/manage/courses/:courseId">
+            <Route path="new-exam" element={<ExamPage />} />
+            <Route path="exam/:examId" element={<ExamPage />} />
         </Route>
         <Route path="/manage">
           <Route path="new-course" element={<CourseCreate />}></Route>

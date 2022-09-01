@@ -7,7 +7,8 @@ import { useState, useEffect } from "react";
 export type Settings = {
     title: string;
     instructions?: string;
-    duration?: {
+    duration: {
+        unlimited: boolean;
         durationMinutes?: number;
         durationSeconds?: number;
     }
@@ -27,6 +28,7 @@ export const defaultSettings: Settings = {
     title: "Exam title",
     instructions: "Instructions",
     duration: {
+        unlimited: false,
         durationMinutes: 0,
         durationSeconds: 0
     },
@@ -43,13 +45,32 @@ export const defaultSettings: Settings = {
 }
 
 export default function ExamSettings(props: any) {
-    const { changeSettings, examSettings } = props;
-    const [settings, setSettings] = useState<Settings>(examSettings || defaultSettings);
+    const { changeSettings, examSettings, questions } = props;
+    const [settings, setSettings] = useState<Settings>(defaultSettings);
+
+    if (JSON.stringify(examSettings) != JSON.stringify(settings) && settings == defaultSettings) {
+        setSettings(examSettings);
+    }
+
+    const handleDurationChange = (settings: any, questions: any[]) => {
+        if (settings.timeBox.state && !settings.timeBox.isAllQuestions) {
+            const duration = questions.reduce((acc, curr) => {
+                return acc + parseInt(curr.durationSeconds);
+            }, 0);
+            setSettings({ ...settings, duration: { ...settings.duration, durationSeconds: duration % 60, durationMinutes: Math.floor(duration / 60) } });
+        }
+        else if (settings.timeBox.state && settings.timeBox.isAllQuestions) {
+            setSettings({ ...settings, duration: { ...settings.duration, durationSeconds: (settings.timeBox.durationSeconds * questions.length) % 60, durationMinutes: settings.timeBox.durationMinutes * questions.length + Math.floor(settings.timeBox.durationSeconds * questions.length / 60) } });
+        }
+    }
+
+    useEffect(() => {
+        handleDurationChange(settings, questions);
+    }, [settings.timeBox, questions]);
 
     useEffect(() => {
         changeSettings(settings);
-    }
-        , [settings]);
+    }, [settings]);
 
     return (
         <Grid container spacing={2}>
@@ -61,7 +82,11 @@ export default function ExamSettings(props: any) {
                     error={settings.title === ""}
                     helperText={settings.title === "" ? "Title is required" : ""}
                     fullWidth value={settings.title}
-                    defaultValue={'Exam title'} label="Exam Title" variant="filled" sx={{ my: 2 }} onChange={(e) => setSettings(prevState => ({ ...prevState, title: e.target.value }))} />
+                    defaultValue={'Exam title'}
+                    label="Exam Title"
+                    variant="outlined"
+                    sx={{ my: 2 }}
+                    onChange={(e) => setSettings(prevState => ({ ...prevState, title: e.target.value }))} />
                 <TextField
                     fullWidth
                     error={settings.instructions === ''}
@@ -70,7 +95,7 @@ export default function ExamSettings(props: any) {
                     label="Instructions"
                     placeholder="Enter instructions here"
                     multiline
-                    variant="filled"
+                    variant="outlined"
                     rows={4}
                     onChange={(e) => setSettings(prevState => ({ ...prevState, instructions: e.target.value }))}
                 />
@@ -88,6 +113,10 @@ export default function ExamSettings(props: any) {
                             Time for quiz
                         </Typography>
                         <Box sx={{ display: 'flex', mb: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="caption" sx={{ ml: 1 }}>
+                                Unlimited time
+                                <Checkbox checked={settings.duration.unlimited} disabled={settings.timeBox.state} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, duration: { ...prevState.duration, unlimited: !prevState.duration.unlimited } }))} />
+                            </Typography>
                             <TextField
                                 size="small"
                                 label="minutes"
@@ -100,7 +129,7 @@ export default function ExamSettings(props: any) {
                                 sx={{ width: '8ch', mr: 2 }}
                                 InputProps={{ inputProps: { min: 0, max: 60 } }}
                                 onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, duration: { ...prevState.duration, durationMinutes: parseInt(e.target.value) } }))}
-                                disabled={settings.timeBox.state}
+                                disabled={settings.timeBox.state || settings.duration.unlimited}
                             />
                             <TextField
                                 size="small"
@@ -114,14 +143,15 @@ export default function ExamSettings(props: any) {
                                 sx={{ width: '8ch' }}
                                 InputProps={{ inputProps: { min: 0, max: 60 } }}
                                 onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, duration: { ...prevState.duration, durationSeconds: parseInt(e.target.value) } }))}
-                                disabled={settings.timeBox.state}
+                                disabled={settings.timeBox.state || settings.duration.unlimited}
                             />
                         </Box>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', my: 2 }}>
                     <Typography variant="subtitle2" sx={{ ml: 1 }}>
-                        Time box questions <Checkbox value={settings.timeBox.state} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, timeBox: { ...prevState.timeBox, state: !prevState.timeBox.state } }))} />
+                        Time box questions {settings.timeBox.state}
+                        <Checkbox checked={settings.timeBox.state} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, timeBox: { ...prevState.timeBox, state: !prevState.timeBox.state } }))} />
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'end' }}>
                         <Typography variant='caption' sx={{ mb: 1 }}>
@@ -130,7 +160,7 @@ export default function ExamSettings(props: any) {
                         <Box sx={{ display: 'flex', mb: 1, justifyContent: 'space-between', alignItems: 'center' }}>
                             <Typography variant="caption" sx={{ ml: 1 }}>
                                 For all questions
-                                <Checkbox value={settings.timeBox.isAllQuestions} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, timeBox: { ...prevState.timeBox, isAllQuestions: !prevState.timeBox.isAllQuestions } }))} />
+                                <Checkbox checked={settings.timeBox.isAllQuestions} disabled={!settings.timeBox.state} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, timeBox: { ...prevState.timeBox, isAllQuestions: !prevState.timeBox.isAllQuestions } }))} />
                             </Typography>
                             <TextField
                                 size="small"
@@ -217,31 +247,15 @@ export default function ExamSettings(props: any) {
                     <Typography variant="subtitle2" sx={{ ml: 1 }}>
                         Randomize questions
                     </Typography>
-                    <Checkbox value={settings.randomizeQuestions} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, randomizeQuestions: !prevState.randomizeQuestions }))} />
+                    <Checkbox checked={settings.randomizeQuestions} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, randomizeQuestions: !prevState.randomizeQuestions }))} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', my: 2, width: { xs: '100%', sm: '70%', md: '50%', lg: '30%' } }}>
                     <Typography variant="subtitle2" sx={{ ml: 1 }}>
                         Randomize answers
                     </Typography>
-                    <Checkbox value={settings.randomizeAnswers} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, randomizeQuestions: !prevState.randomizeQuestions }))} />
+                    <Checkbox checked={settings.randomizeAnswers} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, randomizeAnswers: !prevState.randomizeAnswers }))} />
                 </Box>
             </Grid>
         </Grid>
-    );
-}
-
-
-export function DateTimeSelector(props: any) {
-    const { time, setTime } = props;
-
-    return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
-                label="Date and Time picker"
-                value={time}
-                onChange={(e: Date | null) => setTime(e)}
-                renderInput={(params) => <TextField {...params} />}
-            />
-        </LocalizationProvider>
     );
 }
