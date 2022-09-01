@@ -188,3 +188,15 @@ export function getAttemptsByQuizId(courseId: string, quizId: string) {
     .get<any>(`/manage/courses/${courseId}/quiz/${quizId}/attempts`)
     .then((r) => r.data.data);
 }
+
+export function getSubmissionsByQuestionId(
+  courseId: string,
+  quizId: string,
+  questionId: string
+) {
+  return client
+    .get<any>(
+      `/manage/courses/${courseId}/quiz/${quizId}/submissions/question/${questionId}`
+    )
+    .then((r) => r.data.data);
+}

@@ -24,6 +24,11 @@ export enum MarkingStatus {
   MARKED = 'MARKED',
 }
 
+export enum ReleaseStatus {
+  NOT_RELEASED = 'NOT_RELEASED',
+  RELEASED = 'RELEASED',
+}
+
 @Entity()
 export class Attempt {
   @PrimaryKey()
@@ -49,6 +54,9 @@ export class Attempt {
 
   @Enum(() => MarkingStatus)
   markingStatus = MarkingStatus.NOT_MARKED;
+
+  @Enum(() => ReleaseStatus)
+  releasedStatus = ReleaseStatus.NOT_RELEASED;
 
   @OneToMany(() => Submission, (submission) => submission.attempt, {
     orphanRemoval: true,

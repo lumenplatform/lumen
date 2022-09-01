@@ -1,10 +1,10 @@
-import { Card, Divider, InputAdornment, Skeleton, Stack, TextField } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import { Button, Card, Divider, InputAdornment, Skeleton, Stack, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { useDebouncedCallback } from 'use-debounce';
 import { getAttemptById, getQuizById, markSubmssion } from '../../../api';
 import EssayQ from '../../../components/EssayQuiz';
 import MCQ from '../../../components/MCQQuiz';
@@ -12,11 +12,11 @@ import MCQ from '../../../components/MCQQuiz';
 
 function MarkingBox(props: any) {
   const { markEnabled, maxMarks, submissionId, marks = 0 } = props;
+  const [marksInput, setMarksInput] = useState(marks);
   const { courseId, examId, attemptId } = useParams();
   const { mutate: submissionMarkMutation } = useMutation(markSubmssion);
-  const submissionMarkDebounce = useDebouncedCallback((data) => { submissionMarkMutation(data) }, 2000);
   const mark = (mark: number) => {
-    submissionMarkDebounce({ quizId: examId, courseId: courseId, attemptId: attemptId, submissionId: submissionId, mark: { submissionId: submissionId, marks: mark } });
+    submissionMarkMutation({ quizId: examId, courseId: courseId, attemptId: attemptId, submissionId: submissionId, mark: { submissionId: submissionId, marks: mark } });
   }
   return (
     <Box sx={{ m: 2, display: 'flex', justifyContent: 'end' }}>
@@ -25,15 +25,21 @@ function MarkingBox(props: any) {
         <TextField
           size="small"
           disabled={!markEnabled}
-          defaultValue={marks}
+          defaultValue={marksInput}
           type="number"
           sx={{ width: '10ch', mr: 2 }}
           InputProps={{
             inputProps: { min: 0, max: maxMarks },
             endAdornment: <InputAdornment position="end">/{maxMarks}</InputAdornment>
           }}
-          onChange={(e) => mark(parseInt(e.target.value))}
+          onChange={(e) => setMarksInput(parseInt(e.target.value))}
         />
+        <Button
+          endIcon={<CheckIcon />}
+          onClick={() => mark(marksInput)}
+        >
+          Save
+        </Button>
       </Stack>
     </Box>
   );
@@ -65,50 +71,50 @@ export default function QuizMarking() {
     }
   }, [examData, attemptData]);
 
-  if (isExamLoading || isExamError || isAttemptError || isAttemptError) 
+  if (isExamLoading || isExamError || isAttemptError || isAttemptError)
     return <Skeleton></Skeleton>;
 
   return (
-    <Box sx={{mb:5}}>
+    <Box sx={{ mb: 5 }}>
       <Typography variant="h5">{examData.settings.title}</Typography>
       <Typography variant="body1">{attemptId}</Typography>
       <Box sx={{
-        display: 'flex', justifyContent: 'center', flexDirection: 'column',alignItems:'center'
+        display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'
       }}>
-        <Box sx={{minWidth:800}}>
-        {quizArray.map((quiz: any, index: number, arr: any) => (
-          <Stack>
-            {quiz.type == 'essay' && (
-              <Card sx={{ marginTop: 2 }}>
-                <EssayQ
-                  index={index + 1}
-                  noOfQuestions={arr.length}
-                  questionId={quiz.id}
-                  question={quiz.question}
-                  answer={quiz.submission.essayAnswer}
-                  disabled={true}
-                />
-                <Divider />
-                <MarkingBox markEnabled={true} maxMarks={quiz.marks} marks={quiz.submission.marks} submissionId={quiz.submission.id} />
-              </Card>
-            )}
-            {quiz.type == 'mcq' && (
-              <Card sx={{ marginTop: 2 }}>
-                <MCQ
-                  index={index + 1}
-                  noOfQuestions={arr.length}
-                  questionId={quiz.id}
-                  answers={quiz.answers}
-                  answer={quiz.submission.mcqAnswer}
-                  question={quiz.question}
-                  disabled={true}
-                />
-                <Divider />
-                <MarkingBox markEnabled={false} maxMarks={quiz.marks} marks={quiz.submission.marks} submissionId={quiz.submission.id} />
-              </Card>
-            )}
-          </Stack>
-        ))}
+        <Box sx={{ minWidth: 800 }}>
+          {quizArray.map((quiz: any, index: number, arr: any) => (
+            <Stack>
+              {quiz.type == 'essay' && (
+                <Card sx={{ marginTop: 2 }}>
+                  <EssayQ
+                    index={index + 1}
+                    noOfQuestions={arr.length}
+                    questionId={quiz.id}
+                    question={quiz.question}
+                    answer={quiz.submission.essayAnswer}
+                    disabled={true}
+                  />
+                  <Divider />
+                  <MarkingBox markEnabled={true} maxMarks={quiz.marks} marks={quiz.submission.marks} submissionId={quiz.submission.id} />
+                </Card>
+              )}
+              {quiz.type == 'mcq' && (
+                <Card sx={{ marginTop: 2 }}>
+                  <MCQ
+                    index={index + 1}
+                    noOfQuestions={arr.length}
+                    questionId={quiz.id}
+                    answers={quiz.answers}
+                    answer={quiz.submission.mcqAnswer}
+                    question={quiz.question}
+                    disabled={true}
+                  />
+                  <Divider />
+                  <MarkingBox markEnabled={false} maxMarks={quiz.marks} marks={quiz.submission.marks} submissionId={quiz.submission.id} />
+                </Card>
+              )}
+            </Stack>
+          ))}
         </Box>
       </Box>
     </Box>

@@ -33,6 +33,7 @@ import QuizResultPage from './pages/student/quiz/QuizResultPage';
 import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
 import QuizMarking from './pages/management/exam/Marking'
 import Attempts from './pages/management/exam/Attempts';
+import Questions from './pages/management/exam/Questions';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -87,6 +88,7 @@ export default function () {
             <Route index element={<ManageCourse />} />
             <Route path="exam/:examId/attempt/:attemptId" element={<QuizMarking/>} />
             <Route path="exam/:examId/attempts" element={<Attempts />} />
+            <Route path="exam/:examId/questions" element={<Questions />} />
           </Route>
         </Route>
         <Route path="/manage/courses/:courseId">

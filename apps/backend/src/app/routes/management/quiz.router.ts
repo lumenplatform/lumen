@@ -52,9 +52,19 @@ quizRouter.post(
 );
 
 quizRouter.get('/:id/attempts', (req, res, next) => {
-  quizController.getAttempts(req.params.id)
-  .then((result) => {
-    res.json(createResponse(result));
-  })
-  .catch(next);
-})
+  quizController
+    .getAttempts(req.params.id)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});
+
+quizRouter.get('/:id/submissions/question/:questionId', (req, res, next) => {
+  quizController
+    .getSubmissionsByQuestion(req.params.id, req.params.questionId)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});

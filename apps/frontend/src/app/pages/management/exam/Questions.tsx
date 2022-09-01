@@ -1,4 +1,7 @@
-import { Button, Chip, Skeleton, Typography, useTheme, Box } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
+import CheckIcon from '@mui/icons-material/Check';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import { Box, Button, Chip, Skeleton, Typography, useTheme } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -6,17 +9,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAttemptsByQuizId, getQuizById } from '../../../api';
-import { ArrowBack } from '@mui/icons-material';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-export default function Attempts() {
+export default function Questions() {
     const theme = useTheme();
     const navigate = useNavigate();
+    const [submissions, setSubmissions] = useState<any>([]);
     const { courseId, examId } = useParams();
     const {
         data: attemptData,
@@ -29,83 +30,76 @@ export default function Attempts() {
         isError: isExamError,
     } = useQuery(['exam', examId], () => getQuizById(courseId!, examId!));
 
-    if (isLoading || isError)
+    useEffect(() => {
+        if (attemptData) {
+            const s = attemptData.map((attempt: any) => attempt.submission).flat();
+            console.log(s)
+            setSubmissions([...s]);
+        }
+    }, [attemptData]);
+
+    if (isLoading || isError || isExamLoading || isExamError)
         return <Skeleton></Skeleton>;
 
+    console.log(examData.questions);
+    console.log(attemptData);
     return (
         <Box>
             <Button
                 startIcon={<ArrowBack />}
-                onClick={() => navigate(`/manage/courses/${courseId}`)}
+                onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/attempts`)}
                 color="inherit"
             >
-                Back to Course
+                Back to Attempts
             </Button>
             <Typography variant="h6" sx={{ my: theme.spacing(2) }} component="div">
                 Attempts - {examData?.settings.title}
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                 <Button
-                    endIcon={<ArrowForwardIcon />}
+                    endIcon={<DoneAllIcon />}
                     onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/questions`)}
+                    disabled={submissions.some((e: any) => e.markingStatus == 'NOT_MARKED' )}
                 >
-                    Mark All
+                    Release All
                 </Button>
             </Box>
             <TableContainer component={Paper} sx={{ mt: 2 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ pl: theme.spacing(3) }}>User</TableCell>
-                            <TableCell>Attempted On</TableCell>
-                            <TableCell>Marks</TableCell>
+                            <TableCell>Question</TableCell>
                             <TableCell>Status</TableCell>
-                            <TableCell>Released</TableCell>
+                            <TableCell>Marked</TableCell>
                             <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {attemptData.map((row: any) => (
-                            <TableRow key={row.enrollmentId}>
+                        {examData.questions.map((row: any, index: number) => (
+                            <TableRow>
                                 <TableCell sx={{ pl: theme.spacing(3) }}>
-                                    <Typography variant="body2">{row.user.name}</Typography>
+                                    <Typography variant="body2">Question {index + 1}</Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography variant="body2">{row.startedAt}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography variant="body2">{row.marks}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                    {row.markingStatus == 'MARKED' ?
-                                        <Chip label='Marked' color="success" size="small" variant="outlined" sx={{ width: 100 }} />
-                                        : <Chip label='Not Marked' color="warning" size="small" variant="outlined" sx={{ width: 100 }} />
+                                    {submissions.some((e: any) => e.markingStatus == 'NOT_MARKED' && e.question == row.id) ?
+                                        <Chip label='Not Marked' color="warning" size="small" variant="outlined" sx={{ width: 100 }} />
+                                        : <Chip label='Marked' color="success" size="small" variant="outlined" sx={{ width: 100 }} />
+
                                     }
                                 </TableCell>
                                 <TableCell>
-                                    {row.markingStatus == 'MARKED' ?
-                                        <Chip label='Released' color="success" size="small" variant="outlined" sx={{ width: 120 }} />
-                                        : <Chip label='Not Released' color="warning" size="small" variant="outlined" sx={{ width: 120 }} />
-                                    }
+                                    {submissions.reduce((acc: number, curr: any) => acc + (curr.question == row.id && curr.markingStatus=='MARKED'? 1 : 0), 0)}
+                                    /
+                                    {attemptData.length}
                                 </TableCell>
                                 <TableCell>
                                     <Button
-                                        startIcon={<RemoveRedEyeOutlinedIcon />}
+                                        endIcon={<CheckIcon />}
                                         onClick={() => {
                                             navigate(`/manage/courses/${courseId}/exam/${examId}/attempt/${row.id}`);
                                         }}
                                     >
-                                        View
-                                    </Button>
-                                    |
-                                    <Button
-                                        startIcon={<DoneAllIcon />}
-                                        onClick={() => {
-                                            navigate(`/manage/courses/${courseId}/exam/${examId}/attempt/${row.id}`);
-                                        }}
-                                        disabled={row.markingStatus == 'NOT_MARKED'}
-                                    >
-                                        Release
+                                        Mark
                                     </Button>
                                 </TableCell>
                             </TableRow>

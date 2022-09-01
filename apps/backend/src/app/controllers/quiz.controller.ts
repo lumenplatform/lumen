@@ -71,7 +71,11 @@ export class QuizController {
 
   async getAttempts(quizId: string) {
     const em = RequestContext.getEntityManager();
-    const attempts = await em.find(Attempt, { quiz: quizId }, { populate: ['user'] });
+    const attempts = await em.find(
+      Attempt,
+      { quiz: quizId },
+      { populate: ['user', 'submission'] }
+    );
     return attempts;
   }
 
@@ -87,7 +91,7 @@ export class QuizController {
 
   async completeAttempt(quizId: string, attemptId: string, data: any) {
     await this.attempt.updateSubmssion(attemptId, data);
-    return await this.attempt.completeAttempt(quizId, attemptId);    
+    return await this.attempt.completeAttempt(quizId, attemptId);
   }
 
   async getResults(attemptId: string) {
@@ -112,5 +116,17 @@ export class QuizController {
       submissionId,
       data.marks
     );
+  }
+
+  async getSubmissionsByQuestion(quizId: string, questionId: string) {
+    const em = RequestContext.getEntityManager();
+    const submissions = await em.find(
+      Submission,
+      {
+        question: questionId,
+      },
+      { populate: ['attempt'] }
+    );
+    return submissions;
   }
 }
