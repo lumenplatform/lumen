@@ -50,7 +50,10 @@ export default function QuizResultPage() {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">{index + 1}</TableCell>
-                    <TableCell align="right">{row.correct ? 'Correct' : 'Incorrect'}</TableCell>
+                    {row.question.type == 'essay' ?
+                      <TableCell align="right" >-</TableCell> 
+                      : <TableCell align="right">{row.correct ? 'Correct' : 'Incorrect'}</TableCell>
+                    }
                     <TableCell align="right">{row.marks}</TableCell>
                   </TableRow>
                 ))}
@@ -85,13 +88,13 @@ export default function QuizResultPage() {
             </Table>
           </TableContainer>
           :
-            <Card sx={{p:5,my:2}}>
-              <CardContent>
-                <Typography variant="h6">
-                  Pending to be marked by the Instructor
-                </Typography>
-              </CardContent>
-            </Card>
+          <Card sx={{ p: 5, my: 2 }}>
+            <CardContent>
+              <Typography variant="h6">
+                Pending to be marked by the Instructor
+              </Typography>
+            </CardContent>
+          </Card>
         }
         <Button variant="contained" onClick={() => navigate(`/student/${courseId}`)}>
           Back to course

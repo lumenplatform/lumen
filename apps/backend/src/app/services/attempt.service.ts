@@ -6,7 +6,6 @@ import { Submission } from '../models/submission.model';
 import { User } from '../models/user.model';
 
 export class AttemptService {
-
   async getOngoingAttempt(userId: string, quizId: string) {
     const em = RequestContext.getEntityManager();
     const user = await em.findOneOrFail(User, { uid: userId });
@@ -71,38 +70,52 @@ export class AttemptService {
     await em.flush();
   }
 
-  async completeAttempt(quizId: string, attemptId: string, submissions: any) {
+  async completeAttempt(quizId: string, attemptId: string) {
+    console.log("asdasdkasdkljaskldjaslkdja3");
+
     const em = RequestContext.getEntityManager();
     const attempt = await em.findOneOrFail(
       Attempt,
       { id: attemptId },
-      { populate: ['submission'] }
+      { populate: ['quiz'] }
     );
-    const questions = await em.find(
-      Question,
-      { exam: quizId },
-      { populate: ['answers'] }
-    );
-    attempt.submission.removeAll();
+      console.log(attempt);
     attempt.completedAt = new Date(); //mark as completed
     attempt.marks = 0; //reset marks
     attempt.attemptStatus = AttemptStatus.COMPLETED; //mark as completed
+    attempt.quiz.noOfAttempts=+1; //increment no of attempts
+    console.log("num attepmets", attempt.quiz.noOfAttempts);
+    await this.markAttempt(attemptId); //mark attempt
+    await em.flush();
+  }
 
-    submissions.forEach((s) => {
-      const submission = new Submission();
-      wrap(submission).assign(
-        {
-          question: s.question,
-          mcqAnswer: s.mcqAnswer,
-          essayAnswer: s.essayAnswer,
-          flag: s.flag,
-          answered: s.answered,
-        },
-        { em: em }
-      );
+  async getAttemptById(attemptId: string) {
+    const em = RequestContext.getEntityManager();
+    const attempt = await em.findOneOrFail(
+      Attempt,
+      { id: attemptId },
+      { populate: ['submission', 'submission.mcqAnswer'] }
+    );
+    return attempt;
+  }
+ 
+  async markAttempt(attemptId: string) {
 
+    const em = RequestContext.getEntityManager();
+    const attempt = await em.findOneOrFail(
+      Attempt,
+      { id: attemptId },
+      { populate: ['submission','submission.mcqAnswer'] }
+    );
+    const questions = await em.find(
+      Question,
+      { exam: attempt.quiz.id },
+      { populate: ['answers'] }
+    );
+
+    attempt.submission.getItems().forEach((s) => {
       const question = questions.find((obj) => {
-        return obj.id == submission.question.id;
+        return obj.id == s.question.id;
       });
 
       //check if question is MCQ
@@ -118,25 +131,24 @@ export class AttemptService {
 
         //if question is not answered
         if (!s.answered) {
-          submission.correct = false;
-          submission.marks = 0;
-          submission.markingStatus = MarkingStatus.MARKED;
+          s.correct = false;
+          s.marks = 0;
+          s.markingStatus = MarkingStatus.MARKED;
         } else if (correctAnswer && s.answered) {
           const isCorrect =
-            submission.mcqAnswer.length === correctAnswer.length &&
-            submission.mcqAnswer
+            s.mcqAnswer.length === correctAnswer.length &&
+            s.mcqAnswer
               .getItems()
               .map((o) => o.id)
               .every((answer) => {
                 return correctAnswerIds.includes(answer);
               });
-          submission.marks = isCorrect ? question.marks : 0; //check if answer is correct and set marks
+          s.marks = isCorrect ? question.marks : 0; //check if answer is correct and set marks
           attempt.marks += isCorrect ? question.marks : 0; //add marks to attempt
-          submission.correct = isCorrect ? true : false;
-          submission.markingStatus = MarkingStatus.MARKED;
+          s.correct = isCorrect ? true : false;
+          s.markingStatus = MarkingStatus.MARKED;
         }
       }
-      attempt.submission.add(submission);
     });
 
     const isAllMarked = attempt.submission.getItems().every((obj) => {
@@ -148,15 +160,21 @@ export class AttemptService {
       : MarkingStatus.NOT_MARKED;
 
     await em.flush();
+  
   }
 
-  async getAttemptById(attemptId: string) {
+  async markSubmission(
+    quizId: string,
+    attemptId: string,
+    submissionId: string,
+    marks: number
+  ) {
     const em = RequestContext.getEntityManager();
-    const attempt = await em.findOneOrFail(
-      Attempt,
-      { id: attemptId },
-      { populate: ['submission', 'submission.mcqAnswer'] }
-    );
-    return attempt;
+    const submission = await em.findOneOrFail(Submission, { id: submissionId });
+    submission.marks = marks;
+    submission.markingStatus = MarkingStatus.MARKED;
+    await em.flush();
+    await this.markAttempt(attemptId);
+    return submission;
   }
 }

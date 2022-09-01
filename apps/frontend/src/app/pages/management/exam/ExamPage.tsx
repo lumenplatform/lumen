@@ -104,7 +104,7 @@ export default function ExamPage() {
                     <Box sx={{mt:3}}>
                         <Tabs value={value} onChange={handleChange} orientation="vertical" sx={{ minWidth: 'max-content' }}>
                             <Tab label="Exam Settings" {...a11yProps(0)} />
-                            <Tab label="Create exam" {...a11yProps(1)} />
+                            <Tab label="Exam Questions" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
                     <Box sx={{ width: '100%',ml:2,px:2 }}>

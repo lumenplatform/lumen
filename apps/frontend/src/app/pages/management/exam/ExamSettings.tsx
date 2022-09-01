@@ -115,7 +115,7 @@ export default function ExamSettings(props: any) {
                         <Box sx={{ display: 'flex', mb: 1, justifyContent: 'space-between', alignItems: 'center' }}>
                             <Typography variant="caption" sx={{ ml: 1 }}>
                                 Unlimited time
-                                <Checkbox checked={settings.timeBox.isAllQuestions} disabled={settings.timeBox.state} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, duration: { ...prevState.duration, unlimited: !prevState.duration.unlimited } }))} />
+                                <Checkbox checked={settings.duration.unlimited} disabled={settings.timeBox.state} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, duration: { ...prevState.duration, unlimited: !prevState.duration.unlimited } }))} />
                             </Typography>
                             <TextField
                                 size="small"

@@ -47,8 +47,10 @@ export default function ExamCreate(props: any) {
     }
 
     return (
-        <Box>
-            <List sx={{ display: 'flex',justifyContent:'center',alignItems:'center', flexDirection: 'column', width: '100%' }} >
+        <Box sx={{
+            display: 'flex', justifyContent: 'center', flexDirection: 'column',alignItems:'center'
+          }}>
+            <List sx={{ display: 'flex',justifyContent:'center',alignItems:'center', flexDirection: 'column', width: '100%' ,maxWidth:800 }} >
                 {questions.map((question, index) => (
                     <ListItem key={index} dense={true} autoFocus={true}>
                         <Card sx={{ display: 'flex', flexDirection: 'column', width: '100%', py: 2, px: 3 ,mb:4}}>

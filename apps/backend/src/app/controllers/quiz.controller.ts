@@ -1,7 +1,8 @@
 import { RequestContext, wrap } from '@mikro-orm/core';
-import { Attempt } from '../models/attempt.model';
+import { Attempt, MarkingStatus } from '../models/attempt.model';
 import { Course } from '../models/course.model';
 import { Quiz } from '../models/quiz.model';
+import { Submission } from '../models/submission.model';
 import { AttemptService } from '../services/attempt.service';
 
 export class QuizController {
@@ -38,14 +39,24 @@ export class QuizController {
 
   async updateQuiz(id: string, data: any) {
     const em = RequestContext.getEntityManager();
-    const quiz = await em.findOneOrFail(Quiz, { id: id } , { populate: ['questions', 'questions.answers'] });
+    const quiz = await em.findOneOrFail(
+      Quiz,
+      { id: id },
+      { populate: ['questions', 'questions.answers'] }
+    );
     quiz.questions.removeAll();
     wrap(quiz).assign({
       settings: data.settings,
       questions: data.questions,
     });
     await em.flush();
+
+    const attempts = await em.find(Attempt, { quiz: id });
+    attempts.forEach(async (attempt) => {
+      await this.attempt.completeAttempt(quiz.id, attempt.id);
+    });
     return quiz;
+    await em.flush();
   }
 
   async getQuizDetailsById(id: string) {
@@ -56,6 +67,12 @@ export class QuizController {
 
   async getAttemptById(id: string) {
     return await this.attempt.getAttemptById(id);
+  }
+
+  async getAttempts(quizId: string) {
+    const em = RequestContext.getEntityManager();
+    const attempts = await em.find(Attempt, { quiz: quizId }, { populate: ['user'] });
+    return attempts;
   }
 
   async updateAttempt(attemptId: string, data: any) {
@@ -69,17 +86,31 @@ export class QuizController {
   }
 
   async completeAttempt(quizId: string, attemptId: string, data: any) {
-    const marks = this.attempt.completeAttempt(quizId, attemptId, data);
-    return marks;
+    await this.attempt.updateSubmssion(attemptId, data);
+    return await this.attempt.completeAttempt(quizId, attemptId);    
   }
 
-  async getResults(id: string) {
+  async getResults(attemptId: string) {
     const em = RequestContext.getEntityManager();
     const attempt = await em.findOneOrFail(
       Attempt,
-      { id: id },
+      { id: attemptId },
       { populate: ['quiz', 'submission', 'submission.question'] }
     ); //TODO send only required fields
     return attempt;
+  }
+
+  async markSubmission(
+    quizId: string,
+    attemptId: string,
+    submissionId: string,
+    data: any
+  ) {
+    return await this.attempt.markSubmission(
+      quizId,
+      attemptId,
+      submissionId,
+      data.marks
+    );
   }
 }

@@ -25,6 +25,7 @@ export default function QuizAndAssignments() {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const { data: quizzes ,isLoading,isError } = useQuery(['quizzes', courseId], () => getQuizzesByCourseId(courseId!));
+  
   if(isError||isLoading){
     return <Skeleton></Skeleton>
   }
@@ -50,14 +51,14 @@ export default function QuizAndAssignments() {
                   <Typography variant="body2">{row.settings.title}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="body2">{0}</Typography>
+                  <Typography variant="body2">{row.noOfAttempts}</Typography>
                 </TableCell>
                 <TableCell>
                   <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                       startIcon={<RemoveRedEyeOutlinedIcon />}
                       onClick={() => {
-                        navigate(`/manage/courses/${row.course}`);
+                        navigate(`/manage/courses/${row.course}/exam/${row.id}/attempts`);
                       }}
                     >
                       View

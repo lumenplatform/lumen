@@ -79,7 +79,9 @@ export function getOrgCoursesById(id: string) {
 }
 
 export function getOrgCourseUsers(id: string) {
-  return client.get<any>('/manage/courses/'+id+'/users',{}).then((r)=>r.data.data);
+  return client
+    .get<any>('/manage/courses/' + id + '/users', {})
+    .then((r) => r.data.data);
 }
 
 export function getOrgUsers() {
@@ -150,7 +152,7 @@ export function updateAttempt(data: any) {
 export function completeAttempt(data: any) {
   return client
     .post(
-      `/manage/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/complete`,
+      `/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/complete`,
       data.submissions
     )
     .then((r) => r.data.data);
@@ -171,5 +173,18 @@ export function getResults(
 export function getQuizzesByCourseId(courseId: string) {
   return client
     .get<any>(`/manage/courses/${courseId}/quizzes`)
+    .then((r) => r.data.data);
+}
+
+export function markSubmssion(data: any) {
+  return client.post(
+    `/manage/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/submission/${data.submissionId}/mark`,
+    data.mark
+  );
+}
+
+export function getAttemptsByQuizId(courseId: string, quizId: string) {
+  return client
+    .get<any>(`/manage/courses/${courseId}/quiz/${quizId}/attempts`)
     .then((r) => r.data.data);
 }

@@ -78,7 +78,6 @@ export default function QuizPage(props: any) {
           accumulator.push(object[index]);return accumulator;
       },[]); */
     if (examData && attemptData) {
-      console.log(attemptData);
       const isOngoingAttempt = attemptData.submission.length > 0;
       const elapsedTime = isOngoingAttempt ? (new Date().getTime() - new Date(attemptData.startedAt).getTime()) / 1000 : 0;
       let questions = examData.questions;
@@ -87,7 +86,6 @@ export default function QuizPage(props: any) {
         if (!isOngoingAttempt)
           questions = examData.questions.sort(() => 0.5 - Math.random());
         else {
-          console.log('asdasdasd')
           const questionOrder = attemptData.submission.map((s: any) => s.question);
           questions.sort((a: any, b: any) => questionOrder.indexOf(a.id) - questionOrder.indexOf(b.id));
         }
@@ -223,6 +221,8 @@ export default function QuizPage(props: any) {
           {isQuizSubmitting == false && quizArray.filter((q: any, i: number) => (i == page - 1)).map((quiz: any, index: number) => (
             <Stack direction={'row'} spacing={0}>
               {quiz.type == 'mcq' && (
+                <Container>
+                  <Card>
                 <MCQ
                   index={page}
                   noOfQuestions={quizArray.length}
@@ -240,8 +240,12 @@ export default function QuizPage(props: any) {
                   setFlag={handleFlagged}
                   setAnswer={handleAnswerChanged}
                 />
+                </Card>
+                </Container>
               )}
               {quiz.type == 'essay' && (
+                <Container>
+                  <Card>
                 <EssayQ
                   index={page}
                   noOfQuestions={quizArray.length}
@@ -257,6 +261,8 @@ export default function QuizPage(props: any) {
                   setFlag={handleFlagged}
                   setAnswer={handleAnswerChanged}
                 />
+                </Card>
+                </Container>
               )}
             </Stack>
           ))}

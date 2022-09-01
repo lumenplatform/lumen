@@ -54,11 +54,4 @@ export class Attempt {
     orphanRemoval: true,
   })
   submission = new Collection<Submission>(this);
-
-  @AfterUpdate()
-  async updateQuizAttempts() {
-    if(this.attemptStatus === AttemptStatus.COMPLETED) {
-      await this.quiz.noOfAttempts++;
-    }
-  }
 }
