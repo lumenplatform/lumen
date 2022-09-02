@@ -3,8 +3,8 @@ import { RequireAuth, RequireDesktop, UserRole } from './components/Auth';
 import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
-import CourseCreate from './pages/management/course/CourseCreate';
-import ManageCourse from './pages/management/course/ManageCourse';
+import CourseCreate from './pages/management/Course/CourseCreate';
+import ManageCourse from './pages/management/Course/ManageCourse';
 import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
@@ -34,6 +34,7 @@ import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
 import QuizMarking from './pages/management/exam/Marking'
 import Attempts from './pages/management/exam/Attempts';
 import Questions from './pages/management/exam/Questions';
+import AttemptMarking from './pages/management/exam/AttemptMarking';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -89,6 +90,7 @@ export default function () {
             <Route path="exam/:examId/attempt/:attemptId" element={<QuizMarking/>} />
             <Route path="exam/:examId/attempts" element={<Attempts />} />
             <Route path="exam/:examId/questions" element={<Questions />} />
+            <Route path="exam/:examId/attemptMarking" element={<AttemptMarking />} />
           </Route>
         </Route>
         <Route path="/manage/courses/:courseId">
