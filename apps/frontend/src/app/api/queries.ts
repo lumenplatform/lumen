@@ -101,10 +101,17 @@ export function inviteUserToOrg(data: any) {
 export function getPendingOrgInvitations() {
   return client.get('/manage/users/invites').then((r) => r.data.data);
 }
+
+export function getCurrentOrganization() {
+  return client.get('/org/current').then((r) => r.data.data);
+}
+
+export function updateCurrentOrganization(data: any) {
+  return client.post('/org/current', data).then((r) => r.data.data);
+}
 // END MANAGEMENT
 
-
-export function enrollInCourse(id:string){
+export function enrollInCourse(id: string) {
   return client.post(`/courses/${id}/enroll/`, {}).then((r) => r.data.data);
 }
 

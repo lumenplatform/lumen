@@ -1,7 +1,6 @@
 import { BlockBlobClient } from '@azure/storage-blob';
 import {
   DeleteOutlined,
-  Description,
   DescriptionOutlined,
   PhotoOutlined,
   PictureAsPdfOutlined,
@@ -32,11 +31,11 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Component, ContextType, useEffect, useRef, useState } from 'react';
 import { useList } from 'react-use';
-import { StorageContext, useStorage } from './StorageProvider';
-import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { useAuth } from './Auth';
+import { StorageContext, useStorage } from './StorageProvider';
 
 function formatBytes(bytes: number, decimals: number) {
   if (bytes == 0) return '0 Bytes';
@@ -332,6 +331,7 @@ export class FileItemComp extends Component<
     handleRemove: any;
     updateItem: any;
     fileActions: boolean;
+    showSettings?: boolean;
     removeType: 'replace' | 'delete';
   },
   {
@@ -358,6 +358,7 @@ export class FileItemComp extends Component<
       this.started = true;
       const blockBlobClient: BlockBlobClient =
         this.context.containerClient?.getBlockBlobClient(
+          // TODO : add a random Prefix ?
           this.props.fileItem.file.name
         );
 
@@ -370,7 +371,7 @@ export class FileItemComp extends Component<
           onProgress: (e) => {
             this.setState({
               progress: Math.round(
-                (e.loadedBytes / this.props.fileItem.file.size) * 100
+                (e.loadedBytes / this.props.fileItem.size) * 100
               ),
             });
           },
@@ -435,11 +436,13 @@ export class FileItemComp extends Component<
         secondaryAction={
           fileActions && (
             <Box>
-              <AssetOptions
-                value={config}
-                mime={mime}
-                onChange={(config: any) => this.props.updateItem({ config })}
-              />
+              {this.props.showSettings && (
+                <AssetOptions
+                  value={config}
+                  mime={mime}
+                  onChange={(config: any) => this.props.updateItem({ config })}
+                />
+              )}
               {this.props.removeType === 'delete' ? (
                 <IconButton edge="end" color="error" onClick={handleRemove}>
                   <DeleteOutlined />
@@ -491,52 +494,80 @@ type FileInputProps = {
   onBlur?: any;
   onPreviewChange?: any;
   name?: string;
+  showSettings?: boolean;
   accept?: string;
   value?: FileItem[] | FileItem;
   viewOnly?: boolean;
 };
 
-function FilesInput({
-  multiple,
-  viewOnly,
-  onChange,
-  value,
-  accept,
-}: FileInputProps) {
-  const [files, { updateAt, push, removeAt, set }] = useList<FileItem>(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    multiple ? (value ? value : []) : value ? [value] : []
-  );
+function FilesInput(props: FileInputProps) {
+  const { multiple, viewOnly, onChange, value, accept } = props;
+  const [files, setFiles] = useState<FileItem[]>([]);
+
+  const [valueSet, setValueSet] = useState(false);
+
   const fileInputElement = useRef<HTMLInputElement>(null);
   const storage = useStorage();
 
-  useEffect(() => {
+  const change = (updatedFiles: FileItem[]) => {
     if (onChange && !viewOnly) {
-      onChange(multiple ? files : files[0]);
+      onChange(multiple ? updatedFiles : updatedFiles[0]);
     }
+  };
+
+  useEffect(() => {
+    change(files);
   }, [files]);
 
   useEffect(() => {
-    if (viewOnly) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      set(multiple ? (value ? value : []) : value ? [value] : []);
+    if (value && valueSet === false) {
+      if (multiple) {
+        setFiles((value ? value : []) as FileItem[]);
+      } else {
+        setFiles(value ? [value as FileItem] : []);
+      }
+      setValueSet(true);
     }
   }, [value]);
 
   const onFileChange = (fileInput: any) => {
-    for (const file of fileInput.files) {
-      push({
-        name: file.name,
-        file,
-        size: file.size,
-        uploading: true,
-        mime: file.type,
-        config: {},
-      });
-    }
-    fileInput.value = null;
+    setFiles((crr) => {
+      const newFiles = [];
+
+      for (const file of fileInput.files) {
+        newFiles.push({
+          name: file.name,
+          file,
+          size: file.size,
+          uploading: true,
+          mime: file.type,
+          config: {},
+        });
+      }
+
+      fileInput.value = null;
+      const updatedFiles = [...crr, ...newFiles];
+      return updatedFiles;
+    });
+  };
+
+  const onFileUpdate = (index: number, data: FileItem) => {
+    setFiles((crr) => {
+      const updatedFiles = [...crr];
+      updatedFiles.splice(index, 1, data);
+      console.log(updatedFiles);
+      return updatedFiles;
+    });
+  };
+
+  const onFileRemove = (index: number) => {
+    setFiles((crr) => {
+      const updatedFiles = [...crr];
+      updatedFiles.splice(index, 1);
+      return updatedFiles;
+    });
+
+    if (!multiple) addFiles();
   };
 
   const addFiles = () => fileInputElement.current?.click();
@@ -549,12 +580,10 @@ function FilesInput({
             <FileItemComp
               key={index}
               fileItem={file}
-              handleRemove={() => {
-                removeAt(index);
-                if (!multiple) addFiles();
-              }}
+              showSettings={props.showSettings}
+              handleRemove={() => onFileRemove(index)}
               fileActions={!viewOnly}
-              updateItem={(c: any) => updateAt(index, { ...file, ...c })}
+              updateItem={(c: any) => onFileUpdate(index, { ...file, ...c })}
               removeType={multiple ? 'delete' : 'replace'}
             />
           ))}

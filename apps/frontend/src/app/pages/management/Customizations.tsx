@@ -1,34 +1,45 @@
 import { DisplaySettingsOutlined } from '@mui/icons-material';
 import {
+  Alert,
   Box,
   Button,
-  Grid,
+  CircularProgress,
   InputAdornment,
   Stack,
   Table,
+  TableBody,
   TableCell,
   TableHead,
   TableRow,
   TextField,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useMutation, useQuery } from 'react-query';
+import { getCurrentOrganization, updateCurrentOrganization } from '../../api';
 import FilesInput from '../../components/FilesInput';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function Customization() {
-  const [inputs, setInputs] = useState<any>({});
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const { data: org } = useQuery('org', getCurrentOrganization);
+  const updateOrgMutation = useMutation(updateCurrentOrganization);
 
-  const handleChange = (event: any) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setInputs((values: any) => ({ ...values, [name]: value }));
-  };
+  const { register, reset, control, getValues } = useForm();
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    console.log(inputs);
-  };
+  useEffect(() => {
+    if (org)
+      reset({
+        name: org.name,
+        description: org.description,
+        theme: org.theme,
+        domains: org.domains,
+      });
+  }, [org]);
+
+  if (!org) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box sx={{ p: 3, mb: 2 }}>
@@ -41,24 +52,44 @@ export default function Customization() {
       <Typography my={1} variant="subtitle2">
         Basic Information
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <Box
-          sx={{
-            my: 2,
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 2,
-          }}
-        >
-          <TextField variant="filled" label="Organization Name" />
-          <Stack direction={'row'} alignItems="center">
-            <span>Logo : </span>
-            <FilesInput />
-          </Stack>
-          <TextField variant="filled" multiline rows={3} label="Description" />
-          <div></div>
-        </Box>
-      </form>
+      <Box
+        sx={{
+          my: 2,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 2,
+        }}
+      >
+        <TextField
+          variant="filled"
+          {...register('name')}
+          label="Organization Name"
+        />
+        <Stack direction={'row'} alignItems="center">
+          <span>Logo : </span>
+          <Box style={{ flexGrow: 1 }}>
+            <Controller
+              name="theme.logo"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FilesInput
+                  accept="image/*"
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
+            />
+          </Box>
+        </Stack>
+        <TextField
+          variant="filled"
+          {...register('description')}
+          multiline
+          rows={3}
+          label="Description"
+        />
+        <div></div>
+      </Box>
       <Typography my={1} mt={4} variant="subtitle2">
         Domain Mappings
       </Typography>
@@ -66,13 +97,14 @@ export default function Customization() {
         <TextField
           label="Subdomain"
           variant="filled"
+          {...register('domains.subdomain')}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">.lumenlms.xyz</InputAdornment>
             ),
           }}
         />
-        <Table sx={{ minWidth: 650, mt: 2 }} size="small">
+        {false && <Table sx={{ minWidth: 650, mt: 2 }} size="small">
           <TableHead>
             <TableRow>
               <TableCell>Domain</TableCell>
@@ -81,32 +113,50 @@ export default function Customization() {
               <TableCell> </TableCell>
             </TableRow>
           </TableHead>
-
-          <TableRow>
-            <TableCell>ucec.cmb.ec.lk</TableCell>
-            <TableCell>Aug 14, 2022</TableCell>
-            <TableCell>dalana.dhar@gmail.com</TableCell>
-            <TableCell>
-              <Button color="inherit" size="small">
-                DNS Records 
-              </Button>{' '}
-              |
-              <Button color="error" size="small">
-                Delete
-              </Button>
-            </TableCell>
-          </TableRow>
-        </Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>ucec.cmb.ec.lk</TableCell>
+              <TableCell>Aug 14, 2022</TableCell>
+              <TableCell>dalana.dhar@gmail.com</TableCell>
+              <TableCell>
+                <Button color="inherit" size="small">
+                  DNS Records
+                </Button>
+                |
+                <Button color="error" size="small">
+                  Delete
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>}
       </Box>
       <Typography my={1} mt={4} variant="subtitle2">
         Theming
       </Typography>
-      Primary Color : <input type="color" value="#1dbf7b" />
-      &nbsp; Secondary Color : <input type="color" value={'#ffff00'} />
+      Primary Color :
+      <input type="color" {...register('theme.theme.primary')} />
+      &nbsp; Secondary Color :
+      <input type="color" {...register('theme.theme.secondary')} />
       <Box sx={{ mt: 4 }}>
-        <Button variant="contained" disableElevation>
+        <LoadingButton
+          variant="contained"
+          disableElevation
+          loading={updateOrgMutation.isLoading}
+          onClick={() => {
+            updateOrgMutation.mutate(getValues());
+          }}
+        >
           Save
-        </Button>
+        </LoadingButton>
+        <br />
+        <br />
+        {updateOrgMutation.isSuccess && (
+          <Alert severity="success">Updated Successfully</Alert>
+        )}
+        {updateOrgMutation.isError && (
+          <Alert severity="error">Update Failed</Alert>
+        )}
       </Box>
     </Box>
   );

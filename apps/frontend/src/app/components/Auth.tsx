@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated, getIdTokenClaims, user?.sub]);
 
   const { data: appUser, isLoading: userLoading } = useQuery('me', fetchUser, {
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && !!user && !auth0Loading,
   });
 
   const signIn = (opt: { redirectPath: string }) => {
