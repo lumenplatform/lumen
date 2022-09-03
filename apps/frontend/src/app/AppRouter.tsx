@@ -27,7 +27,6 @@ import SubmissionStatus from './pages/student/course/SubmissionStatus';
 import CoursePage from './pages/student/CoursePage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
-import Notification from './pages/Notification/AllNotification';
 import QuizPage from './pages/student/quiz/QuizPage';
 import AttemptQuizPage from './pages/student/quiz/QuizAttemptPage';
 import QuizResultPage from './pages/student/quiz/QuizResultPage';
