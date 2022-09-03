@@ -20,11 +20,11 @@ import { User } from './user.model';
 
 @Embeddable()
 export class CourseSettings {
-  @Property({ default: false, columnType: 'boolean' })
-  isDesktopOnly? = false;
+  @Property({ default: 'NO', columnType: 'varchar' })
+  isDesktopOnly: 'YES' | 'NO' = 'NO';
 
-  @Property({ default: false, columnType: 'boolean' })
-  isPrivate? = false;
+  @Property({ default: 'YES', columnType: 'varchar' })
+  isPrivate?: 'YES' | 'NO' = 'YES';
 }
 
 export enum CourseStatus {

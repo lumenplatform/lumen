@@ -128,7 +128,11 @@ export function RequireDesktop({
   );
 
   if (!bypass && courseId) {
-    if (course && course.settings?.isDesktopOnly && !window.electron) {
+    if (
+      course &&
+      course.settings?.isDesktopOnly === 'YES' &&
+      !window.electron
+    ) {
       return <AppBanner link={'lumen-desktop://open?url=' + location.href} />;
     }
     return children;

@@ -83,6 +83,7 @@ export default function TopicEditor({
         {data.contentType === 'video' && (
           <FilesInput
             accept="video/*"
+            showSettings={true}
             value={data.video}
             onChange={(video: any) => setData((d) => ({ ...d, video }))}
           />
@@ -134,6 +135,7 @@ export default function TopicEditor({
             <FilesInput
               multiple
               value={data.resources.map((r: any) => r.asset)}
+              showSettings={true}
               onChange={(r: any) =>
                 setData((d) => ({
                   ...d,

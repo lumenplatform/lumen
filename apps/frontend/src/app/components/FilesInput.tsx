@@ -33,6 +33,7 @@ import {
 import { Box } from '@mui/system';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Component, ContextType, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useList } from 'react-use';
 import { useAuth } from './Auth';
 import { StorageContext, useStorage } from './StorageProvider';
@@ -74,11 +75,15 @@ function getExtensionColor(r: string) {
 
 function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(props.value);
+  const [value, setValue] = useState<any>();
 
   const handleClose = () => setOpen(false);
   const isVideo = props.mime?.startsWith('video');
   const isPdf = props.mime === 'application/pdf';
+
+  useEffect(() => {
+    setValue(props.value);
+  }, [props.value]);
 
   return (
     <>
@@ -96,79 +101,86 @@ function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
         </DialogTitle>
         <DialogContent>
           <table style={{ lineHeight: 1 }}>
-            <tr>
-              <td>Disable Downloading&nbsp; &nbsp;</td>
-              <td>
-                <RadioGroup
-                  row={true}
-                  onChange={(r) => {
-                    setValue((e: any) => ({ ...e, down: r.target.value }));
-                  }}
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio defaultChecked />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </td>
-            </tr>
-            <tr style={{ opacity: isVideo || isPdf ? 1 : '.3' }}>
-              <td>
-                Watermark &nbsp; &nbsp;
-                <br /> <small>video / pdf</small>
-              </td>
-              <td>
-                <RadioGroup
-                  row={true}
-                  onChange={(r) => {
-                    setValue((e: any) => ({ ...e, down: r.target.value }));
-                  }}
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio defaultChecked />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </td>
-            </tr>
-            <tr style={{ opacity: isVideo ? 1 : '.3' }}>
-              <td>
-                No Screen Capture
-                <br /> <small>video </small>
-              </td>
-              <td>
-                <RadioGroup
-                  row={true}
-                  onChange={(r) => {
-                    setValue((e: any) => ({ ...e, sc: r.target.value }));
-                  }}
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio defaultChecked />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </td>
-            </tr>
-            {/* <tr style={{ opacity: isVideo ? 1 : '.3' }}>
+            <tbody>
+              <tr>
+                <td>Disable Downloading&nbsp; &nbsp;</td>
+                <td>
+                  <RadioGroup
+                    row={true}
+                    value={value?.down}
+                    onChange={(r) => {
+                      setValue((e: any) => ({ ...e, down: r.target.value }));
+                    }}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </td>
+              </tr>
+              <tr style={{ opacity: isVideo || isPdf ? 1 : '.3' }}>
+                <td>
+                  Watermark &nbsp; &nbsp;
+                  <br /> <small>video / pdf</small>
+                </td>
+                <td>
+                  <RadioGroup
+                    row={true}
+                    value={value?.watermark}
+                    onChange={(r) => {
+                      setValue((e: any) => ({
+                        ...e,
+                        watermark: r.target.value,
+                      }));
+                    }}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </td>
+              </tr>
+              <tr style={{ opacity: isVideo ? 1 : '.3' }}>
+                <td>
+                  No Screen Capture
+                  <br /> <small>video </small>
+                </td>
+                <td>
+                  <RadioGroup
+                    row={true}
+                    value={value?.sc}
+                    onChange={(r) => {
+                      setValue((e: any) => ({ ...e, sc: r.target.value }));
+                    }}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </td>
+              </tr>
+              {/* <tr style={{ opacity: isVideo ? 1 : '.3' }}>
               <td>
                 Verified Media Path <br /> <small>video</small>
               </td>
@@ -192,6 +204,7 @@ function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
                 </RadioGroup>
               </td>
             </tr> */}
+            </tbody>
           </table>
 
           {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
@@ -435,7 +448,12 @@ export class FileItemComp extends Component<
         dense
         secondaryAction={
           fileActions && (
-            <Box>
+            <Box
+              sx={{
+                backgroundColor: (t) =>
+                  t.palette.mode === 'light' ? 'white' : 'black',
+              }}
+            >
               {this.props.showSettings && (
                 <AssetOptions
                   value={config}
@@ -443,15 +461,15 @@ export class FileItemComp extends Component<
                   onChange={(config: any) => this.props.updateItem({ config })}
                 />
               )}
-              {this.props.removeType === 'delete' ? (
-                <IconButton edge="end" color="error" onClick={handleRemove}>
-                  <DeleteOutlined />
-                </IconButton>
-              ) : (
+              {/* {this.props.removeType === 'delete' ? ( */}
+              <IconButton edge="end" color="error" onClick={handleRemove}>
+                <DeleteOutlined />
+              </IconButton>
+              {/* ) : (  
                 <Button onClick={handleRemove} color="secondary">
                   Replace
                 </Button>
-              )}
+                )} */}
             </Box>
           )
         }
