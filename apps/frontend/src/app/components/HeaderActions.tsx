@@ -13,15 +13,22 @@ import Popover from '@mui/material/Popover';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth';
+import { ThemeContext } from '../providers/ThemeModeProvider';
 
 function HeaderActions() {
   const theme = useTheme();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const colorMode = React.useContext(ThemeContext);
 
   return (
     <>
-      <IconButton color="inherit">
+      <IconButton
+        color="inherit"
+        onClick={() => {
+          colorMode.toggleColorMode();
+        }}
+      >
         {theme.palette.mode === 'dark' ? (
           <LightModeOutlinedIcon />
         ) : (
@@ -67,8 +74,6 @@ function Notification() {
     </List>
   );
 }
-
-
 
 export function BasicPopover() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(

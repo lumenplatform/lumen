@@ -192,7 +192,10 @@ export default function TopicItemHeader({
         </IconButton>
         <IconButton
           size="small"
-          onClick={() => actions.removeTopicAt(sectionIndex, index)}
+          onClick={(e) => {
+            e.stopPropagation();
+            actions.removeTopicAt(sectionIndex, index);
+          }}
         >
           <DeleteOutline fontSize="small" />
         </IconButton>

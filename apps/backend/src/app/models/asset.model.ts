@@ -1,6 +1,17 @@
-import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  AfterCreate,
+  AfterUpdate,
+  Entity,
+  Enum,
+  EventArgs,
+  PrimaryKey,
+  Property,
+  RequestContext,
+  UpdateOptions,
+} from '@mikro-orm/core';
 import { v4 } from 'uuid';
 import { AMSService, StreamingURL } from '../services/drm/ams.service';
+import { StorageService } from '../services/storage.service';
 export enum AssetType {
   FILE = 'FILE',
   IMAGE = 'IMAGE',
@@ -49,6 +60,7 @@ export class Asset {
 
   @Property({ persist: false })
   get path() {
+    // generate a token for the drm server
     if (this.streamingURLs) {
       return {
         src: this.streamingURLs[0].url,
@@ -62,6 +74,43 @@ export class Asset {
         ],
       };
     }
-    return this.url;
+    try {
+      // generate a signed url allowing access for 1hr
+      return StorageService.generateSignedURL(this.url);
+    } catch (e) {
+      // if an error occurs during generation (eg:invalid url) just return the url
+      return this.url;
+    }
+  }
+
+  @AfterUpdate()
+  @AfterCreate()
+  async processVideo(eventArgs: EventArgs<Asset>, options: UpdateOptions<any>) {
+    if (
+      this.mime.startsWith('video') &&
+      !this.streamingURLs &&
+      process.env.AUTO_PROCESS_VIDEO == 'true'
+    ) {
+      this.status = AssetStatus.PROCESSING;
+
+      await eventArgs.em.nativeUpdate(
+        Asset,
+        { id: this.id },
+        { status: AssetStatus.PROCESSING }
+      );
+
+      const drmService = new AMSService();
+      const r = await drmService.getStreamingURLsFormURL(this.url);
+
+      await eventArgs.em.nativeUpdate(
+        Asset,
+        { id: this.id },
+        {
+          contentKey: r[0].keyIdentifier,
+          status: AssetStatus.ACTIVE,
+          streamingURLs: r,
+        }
+      );
+    }
   }
 }

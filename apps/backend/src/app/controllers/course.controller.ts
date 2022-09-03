@@ -1,7 +1,8 @@
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
+import { CourseMaterial } from '../models/course-material.model';
 import { Course } from '../models/course.model';
-import { Enrollment } from '../models/enrollment.model';
+import { CompletedTopic, Enrollment } from '../models/enrollment.model';
 import { CourseReview } from '../models/review.mode';
 import { User } from '../models/user.model';
 import { Quiz } from '../models/quiz.model';
@@ -98,9 +99,8 @@ export class CourseController {
 
   async enroll(req, userId, courseId) {
     const course = await this.getCourseByID(courseId);
-    const user: User = new User();
     const em = RequestContext.getEntityManager();
-    /* const user = await em.findOneOrFail(User,{}); */
+    const user = await em.findOneOrFail(User, { uid: userId });
     const domain = `${req.protocol == 'https' ? 'https:' : 'http'}://${req.get(
       'host'
     )}`;
@@ -114,10 +114,10 @@ export class CourseController {
   }
 
   async enrollSuccess(sessionId) {
-    const { user, course, price } = await this.payment.getPaymentDetails(
+    const { user, course, price, txnId } = await this.payment.getPaymentDetails(
       sessionId
     );
-    this.courseService.addEnrollment(user, course, price);
+    this.courseService.addEnrollment(txnId, user, course, price);
     //this.mail.sendMail()
     return `/student/${course.courseId}`;
   }
@@ -127,5 +127,45 @@ export class CourseController {
     const course = await em.findOneOrFail(Course,{courseId: id});
     const quizzes = await em.find(Quiz, { course: course });
     return quizzes;
+  }
+
+  async getEnrolledCourses(uid: string) {
+    const em = RequestContext.getEntityManager();
+    return em
+      .find(Enrollment, { user: { uid } }, { populate: ['course'] })
+      .then((r) => r.map((k) => k.course));
+  }
+
+  async getRecommendedCourses(uid: string) {
+    // todo : properly calculate recommended
+    const enrolled = await this.getEnrolledCourses(uid);
+    const em = RequestContext.getEntityManager();
+    const recommended = await em.find(Course, {
+      courseId: { $nin: enrolled.map((r) => r.courseId) },
+    });
+    return recommended.sort(() => 0.5 - Math.random()).slice(0, 3);
+  }
+
+  async markTopicAsCompleted(
+    userId: string,
+    courseId: string,
+    topicId: string
+  ) {
+    const em = RequestContext.getEntityManager();
+
+    const [enrollment, topic] = await Promise.all([
+      em.findOneOrFail(Enrollment, {
+        user: { uid: userId },
+        course: { courseId },
+      }),
+      em.findOneOrFail(CourseMaterial, { id: topicId }),
+    ]);
+
+    const completedTopic = em.create(CompletedTopic, {
+      enrollment,
+      topic,
+    });
+    em.persist(completedTopic);
+    em.flush();
   }
 }
