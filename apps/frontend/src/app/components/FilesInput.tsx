@@ -393,6 +393,7 @@ export class FileItemComp extends Component<
           blockBlobClient.setHTTPHeaders({
             blobContentDisposition: 'inline;',
             blobContentType: this.props.fileItem.mime,
+            blobCacheControl: 'public, max-age=604800, immutable',
           })
         )
         .then((_) => {

@@ -53,12 +53,12 @@ export function Header() {
           style={{ height: '48px', marginRight: '1rem' }}
           alt=""
         />
-        <Typography fontWeight={700} fontSize="1.5rem">
+        <Typography fontWeight={700} fontSize="1.5rem" sx={{ mr: 2 }}>
           Lum<span style={{ color: theme.palette.primary.main }}>ė</span>n
         </Typography>
-        <Button sx={{ ml: 2 }} variant="outlined" disableElevation>
+        {/* <Button  variant="outlined" disableElevation>
           Courses
-        </Button>
+        </Button> 
         <TextField
           size="small"
           placeholder="Search"
@@ -69,7 +69,7 @@ export function Header() {
               </InputAdornment>
             ),
           }}
-        />
+        />*/}
         {/* <Button sx={{ mr: 2 }} onClick={() => navigate('/manage')}>
               Teach
             </Button>  */}

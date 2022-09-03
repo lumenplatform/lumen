@@ -79,7 +79,7 @@ export function StudentHero() {
             }}
           >
             <Box>
-              <Chip variant='outlined' icon={<InfoOutlined/>} clickable color='success'   label={'V1.0 Released. See What\'s New'} ></Chip>
+              {/* <Chip variant='outlined' icon={<InfoOutlined/>} clickable color='success'   label={'V1.0 Released. See What\'s New'} ></Chip> */}
             </Box>
             <Typography variant="h2" fontWeight={600} my={3}>
               Learning, Reimagined.

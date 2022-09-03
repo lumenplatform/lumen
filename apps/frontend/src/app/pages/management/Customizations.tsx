@@ -134,9 +134,9 @@ export default function Customization() {
       <Typography my={1} mt={4} variant="subtitle2">
         Theming
       </Typography>
-      Primary Color :
+      Primary Color :  &nbsp; 
       <input type="color" {...register('theme.theme.primary')} />
-      &nbsp; Secondary Color :
+      &nbsp; Secondary Color :  &nbsp; 
       <input type="color" {...register('theme.theme.secondary')} />
       <Box sx={{ mt: 4 }}>
         <LoadingButton
