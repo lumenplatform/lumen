@@ -7,6 +7,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { getOrgCoursesById } from '../../../../api';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 
 //sample data array with objects containg username,email,enrolled date,course title
 const data = [
@@ -16,27 +19,28 @@ const data = [
   { username: 'John Doe', role: 'Modreator', course: 'machine learning' },
   { username: 'John Doe', role: 'Modreator', course: 'machine learning' },
 ];
+
 export default function CourseInstructors() {
   const theme = useTheme();
+  const { courseId } = useParams();
+  const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
+    getOrgCoursesById(courseId ?? '')
+  );
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ pl: theme.spacing(3) }}>User</TableCell>
-            <TableCell>Role</TableCell>
+            <TableCell sx={{ pl: theme.spacing(3) }}>Name</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row: any) => (
-            <TableRow key={row.title}>
+          {courseData.instructors && courseData.instructors.map((row: any) => (
+            <TableRow key={row.uid}>
               <TableCell sx={{ pl: theme.spacing(3) }}>
-                <Typography variant="body2">{row.username}</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="body2">{row.role}</Typography>
+                <Typography variant="body2">{row.name}</Typography>
               </TableCell>
               <TableCell>
                 <Button

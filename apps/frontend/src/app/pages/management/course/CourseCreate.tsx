@@ -35,7 +35,7 @@ export default function CourseCreate() {
 
   const courseCreateMutation = useMutation(createNewCourse);
   const courseUpdateMutation = useMutation(updateCourse);
-
+  
   // Active Tab
   const [value, setValue] = useState(0);
 
