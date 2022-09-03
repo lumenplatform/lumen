@@ -1,14 +1,14 @@
+import { ArrowBack } from '@mui/icons-material';
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, Card, Divider, InputAdornment, Skeleton, Stack, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getAttemptById, getQuizById, markSubmssion } from '../../../api';
 import EssayQ from '../../../components/EssayQuiz';
 import MCQ from '../../../components/MCQQuiz';
-
 
 function MarkingBox(props: any) {
   const { markEnabled, maxMarks, submissionId, marks = 0 } = props;
@@ -46,7 +46,7 @@ function MarkingBox(props: any) {
 }
 
 export default function QuizMarking() {
-
+  const navigate = useNavigate();
   const { courseId, examId, attemptId } = useParams();
   const [quizArray, setQuizArray] = useState<any>([]);
   const {
@@ -71,13 +71,26 @@ export default function QuizMarking() {
     }
   }, [examData, attemptData]);
 
-  if (isExamLoading || isExamError || isAttemptError || isAttemptError)
+  if (isExamLoading || isExamError || isAttemptError || isAttemptLoading)
     return <Skeleton></Skeleton>;
 
   return (
     <Box sx={{ mb: 5 }}>
-      <Typography variant="h5">{examData.settings.title}</Typography>
-      <Typography variant="body1">{attemptId}</Typography>
+      <Button
+        startIcon={<ArrowBack />}
+        onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/attempts`)}
+        color="inherit"
+      >
+        Back to Attempts
+      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h5">{examData.settings.title}</Typography>
+        &nbsp;|&nbsp;
+        <Box sx={{ display: 'flex',flexDirection:'column' }}>
+          <Typography variant="subtitle1" sx={{ lineHeight: 1 }}>{attemptData.user.name}</Typography>
+          <Typography variant="caption" sx={{ lineHeight: 1 }}>{attemptId}</Typography>
+        </Box>
+      </Box>
       <Box sx={{
         display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'
       }}>

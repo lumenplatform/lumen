@@ -70,13 +70,7 @@ export class QuizController {
   }
 
   async getAttempts(quizId: string) {
-    const em = RequestContext.getEntityManager();
-    const attempts = await em.find(
-      Attempt,
-      { quiz: quizId },
-      { populate: ['user', 'submission'] }
-    );
-    return attempts;
+    return await this.attempt.getAttemptsByQuizId(quizId);
   }
 
   async updateAttempt(attemptId: string, data: any) {

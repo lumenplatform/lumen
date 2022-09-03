@@ -71,7 +71,7 @@ export class AttemptService {
   }
 
   async completeAttempt(quizId: string, attemptId: string) {
-    console.log("asdasdkasdkljaskldjaslkdja3");
+    console.log('asdasdkasdkljaskldjaslkdja3');
 
     const em = RequestContext.getEntityManager();
     const attempt = await em.findOneOrFail(
@@ -79,14 +79,24 @@ export class AttemptService {
       { id: attemptId },
       { populate: ['quiz'] }
     );
-      console.log(attempt);
+    console.log(attempt);
     attempt.completedAt = new Date(); //mark as completed
     attempt.marks = 0; //reset marks
     attempt.attemptStatus = AttemptStatus.COMPLETED; //mark as completed
-    attempt.quiz.noOfAttempts=+1; //increment no of attempts
-    console.log("num attepmets", attempt.quiz.noOfAttempts);
+    attempt.quiz.noOfAttempts = +1; //increment no of attempts
+    console.log('num attepmets', attempt.quiz.noOfAttempts);
     await this.markAttempt(attemptId); //mark attempt
     await em.flush();
+  }
+
+  async getAttemptsByQuizId(quizId: string) {
+    const em = RequestContext.getEntityManager();
+    const attempts = await em.find(
+      Attempt,
+      { quiz: quizId },
+      { populate: ['user', 'submission'] }
+    );
+    return attempts;
   }
 
   async getAttemptById(attemptId: string) {
@@ -94,18 +104,17 @@ export class AttemptService {
     const attempt = await em.findOneOrFail(
       Attempt,
       { id: attemptId },
-      { populate: ['submission', 'submission.mcqAnswer'] }
+      { populate: ['user', 'submission', 'submission.mcqAnswer'] }
     );
     return attempt;
   }
- 
-  async markAttempt(attemptId: string) {
 
+  async markAttempt(attemptId: string) {
     const em = RequestContext.getEntityManager();
     const attempt = await em.findOneOrFail(
       Attempt,
       { id: attemptId },
-      { populate: ['submission','submission.mcqAnswer'] }
+      { populate: ['submission', 'submission.mcqAnswer'] }
     );
     const questions = await em.find(
       Question,
@@ -160,7 +169,6 @@ export class AttemptService {
       : MarkingStatus.NOT_MARKED;
 
     await em.flush();
-  
   }
 
   async markSubmission(

@@ -29,9 +29,10 @@ export default function Attempts() {
         isError: isExamError,
     } = useQuery(['exam', examId], () => getQuizById(courseId!, examId!));
 
-    if (isLoading || isError)
+    if (isLoading || isError || isExamLoading || isExamError)
         return <Skeleton></Skeleton>;
 
+        console.log(attemptData);
     return (
         <Box>
             <Button
