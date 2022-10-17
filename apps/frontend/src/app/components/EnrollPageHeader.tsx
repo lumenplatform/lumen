@@ -108,7 +108,7 @@ export default function EnrollHEader() {
             display="inline"
             style={{ marginLeft: 10 }}
           >
-            120 Already enrolled
+            3 Already enrolled
 
             {/* get the total */}
           </Typography>

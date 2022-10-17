@@ -41,7 +41,7 @@ export default function CourseEnrolmentOptions(props: any) {
 
       <Box sx={{ maxWidth: '1440px', px: 3 }} mt='20px'>
         <Typography variant="body2" lineHeight={1} mb='20px' align='left'>
-          <b>120</b> already enrolled. 
+          <b>3</b> already enrolled. 
         </Typography>
       </Box>
         
