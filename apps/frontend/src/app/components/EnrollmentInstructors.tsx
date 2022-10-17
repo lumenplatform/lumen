@@ -11,7 +11,7 @@ import { getCourseById } from '../api';
 export default function Instructors() {
   const { courseId } = useParams();
 
-  const {
+  const  {
     data: course_instructors,
     isLoading,
     isError,
@@ -37,8 +37,8 @@ export default function Instructors() {
           <Typography variant="h6" sx={{ mb: 1 }}>
           {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
-          <Typography variant="subtitle1">1250 learners</Typography>
-          <Typography variant="subtitle1">12 courses</Typography>
+          <Typography variant="subtitle1">2 learners</Typography>
+          <Typography variant="subtitle1">1 courses</Typography>
         </Stack>
       </Stack>
 
@@ -53,12 +53,13 @@ export default function Instructors() {
           src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
           sx={{ width: 90, height: 90 }}
         />
+        
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
             {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
-          <Typography variant="subtitle1">1340 learners</Typography>
-          <Typography variant="subtitle1">10 courses</Typography>
+          <Typography variant="subtitle1">1 learners</Typography>
+          <Typography variant="subtitle1">3 courses</Typography>
         </Stack>
       </Stack>
     </Container>

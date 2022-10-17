@@ -40,6 +40,10 @@ export default function EnrollHEader() {
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
+  const {
+    data: course_instructors,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
   if (isError || isLoading) {
     return <Skeleton></Skeleton>;
   }
@@ -83,7 +87,7 @@ export default function EnrollHEader() {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
           />
           <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-            Remy Sharp
+          {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
         </Box>
 
@@ -93,7 +97,7 @@ export default function EnrollHEader() {
             src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
           />
           <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-            Kevin Wayne
+          {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
         </Box>
 
