@@ -73,7 +73,7 @@ export default function EnrollHEader() {
             component="h3"
             sx={{ lineHeight: 0, ml: 1 }}
           >
-            34 ratings  
+            3 ratings  
             {/* get the count from table */}
 
           </Typography>

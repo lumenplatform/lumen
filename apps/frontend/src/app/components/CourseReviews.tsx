@@ -21,7 +21,9 @@ import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress';
 
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getCourseReview } from '../api';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -45,55 +47,20 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CourseReviews(props: any) {
-  const reviews = [
-    {
-      review:
-        'The instructor was very articulate and the content is very feature rich. I also like the idea of answering open ended questions about data.',
-      rating: '4',
-      courseName: 'Calculas Basics',
-      userName: 'Dariya K.',
-      courseId: 'Course Id',
-      userId: 'User Id',
-      userImage: 'http://www.venmond.com/demo/vendroid/img/avatar/big.jpg',
-      date: '2022-08-01',
-    },
-    {
-      review:
-        'For anyone starting out as a data analyst, this is a great introduction and is very inspiring. The content was well paced and was accessible.',
-      rating: '5',
-      courseName: 'Machine learning',
-      userName: 'Lisa L.',
-      courseId: 'Course Id',
-      userId: 'User Id',
-      userImage:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaH95MYy4lQdqXKOR2FCcv2KIHRhz7rCj4N8VKm4zbQmfaOU7lU_m_ykDR6sWGMMEKof8&usqp=CAU',
-      date: '2022-08-05',
-    },
-    {
-      review:
-        "Gaining new knowledge and skills through Coursera helped me break out of the mold I'd been in for over a decade. Coursera helped open doors for me.",
-      rating: '4',
-      courseName: 'Key Technologies for Business',
-      userName: 'Loreeli G.',
-      courseId: 'Course Id',
-      userId: 'User Id',
-      userImage:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdZSsRW8ahClgpWbdmk1wKCv_6d5ZNEf_kuZLEmarGpS7KAd8cHuXo9UPSJOy_EESmpu8&usqp=CAU',
-      date: '2022-08-10',
-    },
-    {
-      review:
-        'The Specialization I took blew my mind. Each course was interesting, fun, and motivational, which encouraged me to continue learning.',
-      rating: '4',
-      courseName: 'Python for Everybody',
-      userName: 'Visal K.',
-      courseId: 'Course Id',
-      userId: 'User Id',
-      userImage:
-        'https://www.bnl.gov/today/body_pics/2017/06/stephanhruszkewycz-hr.jpg',
-      date: '2022-08-11',
-    },
-  ];
+
+  const { courseId } = useParams();
+
+  const  {
+    data: course_reviews,
+    isLoading,
+    isError,
+  } = useQuery(['course-reviews'+courseId, courseId], () => getCourseReview(courseId!));
+
+  if (isError || isLoading) {
+    return <Typography variant="subtitle1">No Reviews Yet.</Typography>;
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const theme = useTheme();
   return (
     <div>
@@ -116,7 +83,7 @@ export default function CourseReviews(props: any) {
               <Rating name="read-only" value={4} readOnly size="small" />
               <div style={{ height: '48px', paddingTop: '' }}>
                 {' '}
-                130 Reviews{' '}
+                3 Reviews{' '}
               </div>
             </Box>
           </Box>
@@ -214,11 +181,11 @@ export default function CourseReviews(props: any) {
 
         <Grid item xs={10} md={10}>
           <Item>
-            {reviews.map((review: any) => (
+          {course_reviews.map((review:any) => (
               <>
                 <ListItem alignItems="flex-start">
                   <ListItemAvatar>
-                    <Avatar alt={review.userName} src={review.userImage} />
+                    {/* <Avatar alt={review.userName} src={review.userImage} /> */}
                   </ListItemAvatar>
                   <ListItemText
                     primary={
@@ -230,7 +197,7 @@ export default function CourseReviews(props: any) {
                             variant="body2"
                             color="text.primary"
                           >
-                            {review.userName}
+                            {/* {review.userName} */}
                           </Typography>
                           <Typography
                             sx={{ display: 'inline' }}
@@ -238,7 +205,7 @@ export default function CourseReviews(props: any) {
                             variant="caption"
                             color="text.primary"
                           >
-                            {' - ' + review.courseName}
+                            {/* {' - ' + review.courseName} */}
                           </Typography>
                         </Box>
                         <Rating
@@ -254,7 +221,7 @@ export default function CourseReviews(props: any) {
                           variant="caption"
                           color="text.primary"
                         >
-                          {review.date}
+                          {/* {review.date} */}
                         </Typography>
                       </Box>
                     }

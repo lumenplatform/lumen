@@ -59,6 +59,10 @@ export function getCourseMaterial(id: string) {
   return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
 }
 
+export function getCourseReview(id: string) {
+  return client.get<any>(`/courses/${id}/reviews`).then((r) => r.data.data);
+}
+
 // MANAGEMENT
 export function createNewCourse(data: any) {
   return client.post('/manage/courses', data, {});
