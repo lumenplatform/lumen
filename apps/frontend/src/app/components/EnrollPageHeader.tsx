@@ -19,6 +19,8 @@ import Faq from './FAQ';
 import { useQuery } from 'react-query';
 import { Outlet, useParams } from 'react-router-dom';
 import { getCourseById } from '../api';
+import { Header } from '../pages/public/fragments/Header';
+import StudentHeader from './StudentHeader';
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -49,7 +51,9 @@ export default function EnrollHEader() {
   }
 
   return (
+    
     <React.Fragment>
+      <StudentHeader />
       <Box
         sx={{
           backgroundImage:
