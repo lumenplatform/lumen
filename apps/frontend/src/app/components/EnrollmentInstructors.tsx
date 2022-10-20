@@ -11,37 +11,18 @@ import { getCourseById } from '../api';
 export default function Instructors() {
   const { courseId } = useParams();
 
-  const {
+  const  {
     data: course_instructors,
     isLoading,
     isError,
-  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+  } = useQuery(['course-instructors'+courseId, courseId], () => getCourseById(courseId!));
 
   if (isError || isLoading) {
     return <Typography variant="subtitle1">No instructors</Typography>;
   }
   return (
     <Container>
-      <Stack
-        direction="row"
-        spacing={3}
-        sx={{ margin: '2% 0' }}
-        alignItems="center"
-      >
-        <Avatar
-          alt="Remy Sharp"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
-          sx={{ width: 90, height: 90 }}
-        />
-        <Stack>
-          <Typography variant="h6" sx={{ mb: 1 }}>
-          {course_instructors.first_name} {course_instructors.last_name}
-          </Typography>
-          <Typography variant="subtitle1">1250 learners</Typography>
-          <Typography variant="subtitle1">12 courses</Typography>
-        </Stack>
-      </Stack>
-
+      {course_instructors.map((instructor:any) => (
       <Stack
         direction="row"
         spacing={3}
@@ -53,14 +34,16 @@ export default function Instructors() {
           src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
           sx={{ width: 90, height: 90 }}
         />
+        
         <Stack>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            {course_instructors.first_name} {course_instructors.last_name}
+            {instructor.first_name} {instructor.last_name}
           </Typography>
-          <Typography variant="subtitle1">1340 learners</Typography>
-          <Typography variant="subtitle1">10 courses</Typography>
+          <Typography variant="subtitle1">1 learners</Typography>
+          <Typography variant="subtitle1">3 courses</Typography>
         </Stack>
       </Stack>
+      ))};
     </Container>
   );
 }

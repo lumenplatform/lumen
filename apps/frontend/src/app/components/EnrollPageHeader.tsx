@@ -18,7 +18,11 @@ import Faq from './FAQ';
 
 import { useQuery } from 'react-query';
 import { Outlet, useParams } from 'react-router-dom';
-import { enrollInCourse, getCourseById } from '../api';
+ 
+import {enrollInCourse, getCourseById } from '../api';
+import { Header } from '../pages/public/fragments/Header';
+import StudentHeader from './StudentHeader';
+ 
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -43,12 +47,18 @@ export default function EnrollHEader() {
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
+  const {
+    data: course_instructors,
+  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+
   if (isError || isLoading) {
     return <Skeleton></Skeleton>;
   }
 
   return (
+    
     <React.Fragment>
+      <StudentHeader />
       <Box
         sx={{
           backgroundImage:
@@ -72,8 +82,8 @@ export default function EnrollHEader() {
             component="h3"
             sx={{ lineHeight: 0, ml: 1 }}
           >
-            34 ratings
-            {/* get the count from table */}
+            3 ratings  
+              {/* get the count from table */}
           </Typography>
         </Box>
 
@@ -85,7 +95,7 @@ export default function EnrollHEader() {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
           />
           <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-            Remy Sharp
+          {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
         </Box>
 
@@ -95,7 +105,7 @@ export default function EnrollHEader() {
             src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
           />
           <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-            Kevin Wayne
+          {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
         </Box>
 
@@ -110,7 +120,8 @@ export default function EnrollHEader() {
             display="inline"
             style={{ marginLeft: 10 }}
           >
-            120 Already enrolled
+ 
+            3 Already enrolled
             {/* get the total */}
           </Typography>
         </Box>

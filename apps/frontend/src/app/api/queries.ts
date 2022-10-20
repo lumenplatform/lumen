@@ -59,6 +59,10 @@ export function getCourseMaterial(id: string) {
   return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
 }
 
+ 
+export function getCourseReview(id: string) {
+  return client.get<any>(`/courses/${id}/reviews`).then((r) => r.data.data);
+ 
 export function getEnrolledCourses() {
   return client.get<any>('/courses/enrolled').then((r) => r.data.data);
 }
@@ -69,6 +73,7 @@ export function getRecommendedCourses() {
 
 export function markTopicAsCompleted(courseId: string, topicId: string) {
   return client.post(`/courses/${courseId}/complete-topic/${topicId}`);
+ 
 }
 
 // MANAGEMENT
