@@ -18,9 +18,11 @@ export enum QuestionsType {
 
 @Entity()
 export class Question {
-    
   @PrimaryKey()
   id: string = v4();
+
+  @Property({ columnType: 'SERIAL' })
+  order: number;
 
   @ManyToOne(() => Quiz)
   exam: Quiz;
@@ -37,6 +39,9 @@ export class Question {
   @Property()
   durationSeconds?: number;
 
-  @OneToMany(() => Answer, (answer) => answer.question)
+  @OneToMany(() => Answer, (answer) => answer.question, {
+    orderBy: { order: 1 },
+    orphanRemoval: true,
+  })
   answers? = new Collection<Answer>(this);
 }

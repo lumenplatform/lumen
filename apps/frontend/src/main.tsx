@@ -8,6 +8,7 @@ import App from './app/app';
 import { AuthProvider } from './app/components/Auth';
 import { environment } from './environments/environment';
 import disableDevtool from 'disable-devtool';
+import ThemeModeProvider from './app/providers/ThemeModeProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -34,7 +35,9 @@ root.render(
         <BrowserRouter>
           <AuthProvider>
             <StorageProvider>
-              <App />
+              <ThemeModeProvider>
+                <App /> 
+              </ThemeModeProvider>
             </StorageProvider>
           </AuthProvider>
         </BrowserRouter>

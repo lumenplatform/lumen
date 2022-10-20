@@ -47,7 +47,7 @@ export default function CourseCard({ course }: { course: any }) {
             >
               <Avatar
                 sx={{ mr: 1 }}
-                src={course.organization.customizations?.logo?.path}
+                src={course.organization.theme?.logo?.path}
               />
               <Box sx={{ minWidth: 0, overflow: 'hidden' }}>
                 <MuiLink

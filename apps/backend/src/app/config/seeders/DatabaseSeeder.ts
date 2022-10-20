@@ -23,6 +23,8 @@ if (!Array.prototype.sample) {
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     const users = new UserFactory(em).make(5);
+    users[0].uid = 'google-oauth2|101061271827612555828';
+    users[0].email = 'dalana199981@gmail.com';
 
     const organizations = organizations_data.map((r: any) =>
       em.create(Organization, r)

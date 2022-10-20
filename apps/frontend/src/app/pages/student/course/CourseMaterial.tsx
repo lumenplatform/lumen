@@ -1,57 +1,25 @@
-import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import AudioIcon from '@mui/icons-material/AudioFileRounded';
-import LinkIcon from '@mui/icons-material/LinkRounded';
-import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
-import VideoIcon from '@mui/icons-material/VideoFileRounded';
-import { useTheme } from '@mui/material';
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import MuiAccordionSummary, {
-  AccordionSummaryProps,
-} from '@mui/material/AccordionSummary';
-import Badge from '@mui/material/Badge';
-import { styled } from '@mui/material/styles';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import OndemandVideoOutlined from '@mui/icons-material/OndemandVideoOutlined';
+import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
+} from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-import { alpha } from '@mui/system';
-import * as React from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { Link as L, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getCourseMaterial } from '../../../api';
-
-const Accordion = styled((props: AccordionProps) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-  '&:not(:last-child)': {
-    marginBottom: 10,
-  },
-  '&:before': {
-    display: 'none',
-  },
-}));
-
-const AccordionSummary = styled((props: AccordionSummaryProps) => (
-  <MuiAccordionSummary
-    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
-    {...props}
-  />
-))(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === 'dark'
-      ? 'rgba(255, 255, 255, .05)'
-      : 'rgba(0, 0, 0, .03)',
-  flexDirection: 'row-reverse',
-  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-    transform: 'rotate(90deg)',
-  },
-  '& .MuiAccordionSummary-content': {
-    marginLeft: theme.spacing(1),
-  },
-}));
-
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
-  borderTop: '1px solid rgba(0, 0, 0, .125)',
-}));
 
 function CourseMaterial(props: any) {
   const { courseId } = useParams();
@@ -60,123 +28,95 @@ function CourseMaterial(props: any) {
     getCourseMaterial(courseId!)
   );
 
+  if (!data) return <Box>'Loading..'</Box>;
+
   return (
-    <div>
-      {data &&
-        data.map((courseMaterial: any) => (
-          <CourseMaterialTopics courseMaterial={courseMaterial} />
-        ))}
-    </div>
+    <Box sx={{ p: 1, position: 'relative' }}>
+      {data.map((section: any) => (
+        <CourseSection section={section} />
+      ))}
+    </Box>
   );
 }
 
-function CourseMaterialTopics(props: any) {
-  const [expanded, setExpanded] = React.useState<true | false>(true);
+function CourseSection({ section }: { section: any }) {
+  const [expanded, setExpanded] = useState<true | false>(true);
 
-  const handleChange =
-    (panel: boolean) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? true : false);
-    };
-
+  const handleChange = () => setExpanded(expanded ? false : true);
   const theme = useTheme();
 
   return (
-    <Accordion expanded={expanded === true} onChange={handleChange(true)}>
-      <AccordionSummary
-        sx={{
-          background: expanded
-            ? alpha(
-                theme.palette.primary.main,
-                theme.palette.action.selectedOpacity
-              )
-            : '',
-        }}
-      >
-        <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
-          {props.courseMaterial.title}
-        </Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Typography sx={{ mb: 2 }}>
-          {props.courseMaterial.description}
-        </Typography>
-        {props.courseMaterial.topics &&
-          props.courseMaterial.topics.map((courseMaterialItem: any) => (
-            <CourseMaterialItem
-              courseMaterialItem={courseMaterialItem}
-              sectionId={props.courseMaterial.id}
-            />
-          ))}
-      </AccordionDetails>
-    </Accordion>
-  );
-}
-
-function CourseMaterialItem({
-  sectionId,
-  courseMaterialItem,
-}: {
-  sectionId: string;
-  courseMaterialItem: any;
-}) {
-  const { courseId } = useParams();
-
-  const [expanded, setExpanded] = React.useState<true | false>(false);
-
-  const handleChange =
-    (panel: boolean) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? true : false);
-    };
-
-  const theme = useTheme();
-
-  return (
-    <Accordion expanded={expanded === true} onChange={handleChange(true)}>
-      <AccordionSummary>
-        <Typography sx={{ color: expanded ? theme.palette.primary.dark : '' }}>
-          {courseMaterialItem.title}
-        </Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <L
-          to={
-            '/student/' +
-            courseId +
-            '/learn/' +
-            sectionId +
-            '/' +
-            courseMaterialItem.id
-          }
-        >
-          Learn
-        </L>
-      </AccordionDetails>
-      {/* {props.courseMaterialItem.resources.map((resource: any) => (
-        <Resource resource={resource} />
-      ))} */}
-    </Accordion>
-  );
-}
-function Resource(props: any) {
-  let Icon;
-  if (props.resource.type === 'video') Icon = <VideoIcon color="action" />;
-  else if (props.resource.type === 'audio') Icon = <AudioIcon color="action" />;
-  else if (props.resource.type === 'link') Icon = <LinkIcon color="action" />;
-  else if (props.resource.type === 'file') Icon = <FileIcon color="action" />;
-
-  return (
-    <AccordionDetails
+    <Accordion
+      expanded={expanded === true}
+      onChange={handleChange}
+      elevation={0}
       sx={{
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'flex-start',
+        borderRadius: '.2rem',
+        border: '1px solid ' + theme.palette.divider,
       }}
     >
-      <Badge color="primary" variant="dot" invisible={props.resource.checked}>
-        {Icon}
-      </Badge>
-      <L to="/student/co1/materialview">{props.resource.title}</L>
-    </AccordionDetails>
+      <AccordionSummary
+        sx={{
+          minHeight: '48px',
+          position: 'sticky',
+          top: 0,
+          background: theme.palette.background.paper,
+          zIndex: 1,
+          borderBottom: '1px solid ' + theme.palette.divider,
+        }}
+        expandIcon={<ExpandMoreIcon />}
+      >
+        <Typography variant="body1" fontWeight={'600'} px={2}>
+          {section.title}
+        </Typography>
+        {section.totalTime} Minutes
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography sx={{ mt: 1, mx: 2 }}>{section.description}</Typography>
+        <List>
+          {section.topics &&
+            section.topics.map((topic: any) => (
+              <CourseTopic topic={topic} sectionId={section.id} />
+            ))}
+        </List>
+      </AccordionDetails>
+    </Accordion>
+  );
+}
+
+const TopicIcon = ({ type }: { type: string }) => {
+  if (type === 'video') return <OndemandVideoOutlined />;
+  if (type === 'quiz') return <QuizOutlinedIcon />;
+  return <ArticleOutlinedIcon />;
+};
+
+function CourseTopic(props: { sectionId: string; topic: any }) {
+  const { courseId } = useParams();
+  const { sectionId, topic } = props;
+  const navigate = useNavigate();
+
+  return (
+    <ListItem disablePadding secondaryAction={<CheckCircleOutlineIcon />}>
+      <ListItemButton
+        sx={{ py: 0 }}
+        onClick={() =>
+          navigate(`/student/${courseId}/learn/${sectionId}/${topic.id}`)
+        }
+      >
+        <ListItemIcon sx={{ color: 'inherit' }}>
+          <TopicIcon type={topic.contentType} />
+        </ListItemIcon>
+        <ListItemText
+          primary={topic.title}
+          secondary={
+            <Box sx={{ textTransform: 'capitalize' }}>
+              {topic.contentType || 'Lesson'}
+              {topic.timeEstimate && ' - ' + topic.timeEstimate + ' Minutes'}
+            </Box>
+          }
+        />
+      </ListItemButton>
+    </ListItem>
   );
 }
 

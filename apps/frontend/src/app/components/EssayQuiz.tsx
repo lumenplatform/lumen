@@ -7,16 +7,16 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
 export default function EssayQ(props: any) {
-  const { questionId, setFlag, setAnswer, question, isFlagged,noOfQuestions,index } = props;
+  const { questionId, setFlag, setAnswer, question, isFlagged, noOfQuestions, index, answer } = props;
 
   return (
-    <Container sx={{ padding: 5 }}>
-      <Card sx={{ Width: 800, minHeight: 300 }}>
+    <Container>
+      <Card sx={{ minHeight: 400 }}>
         <Box sx={{ backgroundColor: '#a0a69d', minHeight: 40, padding: 2 }}>
           <Grid container>
             <Grid item xs={10}>
               <Typography variant="subtitle1">
-              Question {index} of {noOfQuestions}
+                Question {index} of {noOfQuestions}
               </Typography>
             </Grid>
 
@@ -35,24 +35,23 @@ export default function EssayQ(props: any) {
           </Grid>
         </Box>
 
-        <Box sx={{ padding: 5 }}>
-          <FormControl>
+        <Box sx={{ p: 3, width: '100%' }}>
+          <FormControl sx={{ width: '100%' }}>
             <Typography variant="body1" paddingBottom={3}>
               {question}
             </Typography>
-
             <TextField
               id="essay"
               multiline
-              maxRows={20}
               variant="outlined"
               fullWidth
-              rows={10}
+              rows={7}
+              value={answer}
               onChange={(e) => setAnswer(questionId, e.target.value, 'essay')}
             />
           </FormControl>
         </Box>
       </Card>
-    </Container>
+    </Container >
   );
 }

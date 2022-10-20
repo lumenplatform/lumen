@@ -68,7 +68,7 @@ function OverviewTab() {
         </Typography>
         <Box
           sx={{
-            my: 2,
+            my: 1,
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: 2,

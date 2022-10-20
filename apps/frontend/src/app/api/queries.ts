@@ -59,8 +59,21 @@ export function getCourseMaterial(id: string) {
   return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
 }
 
+ 
 export function getCourseReview(id: string) {
   return client.get<any>(`/courses/${id}/reviews`).then((r) => r.data.data);
+ 
+export function getEnrolledCourses() {
+  return client.get<any>('/courses/enrolled').then((r) => r.data.data);
+}
+
+export function getRecommendedCourses() {
+  return client.get<any>('/courses/recommended').then((r) => r.data.data);
+}
+
+export function markTopicAsCompleted(courseId: string, topicId: string) {
+  return client.post(`/courses/${courseId}/complete-topic/${topicId}`);
+ 
 }
 
 // MANAGEMENT
@@ -82,6 +95,10 @@ export function getOrgCoursesById(id: string) {
   return client.get<any>('/manage/courses/' + id, {}).then((r) => r.data.data);
 }
 
+export function getOrgCourseUsers(id: string) {
+  return client.get<any>('/manage/courses/'+id+'/users',{}).then((r)=>r.data.data);
+}
+
 export function getOrgUsers() {
   return client.get<any>('/manage/users/').then((r) => r.data.data);
 }
@@ -93,20 +110,101 @@ export function inviteUserToOrg(data: any) {
 export function getPendingOrgInvitations() {
   return client.get('/manage/users/invites').then((r) => r.data.data);
 }
+
+export function getCurrentOrganization() {
+  return client.get('/org/current').then((r) => r.data.data);
+}
+
+export function updateCurrentOrganization(data: any) {
+  return client.post('/org/current', data).then((r) => r.data.data);
+}
 // END MANAGEMENT
 
+export function enrollInCourse(id: string) {
+  return client.post(`/courses/${id}/enroll/`, {}).then((r) => r.data.data);
+}
+
 export function createNewQuiz(data: any) {
-  return client.post(`/courses/${data.form.course}/quiz/`, data.form).then((r) => r.data.data);
+  return client
+    .post(`/manage/courses/${data.form.course}/quiz/`, data.form)
+    .then((r) => r.data.data);
 }
 
-export function updateQuiz( data: any) {
-  return client.put(`/courses/${data.course}/quiz/${data.examId}`, data.form).then((r) => r.data.data);
+export function updateQuiz(data: any) {
+  return client
+    .put(`/manage/courses/${data.course}/quiz/${data.examId}`, data.form)
+    .then((r) => r.data.data);
 }
 
-export function getQuizById(courseId: string, examId: string) {
-  return client.get<any>(`/courses/${courseId}/quiz/${examId}`).then((r) => r.data.data);
+export function getQuizById(courseId: string, quizId: string) {
+  return client
+    .get<any>(`/manage/courses/${courseId}/quiz/${quizId}`)
+    .then((r) => r.data.data);
 }
 
-export function submitQuiz( data: any) {
-  return client.post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data).then((r) => r.data.data);
+export function getQuizDetails(courseId: string, quizId: string) {
+  return client
+    .get<any>(`/courses/${courseId}/quiz/${quizId}`)
+    .then((r) => r.data.data);
+}
+
+export function getAttemptById(
+  courseId: string,
+  quizId: string,
+  attemptId: string
+) {
+  return client
+    .get<any>(`/courses/${courseId}/quiz/${quizId}/attempt/${attemptId}`)
+    .then((r) => r.data.data);
+}
+
+export function createNewAttempt(data: any) {
+  return client
+    .post(
+      `/courses/${data.courseId}/quiz/${data.quizId}/attempt/create`,
+      data.form
+    )
+    .then((r) => r.data.data);
+}
+
+export function updateAttempt(data: any) {
+  return client
+    .post(
+      `/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/update`,
+      data.submissions
+    )
+    .then((r) => r.data.data);
+}
+
+export function completeAttempt(data: any) {
+  return client
+    .post(
+      `/manage/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/complete`,
+      data.submissions
+    )
+    .then((r) => r.data.data);
+}
+
+export function getResults(
+  courseId: string,
+  quizId: string,
+  attemptId: string
+) {
+  return client
+    .get<any>(
+      `/courses/${courseId}/quiz/${quizId}/attempt/${attemptId}/results`
+    )
+    .then((r) => r.data.data);
+}
+
+export function getQuizzesByCourseId(courseId: string) {
+  return client
+    .get<any>(`/manage/courses/${courseId}/quizzes`)
+    .then((r) => r.data.data);
+}
+
+export function submitQuiz(data: any) {
+  return client
+    .post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data)
+    .then((r) => r.data.data);
 }

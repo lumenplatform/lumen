@@ -1,6 +1,6 @@
 import { Edit, EditOutlined } from '@mui/icons-material';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import { Button, Chip, Typography, useTheme } from '@mui/material';
+import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -24,9 +24,14 @@ export default function Users() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ my: theme.spacing(2) }} component="div">
-        Courses
-      </Typography>
+      <Stack direction={'row'} justifyContent="space-between" alignItems='center'>
+        <Typography variant="h5" sx={{ my: theme.spacing(2) }} component="div">
+          Courses
+        </Typography>
+        <Button variant='contained' onClick={() => navigate('/manage/new-course')}>
+          New Course
+        </Button>
+      </Stack>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

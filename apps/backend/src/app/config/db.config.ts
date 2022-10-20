@@ -2,7 +2,7 @@ import { Connection, IDatabaseDriver, Options } from '@mikro-orm/core';
 import { Asset } from '../models/asset.model';
 import { CourseMaterial } from '../models/course-material.model';
 import { Course } from '../models/course.model';
-import { Enrollment } from '../models/enrollment.model';
+import { CompletedTopic, Enrollment } from '../models/enrollment.model';
 import { CourseReview } from '../models/review.mode';
 import { Payment } from '../models/payment.model';
 import { Organization } from '../models/organization.model';
@@ -12,6 +12,7 @@ import { Notification } from '../models/notification.model';
 import { Question } from '../models/question.model';
 import { Quiz } from '../models/quiz.model';
 import { Answer } from '../models/answer.model';
+import { Attempt } from '../models/attempt.model';
 
 import path = require('path');
 import { UserInvite } from '../models/user-invite.model';
@@ -26,6 +27,7 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     Notification,
     Organization,
     Enrollment,
+    CompletedTopic,
     Course,
     CourseMaterial,
     CourseResource,
@@ -35,6 +37,7 @@ const ORMConfig: Options<IDatabaseDriver<Connection>> = {
     Question,
     Quiz,
     Answer,
+    Attempt,
   ],
   type: 'postgresql',
   clientUrl: process.env.PG_CONNECTION_STRING,

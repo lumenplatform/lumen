@@ -8,12 +8,10 @@ export function CourseMessage() {
   return (
     <Box sx={{ px: 3 }}>
       <Typography variant="body1" gutterBottom mt={0}>
-        <Box>
-          Write messages to your students (optional) that will be sent
-          automatically when they join or complete your course to encourage
-          students to engage with course content. If you do not wish to send a
-          welcome or congratulations message, leave the text box blank.
-        </Box>
+        Write messages to your students (optional) that will be sent
+        automatically when they join or complete your course to encourage
+        students to engage with course content. If you do not wish to send a
+        welcome or congratulations message, leave the text box blank.
       </Typography>
       <Box
         sx={{

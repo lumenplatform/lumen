@@ -18,9 +18,11 @@ import Faq from './FAQ';
 
 import { useQuery } from 'react-query';
 import { Outlet, useParams } from 'react-router-dom';
-import { getCourseById } from '../api';
+ 
+import {enrollInCourse, getCourseById } from '../api';
 import { Header } from '../pages/public/fragments/Header';
 import StudentHeader from './StudentHeader';
+ 
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -31,7 +33,10 @@ export default function EnrollHEader() {
   };
 
   const enrollbutton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setValue('5');
+    enrollInCourse(courseId!).then((r) => {
+      // eslint-disable-next-line no-restricted-globals
+      location.href = r.paymentUrl;
+    });
   };
 
   const { courseId } = useParams();
@@ -65,10 +70,10 @@ export default function EnrollHEader() {
         }}
       >
         <Typography variant="h3" component="h3">
-        {course.title}
+          {course.title}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Rating name="read-only" value={4} readOnly size="small" />    
+          <Rating name="read-only" value={4} readOnly size="small" />
           {/* get the value from the table (total) */}
 
           <Typography
@@ -78,8 +83,7 @@ export default function EnrollHEader() {
             sx={{ lineHeight: 0, ml: 1 }}
           >
             3 ratings  
-            {/* get the count from table */}
-
+              {/* get the count from table */}
           </Typography>
         </Box>
 
@@ -116,8 +120,8 @@ export default function EnrollHEader() {
             display="inline"
             style={{ marginLeft: 10 }}
           >
+ 
             3 Already enrolled
-
             {/* get the total */}
           </Typography>
         </Box>

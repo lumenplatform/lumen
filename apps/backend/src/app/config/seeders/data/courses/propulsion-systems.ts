@@ -15,7 +15,6 @@ export const propulsionSystems: DeepPartial<Course> = {
   subjectArea: 'Engineering',
   duration: 0,
   price: 12,
-  settings: { isDesktopOnly: true },
 
   courseImage: {
     type: AssetType.IMAGE,
@@ -45,7 +44,50 @@ export const propulsionSystems: DeepPartial<Course> = {
     {
       title: 'An appreciation of propulsion and jet engine rotordynamics',
       topics: [
-        { title: 'Rocket equation; gravity loss; optimum acceleration	' },
+        {
+          title: 'Rocket equation; gravity loss; optimum acceleration	',
+          contentType: 'video',
+          video: {
+            id: 'aa145ac8-67b9-4827-9619-921c06a509be',
+            url: 'https://lumenlmsstorage.blob.core.windows.net/test/Liner%20Algebra.mp4?sv=2021-08-06&se=2022-08-14T15%3A51%3A21Z&sr=c&sp=rcw&sig=XWQnOohK0FgV1ymAzlKQkFKp3%2B5rm3IABPYkknt2Pl0%3D',
+            type: AssetType.VIDEO,
+            status: AssetStatus.ACTIVE,
+            mime: 'video/mp4',
+            name: 'Liner Algebra.mp4',
+            size: 2853188,
+            config: {},
+            contentKey: 'e6096811-c1b2-45f9-9ee1-1b6c9889268d',
+            streamingURLs: [
+              {
+                url: 'https://lumenlms-aase.streaming.media.azure.net/8044af77-ca0b-4674-a882-e825c4b95516/Liner Algebra.ism/manifest(format=mpd-time-csf,encryption=cenc)',
+                keyIdentifier: 'e6096811-c1b2-45f9-9ee1-1b6c9889268d',
+              },
+              {
+                url: 'https://lumenlms-aase.streaming.media.azure.net/8044af77-ca0b-4674-a882-e825c4b95516/Liner Algebra.ism/manifest(format=mpd-time-cmaf,encryption=cenc)',
+                keyIdentifier: 'e6096811-c1b2-45f9-9ee1-1b6c9889268d',
+              },
+              {
+                url: 'https://lumenlms-aase.streaming.media.azure.net/8044af77-ca0b-4674-a882-e825c4b95516/Liner Algebra.ism/manifest(encryption=cenc)',
+                keyIdentifier: 'e6096811-c1b2-45f9-9ee1-1b6c9889268d',
+              },
+            ],
+          },
+          resources: [
+            {
+              id: '1b326fb6-7b99-4df6-afc1-6fa9ea5d1d671',
+              asset: {
+                id: '1b326fb6-7b99-4df6-afc1-6fa9ea5d1d671',
+                url: 'https://lumenlmsstorage.blob.core.windows.net/test/Problem%20Set%201.pdf?sv=2021-08-06&se=2022-08-23T01%3A35%3A05Z&sr=c&sp=rcw&sig=uaoZYnbiTtXAPMC8gcgKbNpyOwB%2FmcXGo%2FffAJTVDqw%3D',
+                type: AssetType.FILE,
+                status: AssetStatus.ACTIVE,
+                mime: 'application/pdf',
+                name: 'Problem Set 1.pdf',
+                size: 227552,
+                config: {},
+              },
+            },
+          ],
+        },
         { title: 'Rocket staging; range of aircraft; climb & acceleration	' },
         { title: 'Orbital mechanics; single force center	' },
         { title: 'Hyperbolic orbits; interplanetary transfer	' },
