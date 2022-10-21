@@ -1,4 +1,5 @@
 import { createContext, useState, useMemo } from 'react';
+import { useLocalStorage } from 'react-use';
 
 export const ThemeContext = createContext<{
   toggleColorMode: () => void;
@@ -6,14 +7,18 @@ export const ThemeContext = createContext<{
 }>(null!);
 
 export default function ThemeModeProvider(props: any) {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [mode, setMode] = useLocalStorage<'light' | 'dark'>(
+    'theme-context',
+    'light',
+    { raw: true }
+  );
 
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode(mode === 'light' ? 'dark' : 'light');
       },
-      mode,
+      mode: mode ? mode : 'light',
     }),
     [mode]
   );

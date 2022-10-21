@@ -1,15 +1,6 @@
-import SearchOutlined from '@mui/icons-material/SearchOutlined';
-import {
-  Box,
-  Button,
-  InputAdornment,
-  Link as MuiLink,
-  TextField,
-  Toolbar,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Button, Link as MuiLink, Toolbar, useTheme } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
+import ThemedLogo from '../../../components/ThemedLogo';
 
 export function Header() {
   const navigate = useNavigate();
@@ -25,18 +16,17 @@ export function Header() {
       {({ isActive }) => (
         <MuiLink
           sx={{
-            color: 'black',
+            color: theme.palette.text.primary,
             mr: 3,
             cursor: 'pointer',
             textDecoration: isActive ? 'underline' : 'none',
-            textDecorationColor: (t) => theme.palette.primary.main,
+            textDecorationColor: theme.palette.primary.main,
             textDecorationThickness: '3px',
             fontWeight: isActive ? 600 : 400,
             '&:hover': {
               color: theme.palette.primary.main,
             },
           }}
-          // style={({ isActive }: any) => ({ color: 'red' })}
           underline="none"
         >
           {text}
@@ -48,14 +38,7 @@ export function Header() {
   return (
     <Box>
       <Toolbar sx={{ my: 2 }}>
-        <img
-          src="/assets/icons/logo_avatar.png"
-          style={{ height: '48px', marginRight: '1rem' }}
-          alt=""
-        />
-        <Typography fontWeight={700} fontSize="1.5rem" sx={{ mr: 2 }}>
-          Lum<span style={{ color: theme.palette.primary.main }}>ė</span>n
-        </Typography>
+        <ThemedLogo />
         {/* <Button  variant="outlined" disableElevation>
           Courses
         </Button> 

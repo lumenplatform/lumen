@@ -1,13 +1,13 @@
-import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
+import { Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
-import { Link } from 'react-router-dom';
 import HeaderActions from './HeaderActions';
+import ThemedLogo from './ThemedLogo';
 
 function StudentHeader() {
   return (
     <div>
       <Toolbar>
-        <img src="/assets/icons/logo_horiz.png" style={{ height: '48px' }} />
+        <ThemedLogo />
         <Box sx={{ flexGrow: 1 }}></Box>
         <HeaderActions />
       </Toolbar>

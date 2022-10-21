@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import HeaderActions from '../../components/HeaderActions';
+import ThemedLogo from '../../components/ThemedLogo';
 
 const drawerWidth = 220;
 
@@ -201,10 +202,7 @@ export default function AdminLayout() {
         open={open}
       >
         <DrawerHeader>
-          <img
-            src="/assets/icons/logo_horiz.png"
-            style={{ height: '48px' }}
-          ></img>
+          <ThemedLogo />
         </DrawerHeader>
         <SideNavItems />
       </Drawer>

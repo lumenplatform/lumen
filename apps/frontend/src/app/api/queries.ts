@@ -62,7 +62,8 @@ export function getCourseMaterial(id: string) {
  
 export function getCourseReview(id: string) {
   return client.get<any>(`/courses/${id}/reviews`).then((r) => r.data.data);
- 
+}
+
 export function getEnrolledCourses() {
   return client.get<any>('/courses/enrolled').then((r) => r.data.data);
 }
