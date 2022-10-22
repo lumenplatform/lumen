@@ -7,12 +7,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAttemptsByQuizId, getQuizById } from '../../../api';
+import { getAttemptsByQuizId, getQuizById, releaseSubmissionMarks } from '../../../api';
 import { ArrowBack } from '@mui/icons-material';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useEffect } from 'react';
 
 export default function Attempts() {
     const theme = useTheme();
@@ -21,6 +22,7 @@ export default function Attempts() {
     const {
         data: attemptData,
         isLoading,
+        refetch: refetchAttempts,
         isError } = useQuery(['exam-attempts', examId], () => getAttemptsByQuizId(courseId!, examId!));
 
     const {
@@ -29,10 +31,18 @@ export default function Attempts() {
         isError: isExamError,
     } = useQuery(['exam', examId], () => getQuizById(courseId!, examId!));
 
+    const { mutate: releaseMarksMutation, isSuccess: releaseMarksSucces } = useMutation(releaseSubmissionMarks);
+
+    useEffect(() => {
+        if (releaseMarksSucces) {
+            refetchAttempts();
+        }
+    }, [releaseMarksSucces]);
+
     if (isLoading || isError || isExamLoading || isExamError)
         return <Skeleton></Skeleton>;
 
-        console.log(attemptData);
+    console.log(attemptData);
     return (
         <Box>
             <Button
@@ -84,7 +94,7 @@ export default function Attempts() {
                                     }
                                 </TableCell>
                                 <TableCell>
-                                    {row.markingStatus == 'MARKED' ?
+                                    {row.releasedStatus == 'RELEASED' ?
                                         <Chip label='Released' color="success" size="small" variant="outlined" sx={{ width: 120 }} />
                                         : <Chip label='Not Released' color="warning" size="small" variant="outlined" sx={{ width: 120 }} />
                                     }
@@ -101,10 +111,8 @@ export default function Attempts() {
                                     |
                                     <Button
                                         startIcon={<DoneAllIcon />}
-                                        onClick={() => {
-                                            navigate(`/manage/courses/${courseId}/exam/${examId}/attempt/${row.id}`);
-                                        }}
-                                        disabled={row.markingStatus == 'NOT_MARKED'}
+                                        onClick={() => releaseMarksMutation({ courseId: courseId, quizId: examId, attemptId: row.id })}
+                                        disabled={row.releasedStatus == 'RELEASED' || row.markingStatus == 'NOT_MARKED'}
                                     >
                                         Release
                                     </Button>

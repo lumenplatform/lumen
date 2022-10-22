@@ -51,7 +51,7 @@ export default function QuizResultPage() {
                   >
                     <TableCell component="th" scope="row">{index + 1}</TableCell>
                     {row.question.type == 'essay' ?
-                      <TableCell align="right" >-</TableCell> 
+                      <TableCell align="right" >-</TableCell>
                       : <TableCell align="right">{row.correct ? 'Correct' : 'Incorrect'}</TableCell>
                     }
                     <TableCell align="right">{row.marks}</TableCell>
@@ -75,7 +75,7 @@ export default function QuizResultPage() {
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="h6" lineHeight={1}>
-                      {results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) < results.quiz.settings.passGrade ? 'Fail' : 'Pass'}
+                      {results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) * 100 < results.quiz.settings.passGrade ? 'Fail' : 'Pass'}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

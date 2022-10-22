@@ -68,3 +68,12 @@ quizRouter.get('/:id/submissions/question/:questionId', (req, res, next) => {
     })
     .catch(next);
 });
+
+quizRouter.post('/:id/attempt/:attemptId/release', (req, res, next) => {
+  quizController
+    .releaseMarks(req.params.attemptId)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+});

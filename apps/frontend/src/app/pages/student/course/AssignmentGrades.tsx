@@ -1,14 +1,15 @@
+import { Chip, Typography, useTheme, Skeleton } from '@mui/material';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Button, Chip, Typography, useTheme } from '@mui/material';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import TablePagination from '@mui/material/TablePagination';
+import { useQuery } from 'react-query';
+import { getCourseAttempts } from '../../../api';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function createData(
   Grade_item: string,
@@ -24,58 +25,59 @@ const rows = [
   createData('Activity 1', 159, 50, 24, 4.0),
   createData('Activity 2', 237, 70, 37, 4.3),
   createData('Activity 3', 262, 16, 24, 6.0),
-  
+
 ];
 
-export default function Users() {
-  const theme = useTheme();
-  const activeChip = <Chip label="Active" color="success" size="small" variant="outlined"/>
-  const draftChip = <Chip label="Draft" color="warning" size="small" variant="outlined"/>
-  const discontinuedChip = <Chip label="Discontinued" color="error" size="small" variant="outlined"/>
+export default function Grades() {
+
+  const { courseId } = useParams();
+  const {
+    data: attempts,
+    isLoading,
+    isError } = useQuery(['courseId', courseId], () => getCourseAttempts(courseId!));
+
+
+  if (isLoading || isError) return <Skeleton></Skeleton>;
+
+  console.log(attempts);
 
   return (
     <Box>
-      
+
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell  align="center">Grade item</TableCell>
+              <TableCell align="center">Quiz</TableCell>
               <TableCell align="center">Grade</TableCell>
-              <TableCell align="center">range</TableCell>
-              <TableCell align="center">preccentage</TableCell>
-             
+              <TableCell align="center">Pass/Fail</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-           
-            {rows.map((row) => (
-              <TableRow key={row.Grade_item}>
+            {attempts.map((attempt: any) => (
+              <TableRow key={attempt.id}>
                 <TableCell align="center">
-                <Typography variant="body2" >Ativity 1</Typography>
+                  <Typography variant="body2" >{attempt.quiz.settings.title}</Typography>
                 </TableCell>
-                <TableCell align="center">10</TableCell>
-                <TableCell align="center">0-40</TableCell>
-                <TableCell align="center">
-                 50%
-                </TableCell>
-                
+                {(attempt.markingStatus == 'MARKED' && attempt.releasedStatus == 'RELEASED') ?
+                  <>
+                    <TableCell align="center"> {attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) * 100}%</TableCell>
+                    <TableCell align="center">{attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) * 100 < attempt.quiz.settings.passGrade ? 'Fail' : 'Pass'}</TableCell>
+                  </>
+                  :
+                  <>
+                  <TableCell align="center"><Chip label={'pending'} color="default" /></TableCell>
+                  <TableCell align="center"><Chip label={'pending'} color="default" /></TableCell>
+                  </>
+                }
+
               </TableRow>
             ))}
-            <TableRow>
-              <TableCell align="center">
-               <Typography ><b>Total</b></Typography> 
-              </TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-
-            </TableRow>
           </TableBody>
         </Table>
-        
-        
+
+
       </TableContainer>
     </Box>
   );

@@ -8,6 +8,7 @@ export const quizRouter = express.Router();
 const attemptService = new AttemptService();
 const quizController = new QuizController(attemptService);
 
+// get quiz
 quizRouter.get('/:id', (req, res, next) => {
   quizController
     .getQuizById(req.params.id, req.user)
@@ -17,6 +18,7 @@ quizRouter.get('/:id', (req, res, next) => {
     .catch(next);
 });
 
+//create attempt
 quizRouter.post('/:id/attempt/create', (req, res, next) => {
   quizController
     .createAttempt(req.params.id, req.user)
@@ -26,6 +28,7 @@ quizRouter.post('/:id/attempt/create', (req, res, next) => {
     .catch(next);
 });
 
+//get attempt
 quizRouter.get('/:id/attempt/:attemptId', (req, res, next) => {
   quizController
     .getAttemptById(req.params.attemptId)
@@ -35,6 +38,7 @@ quizRouter.get('/:id/attempt/:attemptId', (req, res, next) => {
     .catch(next);
 });
 
+//update attempt
 quizRouter.post('/:id/attempt/:attemptId/update', (req, res, next) => {
   quizController
     .updateAttempt(req.params.attemptId, req.body)
@@ -42,7 +46,8 @@ quizRouter.post('/:id/attempt/:attemptId/update', (req, res, next) => {
       res.json(createResponse(result));
     }).catch(next);
   });
-  
+
+//complete attempt
 quizRouter.post('/:id/attempt/:attemptId/complete', (req, res, next) => {
   quizController
     .completeAttempt(req.params.id, req.params.attemptId, req.body)
@@ -52,6 +57,7 @@ quizRouter.post('/:id/attempt/:attemptId/complete', (req, res, next) => {
     .catch(next);
 });
 
+//get attempt results
 quizRouter.get('/:id/attempt/:attemptId/results', (req, res, next) => {
   quizController
     .getResults(req.params.attemptId)

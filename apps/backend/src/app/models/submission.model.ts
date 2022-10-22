@@ -35,8 +35,8 @@ export class Submission {
   @Property({ nullable: true })
   correct?: boolean;
 
-  @Property({ nullable: true })
-  marks?: number;
+  @Property({ type: 'integer' })
+  marks = 0;
 
   @Property({ nullable: true })
   flag?: boolean;

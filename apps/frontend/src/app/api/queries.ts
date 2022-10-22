@@ -183,6 +183,13 @@ export function markSubmssion(data: any) {
   );
 }
 
+export function releaseSubmissionMarks(data: any) {
+  return client.post(
+    `/manage/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/release`,
+    {}
+  );
+}
+
 export function getAttemptsByQuizId(courseId: string, quizId: string) {
   return client
     .get<any>(`/manage/courses/${courseId}/quiz/${quizId}/attempts`)
@@ -198,5 +205,13 @@ export function getSubmissionsByQuestionId(
     .get<any>(
       `/manage/courses/${courseId}/quiz/${quizId}/submissions/question/${questionId}`
     )
+    .then((r) => r.data.data);
+}
+
+
+//get attempts for the for a course
+export function getCourseAttempts(courseId: string) {
+  return client
+    .get<any>(`/courses/${courseId}/attempts`)
     .then((r) => r.data.data);
 }

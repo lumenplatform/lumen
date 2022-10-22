@@ -66,7 +66,7 @@ const quizArray = {
   questions: [
     {
       questionid: 'q01',
-      qtype: 'mcq',
+      type: 'mcq',
       question: 'question test iggiugiugiugiu',
       answers: [
         { answerid: 'a1', answer: 'nibgyigigi' },
@@ -146,7 +146,6 @@ export default function QuizMarking() {
                     noOfQuestions={arr.length}
                     questionId={quiz.id}
                     answers={quiz.answers}
-                    answer={quiz.submission.mcqAnswer}
                     question={quiz.question}
                     disabled={true}
                   />

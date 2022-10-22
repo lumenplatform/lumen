@@ -13,11 +13,21 @@ import MCQ from '../../../components/MCQQuiz';
 function MarkingBox(props: any) {
   const { markEnabled, maxMarks, submissionId, marks = 0 } = props;
   const [marksInput, setMarksInput] = useState(marks);
+  const [marksChanged, setMarksChanged] = useState(false);
   const { courseId, examId, attemptId } = useParams();
   const { mutate: submissionMarkMutation } = useMutation(markSubmssion);
   const mark = (mark: number) => {
+    setMarksChanged(false);
     submissionMarkMutation({ quizId: examId, courseId: courseId, attemptId: attemptId, submissionId: submissionId, mark: { submissionId: submissionId, marks: mark } });
   }
+
+  useEffect(() => {
+    if (marks !== marksInput)
+      setMarksChanged(true);
+  }, [marksInput]);
+
+
+
   return (
     <Box sx={{ m: 2, display: 'flex', justifyContent: 'end' }}>
       <Stack direction="row" spacing={2} alignItems="center">
@@ -40,6 +50,7 @@ function MarkingBox(props: any) {
         >
           Save
         </Button>
+        
       </Stack>
     </Box>
   );
@@ -86,7 +97,7 @@ export default function QuizMarking() {
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="h5">{examData.settings.title}</Typography>
         &nbsp;|&nbsp;
-        <Box sx={{ display: 'flex',flexDirection:'column' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant="subtitle1" sx={{ lineHeight: 1 }}>{attemptData.user.name}</Typography>
           <Typography variant="caption" sx={{ lineHeight: 1 }}>{attemptId}</Typography>
         </Box>
