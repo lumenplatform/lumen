@@ -26,6 +26,7 @@ export class OrganizationService {
       },
       billing: { plan: BillingPlan.BASIC },
       domains: { subdomain },
+      description: data.description,
     });
     await this.orgRepo.persistAndFlush(org);
     return org;
