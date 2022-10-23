@@ -1,9 +1,12 @@
-import { Box, Checkbox, Chip, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useState, useEffect } from "react";
-
+import { Box, Checkbox, Chip, Divider, Grid, InputAdornment, TextField, Typography, useTheme } from "@mui/material";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useEffect, useState } from "react";
 export type Settings = {
     title: string;
     instructions?: string;
@@ -18,17 +21,19 @@ export type Settings = {
         durationMinutes?: number;
         durationSeconds?: number;
     }
+    autoReleaseResults: boolean;
     contribution: number;
     passGrade: number;
     randomizeQuestions: boolean;
     randomizeAnswers: boolean;
+    enableReview: boolean;
 }
 
 export const defaultSettings: Settings = {
     title: "Exam title",
     instructions: "Instructions",
     duration: {
-        unlimited: false,
+        unlimited: true,
         durationMinutes: 0,
         durationSeconds: 0
     },
@@ -38,10 +43,12 @@ export const defaultSettings: Settings = {
         durationMinutes: 0,
         durationSeconds: 0
     },
+    autoReleaseResults: false,
     contribution: 0,
     passGrade: 0,
     randomizeQuestions: false,
-    randomizeAnswers: false
+    randomizeAnswers: false,
+    enableReview: false
 }
 
 export default function ExamSettings(props: any) {
@@ -69,7 +76,8 @@ export default function ExamSettings(props: any) {
     }, [settings.timeBox, questions]);
 
     useEffect(() => {
-        changeSettings(settings);
+        if (settings != examSettings)
+            changeSettings(settings);
     }, [settings]);
 
     return (
@@ -238,6 +246,15 @@ export default function ExamSettings(props: any) {
                         onChange={(e) => setSettings(prevState => ({ ...prevState, passGrade: parseInt(e.target.value) }))}
                     />
                 </Box>
+                <Typography variant="subtitle2" sx={{ ml: 1 }}>
+                    Auto Release Grade
+                    <Checkbox checked={settings.autoReleaseResults} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, autoReleaseResults: !prevState.autoReleaseResults }))} />
+                    {questions.find((q: any) => q.type === 'essay') && <Typography color="secondary" variant="caption" sx={{ ml: 1 }}>Note: Quiz containing essay questions will not be auto released</Typography>}
+                </Typography>
+                <Typography variant="subtitle2" sx={{ ml: 1 }}>
+                    Enable Review
+                    <Checkbox checked={settings.enableReview} onChange={(e) => setSettings((prevState: Settings) => ({ ...prevState, enableReview: !prevState.enableReview }))} />
+                </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Divider textAlign="left" sx={{ width: '100%' }}>

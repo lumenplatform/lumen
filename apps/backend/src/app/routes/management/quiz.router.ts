@@ -60,14 +60,26 @@ quizRouter.get('/:id/attempts', (req, res, next) => {
     .catch(next);
 });
 
-quizRouter.get('/:id/submissions/question/:questionId', (req, res, next) => {
+quizRouter.get('/:id/question/:questionId/submission', (req, res, next) => {
   quizController
-    .getSubmissionsByQuestion(req.params.id, req.params.questionId)
+    .getSubmissionsByQuestionId(req.params.id, req.params.questionId)
     .then((result) => {
       res.json(createResponse(result));
     })
     .catch(next);
 });
+
+quizRouter.get(
+  '/:id/question/:questionId/submission/:SubmissionId',
+  (req, res, next) => {
+    quizController
+      .getSubmissionById(req.params.SubmissionId)
+      .then((result) => {
+        res.json(createResponse(result));
+      })
+      .catch(next);
+  }
+);
 
 quizRouter.post('/:id/attempt/:attemptId/release', (req, res, next) => {
   quizController

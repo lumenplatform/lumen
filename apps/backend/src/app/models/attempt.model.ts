@@ -43,6 +43,12 @@ export class Attempt {
   @Property({ type: 'integer' })
   marks = 0;
 
+  @Property({ nullable: true })
+  isPassed ?: boolean;
+
+  @Property({ type: 'integer' })
+  grade = 0;
+
   @Property({ columnType: 'timestamptz' })
   startedAt = new Date();
 
@@ -57,6 +63,7 @@ export class Attempt {
 
   @Enum(() => ReleaseStatus)
   releasedStatus = ReleaseStatus.NOT_RELEASED;
+
 
   @OneToMany(() => Submission, (submission) => submission.attempt, {
     orphanRemoval: true,

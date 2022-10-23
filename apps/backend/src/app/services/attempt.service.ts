@@ -9,6 +9,7 @@ import { Question, QuestionsType } from '../models/question.model';
 import { Quiz } from '../models/quiz.model';
 import { Submission } from '../models/submission.model';
 import { User } from '../models/user.model';
+import { quizRouter } from '../routes/quiz.router';
 
 export class AttemptService {
   async getOngoingAttempt(userId: string, quizId: string) {
@@ -86,9 +87,8 @@ export class AttemptService {
     attempt.marks = 0; //reset marks
     attempt.attemptStatus = AttemptStatus.COMPLETED; //mark as completed
     attempt.quiz.noOfAttempts = attempt.quiz.noOfAttempts + 1; //increment no of attempts
-    console.log(attempt.quiz);
-    await this.markAttempt(attemptId); //mark attempt
     await em.flush();
+    return await this.markAttempt(attemptId); //mark attempt
   }
 
   async getAttemptsByQuizId(quizId: string) {
@@ -126,6 +126,17 @@ export class AttemptService {
       { exam: attempt.quiz.id },
       { populate: ['answers'] }
     );
+    const quiz = await em.findOneOrFail(Quiz, { id: attempt.quiz.id });
+
+    const questionsMarks = questions.reduce((acc, question) => {
+      acc = acc + question.marks;
+      return acc;
+    }, 0);
+
+    attempt.marks = 0; //reset marks
+
+    console.log('attempt.submission', attempt.submission);
+    console.log('questions', questions);
 
     attempt.submission.getItems().forEach((s) => {
       const question = questions.find((obj) => {
@@ -134,8 +145,6 @@ export class AttemptService {
       });
 
       if (!question) return; //if question not found, continue
-
-      attempt.marks = 0; //reset marks
 
       //add marks for essay questions if marked
       if (
@@ -146,7 +155,7 @@ export class AttemptService {
       }
 
       //check if question is MCQ
-      if (question.type == QuestionsType.MCQ && question.answers) {
+      if (question.type == QuestionsType.MCQ) {
         //get correct answer
         const correctAnswer = question.answers.getItems().filter((obj) => {
           return obj.correct == true;
@@ -157,24 +166,18 @@ export class AttemptService {
         });
 
         //if question is not answered
-        if (!s.answered) {
-          s.correct = false;
-          s.marks = 0;
-          s.markingStatus = MarkingStatus.MARKED;
-        } else if (correctAnswer && s.answered) {
-          const isCorrect =
-            s.mcqAnswer.length === correctAnswer.length &&
-            s.mcqAnswer
-              .getItems()
-              .map((o) => o.id)
-              .every((answer) => {
-                return correctAnswerIds.includes(answer);
-              });
-          s.marks = isCorrect ? question.marks : 0; //check if answer is correct and set marks
-          attempt.marks += isCorrect ? question.marks : 0; //add marks to attempt
-          s.correct = isCorrect ? true : false;
-          s.markingStatus = MarkingStatus.MARKED;
-        }
+        const isCorrect =
+          s.mcqAnswer.length === correctAnswer.length &&
+          s.mcqAnswer
+            .getItems()
+            .map((o) => o.id)
+            .every((answer) => {
+              return correctAnswerIds.includes(answer);
+            });
+        s.marks = isCorrect ? question.marks : 0; //check if answer is correct and set marks
+        attempt.marks += isCorrect ? question.marks : 0; //add marks to attempt
+        s.correct = isCorrect ? true : false;
+        s.markingStatus = MarkingStatus.MARKED;
       }
     });
 
@@ -186,6 +189,15 @@ export class AttemptService {
       ? MarkingStatus.MARKED
       : MarkingStatus.NOT_MARKED;
 
+    attempt.releasedStatus =
+      isAllMarked && quiz.settings.autoReleaseResults
+        ? ReleaseStatus.RELEASED
+        : ReleaseStatus.NOT_RELEASED; //mark as not released
+
+    attempt.grade =
+      questionsMarks == 0 ? 0 : (attempt.marks / questionsMarks) * 100; //calculate grade
+
+    attempt.isPassed = attempt.grade >= quiz.settings.passGrade ? true : false; //check if passed
     await em.flush();
   }
 
@@ -215,12 +227,21 @@ export class AttemptService {
     await em.flush();
   }
 
-  async getAttemptsByCourseIdAndUserId (userId: string, courseId: string) {
+  async releaseAllMarks(quizId: string) {
+    const em = RequestContext.getEntityManager();
+    const attempts = await em.find(Attempt, { quiz: quizId });
+    attempts.forEach((attempt) => {
+      attempt.releasedStatus = ReleaseStatus.RELEASED;
+    });
+    await em.flush();
+  }
+
+  async getAttemptsByCourseIdAndUserId(userId: string, courseId: string) {
     const em = RequestContext.getEntityManager();
     const attempt = await em.find(
       Attempt,
-      { user: { uid: userId } , quiz: { course: { courseId: courseId } } },
-      { populate: ['quiz','submission', 'submission.question'] }
+      { user: { uid: userId }, quiz: { course: { courseId: courseId } } },
+      { populate: ['quiz', 'submission', 'submission.question'] }
     );
     return attempt;
   }

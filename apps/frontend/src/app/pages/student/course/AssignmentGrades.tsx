@@ -1,4 +1,4 @@
-import { Chip, Typography, useTheme, Skeleton } from '@mui/material';
+import { Chip, Typography, Button, Skeleton, Link } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -10,6 +10,9 @@ import TableRow from '@mui/material/TableRow';
 import { useQuery } from 'react-query';
 import { getCourseAttempts } from '../../../api';
 import { useNavigate, useParams } from 'react-router-dom';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+
 
 function createData(
   Grade_item: string,
@@ -35,7 +38,7 @@ export default function Grades() {
     data: attempts,
     isLoading,
     isError } = useQuery(['courseId', courseId], () => getCourseAttempts(courseId!));
-
+  const navigate = useNavigate();
 
   if (isLoading || isError) return <Skeleton></Skeleton>;
 
@@ -52,13 +55,16 @@ export default function Grades() {
               <TableCell align="center">Quiz</TableCell>
               <TableCell align="center">Grade</TableCell>
               <TableCell align="center">Pass/Fail</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {attempts.map((attempt: any) => (
               <TableRow key={attempt.id}>
                 <TableCell align="center">
-                  <Typography variant="body2" >{attempt.quiz.settings.title}</Typography>
+                  <Typography variant="body2" component="div">
+                    {attempt.quiz.settings.title}
+                  </Typography>
                 </TableCell>
                 {(attempt.markingStatus == 'MARKED' && attempt.releasedStatus == 'RELEASED') ?
                   <>
@@ -67,11 +73,21 @@ export default function Grades() {
                   </>
                   :
                   <>
-                  <TableCell align="center"><Chip label={'pending'} color="default" /></TableCell>
-                  <TableCell align="center"><Chip label={'pending'} color="default" /></TableCell>
+                    <TableCell align="center"><Chip label={'pending'} color="default" /></TableCell>
+                    <TableCell align="center"><Chip label={'pending'} color="default" /></TableCell>
                   </>
                 }
-
+                <TableCell align="center">
+                  <Button
+                    disabled={!attempt.quiz.settings.enableReview}
+                    startIcon={attempt.quiz.settings.enableReview ? <RemoveRedEyeOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
+                    onClick={() => {
+                      navigate(`/student/${courseId}/quiz/${attempt.quiz.id}/attempt/${attempt.id}/review`);
+                    }}
+                  >
+                    Review
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

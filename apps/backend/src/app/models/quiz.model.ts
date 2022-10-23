@@ -63,6 +63,12 @@ export class QuizSettings {
   @Property()
   randomizeAnswers: boolean;
 
+  @Property()
+  autoReleaseResults: boolean;
+
+  @Property()
+  enableReview: boolean;
+
   @Embedded(() => TimeBox)
   timeBox: TimeBox;
 }
