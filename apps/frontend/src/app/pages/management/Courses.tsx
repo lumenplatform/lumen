@@ -211,6 +211,8 @@ export default function Users() {
   const location = useLocation();
   const queryParams = new URLSearchParams(window.location.search);
   const navigate = useNavigate();
+  // const x = (data.length) / 5;
+  
 
   const handleSearchQuery = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -342,7 +344,7 @@ export default function Users() {
                               </Typography>
                             </TableCell>
                             {/* <TableCell>{row.price}</TableCell> */}
-                            <TableCell>{row.price}$</TableCell>
+                            <TableCell>${row.price}$</TableCell>
                             <TableCell>{draftChip(row.status)}</TableCell>
                             <TableCell>
                               <Box
@@ -381,6 +383,7 @@ export default function Users() {
                     </Grid>
                   )}
                 </Grid>
+                {/* ends here */}
               </Table>
 
               {/* <TablePagination
@@ -394,11 +397,12 @@ export default function Users() {
           /> */}
 
               <Stack spacing={2} sx={{ mt: '20px', mb: '20px', ml: '380px' }}>
-                <Pagination
-                  count={data.length / 5}
+                
+                {/* <Pagination
+                  // count={data.length / 5}
                   variant="outlined"
                   shape="rounded"
-                />
+                /> */}
               </Stack>
             </TableContainer>
           </Box>
