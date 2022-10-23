@@ -1,4 +1,9 @@
-import { Edit, EditOutlined } from '@mui/icons-material';
+import {
+  Edit,
+  EditOutlined,
+  KeyboardArrowLeft,
+  KeyboardArrowRight,
+} from '@mui/icons-material';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -13,10 +18,12 @@ import {
   FormGroup,
   FormLabel,
   Grid,
+  IconButton,
   List,
   Skeleton,
   Slider,
   Stack,
+  TableFooter,
   TextField,
   Typography,
   useTheme,
@@ -36,6 +43,89 @@ import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getOrgCourses, search } from '../../api';
 import Pagination from '@mui/material/Pagination';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import TablePagination from '@mui/material/TablePagination';
+
+interface TablePaginationActionsProps {
+  count: number;
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    newPage: number
+  ) => void;
+}
+
+function TablePaginationActions(props: TablePaginationActionsProps) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
 
 function updateArray(array: string[] | any[], element: any) {
   const x = [...array];
@@ -194,6 +284,9 @@ export default function Users() {
   const [params, setParams] = React.useState(defaultParams);
   const theme = useTheme();
 
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(2);
+
   const {
     data: courses,
     isLoading,
@@ -212,7 +305,6 @@ export default function Users() {
   const queryParams = new URLSearchParams(window.location.search);
   const navigate = useNavigate();
   // const x = (data.length) / 5;
-  
 
   const handleSearchQuery = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -245,6 +337,23 @@ export default function Users() {
   const draftChip = (status: string) => (
     <Chip label={status} color="warning" size="small" variant="outlined" />
   );
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <div>
@@ -309,102 +418,113 @@ export default function Users() {
               </Button>
             </Stack>
 
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ pl: theme.spacing(3) }}>Course</TableCell>
-                    {/* <TableCell>Enrolled</TableCell> */}
-                    <TableCell>Price</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
+            <Grid>
+              {isLoading ||
+              isError ||
+              !data ||
+              isRefetchError ||
+              isRefetching ? (
+                [...Array(1).keys()].map((_) => (
+                  <Stack spacing={1}>
+                    <Skeleton width={800} height={40} />
+                  </Stack>
+                ))
+              ) : data.length > 0 ? (
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ pl: theme.spacing(3) }}>
+                          Course
+                        </TableCell>
+                        {/* <TableCell>Enrolled</TableCell> */}
+                        <TableCell>Price</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
 
-                {/* apply all here */}
-                <Grid container spacing={2}>
-                  {isLoading ||
-                  isError ||
-                  !data ||
-                  isRefetchError ||
-                  isRefetching ? (
-                    [...Array(1).keys()].map((_) => (
-                      <Stack spacing={1}>
-                        <Skeleton width={800} height={40} />
-                      </Stack>
-                    ))
-                  ) : data.length > 0 ? (
+                    {/* apply all here */}
+
                     <TableBody>
-                      {data &&
-                        data.map((row: any) => (
-                          <TableRow key={row.title}>
-                            <TableCell sx={{ pl: theme.spacing(3) }}>
-                              <Typography variant="body2">
-                                {row.title}
-                              </Typography>
-                            </TableCell>
-                            {/* <TableCell>{row.price}</TableCell> */}
-                            <TableCell>${row.price}$</TableCell>
-                            <TableCell>{draftChip(row.status)}</TableCell>
-                            <TableCell>
-                              <Box
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
+                      {(rowsPerPage > 0
+                        ? data.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : data
+                      ).map((row: any) => (
+                        <TableRow key={row.title}>
+                          <TableCell sx={{ pl: theme.spacing(3) }}>
+                            <Typography variant="body2">{row.title}</Typography>
+                          </TableCell>
+                          <TableCell>{row.price}$</TableCell>
+                          <TableCell>{draftChip(row.status)}</TableCell>
+                          <TableCell>
+                            <Box
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <Button
+                                startIcon={<RemoveRedEyeOutlinedIcon />}
+                                onClick={() => {
+                                  navigate(`/manage/courses/${row.courseId}`);
                                 }}
                               >
-                                <Button
-                                  startIcon={<RemoveRedEyeOutlinedIcon />}
-                                  onClick={() => {
-                                    navigate(`/manage/courses/${row.courseId}`);
-                                  }}
-                                >
-                                  View
-                                </Button>
-                                &nbsp; | &nbsp;
-                                <Button
-                                  startIcon={<EditOutlined />}
-                                  onClick={() => {
-                                    navigate(
-                                      `/manage/courses/${row.courseId}/edit`
-                                    );
-                                  }}
-                                >
-                                  Edit
-                                </Button>
-                              </Box>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                                View
+                              </Button>
+                              &nbsp; | &nbsp;
+                              <Button
+                                startIcon={<EditOutlined />}
+                                onClick={() => {
+                                  navigate(
+                                    `/manage/courses/${row.courseId}/edit`
+                                  );
+                                }}
+                              >
+                                Edit
+                              </Button>
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
-                  ) : (
-                    <Grid item xs={12} sm={6} md={6} lg={4}>
-                      <NoResults value={params.searchQuery} />
-                    </Grid>
-                  )}
+
+                    <TableFooter>
+                      <TableRow>
+                        <TablePagination
+                          rowsPerPageOptions={[
+                            2,
+                            10,
+                            25,
+                            { label: 'All', value: -1 },
+                          ]}
+                          colSpan={3}
+                          count={data.length}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          SelectProps={{
+                            inputProps: {
+                              'aria-label': 'rows per page',
+                            },
+                            native: true,
+                          }}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                          ActionsComponent={TablePaginationActions}
+                        />
+                      </TableRow>
+                    </TableFooter>
+                  </Table>
+                </TableContainer>
+              ) : (
+                <Grid item xs={12} sm={6} md={6} lg={4}>
+                  <NoResults value={params.searchQuery} />
                 </Grid>
-                {/* ends here */}
-              </Table>
-
-              {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={5}
-            page={0}
-            onPageChange={() => {}}
-            onRowsPerPageChange={() => {}}
-          /> */}
-
-              <Stack spacing={2} sx={{ mt: '20px', mb: '20px', ml: '380px' }}>
-                
-                {/* <Pagination
-                  // count={data.length / 5}
-                  variant="outlined"
-                  shape="rounded"
-                /> */}
-              </Stack>
-            </TableContainer>
+              )}
+            </Grid>
           </Box>
         </Box>
       </Container>
