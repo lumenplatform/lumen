@@ -1,4 +1,4 @@
-import { Edit, EditOutlined, ExpandLess, ExpandMore, StarBorder } from '@mui/icons-material';
+import { Edit, EditOutlined } from '@mui/icons-material';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -6,7 +6,6 @@ import {
   Button,
   Checkbox,
   Chip,
-  Collapse,
   Container,
   Drawer,
   FormControl,
@@ -15,9 +14,6 @@ import {
   FormLabel,
   Grid,
   List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Skeleton,
   Slider,
   Stack,
@@ -37,9 +33,9 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import React from 'react';
 import { createContext } from 'react';
 import { useQuery } from 'react-query';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getOrgCourses, search } from '../../api';
-import '../../../styles.css'; 
+import Pagination from '@mui/material/Pagination';
 
 function updateArray(array: string[] | any[], element: any) {
   const x = [...array];
@@ -82,7 +78,7 @@ function ResponsiveDrawer(props: any) {
     setShowFilter(!showFilter);
   };
 
-  const statuses = ['PUBLISHED', 'Unpublished'];
+  const statuses = ['Published', 'Unpublished'];
 
   const drawer = (
     <List sx={{ mx: { xs: 2, sm: 0 }, mr: { sm: 2 }, mt: { xs: 3 } }}>
@@ -94,26 +90,28 @@ function ResponsiveDrawer(props: any) {
           </Typography>
         </FormLabel>
         <FormGroup>
-        
           {statuses
-          .filter((text, index, arr) => showMore.stats || index < 4)
-          .map((text) => (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={() =>
-                    setParams((prevState: Params) => ({
-                      ...prevState,
-                      publishStatusp: updateArray(prevState.publishStatus, text),
-                    }))
-                  }
-                /> 
-              }
-              label={text}
-            />
-          ))}
-         
+            .filter((text, index, arr) => showMore.stats || index < 4)
+            .map((text) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={() =>
+                      setParams((prevState: Params) => ({
+                        ...prevState,
+                        publishStatus: updateArray(
+                          prevState.publishStatus,
+                          text
+                        ),
+                      }))
+                    }
+                  />
+                }
+                label={text}
+              />
+            ))}
         </FormGroup>
+
         <Button
           variant="text"
           onClick={() =>
@@ -180,8 +178,6 @@ function ResponsiveDrawer(props: any) {
   );
 }
 
-
-
 function NoResults(props: any) {
   return (
     //Typohraphy with varinat body2
@@ -210,6 +206,8 @@ export default function Users() {
     enabled: false, // disable this query from automatically running
   });
 
+  const { data } = useQuery('search-courses', () => getOrgCourses());
+
   const location = useLocation();
   const queryParams = new URLSearchParams(window.location.search);
   const navigate = useNavigate();
@@ -221,11 +219,19 @@ export default function Users() {
     navigate(`/manage/courses?${queryParams.toString()}`);
   };
 
+  const handleOrgChipDelete = () => {
+    queryParams.delete('organization');
+    navigate(`/manage/courses?${queryParams.toString()}`);
+  };
+
   React.useEffect(() => {
     console.log(queryParams.has('query'));
     setParams((prevState: Params) => ({
       ...prevState,
       searchQuery: queryParams.has('query') ? queryParams.get('query')! : '',
+      organization: queryParams.has('organization')
+        ? queryParams.get('organization')!
+        : '',
     }));
     console.log('params', params);
   }, [location]);
@@ -234,67 +240,53 @@ export default function Users() {
     refetch();
   }, [params]);
 
-  const { data } = useQuery('org-courses', () => getOrgCourses());
-
   const draftChip = (status: string) => (
     <Chip label={status} color="warning" size="small" variant="outlined" />
   );
 
-
   return (
-    <Container>
-      <Box sx={{ display: 'flex', margin: '0 auto' }}>
-        <Box sx={{ width: { sm: '250px' } }}>
-          <paramsContext.Provider value={{ params, setParams }}>
-            <filterContext.Provider value={{ showFilter, setShowFilter }}>
-              <ResponsiveDrawer />
-            </filterContext.Provider>
-          </paramsContext.Provider>
-        </Box>
-        <Box sx={{ flex: 1, mr: { sm: 0, md: 5, lg: 10 } }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              mt: 0,
-              mb: 4,
-              width: { sm: '70%', md: '50%' },
-            }}
-          >
-            <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-            <TextField
-              label="Search Courses"
-              variant="standard"
-              fullWidth
-              color="primary"
-              sx={{ mr: 2 }}
-              defaultValue={params.searchQuery}
-              value={params.searchQuery}
-              onChange={(e) => handleSearchQuery(e)}
-            />
-            <Button
-              startIcon={<TuneIcon />}
-              sx={{ display: { xs: 'flex', sm: 'none' }, px: 3 }}
-              onClick={() => setShowFilter(!showFilter)}
-            >
-              Filters
-            </Button>
-
-            <div className="dropdown">
-  <button className="dropbtn">Filter By</button>
-  <div className="dropdown-content">
-  <a href="#">Link 1</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
-  </div>
-</div>
-
+    <div>
+      <Container>
+        <Box sx={{ display: 'flex', margin: '0 auto' }}>
+          <Box sx={{ width: { sm: '250px' } }}>
+            <paramsContext.Provider value={{ params, setParams }}>
+              <filterContext.Provider value={{ showFilter, setShowFilter }}>
+                <ResponsiveDrawer />
+              </filterContext.Provider>
+            </paramsContext.Provider>
           </Box>
+          <Box sx={{ flex: 1, mr: { sm: 0, md: 5, lg: 10 } }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                mt: 0,
+                mb: 4,
+                width: { sm: '70%', md: '50%' },
+              }}
+            >
+              <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <TextField
+                label="Search Courses"
+                variant="standard"
+                fullWidth
+                color="primary"
+                sx={{ mr: 2 }}
+                defaultValue={params.searchQuery}
+                value={params.searchQuery}
+                onChange={(e) => handleSearchQuery(e)}
+              />
 
- 
+              <Button
+                startIcon={<TuneIcon />}
+                sx={{ display: { xs: 'flex', sm: 'none' }, px: 3 }}
+                onClick={() => setShowFilter(!showFilter)}
+              >
+                Filters
+              </Button>
+            </Box>
 
-          <Box>
             <Stack
               direction={'row'}
               justifyContent="space-between"
@@ -326,55 +318,69 @@ export default function Users() {
                     <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
+
+                {/* apply all here */}
+                <Grid container spacing={2}>
                   {isLoading ||
                   isError ||
                   !data ||
                   isRefetchError ||
                   isRefetching ? (
-                    [...Array(1).keys()].map((_) => <Skeleton width={1000} />)
-                  ) : data.length > 0 ? (
-                    data.map((row: any) => (
-                      <TableRow key={row.title}>
-                        <TableCell sx={{ pl: theme.spacing(3) }}>
-                          <Typography variant="body2">{row.title}</Typography>
-                        </TableCell>
-                        {/* <TableCell>{row.price}</TableCell> */}
-                        <TableCell>{row.price}$</TableCell>
-                        <TableCell>{draftChip(row.status)}</TableCell>
-                        <TableCell>
-                          <Box
-                            style={{ display: 'flex', alignItems: 'center' }}
-                          >
-                            <Button
-                              startIcon={<RemoveRedEyeOutlinedIcon />}
-                              onClick={() => {
-                                navigate(`/manage/courses/${row.courseId}`);
-                              }}
-                            >
-                              View
-                            </Button>
-                            &nbsp; | &nbsp;
-                            <Button
-                              startIcon={<EditOutlined />}
-                              onClick={() => {
-                                navigate(
-                                  `/manage/courses/${row.courseId}/edit`
-                                );
-                              }}
-                            >
-                              Edit
-                            </Button>
-                          </Box>
-                        </TableCell>
-                      </TableRow>
+                    [...Array(1).keys()].map((_) => (
+                      <Stack spacing={1}>
+                        <Skeleton width={800} height={40} />
+                      </Stack>
                     ))
+                  ) : data.length > 0 ? (
+                    <TableBody>
+                      {data &&
+                        data.map((row: any) => (
+                          <TableRow key={row.title}>
+                            <TableCell sx={{ pl: theme.spacing(3) }}>
+                              <Typography variant="body2">
+                                {row.title}
+                              </Typography>
+                            </TableCell>
+                            {/* <TableCell>{row.price}</TableCell> */}
+                            <TableCell>{row.price}$</TableCell>
+                            <TableCell>{draftChip(row.status)}</TableCell>
+                            <TableCell>
+                              <Box
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <Button
+                                  startIcon={<RemoveRedEyeOutlinedIcon />}
+                                  onClick={() => {
+                                    navigate(`/manage/courses/${row.courseId}`);
+                                  }}
+                                >
+                                  View
+                                </Button>
+                                &nbsp; | &nbsp;
+                                <Button
+                                  startIcon={<EditOutlined />}
+                                  onClick={() => {
+                                    navigate(
+                                      `/manage/courses/${row.courseId}/edit`
+                                    );
+                                  }}
+                                >
+                                  Edit
+                                </Button>
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
                   ) : (
                     <Grid item xs={12} sm={6} md={6} lg={4}>
                       <NoResults value={params.searchQuery} />
                     </Grid>
                   )}
-                </TableBody>
+                </Grid>
               </Table>
 
               {/* <TablePagination
@@ -386,10 +392,18 @@ export default function Users() {
             onPageChange={() => {}}
             onRowsPerPageChange={() => {}}
           /> */}
+
+              <Stack spacing={2} sx={{ mt: '20px', mb: '20px', ml: '380px' }}>
+                <Pagination
+                  count={data.length / 5}
+                  variant="outlined"
+                  shape="rounded"
+                />
+              </Stack>
             </TableContainer>
           </Box>
-        </Box>{' '}
-      </Box>
-    </Container>
+        </Box>
+      </Container>
+    </div>
   );
 }

@@ -7,12 +7,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useState } from 'react';
+import React from 'react';
+import Pagination from '@mui/material/Pagination';
+
+
 
 export default function Billing() {
   const [value, setValue] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+
+  const y = 5;
   };
+
+  
 
   return (
     <Box sx={{ p: 3 }}>
@@ -100,6 +108,10 @@ export default function Billing() {
             <TableCell>03.21PM</TableCell>
           </TableRow>
         </Table>
+
+        <Stack sx={{ mt: '20px', display: 'flex', justifyContent: 'flex-end', ml: '45%', mb: '20px' }}>
+          <Pagination count={1} variant="outlined" shape="rounded" />
+          </Stack>
       </TableContainer>
     </Box>
   );
