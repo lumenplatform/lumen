@@ -3,8 +3,8 @@ import { RequireAuth, RequireDesktop, UserRole } from './components/Auth';
 import Enroll from './components/EnrollPageHeader';
 import AdminLayout from './pages/management/AdminLayout';
 import Billing from './pages/management/Billing';
-import CourseCreate from './pages/management/Course/CourseCreate';
-import ManageCourse from './pages/management/Course/ManageCourse';
+import CourseCreate from './pages/management/course/CourseCreate';
+import ManageCourse from './pages/management/course/ManageCourse';
 import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
@@ -36,6 +36,7 @@ import Attempts from './pages/management/exam/Attempts';
 import Questions from './pages/management/exam/Questions';
 import AttemptMarking from './pages/management/exam/AttemptMarking';
 import MarkingAll from './pages/management/exam/MarkAll';
+import QuizReviewPage from './pages/student/quiz/QuizReview';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -74,6 +75,7 @@ export default function () {
             <Route path=":quizId" element={<AttemptQuizPage />} />
             <Route path=":quizId/attempt/:attemptId" element={<QuizPage />} />
             <Route path=":quizId/attempt/:attemptId/results" element={<QuizResultPage />} />
+            <Route path=":quizId/attempt/:attemptId/review" element={<QuizReviewPage />} />
           </Route>
         </Route>
       </Route>
@@ -92,7 +94,8 @@ export default function () {
             <Route path="exam/:examId/attempts" element={<Attempts />} />
             <Route path="exam/:examId/questions" element={<Questions />} />
             <Route path="exam/:examId/attemptMarking" element={<AttemptMarking />} />
-            <Route path="exam/:examId/MarkAll" element={<MarkingAll/>} />
+            <Route path="exam/:examId/question/:questionId/submission" element={<MarkingAll/>} />
+            <Route path="exam/:examId/question/:questionId/submission/:submissionId" element={<MarkingAll/>} />
           </Route>
         </Route>
         <Route path="/manage/courses/:courseId">
