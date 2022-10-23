@@ -6,6 +6,8 @@ import {
   InputAdornment,
   Skeleton,
   Stack,
+  TableCell,
+  TableRow,
   TextField,
 } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -17,7 +19,8 @@ import { getAttemptById, getQuizById, markSubmssion } from '../../../api';
 import EssayQ from '../../../components/EssayQuiz';
 import MCQ from '../../../components/MCQQuiz';
 import Pagination from '@mui/material/Pagination';
-import { ArrowBack,ArrowForward } from '@mui/icons-material';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import Table from '@mui/material/Table';
 
 function MarkingBox(props: any) {
   const { markEnabled, maxMarks, submissionId, marks = 0 } = props;
@@ -79,30 +82,38 @@ const quizArray = {
 };
 
 export default function QuizMarking() {
- 
   return (
     <Box sx={{ mb: 5 }}>
       <Typography variant="h5">{'Exam title'}</Typography>
       {/* <Typography variant="body1"> Attempt {'01'}</Typography> */}
 
-      {/* for two buttons to go to questions. have to edit */}
-      <Box> 
+      {/* for two buttons to go to questions*/}
+      <Table>
+        <TableCell>
           <Button
-            startIcon={<ArrowBack/>}
+            startIcon={<ArrowBack />}
             // onClick ={()=> navigate(`/manage/courses/${courseId}/exam/${examId}/attempts`)}
             color="inherit"
-            variant='contained'
-            >
+            variant="contained"
+          >
+            Previous Question
           </Button>
+        </TableCell>
+
+        <TableCell align="right">
           <Button
-            startIcon={<ArrowForward/>}
+            startIcon={<ArrowForward />}
             // onClick ={()=> navigate(`/manage/courses/${courseId}/exam/${examId}/attempts`)}
             color="inherit"
-            variant='contained'
-            >
+            variant="contained"
+          >
+            Next Question
           </Button>
-        </Box>
-      <Box
+        </TableCell>
+        
+      </Table>
+
+      {/* <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
@@ -154,7 +165,7 @@ export default function QuizMarking() {
             </Stack>
           ))}
         </Box>
-      </Box>
+      </Box> */}
 
       <Stack spacing={10}>
         <Pagination count={0} />
