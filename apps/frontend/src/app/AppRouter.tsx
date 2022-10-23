@@ -35,6 +35,7 @@ import QuizMarking from './pages/management/exam/Marking'
 import Attempts from './pages/management/exam/Attempts';
 import Questions from './pages/management/exam/Questions';
 import AttemptMarking from './pages/management/exam/AttemptMarking';
+import MarkingAll from './pages/management/exam/MarkAll';
 import QuizReviewPage from './pages/student/quiz/QuizReview';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
@@ -93,6 +94,8 @@ export default function () {
             <Route path="exam/:examId/attempts" element={<Attempts />} />
             <Route path="exam/:examId/questions" element={<Questions />} />
             <Route path="exam/:examId/attemptMarking" element={<AttemptMarking />} />
+            <Route path="exam/:examId/question/:questionId/submission" element={<MarkingAll/>} />
+            <Route path="exam/:examId/question/:questionId/submission/:submissionId" element={<MarkingAll/>} />
           </Route>
         </Route>
         <Route path="/manage/courses/:courseId">

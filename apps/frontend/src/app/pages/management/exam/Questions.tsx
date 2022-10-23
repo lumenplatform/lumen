@@ -96,7 +96,7 @@ export default function Questions() {
                                     <Button
                                         endIcon={<CheckIcon />}
                                         onClick={() => {
-                                            navigate(`/manage/courses/${courseId}/exam/${examId}/attempt/${row.id}`);
+                                            navigate(`/manage/courses/${courseId}/exam/${examId}/question/${row.id}/submission`);
                                         }}
                                     >
                                         Mark

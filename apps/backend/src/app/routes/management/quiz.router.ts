@@ -70,7 +70,7 @@ quizRouter.get('/:id/question/:questionId/submission', (req, res, next) => {
 });
 
 quizRouter.get(
-  '/:id/question/:questionId/submission/:SubmissionId',
+  '/:id/submission/:SubmissionId',
   (req, res, next) => {
     quizController
       .getSubmissionById(req.params.SubmissionId)

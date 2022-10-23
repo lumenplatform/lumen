@@ -203,13 +203,25 @@ export function getSubmissionsByQuestionId(
 ) {
   return client
     .get<any>(
-      `/manage/courses/${courseId}/quiz/${quizId}/submissions/question/${questionId}`
+      `/manage/courses/${courseId}/quiz/${quizId}/question/${questionId}/submission`
+    )
+    .then((r) => r.data.data);
+}
+
+export function getSubmissionById(
+  courseId: string,
+  quizId: string,
+  submissionId: string
+) {
+  return client
+    .get<any>(
+      `/manage/courses/${courseId}/quiz/${quizId}/submission/${submissionId}`
     )
     .then((r) => r.data.data);
 }
 
 
-//get attempts for the for a course
+//get student attempts for the for a course
 export function getCourseAttempts(courseId: string) {
   return client
     .get<any>(`/courses/${courseId}/attempts`)

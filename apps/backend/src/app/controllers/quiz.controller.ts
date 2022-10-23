@@ -131,7 +131,6 @@ export class QuizController {
       {
         question: questionId,
       },
-      { populate: ['attempt'] }
     );
     return submissions;
   }
@@ -142,6 +141,7 @@ export class QuizController {
     const submission = await em.findOneOrFail(
       Submission,
       { id: submissionId },
+      { populate: ['attempt','attempt.user','question.answers','mcqAnswer'] }
     );
     return submission;
   }
