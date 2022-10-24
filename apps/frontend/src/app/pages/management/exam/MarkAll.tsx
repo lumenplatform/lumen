@@ -1,7 +1,6 @@
+import * as React from 'react';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
-import {
-  Button, Skeleton, TableCell
-} from '@mui/material';
+import { Button, FormControl, MenuItem, Skeleton, TableCell } from '@mui/material';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import Typography from '@mui/material/Typography';
@@ -9,10 +8,10 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getQuizById } from '../../../api';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SubmissionMarking from './SubmissionMarking';
 
 export default function QuizMarkingAll() {
-
   const { courseId, examId, questionId } = useParams();
   const navigate = useNavigate();
 
@@ -44,28 +43,38 @@ export default function QuizMarkingAll() {
     }
   }, [examData, questionId]);
 
-  if (isExamLoading || isExamError) return <Skeleton/>;
+  const [marking, setMarkAll] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setMarkAll(event.target.value);
+  };
+
+  if (isExamLoading || isExamError) return <Skeleton />;
 
   return (
     <Box sx={{ mb: 5 }}>
-     
-
       <Typography variant="h5">{examData.settings.title}</Typography>
-      
+
       <Button
         startIcon={<ArrowBack />}
-        onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/questions`)}
+        onClick={() =>
+          navigate(`/manage/courses/${courseId}/exam/${examId}/questions`)
+        }
         color="inherit"
-        sx={{marginTop:4}}
+        sx={{ marginTop: 4 }}
       >
         Back to Questions
       </Button>
 
-      <Table sx={{marginTop:1}}>
+      <Table sx={{ marginTop: 1 }}>
         <TableCell>
           <Button
             startIcon={<ArrowBack />}
-            onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/question/${prevQuestionId}/submission`)}
+            onClick={() =>
+              navigate(
+                `/manage/courses/${courseId}/exam/${examId}/question/${prevQuestionId}/submission`
+              )
+            }
             color="inherit"
             variant="contained"
             disabled={prevQuestionId === null}
@@ -77,7 +86,11 @@ export default function QuizMarkingAll() {
         <TableCell align="right">
           <Button
             startIcon={<ArrowForward />}
-            onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/question/${nextQuestionId}/submission`)}
+            onClick={() =>
+              navigate(
+                `/manage/courses/${courseId}/exam/${examId}/question/${nextQuestionId}/submission`
+              )
+            }
             color="inherit"
             variant="contained"
             disabled={nextQuestionId === null}
@@ -85,9 +98,26 @@ export default function QuizMarkingAll() {
             Next Question
           </Button>
         </TableCell>
-
       </Table>
-      <SubmissionMarking index={currentQuestionIndex} noOfQuestions={examData.questions.length}/>
+
+<FormControl sx={{minWidth:130, marginTop:5,justifyContent:'center'}} size='small'>
+      <Select
+        value={marking}
+        onChange={handleChange}
+        displayEmpty
+        inputProps={{ 'aria-label': 'without label' }}
+        defaultValue='MarkAll'
+      >
+        <MenuItem value={'MarkAll'}>Mark All</MenuItem>
+        <MenuItem value={'UnmarkAll'}>Unmark All</MenuItem>
+      </Select>
+
+      </FormControl>
+
+      <SubmissionMarking
+        index={currentQuestionIndex}
+        noOfQuestions={examData.questions.length}
+      />
     </Box>
   );
 }
