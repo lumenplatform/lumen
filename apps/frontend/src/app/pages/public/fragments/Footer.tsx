@@ -38,7 +38,7 @@ export function Footer() {
           <Stack>
             <FooterLink text="Teach on Lumen" link="/manage" />
             <FooterLink text="Downloads" link="/desktop/" />
-            <FooterLink text="About us" link="#" />
+            <FooterLink text="About us" link="/contact" />
             <FooterLink text="Contact us" link="/contact" />
           </Stack>
           <Stack>
