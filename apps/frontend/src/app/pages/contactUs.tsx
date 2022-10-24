@@ -1,74 +1,88 @@
 import * as React from 'react';
-import { alpha } from '@mui/system';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { Typography, Button } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
-export default function ContactUs() {
-  const theme = useTheme();
+export default function Privacy() {
   return (
-    <Grid>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={6} sx={{ ml: 2 }}>
+          <Paper elevation={3} sx={{ padding: 4, mt: 4 }}>
+            <Typography variant="h3" align="center" sx={{ padding: 2, color: '#54f56f' }}>
+              <b>About Us</b>
+            </Typography>
+            <Typography variant="h5" sx={{ padding: 2 }} align="justify">
+              Lumen - Secure Course Delivary Platform
+            </Typography>
+            <Typography variant="body2" sx={{ padding: 2 }} align="justify">
+              Lumėn is a SaaS product for online course providers that helps
+              them keep control of what paying users can do with their material
+              and prevent illegal copying, modification, and distribution of
+              those works.
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={5}>
           <Box
-              sx={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  m: 1,
-                  width: '100%',
-                  height: 300,
-                  ml: '80px',
-                  // border: 1,
-              }}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignContent: 'center',
+              alignItems: 'center',
+              mt: 6,
+            }}
           >
-              <Paper variant="outlined" elevation={0}>
-                  <Box sx={{ background: '#afafaf' }}>
-                      <Container>
-                          <Box sx={{ display: 'flex' }}>
-                              <Box
-                                  sx={{
-                                      flex: 1,
-                                      pl: 3,
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      justifyContent: 'center',
-                                  }}
-                              >
-                                  <Typography variant="h2" fontWeight={600} my={2}>
-                                      About
-                                  </Typography>
-                                  <Typography mb={3}>
-                                      Lumėn is a SaaS product for online course providers that
-                                      helps them keep control of what paying users can do with
-                                      their material and prevent illegal copying, modification,
-                                      and distribution of those works.
-                                  </Typography>
-                              </Box>
-                              <Box>
-                                  <Box
-                                      sx={{
-                                          display: 'flex',
-                                          alignContent: 'flex-end',
-                                          marginLeft: '50%',
-                                          position: 'relative',
-                                      }}
-                                  >
-                                      <img
-                                          src="/assets/images/aboutUs.jpg"
-                                          alt=""
-                                          style={{ maxWidth: '70%', alignContent: 'flex-end' }} />
-                                  </Box>
-                              </Box>
-                          </Box>
-                      </Container>
-                  </Box>
-              </Paper>
+            <img
+              src="/assets/images/illustration_2.png"
+              alt=""
+              style={{ maxWidth: '60%' }}
+            />
           </Box>
+        </Grid>
+
+        <Grid item xs={5}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignContent: 'center',
+              alignItems: 'center',
+              mt: 6,
+            }}
+          >
+            <img
+              src="/assets/images/illustration_6.png"
+              alt=""
+              style={{ maxWidth: '60%' }}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={7} sx={{}}>
+          <Paper elevation={3} sx={{ padding: 4, mt: 4, }}>
+            <Typography variant="h3" align="center" sx={{ padding: 2,  }}>
+              <b>Contact Us</b>
+            </Typography>
+            <Typography variant="body1" align="center" sx={{ paddingBottom: 5,  }}>
+              Leave us a message. We'll get back to you ASAP.
+            </Typography>
+            <TextField id="outlined-basic" label="Email" variant="outlined" sx={{width: '100%'}} />
+            <TextField
+          id="outlined-textarea"
+          label="Message"
+          
+          margin="normal"
+          multiline
+          sx={{width: '100%', height: '100px'}}
+        />
+        <Button variant="contained" sx={{display: 'flex', flexDirection: 'row',
+              alignContent: 'center',}}>Submit</Button>
+          </Paper>
+        </Grid>
       </Grid>
-      
-
-
-
-
-
-
+    </Box>
   );
 }

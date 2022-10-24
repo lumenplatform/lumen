@@ -42,8 +42,8 @@ export function Footer() {
             <FooterLink text="Contact us" link="/contact" />
           </Stack>
           <Stack>
-            <FooterLink text="Terms" link="/terms/" />
-            <FooterLink text="Privacy policy" link="/terms/" />
+            <FooterLink text="Terms" link="/privacy" />
+            <FooterLink text="Privacy policy" link="/privacy" />
           </Stack>
           <Box style={{ flexGrow: 1 }}></Box>
           <Stack textAlign={'right'}>
