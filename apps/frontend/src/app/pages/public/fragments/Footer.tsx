@@ -36,10 +36,10 @@ export function Footer() {
       <Container>
         <Stack direction={'row'} spacing={5}>
           <Stack>
-            <FooterLink text="Teach on Lumen" link="/teach" />
+            <FooterLink text="Teach on Lumen" link="/manage" />
             <FooterLink text="Downloads" link="/desktop/" />
             <FooterLink text="About us" link="#" />
-            <FooterLink text="Contact us" link="#" />
+            <FooterLink text="Contact us" link="/contact" />
           </Stack>
           <Stack>
             <FooterLink text="Terms" link="/terms/" />
