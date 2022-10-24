@@ -10,9 +10,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery ,useMutation } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAttemptsByQuizId, getQuizById } from '../../../api';
+import { getAttemptsByQuizId, getQuizById, releaseAllSubmissionMarks } from '../../../api';
 
 export default function Questions() {
     const theme = useTheme();
@@ -29,6 +29,8 @@ export default function Questions() {
         isLoading: isExamLoading,
         isError: isExamError,
     } = useQuery(['exam', examId], () => getQuizById(courseId!, examId!));
+
+    const { mutate: releaseAllMarksMutation, isSuccess: releaseALLMarksSucces } = useMutation(releaseAllSubmissionMarks);
 
     useEffect(() => {
         if (attemptData) {
@@ -58,8 +60,8 @@ export default function Questions() {
             <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                 <Button
                     endIcon={<DoneAllIcon />}
-                    onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/questions`)}
-                    disabled={submissions.some((e: any) => e.markingStatus == 'NOT_MARKED' )}
+                    onClick={() => releaseAllMarksMutation({ courseId: courseId, quizId: examId })}
+                    disabled={submissions.some((e: any) => e.markingStatus == 'NOT_MARKED')}
                 >
                     Release All
                 </Button>
@@ -88,7 +90,7 @@ export default function Questions() {
                                     }
                                 </TableCell>
                                 <TableCell>
-                                    {submissions.reduce((acc: number, curr: any) => acc + (curr.question == row.id && curr.markingStatus=='MARKED'? 1 : 0), 0)}
+                                    {submissions.reduce((acc: number, curr: any) => acc + (curr.question == row.id && curr.markingStatus == 'MARKED' ? 1 : 0), 0)}
                                     /
                                     {attemptData.length}
                                 </TableCell>

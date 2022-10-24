@@ -190,6 +190,13 @@ export function releaseSubmissionMarks(data: any) {
   );
 }
 
+//release all marks
+export function releaseAllSubmissionMarks(data: any) {
+  return client.post(
+    `/manage/courses/${data.courseId}/quiz/${data.quizId}/release`,
+    {}
+  );
+}
 export function getAttemptsByQuizId(courseId: string, quizId: string) {
   return client
     .get<any>(`/manage/courses/${courseId}/quiz/${quizId}/attempts`)
@@ -199,11 +206,13 @@ export function getAttemptsByQuizId(courseId: string, quizId: string) {
 export function getSubmissionsByQuestionId(
   courseId: string,
   quizId: string,
-  questionId: string
+  questionId: string,
+  marking: string,
+  releasing: string
 ) {
   return client
     .get<any>(
-      `/manage/courses/${courseId}/quiz/${quizId}/question/${questionId}/submission`
+      `/manage/courses/${courseId}/quiz/${quizId}/question/${questionId}/submission?marking=${marking}&releasing=${releasing}`
     )
     .then((r) => r.data.data);
 }
@@ -219,7 +228,6 @@ export function getSubmissionById(
     )
     .then((r) => r.data.data);
 }
-
 
 //get student attempts for the for a course
 export function getCourseAttempts(courseId: string) {

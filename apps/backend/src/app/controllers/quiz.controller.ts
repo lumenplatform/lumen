@@ -54,7 +54,10 @@ export class QuizController {
     });
     await em.flush();
 
-    const attempts = await em.find(Attempt, { quiz: id , attemptStatus: AttemptStatus.COMPLETED});
+    const attempts = await em.find(Attempt, {
+      quiz: id,
+      attemptStatus: AttemptStatus.COMPLETED,
+    });
     attempts.forEach(async (attempt) => {
       await this.attempt.markAttempt(attempt.id);
     });
@@ -124,14 +127,22 @@ export class QuizController {
   }
 
   //get all submisision for a question
-  async getSubmissionsByQuestionId(quizId: string, questionId: string) {
+  async getSubmissionsByQuestionId(
+    quizId: string,
+    questionId: string,
+    marking: any,
+    releasing: any
+  ) {
     const em = RequestContext.getEntityManager();
-    const submissions = await em.find(
-      Submission,
-      {
-        question: questionId,
-      },
-    );
+    const submissions = await em.find(Submission, {
+      $and: [
+        { question: questionId },
+        marking != 'ALL' ? { markingStatus: marking } : {},
+        releasing != 'ALL' ? { attempt: { releasedStatus: releasing } } : {},
+      ],
+    });
+    console.log(marking);
+    console.log(submissions);
     return submissions;
   }
 
@@ -141,7 +152,7 @@ export class QuizController {
     const submission = await em.findOneOrFail(
       Submission,
       { id: submissionId },
-      { populate: ['attempt','attempt.user','question.answers','mcqAnswer'] }
+      { populate: ['attempt', 'attempt.user', 'question.answers', 'mcqAnswer'] }
     );
     return submission;
   }
@@ -149,17 +160,17 @@ export class QuizController {
   //release attempt marks
   async releaseMarks(attemptId: string) {
     await this.attempt.releaseMarks(attemptId);
-    return('Marks released for attempt ' + attemptId);
+    return 'Marks released for attempt ' + attemptId;
   }
 
   //release all marks of a quiz
   async releaseAllMarks(quizId: string) {
     await this.attempt.releaseAllMarks(quizId);
-    return('Marks released for quiz ' + quizId);
+    return 'Marks released for quiz ' + quizId;
   }
 
   //get all attempts of a user
-  async getAttemptsOfUser(userId: string,courseId: string) {
-    return await this.attempt.getAttemptsByCourseIdAndUserId(userId , courseId);
+  async getAttemptsOfUser(userId: string, courseId: string) {
+    return await this.attempt.getAttemptsByCourseIdAndUserId(userId, courseId);
   }
 }

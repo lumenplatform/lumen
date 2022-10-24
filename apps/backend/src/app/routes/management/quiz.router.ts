@@ -61,8 +61,9 @@ quizRouter.get('/:id/attempts', (req, res, next) => {
 });
 
 quizRouter.get('/:id/question/:questionId/submission', (req, res, next) => {
+  console.log(req.query);
   quizController
-    .getSubmissionsByQuestionId(req.params.id, req.params.questionId)
+    .getSubmissionsByQuestionId(req.params.id, req.params.questionId ,req.query.marking,req.query.releasing)
     .then((result) => {
       res.json(createResponse(result));
     })
@@ -89,3 +90,13 @@ quizRouter.post('/:id/attempt/:attemptId/release', (req, res, next) => {
     })
     .catch(next);
 });
+
+quizRouter.post('/:id/release', (req, res, next) => {
+  quizController
+    .releaseAllMarks(req.params.id)
+    .then((result) => {
+      res.json(createResponse(result));
+    })
+    .catch(next);
+}
+);

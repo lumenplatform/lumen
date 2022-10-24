@@ -14,7 +14,6 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getQuizById } from '../../../api';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SubmissionMarking from './SubmissionMarking';
 
 export default function QuizMarkingAll() {
@@ -48,12 +47,6 @@ export default function QuizMarkingAll() {
       }
     }
   }, [examData, questionId]);
-
-  const [marking, setMarkAll] = React.useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setMarkAll(event.target.value);
-  };
 
   if (isExamLoading || isExamError) return <Skeleton />;
 
@@ -105,21 +98,6 @@ export default function QuizMarkingAll() {
           </Button>
         </TableCell>
       </Table>
-      
-      <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-        <FormControl sx={{ minWidth: 130, marginTop: 5 }} size="small">
-          <Select
-            value={marking}
-            onChange={handleChange}
-            displayEmpty
-            inputProps={{ 'aria-label': 'without label' }}
-            defaultValue="MarkAll"
-          >
-            <MenuItem value={'MarkAll'}>Mark All</MenuItem>
-            <MenuItem value={'UnmarkAll'}>Unmark All</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
 
       <SubmissionMarking
         index={currentQuestionIndex}
