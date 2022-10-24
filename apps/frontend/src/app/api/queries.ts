@@ -120,8 +120,8 @@ export function updateCurrentOrganization(data: any) {
   return client.post('/org/current', data).then((r) => r.data.data);
 }
 
-export function updateCurrentCourse(data: any) {
-  return client.post('/courses/current', data).then((r) => r.data.data);
+export function updateCourseStatus(data: any) {
+  return client.post(`/manage/courses/${data.courseId}/update-status`, data).then((r) => r.data.data);
 }
 // END MANAGEMENT
 

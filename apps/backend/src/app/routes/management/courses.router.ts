@@ -3,7 +3,7 @@ import { assert } from 'console';
 import * as express from 'express';
 import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
-import { Course } from '../../models/course.model';
+import { Course, CourseStatus } from '../../models/course.model';
 import { Enrollment } from '../../models/enrollment.model';
 import { Organization } from '../../models/organization.model';
 import { CourseService } from '../../services/course.service';
@@ -132,6 +132,19 @@ coursesRouter.put('/:id', async (req, res, next) => {
     })
     .catch(next);
 });
+
+coursesRouter.post('/:id/update-status', async (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  const course = await em.findOneOrFail(
+    Course,
+    { courseId: req.params.id },
+  );
+  course.status=CourseStatus.UNPUBLISHED
+  em.persist(course)
+  await em.flush()
+  res.json(course)
+})
+
 
 coursesRouter.get('/:id/quizzes', (req, res, next) => {
   courseController
