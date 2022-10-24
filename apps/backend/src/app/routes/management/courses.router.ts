@@ -139,7 +139,7 @@ coursesRouter.post('/:id/update-status', async (req, res, next) => {
     Course,
     { courseId: req.params.id },
   );
-  course.status=CourseStatus.UNPUBLISHED
+  course.status=req.body.status
   em.persist(course)
   await em.flush()
   res.json(course)

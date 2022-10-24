@@ -40,10 +40,9 @@ export default function ManageCourse() {
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
-  const updateCourseMutation = useMutation( updateCourseStatus);
+  const updateCourseMutation = useMutation(updateCourseStatus);
 
   const navigate = useNavigate();
-
 
   if (isError || isLoading) {
     return <Skeleton></Skeleton>;
@@ -57,11 +56,24 @@ export default function ManageCourse() {
           <Button
             color="primary"
             onClick={() => {
-              updateCourseMutation.mutate({courseId, status: 'PUBLISHED'});
-              navigate('/manage/courses')
+              updateCourseMutation.mutate(
+                { courseId, status: 'PUBLISHED' },
+                { onSuccess: () => navigate('/manage/courses') }
+              );
             }}
           >
             Publish
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => {
+              updateCourseMutation.mutate(
+                { courseId, status: 'UNPUBLISHED' },
+                { onSuccess: () => navigate('/manage/courses') }
+              );
+            }}
+          >
+            Unpublished
           </Button>
           <Button>Edit</Button>
           <Button color="error">Delete</Button>
