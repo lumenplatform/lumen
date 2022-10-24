@@ -89,10 +89,11 @@ export default function ExamPage() {
     }, [newExamId]);
 
     const handleSave = () => {
+        console.log("gello");
         if (examId)
             examUpdateMutation({ examId: examId, form: exam });
         else
-            examCreateMutation(exam);
+            examCreateMutation({ form: exam });
     }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {

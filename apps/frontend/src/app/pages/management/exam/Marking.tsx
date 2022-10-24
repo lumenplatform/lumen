@@ -44,13 +44,15 @@ function MarkingBox(props: any) {
           }}
           onChange={(e) => setMarksInput(parseInt(e.target.value))}
         />
-        <Button
-          endIcon={<CheckIcon />}
-          onClick={() => mark(marksInput)}
-        >
-          Save
-        </Button>
-        
+        {markEnabled &&
+          <Button
+            endIcon={<CheckIcon />}
+            onClick={() => mark(marksInput)}
+          >
+            Save
+          </Button>
+        }
+
       </Stack>
     </Box>
   );
@@ -64,7 +66,7 @@ export default function QuizMarking() {
     data: attemptData,
     isLoading: isAttemptLoading,
     isError: isAttemptError
-  } = useQuery(['attempt', attemptId], () => getAttemptById(courseId!, examId!, attemptId!));
+  } = useQuery(['attempt', attemptId], () => getAttemptById(courseId!, examId!, attemptId!), { cacheTime: 0 });
 
   const {
     data: examData,
@@ -119,7 +121,7 @@ export default function QuizMarking() {
                     disabled={true}
                   />
                   <Divider />
-                  <MarkingBox markEnabled={true} maxMarks={quiz.marks} marks={quiz.submission.marks} submissionId={quiz.submission.id} />
+                  <MarkingBox markEnabled={attemptData.releasedStatus === 'RELEASED' ? false : true} maxMarks={quiz.marks} marks={quiz.submission.marks} submissionId={quiz.submission.id} />
                 </Card>
               )}
               {quiz.type == 'mcq' && (

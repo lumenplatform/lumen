@@ -50,9 +50,14 @@ function MarkingBox(props: any) {
                     }}
                     onChange={(e) => setMarksInput(parseInt(e.target.value))}
                 />
-                <Button endIcon={<CheckIcon />} onClick={() => mark(marksInput)}>
-                    Save
-                </Button>
+                {markEnabled &&
+                    <Button
+                        endIcon={<CheckIcon />}
+                        onClick={() => mark(marksInput)}
+                    >
+                        Save
+                    </Button>
+                }
             </Stack>
         </Box>
     );
@@ -86,7 +91,7 @@ export default function SubmissionMarking(props: any) {
         return <Skeleton />;
     }
 
-    const submissionIndex = submissions?.findIndex((s:any) => s.id === submissionId);
+    const submissionIndex = submissions?.findIndex((s: any) => s.id === submissionId);
 
     return (
         <Box sx={{ mb: 5 }}>
@@ -119,7 +124,7 @@ export default function SubmissionMarking(props: any) {
                                 />
                                 <Divider />
                                 <MarkingBox
-                                    markEnabled={true}
+                                    markEnabled={submission.attempt.releasedStatus === 'RELEASED' ? false : true}
                                     maxMarks={submission.question.marks}
                                     marks={submission.marks}
                                     submissionId={submission.id}
@@ -149,7 +154,7 @@ export default function SubmissionMarking(props: any) {
                     </Stack>
                 </Box>
                 <Stack spacing={10} sx={{ mt: 5 }}>
-                    <Pagination count={submissions.length} variant="outlined" shape="rounded" page={submissionIndex+1} onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+                    <Pagination count={submissions.length} variant="outlined" shape="rounded" page={submissionIndex + 1} onChange={(event: React.ChangeEvent<unknown>, value: number) => {
                         navigate(`/manage/courses/${courseId}/exam/${examId}/question/${questionId}/submission/${submissions[value - 1].id}`);
                     }} />
                 </Stack>

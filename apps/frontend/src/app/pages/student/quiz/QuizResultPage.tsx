@@ -33,7 +33,7 @@ export default function QuizResultPage() {
         Assignment Grades
       </Typography>
       <Container>
-        {results.markingStatus == 'MARKED' ?
+        {results.markingStatus == 'MARKED'&& results.releasedStatus=='RELEASED' ?
           <TableContainer component={Paper} sx={{ my: 3 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -103,5 +103,3 @@ export default function QuizResultPage() {
     </Container>
   );
 }
-
-
