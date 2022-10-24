@@ -11,7 +11,7 @@ import { Container } from '@mui/system';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getCourseById, updateCourse, updateCourseStatus } from '../../../api';
 import { TabPanel } from '../../../components/TabPanel';
 import CourseInstructors from './sections/CourseInstructors';
@@ -42,7 +42,8 @@ export default function ManageCourse() {
 
   const updateCourseMutation = useMutation( updateCourseStatus);
 
-  
+  const navigate = useNavigate();
+
 
   if (isError || isLoading) {
     return <Skeleton></Skeleton>;
@@ -57,6 +58,7 @@ export default function ManageCourse() {
             color="primary"
             onClick={() => {
               updateCourseMutation.mutate({courseId, status: 'PUBLISHED'});
+              navigate('/manage/courses')
             }}
           >
             Publish

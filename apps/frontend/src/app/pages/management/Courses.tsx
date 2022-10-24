@@ -256,7 +256,7 @@ export default function Users() {
   const theme = useTheme();
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(2);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const {
     data: courses,
@@ -305,9 +305,14 @@ export default function Users() {
     refetch();
   }, [params]);
 
-  const draftChip = (status: string) => (
-    <Chip label={status} color="warning" size="small" variant="outlined" />
-  );
+  const draftChip = (status: string) => {
+    // const j = {.PUBLISHED};
+    if (status == 'PUBLISHED') {
+      return (<Chip label={status} color="success" size="medium" variant="outlined" />)
+    }else return (<Chip label={status} color="warning" size="medium" variant="outlined" />)
+  
+    
+  };
 
   //Table pagination
   const emptyRows =
@@ -433,7 +438,10 @@ export default function Users() {
                             <Typography variant="body2">{row.title}</Typography>
                           </TableCell>
                           <TableCell>{row.price}$</TableCell>
-                          <TableCell>{draftChip(row.status)}</TableCell>
+                          
+                            <TableCell>{draftChip(row.status)}</TableCell>
+                            {/* <TableCell><Chip label={status} color={status == 'PUBLISHED'?"warning":""} size="small" variant="outlined" /></TableCell> */}
+                          
                           <TableCell>
                             <Box
                               style={{
@@ -470,7 +478,7 @@ export default function Users() {
                       <TableRow>
                         <TablePagination
                           rowsPerPageOptions={[
-                            2,
+                            5,
                             10,
                             25,
                             { label: 'All', value: -1 },
