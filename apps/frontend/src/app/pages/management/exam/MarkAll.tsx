@@ -48,9 +48,20 @@ export default function QuizMarkingAll() {
 
   return (
     <Box sx={{ mb: 5 }}>
+     
+
       <Typography variant="h5">{examData.settings.title}</Typography>
-      {/* for two buttons to go to questions*/}
-      <Table>
+      
+      <Button
+        startIcon={<ArrowBack />}
+        onClick={() => navigate(`/manage/courses/${courseId}/exam/${examId}/questions`)}
+        color="inherit"
+        sx={{marginTop:4}}
+      >
+        Back to Questions
+      </Button>
+
+      <Table sx={{marginTop:1}}>
         <TableCell>
           <Button
             startIcon={<ArrowBack />}
