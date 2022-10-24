@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getCourseById, updateCurrentCourse } from '../../../api';
+import { getCourseById, updateCourse, updateCourseStatus } from '../../../api';
 import { TabPanel } from '../../../components/TabPanel';
 import CourseInstructors from './sections/CourseInstructors';
 import EnrolledStudents from './sections/EnrolledStudents';
@@ -40,9 +40,9 @@ export default function ManageCourse() {
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
-  const updateCourseMutation = useMutation(updateCurrentCourse);
+  const updateCourseMutation = useMutation( updateCourseStatus);
 
-  const { register, reset, control, getValues } = useForm();
+  
 
   if (isError || isLoading) {
     return <Skeleton></Skeleton>;
@@ -55,9 +55,8 @@ export default function ManageCourse() {
         <Box>
           <Button
             color="primary"
-            {...register('PUBLISHED')}
             onClick={() => {
-              updateCourseMutation.mutate(getValues());
+              updateCourseMutation.mutate({courseId, status: 'PUBLISHED'});
             }}
           >
             Publish

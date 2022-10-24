@@ -23,6 +23,7 @@ import {
   Skeleton,
   Slider,
   Stack,
+  SvgIcon,
   TableFooter,
   TextField,
   Typography,
@@ -42,10 +43,12 @@ import { createContext } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getOrgCourses, search } from '../../api';
-import Pagination from '@mui/material/Pagination';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import TablePagination from '@mui/material/TablePagination';
+import '../../../styles.css';
+import { border } from '@mui/system';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -170,102 +173,70 @@ function ResponsiveDrawer(props: any) {
 
   const statuses = ['Published', 'Unpublished'];
 
-  const drawer = (
-    <List sx={{ mx: { xs: 2, sm: 0 }, mr: { sm: 2 }, mt: { xs: 3 } }}>
-      <Typography variant="h6">Filter By</Typography>
-      <FormControl component="fieldset" sx={{ mt: 4, display: 'flex' }}>
-        <FormLabel component="legend">
-          <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-            Status
-          </Typography>
-        </FormLabel>
-        <FormGroup>
-          {statuses
-            .filter((text, index, arr) => showMore.stats || index < 4)
-            .map((text) => (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={() =>
-                      setParams((prevState: Params) => ({
-                        ...prevState,
-                        publishStatus: updateArray(
-                          prevState.publishStatus,
-                          text
-                        ),
-                      }))
-                    }
-                  />
-                }
-                label={text}
-              />
-            ))}
-        </FormGroup>
+  const Name = (
+    <List sx={{ mx: { xs: 2, sm: 0 }, mr: { sm: 2 }, mt: { xs: 0 } }}>
+      <div className="dropdown">
+        <Grid>
+          <Grid item xs={6} md={8} sx={{ mt: 0 }}>
+            <Typography variant="body1" sx={{}}>
+              Filter By:
+            </Typography>
+          </Grid>
+          <Grid item xs={6} md={8}>
+            <Box>
+              <FormControl
+                component="fieldset"
+                sx={{ mt: -4, display: 'flex', border: 0 }}
+              >
+                <FormLabel component="legend">
+                  <button className="dropbtn">
+                    <Typography variant="body1" sx={{}}>
+                      Status{' '}
+                      <SvgIcon
+                        component={ArrowDropDownIcon}
+                        sx={{ paddingLeft: '6px' }}
+                      />
+                    </Typography>
+                  </button>
+                </FormLabel>
 
-        <Button
-          variant="text"
-          onClick={() =>
-            setShowMore((prevState) => ({
-              ...prevState,
-              subjects: !prevState.stats,
-            }))
-          }
-        >
-          {statuses.length < 4
-            ? ''
-            : showMore.stats
-            ? 'Show less'
-            : 'Show more'}
-        </Button>
-      </FormControl>
+                <FormGroup>
+                  <div className="dropdown-content">
+                    {statuses
+                      .filter(
+                        (_text, index, arr) => showMore.stats || index < 4
+                      )
+                      .map((text) => (
+                        <li>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                onChange={() =>
+                                  setParams((prevState: Params) => ({
+                                    ...prevState,
+                                    publishStatus: updateArray(
+                                      prevState.publishStatus,
+                                      text
+                                    ),
+                                  }))
+                                }
+                              />
+                            }
+                            label={text}
+                          />
+                        </li>
+                      ))}
+                  </div>
+                </FormGroup>
+              </FormControl>
+            </Box>
+          </Grid>
+        </Grid>
+      </div>
     </List>
   );
 
-  return (
-    <Box sx={{ position: 'relative', height: '100%', border: 0 }}>
-      <Drawer
-        variant="temporary"
-        open={showFilter}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true,
-        }}
-        sx={{
-          '& .MuiDrawer-root': {
-            position: 'absolute',
-            border: 0,
-          },
-          '& .MuiPaper-root': {
-            border: 0,
-            width: 250,
-          },
-          display: { xs: 'flex', sm: 'none' },
-          border: 0,
-        }}
-      >
-        {drawer}
-      </Drawer>
-      <Drawer
-        variant="permanent"
-        sx={{
-          '& .MuiDrawer-root': {
-            border: 0,
-          },
-          '& .MuiPaper-root': {
-            position: 'relative',
-            border: 0,
-            pr: 3,
-            width: '100%',
-          },
-          display: { xs: 'none', sm: 'flex' },
-          border: 0,
-        }}
-        open
-      >
-        {drawer}
-      </Drawer>
-    </Box>
-  );
+  return <Box sx={{ position: 'right', height: '0%', border: 0 }}>{Name}</Box>;
 }
 
 function NoResults(props: any) {
@@ -338,6 +309,7 @@ export default function Users() {
     <Chip label={status} color="warning" size="small" variant="outlined" />
   );
 
+  //Table pagination
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
@@ -359,44 +331,46 @@ export default function Users() {
     <div>
       <Container>
         <Box sx={{ display: 'flex', margin: '0 auto' }}>
-          <Box sx={{ width: { sm: '250px' } }}>
-            <paramsContext.Provider value={{ params, setParams }}>
-              <filterContext.Provider value={{ showFilter, setShowFilter }}>
-                <ResponsiveDrawer />
-              </filterContext.Provider>
-            </paramsContext.Provider>
-          </Box>
           <Box sx={{ flex: 1, mr: { sm: 0, md: 5, lg: 10 } }}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-                mt: 0,
-                mb: 4,
-                width: { sm: '70%', md: '50%' },
-              }}
-            >
-              <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-              <TextField
-                label="Search Courses"
-                variant="standard"
-                fullWidth
-                color="primary"
-                sx={{ mr: 2 }}
-                defaultValue={params.searchQuery}
-                value={params.searchQuery}
-                onChange={(e) => handleSearchQuery(e)}
-              />
-
-              <Button
-                startIcon={<TuneIcon />}
-                sx={{ display: { xs: 'flex', sm: 'none' }, px: 3 }}
-                onClick={() => setShowFilter(!showFilter)}
-              >
-                Filters
-              </Button>
-            </Box>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'center',
+                    mt: 0,
+                    mb: 4,
+                    width: { sm: '70%', md: '50%' },
+                  }}
+                >
+                  <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                  <TextField
+                    label="Search Courses"
+                    variant="standard"
+                    fullWidth
+                    color="primary"
+                    sx={{ mr: 3 }}
+                    defaultValue={params.searchQuery}
+                    value={params.searchQuery}
+                    onChange={(e) => handleSearchQuery(e)}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box sx={{ width: { sm: '250px' } }}>
+                  <paramsContext.Provider value={{ params, setParams }}>
+                    <filterContext.Provider
+                      value={{ showFilter, setShowFilter }}
+                    >
+                      <Box>
+                        <ResponsiveDrawer />
+                      </Box>
+                    </filterContext.Provider>
+                  </paramsContext.Provider>
+                </Box>
+              </Grid>
+            </Grid>
 
             <Stack
               direction={'row'}

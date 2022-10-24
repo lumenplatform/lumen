@@ -74,7 +74,7 @@ body {
 .dropbtn {
   background-color: #ffffff;
   color: black;
-  padding: 0 px;
+  padding-bottom: 40px;
   font-size: 16px;
   border: 1;
   border-color: #8d8a8a;
@@ -84,7 +84,7 @@ body {
   width: 120px;
   box-shadow: none;
   height: 40px;
-
+opacity: .6;
   font-style: normal;
 }
 
