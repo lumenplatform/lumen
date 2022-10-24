@@ -23,6 +23,8 @@ import { enrollInCourse, getCourseById } from '../api';
 import { Header } from '../pages/public/fragments/Header';
 import StudentHeader from './StudentHeader';
 
+
+
 export default function EnrollHEader() {
   const theme = useTheme();
   const [value, setValue] = React.useState('1');
@@ -71,7 +73,8 @@ export default function EnrollHEader() {
           {course.title}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Rating name="read-only" value={4} readOnly size="small" />
+          <Rating name="read-only" value={course.rating}  readOnly size="small" />
+          
           {/* get the value from the table (total) */}
 
           <Typography
@@ -80,7 +83,8 @@ export default function EnrollHEader() {
             component="h3"
             sx={{ lineHeight: 0, ml: 1 }}
           >
-            3 ratings
+            {course.ratingCount} reviews
+
             {/* get the count from table */}
           </Typography>
         </Box>
