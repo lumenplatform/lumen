@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getQuizById } from '../../../api';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SubmissionMarking from './SubmissionMarking';
+import NativeSelect from '@mui/material/NativeSelect';
 
 export default function QuizMarkingAll() {
   const { courseId, examId, questionId } = useParams();
@@ -43,11 +44,11 @@ export default function QuizMarkingAll() {
     }
   }, [examData, questionId]);
 
-  const [marking, setMarkAll] = React.useState('');
+  // const [marking, setMarkAll] = React.useState('');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setMarkAll(event.target.value);
-  };
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setMarkAll(event.target.value);
+  // };
 
   if (isExamLoading || isExamError) return <Skeleton />;
 
@@ -101,16 +102,16 @@ export default function QuizMarkingAll() {
       </Table>
 
 <FormControl sx={{minWidth:130, marginTop:5,justifyContent:'center'}} size='small'>
-      <Select
-        value={marking}
-        onChange={handleChange}
-        displayEmpty
-        inputProps={{ 'aria-label': 'without label' }}
-        defaultValue='MarkAll'
+      <NativeSelect
+        defaultValue={'MarkAll'}
+        // inputProps={{
+        //   name: 'marking',
+        //   id: 'uncontrolled-native',
+        // }}
       >
-        <MenuItem value={'MarkAll'}>Mark All</MenuItem>
-        <MenuItem value={'UnmarkAll'}>Unmark All</MenuItem>
-      </Select>
+        <option value={'MarkAll'}>Mark All</option>
+        <option value={'UnmarkAll'}>Unmark All</option>
+      </NativeSelect>
 
       </FormControl>
 
