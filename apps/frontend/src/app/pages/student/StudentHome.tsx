@@ -70,7 +70,10 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
           flexItem
           sx={{ display: { xs: 'none', sm: 'block' } }}
         />
-        <Stack sx={{ p: 2, display: { xs: 'none', sm: 'block' },width:'20%' }}>
+        <Stack
+          sx={{ p: 2, display: { xs: 'none', sm: 'flex' }, width: '20%' }}
+          justifyContent="center" alignItems='center'
+        >
           {course.next && (
             <>
               <Typography variant="body2" fontWeight={600} mb={1}>
@@ -79,7 +82,7 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
               <Typography variant="body2">{course.next?.title}</Typography>
             </>
           )}
-          {!course.next && (
+          {!course.next && course.enrollment.status === 'ACTIVE' && (
             <Button
               onClick={() =>
                 navigate(`/student/${course.courseId}/complete-course`)
@@ -88,6 +91,16 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
               size="small"
             >
               Complete Course
+            </Button>
+          )}
+          {course.enrollment.status === 'COMPLETED' && (
+            <Button
+              onClick={() =>
+                navigate(`/student/${course.courseId}/certificate`)
+              }
+              size="small"
+            >
+              View Certificate
             </Button>
           )}
         </Stack>

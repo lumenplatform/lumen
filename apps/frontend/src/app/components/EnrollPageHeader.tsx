@@ -51,7 +51,7 @@ export default function EnrollHEader() {
     () => getCourseReview(courseId!)
   );
 
-  if (isError || isLoading || !course_reviews || course_reviews.length === 0) {
+  if (isError || isLoading || !course_reviews) {
     return <Typography variant="subtitle1">No Reviews Yet.</Typography>;
   }
 
@@ -127,7 +127,7 @@ export default function EnrollHEader() {
             display="inline"
             style={{ marginLeft: 10 }}
           >
-            3 Already enrolled
+            {/* 3 Already enrolled */}
             {/* get the total */}
           </Typography>
         </Box>

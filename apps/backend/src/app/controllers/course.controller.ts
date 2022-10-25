@@ -146,10 +146,13 @@ export class CourseController {
     const courses: any = await em
       .find(
         Enrollment,
-        { user: { uid }, status: EnrollmentStatus.ACTIVE },
+        {
+          user: { uid },
+          // status: EnrollmentStatus.ACTIVE
+        },
         { populate: ['course'] }
       )
-      .then((r) => r.map((k) => k.course));
+      .then((r) => r.map((k) => ({ ...k.course, enrollment: k })));
 
     for (let i = 0; i < courses.length; i++) {
       const material = await this.getCourseMaterial(courses[i].courseId, uid);
