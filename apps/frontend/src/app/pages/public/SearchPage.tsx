@@ -98,7 +98,7 @@ function ResponsiveDrawer(props: any) {
     'Math and Logic',
     'Physical Science and Engineering',
   ];
-  const levelsList = ['Beginner', 'Intermediate', 'Advanced'];
+  const levelsList = ['Beginner', 'Intermediate', 'Expert'];
   const languageList = ['English', 'Sinhala', 'Mandarin', 'Hindi', 'Spanish'];
 
   const drawer = (
