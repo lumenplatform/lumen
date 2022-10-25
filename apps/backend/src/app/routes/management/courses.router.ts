@@ -1,12 +1,19 @@
 import { RequestContext } from '@mikro-orm/core';
 import { assert } from 'console';
 import * as express from 'express';
+import e = require('express');
+import { v4 } from 'uuid';
 import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
 import { Course, CourseStatus } from '../../models/course.model';
-import { Enrollment } from '../../models/enrollment.model';
+import {
+  Enrollment,
+  EnrollmentStatus,
+  EnrollmentType,
+} from '../../models/enrollment.model';
 import { Organization } from '../../models/organization.model';
-import { User } from '../../models/user.model';
+import { Payment } from '../../models/payment.model';
+import { User, UserPreferences } from '../../models/user.model';
 import { CourseService } from '../../services/course.service';
 import { MailJetService } from '../../services/mail/mailjet.service';
 import { StripePaymentService } from '../../services/payment.service';
@@ -72,6 +79,51 @@ coursesRouter.post('/', async (req, res, next) => {
       res.json(createResponse(course, 201, 'Successfully created the course'));
     })
     .catch(next);
+});
+
+coursesRouter.post('/:id/invites', async (req, res, next) => {
+  try {
+    const em = RequestContext.getEntityManager();
+    const course = await em.findOneOrFail(Course, { courseId: req.params.id });
+
+    let user = await em.findOne(User, { email: req.body.email });
+
+    if (!user) {
+      user = em.create(User, {
+        email: req.body.email,
+        name: '[ Invited Student ]',
+        timeZone: '+5.30',
+        preferences: new UserPreferences(),
+      });
+    }
+
+    const existingEnrollments = await em.find(Enrollment, { user, course });
+    if (existingEnrollments.length > 0) {
+      res.status(200).json(existingEnrollments[0]);
+      return;
+    }
+
+    const enrollment = em.create(Enrollment, {
+      user,
+      course,
+      payment: em.create(Payment, {
+        amount: course.price / 2,
+        txnId: v4(),
+        createdAt: new Date(),
+      }),
+      enrollmentDate: new Date(),
+      type: EnrollmentType.PRIVATE,
+      status: EnrollmentStatus.ACTIVE,
+    });
+
+    em.persist(enrollment);
+
+    await em.flush();
+
+    res.status(200).json(enrollment);
+  } catch (e) {
+    next(e);
+  }
 });
 
 //add instructors to the course

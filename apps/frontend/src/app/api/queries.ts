@@ -113,6 +113,10 @@ export function inviteUserToOrg(data: any) {
   return client.post('/manage/users/invites', data).then((r) => r.data.data);
 }
 
+export function inviteStudentToCourse(data: any) {
+  return client.post('/manage/courses/'+data.courseId+'/invites', data).then((r) => r.data.data);
+}
+
 export function addInstrucotorsToCourse(data: any) {
   return client.post('/manage/courses/'+data[0]+'/instructors',data).then((r)=> r.data.data);
 }

@@ -79,8 +79,11 @@ export default function ManageCourse() {
               Un-Publish
             </Button>
           )}
-          <Button>Edit</Button>
-          <Button color="error">Delete</Button>
+          <Button
+            onClick={() => navigate('/manage/courses/' + courseId + '/edit')}
+          >
+            Edit
+          </Button>
         </Box>
       </Box>
       <Box sx={{ width: '100%' }}>
