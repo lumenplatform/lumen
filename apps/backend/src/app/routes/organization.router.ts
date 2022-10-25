@@ -20,3 +20,10 @@ organizationRouter.post('/current', (req, res, next) => {
     .then(sendJSON(res, 200))
     .catch(next);
 });
+
+organizationRouter.get('/dashboard-data', (req, res,next) => {
+  organizationController
+    .getOrgDashboardDataById(req.user.orgId)
+    .then(sendJSON(res, 200))
+    .catch(next);
+});
