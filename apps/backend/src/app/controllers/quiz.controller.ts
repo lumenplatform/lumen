@@ -3,11 +3,7 @@ import { Attempt, AttemptStatus } from '../models/attempt.model';
 import { Quiz } from '../models/quiz.model';
 import { Submission } from '../models/submission.model';
 import { AttemptService } from '../services/attempt.service';
-import { ForbiddenException } from '../utils/errors';
-import { Attempt } from '../models/attempt.model';
 import { Course } from '../models/course.model';
-import { Quiz } from '../models/quiz.model';
-import { AttemptService } from '../services/attempt.service';
 
 export class QuizController {
   constructor(private attempt: AttemptService) {}
