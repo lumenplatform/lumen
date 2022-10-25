@@ -15,105 +15,105 @@ import { useQuery } from 'react-query';
 import { getCourseById, getCourseMaterial } from '../../../api';
 import {useParams } from 'react-router-dom';
 
-const courseMaterials = [{
-  topic: "Week_1",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
-  items: [
-    {
-      item_topic: "video and audio",
-      resources: [{
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: false,
-      },
-      {
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }
-      ]
-    },
-    {
-      item_topic: "all",
-      resources: [{
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }, {
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: true,
-      },
-      {
-        type: "file",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "File 1",
-        checked: true,
-      }
-        ,
-      {
-        type: "link",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Link 1",
-        checked: false,
-      }
-      ]
-    }
-  ]
-}, {
-  topic: "Week_2",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
-  items: [
-    {
-      item_topic: "video and audio",
-      resources: [{
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: false,
-      },
-      {
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }
-      ]
-    },
-    {
-      item_topic: "all",
-      resources: [{
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }, {
-        type: "video",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: true,
-      },
-      {
-        type: "file",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "File 1",
-        checked: true,
-      }
-        ,
-      {
-        type: "link",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Link 1",
-        checked: false,
-      }
-      ]
-    }
-  ]
-}]
+// const courseMaterials = [{
+//   topic: "Week_1",
+//   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
+//   items: [
+//     {
+//       item_topic: "video and audio",
+//       resources: [{
+//         type: "video",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Video 1",
+//         checked: false,
+//       },
+//       {
+//         type: "audio",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Audio 1",
+//         checked: false,
+//       }
+//       ]
+//     },
+//     {
+//       item_topic: "all",
+//       resources: [{
+//         type: "audio",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Audio 1",
+//         checked: false,
+//       }, {
+//         type: "video",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Video 1",
+//         checked: true,
+//       },
+//       {
+//         type: "file",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "File 1",
+//         checked: true,
+//       }
+//         ,
+//       {
+//         type: "link",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Link 1",
+//         checked: false,
+//       }
+//       ]
+//     }
+//   ]
+// }, {
+//   topic: "Week_2",
+//   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
+//   items: [
+//     {
+//       item_topic: "video and audio",
+//       resources: [{
+//         type: "video",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Video 1",
+//         checked: false,
+//       },
+//       {
+//         type: "audio",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Audio 1",
+//         checked: false,
+//       }
+//       ]
+//     },
+//     {
+//       item_topic: "all",
+//       resources: [{
+//         type: "audio",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Audio 1",
+//         checked: false,
+//       }, {
+//         type: "video",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Video 1",
+//         checked: true,
+//       },
+//       {
+//         type: "file",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "File 1",
+//         checked: true,
+//       }
+//         ,
+//       {
+//         type: "link",
+//         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//         title: "Link 1",
+//         checked: false,
+//       }
+//       ]
+//     }
+//   ]
+// }]
 
 function CourseResources() {
   const { courseId, sectionId, topicId } = useParams();
@@ -123,8 +123,8 @@ function CourseResources() {
   return (
     <List>
       {
-        courseMaterials.map((material) => (
-          <CourseMaterialTopics topic={material.topic} description={material.description} items={material.items} />
+        data&&data.map((material:any) => (
+          <CourseMaterialTopics topic={material.title} description={material.description} items={material.topics} />
         ))
       }
     </List>
@@ -170,7 +170,7 @@ function ResourceItem(props: any) {
         </Badge>
       </ListItemIcon>
       <Link href={props.item.url} underline="hover" sx={{ m: 0, ml: 2 }}>
-        {props.item.title}
+        {props.item.asset.name}
       </Link>
     </ListItem>
   );
