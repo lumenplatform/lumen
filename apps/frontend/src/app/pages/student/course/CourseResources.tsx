@@ -14,6 +14,7 @@ import {useTheme} from '@mui/material';
 import { useQuery } from 'react-query';
 import { getCourseById, getCourseMaterial } from '../../../api';
 import {useParams } from 'react-router-dom';
+import FilesInput from '../../../components/FilesInput';
 
 // const courseMaterials = [{
 //   topic: "Week_1",
@@ -140,13 +141,11 @@ function CourseMaterialTopics(props: any) {
       <ListItem>
         <ListItemText disableTypography primary={<Typography variant="h6">{props.topic}</Typography>} />
       </ListItem>
-      <List disablePadding>
-        {
-          resources.map((item:any) => (
-            <ResourceItem item = {item} />
-          ))
-        }
-      </List>
+      <FilesInput
+            viewOnly={true}
+            multiple
+            value={resources?.map((r: any) => r.asset)}
+          />
     </>
   );
 }
