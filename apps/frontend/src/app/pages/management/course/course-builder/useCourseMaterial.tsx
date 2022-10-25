@@ -179,7 +179,7 @@ export function useCourseMaterial(data: Section[]) {
     setSections((p) => {
       const r = [...p];
       r.splice(i, 0, {
-        title: new Date().toISOString(),
+        title: 'Section ' + (r.length + 1) + ' Title',
         topics: [],
       });
       return r;
@@ -191,12 +191,12 @@ export function useCourseMaterial(data: Section[]) {
       const r = [...p];
       if (r[sectionId].topics) {
         r[sectionId].topics.splice(topicIndex, 0, {
-          title: new Date().toISOString(),
+          title: 'Topic ' + (r[sectionId].topics.length + 1) + ' Title',
         });
       } else {
         r[sectionId].topics = [
           {
-            title: new Date().toISOString(),
+            title: 'Topic 1 Title',
           },
         ];
       }

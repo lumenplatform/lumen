@@ -119,7 +119,12 @@ coursesRouter.get('/:id', (req, res, next) => {
     .catch(next);
 });
 
-coursesRouter.get('/:id/reviews');
+coursesRouter.get('/:id/reviews', (req, res, next) => {
+  courseController
+    .getCourseReviews(req.params.id)
+    .then(sendJSON(res, 200, 'Success'))
+    .catch(next);
+});
 
 coursesRouter.post(
   '/:id/reviews',
@@ -202,6 +207,5 @@ coursesRouter.post('/current', (req, res, next) => {
     .then(sendJSON(res, 200))
     .catch(next);
 });
-
 
 coursesRouter.use('/:id/quiz', quizRouter);

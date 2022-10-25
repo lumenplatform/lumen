@@ -98,7 +98,12 @@ export class CourseController {
 
   async getCourseByID(id: string) {
     const em = RequestContext.getEntityManager();
-    return em.findOneOrFail(Course, { courseId: id });
+    return em
+      .findOneOrFail(Course, { courseId: id })
+      .then((r) => ({
+        ...r,
+        enrolledCount: em.count(Enrollment, { course: { courseId: id } }),
+      }));
   }
 
   async updateCourseInformation(courseId: string, data: Partial<Course>) {
@@ -275,5 +280,14 @@ export class CourseController {
     em.persist(enrollment);
     await em.flush();
     return enrollment;
+  }
+
+  getCourseReviews(courseId: string) {
+    const em = RequestContext.getEntityManager() as EntityManager;
+    return em.find(
+      CourseReview,
+      { enrollment: { course: { courseId } } },
+      { populate: ['user'] }
+    );
   }
 }

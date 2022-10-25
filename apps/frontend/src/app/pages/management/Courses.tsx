@@ -3,6 +3,7 @@ import {
   EditOutlined,
   KeyboardArrowLeft,
   KeyboardArrowRight,
+  SentimentDissatisfiedOutlined,
 } from '@mui/icons-material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
@@ -176,7 +177,7 @@ function ResponsiveDrawer(props: any) {
 function NoResults(props: any) {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      <SchoolOutlinedIcon fontSize="large" />
+      <SentimentDissatisfiedOutlined fontSize="large" />
       <Typography variant="h6">No Courses Found </Typography>
     </Stack>
   );
@@ -247,9 +248,9 @@ export default function Users() {
   return (
     <Box sx={{ p: 3 }}>
       <Stack direction="row" alignItems="center">
-        <BookOnlineOutlined />
+        <SchoolOutlinedIcon />
         <Typography ml={1} variant="h6">
-          Your Courses
+          All Courses
         </Typography>
         <Box flex={'1 1 0'}></Box>
         <Button
