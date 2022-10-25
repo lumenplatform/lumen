@@ -54,6 +54,10 @@ function TabPanel(props: TabPanelProps) {
 }
 
 function OverviewTab() {
+  const { user, signOut } = useAuth();
+  if (!user) {
+    return <Skeleton variant="rectangular" width={210} height={118} />;
+  }
   return (
     <div>
       <Paper sx={{ py: 3, mb: 2 }}>
@@ -74,9 +78,9 @@ function OverviewTab() {
             gap: 2,
           }}
         >
-          <TextField label="Username" disabled={true} value="@dalanad" />
-          <TextField label="Full Name" value={'Dalana Dharmathilake'} />
-          <TextField label="Email" value={'dalana.dhar@gmail.com'} />
+          <TextField label="Username" disabled={true} value={user.nickname} />
+          <TextField label="Full Name" value={user.name} />
+          <TextField label="Email" value={user.email} />
           <TextField label="Timezone" value="+05.30" />
         </Box>
         <Button variant="contained">Update Profile</Button>
@@ -279,19 +283,12 @@ function ProfileCard() {
           <b>Timezone:</b> +05.30
         </Typography>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Button variant="outlined" sx={{ mr: 2 }}>
-          Edit
+      <Box sx={{ display: 'flex', justifyContent: 'center' ,mt:4 }} >
+        <Button variant="outlined" sx={{ mr: 2 }} onClick={signOut}>
+          Logout
         </Button>
-        <Button variant="outlined" color="error">
-          Deactivate
-        </Button>
-        <br></br>
       </Box>
-      <Button variant="outlined" sx={{ mr: 2 }} onClick={signOut}>
-        Logout
-      </Button>
-    </Box>
+    </Box >
   );
 }
 

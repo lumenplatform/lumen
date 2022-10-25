@@ -54,6 +54,10 @@ export default function EnrollHEader() {
   if (isError || isLoading || !course_reviews) {
     return <Typography variant="subtitle1">No Reviews Yet.</Typography>;
   }
+  
+  if (isError || isLoading || !course_reviews ) {
+    return <Skeleton />;
+  }
 
   const totalReviews = course_reviews.length;
   const overallRating =
