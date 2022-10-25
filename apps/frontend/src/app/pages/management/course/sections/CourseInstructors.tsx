@@ -1,13 +1,20 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {
+  Avatar,
   Box,
   Button,
+  Checkbox,
   Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
   TextField,
   Typography,
   useTheme,
@@ -19,8 +26,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { getOrgCoursesById } from '../../../../api';
-import { useQuery } from 'react-query';
+import { addInstrucotorsToCourse, getOrgCoursesById, getOrgUsers } from '../../../../api';
+import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -85,9 +92,33 @@ export default function CourseInstructors() {
 }
 
 function AddInstructorForm() {
+  const { courseId } = useParams();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
+  };
+  const [checked, setChecked] = useState([courseId]);
+  const { data: orgUsers, isLoading } = useQuery('/manage/users' , () =>
+    getOrgUsers()
+  );
+
+  const addInstructorMutation = useMutation(addInstrucotorsToCourse);
+
+  // console.log(orgUsers);
+
+
+  const handleToggle = (value: any) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+    setChecked(newChecked);
+    // console.log(checked);
+    
   };
   return (
     <>
@@ -105,31 +136,54 @@ function AddInstructorForm() {
       <Dialog open={open} maxWidth="xs" hideBackdrop={false}>
         <DialogTitle>Add Instructor</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            We will send an email to the user asking them to join.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            // {...register('email')}
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
+          <List
+            dense
+            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+          >
+            {orgUsers && orgUsers.map((row:any) => {
+              const labelId = `checkbox-list-secondary-label-${row.uid}`;
+              return (
+                <ListItem
+                  key={row.uid}
+                  secondaryAction={
+                    <Checkbox
+                      edge="end"
+                      onChange={handleToggle(row.uid)}
+                      checked={checked.indexOf(row.uid) !== -1}
+                      inputProps={{ 'aria-labelledby': labelId }}
+                    />
+                  }
+                  disablePadding
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={`Avatar n°${row.uid + 1}`}
+                        src={`${row.picture}`}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      id={labelId}
+                      primary={`${row.name}`}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
         </DialogContent>
         <DialogActions sx={{ mx: 2, mb: 2 }}>
           <Button color="secondary" onClick={handleClose}>
             Cancel
           </Button>
           <Button
+            disabled={checked.length===1}
             variant="contained"
-            // onClick={() => {
-            //   inviteUserMutation.mutate({ email: getValues('email') });
-            // }}
+            onClick={() => {
+              addInstructorMutation.mutate(checked);
+            }}
           >
-            Invite
+            Add
           </Button>
         </DialogActions>
       </Dialog>
