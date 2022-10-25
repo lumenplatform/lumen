@@ -94,7 +94,7 @@ export class OrganizationService {
     const org = await em.findOneOrFail(Organization, { orgId });
     const payment = em.create(Payment, {
       txnId : v4(),
-      amount : -amount,
+      amount : amount,
     });
     const withdrawal = em.create(Withdrawal, {
       payment : payment,
