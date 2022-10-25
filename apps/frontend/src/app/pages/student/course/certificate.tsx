@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Certificate from '../../../components/certification';
 import StudentHeader from '../../../components/StudentHeader';
+import DownloadIcon from '@mui/icons-material/Download';
+import SvgIcon from '@mui/icons-material/Download';
 // import { getCourseById } from '../../../api';
 
 export default function CertificateDownload() {
@@ -22,7 +24,8 @@ export default function CertificateDownload() {
           </Grid>
           <Grid item xs={1} md={1}></Grid>
 
-          <Button variant="contained" sx={{ ml: 100, my: 3 }}>
+          <Button variant="contained" sx={{ ml: 100, my: 3, paddingX: 22 }}>
+          <SvgIcon component={DownloadIcon} />
               Download
           </Button>
       </Grid></>
