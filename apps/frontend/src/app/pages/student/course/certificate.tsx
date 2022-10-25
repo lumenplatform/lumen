@@ -10,7 +10,7 @@ export default function CertificateDownload() {
 
   return (
 
-    <><StudentHeader></StudentHeader>
+    <><StudentHeader />
     <Grid container spacing={2}>
           <Grid item xs={1} md={1}>
 

@@ -59,17 +59,17 @@ export default function Certificate() {
                   />
                 </Grid>
                 <Grid container xs={8}>
-                  <Grid container xs={12} sx={{}}>
+                  <Grid container xs={12} sx={{ml: 1}}>
                     <Typography variant="h6" style={{ whiteSpace: 'pre-line' }}>
                       {course.organization.name}
                     </Typography>
                   </Grid>
-                  <Grid container xs={12} sx={{}}>
+                  <Grid container xs={12} sx={{ml: 1}}>
                     <Typography variant="body1" display="block">
                       Stanford,
                     </Typography>
                   </Grid>
-                  <Grid container xs={12} sx={{}}>
+                  <Grid container xs={12} sx={{ml: 1}}>
                     <Typography variant="body1">California.</Typography>
                   </Grid>
                 </Grid>
@@ -80,7 +80,7 @@ export default function Certificate() {
                       Completed on: {date}
                     </Typography>
                   </Grid>
-                  <Grid container xs={12} sx={{}}>
+                  <Grid container xs={12} sx={{mt: 2}}>
                     <Typography variant="h4">{user.name}</Typography>
                   </Grid>
                   <Grid container xs={12} sx={{}}>
@@ -93,12 +93,10 @@ export default function Certificate() {
                   </Grid>
                   <Grid container xs={12} sx={{}}>
                     <Typography variant="body1" sx={{ paddingRight: 1 }}>
-                      an online non-credit course offered by
-                    </Typography>
-                    <Typography variant="body1" sx={{ paddingRight: 1 }}>
-                      <b>{course.organization.name}</b>
-                    </Typography>
-                    <Typography variant="body1" sx={{ paddingRight: 1 }}>
+                      an online non-credit course offered by&nbsp; 
+                    
+                      <b>{course.organization.name}</b>&nbsp; 
+                    
                       through Lumén.
                     </Typography>
                   </Grid>
@@ -106,7 +104,7 @@ export default function Certificate() {
                 <Grid container xs={3} sx={{}}></Grid>
                 <Grid container xs={12} sx={{}}>
                   <Grid container xs={12} sx={{}}>
-                    <Typography variant="h6" sx={{ mt: 12 }}>
+                    <Typography variant="h6" sx={{ mt: 10 }}>
                       ________________________________{' '}
                     </Typography>
                   </Grid>
