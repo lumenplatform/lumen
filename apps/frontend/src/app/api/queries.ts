@@ -96,6 +96,11 @@ export function getOrgCoursesById(id: string) {
   return client.get<any>('/manage/courses/' + id, {}).then((r) => r.data.data);
 }
 
+export function deleteCourseInstructor(id: string, courseId: string) {
+  console.log('/manage/courses/'+courseId+'/instructors/'+id);
+  return client.delete<any>('/manage/courses/'+courseId+'/instructors/'+id, {}).then((r)=>r.data.data);
+}
+
 export function getOrgCourseUsers(id: string) {
   return client.get<any>('/manage/courses/'+id+'/users',{}).then((r)=>r.data.data);
 }
@@ -106,6 +111,10 @@ export function getOrgUsers() {
 
 export function inviteUserToOrg(data: any) {
   return client.post('/manage/users/invites', data).then((r) => r.data.data);
+}
+
+export function addInstrucotorsToCourse(data: any) {
+  return client.post('/manage/courses/'+data[0]+'/instructors',data).then((r)=> r.data.data);
 }
 
 export function getPendingOrgInvitations() {
