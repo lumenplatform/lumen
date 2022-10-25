@@ -88,8 +88,8 @@ export function updateCourse(data: any) {
     .then((r) => r.data.data);
 }
 
-export function getOrgCourses() {
-  return client.get<any>('/manage/courses/', {}).then((r) => r.data.data);
+export function getOrgCourses(searchQuery:any,publishStatus:any) {
+  return client.get<any>(`/manage/courses/?searchQuery=${searchQuery? searchQuery:''}&publishStatus=${publishStatus}`, {}).then((r) => r.data.data);
 }
 
 export function getOrgCoursesById(id: string) {

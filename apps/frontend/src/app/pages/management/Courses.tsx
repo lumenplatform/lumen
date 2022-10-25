@@ -1,33 +1,23 @@
 import {
-  Edit,
   EditOutlined,
   KeyboardArrowLeft,
-  KeyboardArrowRight,
+  KeyboardArrowRight
 } from '@mui/icons-material';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import LastPageIcon from '@mui/icons-material/LastPage';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
-import TuneIcon from '@mui/icons-material/Tune';
 import {
-  Button,
-  Checkbox,
-  Chip,
-  Container,
-  Drawer,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Grid,
+  Button, Chip,
+  Container, FormControl, Grid,
   IconButton,
-  List,
-  Skeleton,
-  Slider,
-  Stack,
-  SvgIcon,
-  TableFooter,
+  InputLabel,
+  List, MenuItem, Select,
+  Skeleton, Stack, TableFooter,
   TextField,
   Typography,
-  useTheme,
+  useTheme
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -36,19 +26,13 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import React from 'react';
-import { createContext } from 'react';
+import React, { createContext } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getOrgCourses, search } from '../../api';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import TablePagination from '@mui/material/TablePagination';
 import '../../../styles.css';
-import { border } from '@mui/system';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { getOrgCourses, search } from '../../api';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -130,22 +114,16 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-function updateArray(array: string[] | any[], element: any) {
-  const x = [...array];
-  x.includes(element) ? x.splice(array.indexOf(element), 1) : x.push(element);
-  return x;
-}
-
 type Params = {
   searchQuery?: string;
-  publishStatus: string[];
+  publishStatus: string;
 };
 
 const queryParams = new URLSearchParams(window.location.search);
 
 const defaultParams: Params = {
   searchQuery: queryParams.has('query') ? queryParams.get('query')! : undefined,
-  publishStatus: [],
+  publishStatus: 'ALL',
 };
 
 const filterContext = createContext<{
@@ -153,96 +131,44 @@ const filterContext = createContext<{
   setShowFilter: any;
 }>({
   showFilter: false,
-  setShowFilter: () => {},
+  setShowFilter: () => { },
 });
 
 const paramsContext = createContext<{ params: Params; setParams: any }>({
   params: defaultParams,
-  setParams: () => {},
+  setParams: () => { },
 });
 
 function ResponsiveDrawer(props: any) {
-  const { showFilter, setShowFilter } = React.useContext(filterContext);
   const { params, setParams } = React.useContext(paramsContext);
-  const [showMore, setShowMore] = React.useState({
-    stats: false,
-  });
-  const handleDrawerToggle = () => {
-    setShowFilter(!showFilter);
-  };
 
-  const statuses = ['Published', 'Unpublished'];
+  return (
+    <Box>
+      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <InputLabel id="status-select-small">Status</InputLabel>
+        <Select
+          labelId="status-select-small"
+          id="status-select-small"
+          label="Status"
+          defaultValue='ALL'
+          onChange={(e) => {
+            setParams({ ...params, publishStatus: e.target.value });
+          }}
+        >
+          <MenuItem value={'ALL'}>All</MenuItem>
+          <MenuItem value={'PUBLISHED'}>Published</MenuItem>
+          <MenuItem value={'UNPUBLISHED'}>Unpublished</MenuItem>
+          <MenuItem value={'DRAFT '}>Draft</MenuItem>
 
-  const Name = (
-    <List sx={{ mx: { xs: 2, sm: 0 }, mr: { sm: 2 }, mt: { xs: 0 } }}>
-      <div className="dropdown">
-        <Grid>
-          <Grid item xs={6} md={8} sx={{ mt: 0 }}>
-            <Typography variant="body1" sx={{}}>
-              Filter By:
-            </Typography>
-          </Grid>
-          <Grid item xs={6} md={8}>
-            <Box>
-              <FormControl
-                component="fieldset"
-                sx={{ mt: -4, display: 'flex', border: 0 }}
-              >
-                <FormLabel component="legend">
-                  <button className="dropbtn">
-                    <Typography variant="body1" sx={{}}>
-                      Status{' '}
-                      <SvgIcon
-                        component={ArrowDropDownIcon}
-                        sx={{ paddingLeft: '6px' }}
-                      />
-                    </Typography>
-                  </button>
-                </FormLabel>
+        </Select>
+      </FormControl>
+    </Box>
 
-                <FormGroup>
-                  <div className="dropdown-content">
-                    {statuses
-                      .filter(
-                        (_text, index, arr) => showMore.stats || index < 4
-                      )
-                      .map((text) => (
-                        <li>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                onChange={() =>
-                                  setParams((prevState: Params) => ({
-                                    ...prevState,
-                                    publishStatus: updateArray(
-                                      prevState.publishStatus,
-                                      text
-                                    ),
-                                  }))
-                                }
-                              />
-                            }
-                            label={text}
-                          />
-                        </li>
-                      ))}
-                  </div>
-                </FormGroup>
-              </FormControl>
-            </Box>
-          </Grid>
-        </Grid>
-      </div>
-    </List>
   );
-
-  return <Box sx={{ position: 'right', height: '0%', border: 0 }}>{Name}</Box>;
 }
 
 function NoResults(props: any) {
   return (
-    //Typohraphy with varinat body2
-
     <Stack direction="row" alignItems="center" spacing={2}>
       <SchoolOutlinedIcon fontSize="large" />
       <Typography variant="h6">No results found for "{props.value}"</Typography>
@@ -258,24 +184,12 @@ export default function Users() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const {
-    data: courses,
-    isLoading,
-    isError,
-    isRefetchError,
-    isRefetching,
-    refetch,
-  } = useQuery(JSON.stringify(params), () => search(params), {
-    refetchOnWindowFocus: false,
-    enabled: false, // disable this query from automatically running
-  });
 
-  const { data } = useQuery('search-courses', () => getOrgCourses());
+  const { data, isError, isLoading, isRefetching, isRefetchError, refetch } = useQuery('search-courses', () => getOrgCourses(params.searchQuery, params.publishStatus));
 
   const location = useLocation();
   const queryParams = new URLSearchParams(window.location.search);
   const navigate = useNavigate();
-  // const x = (data.length) / 5;
 
   const handleSearchQuery = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -284,21 +198,12 @@ export default function Users() {
     navigate(`/manage/courses?${queryParams.toString()}`);
   };
 
-  const handleOrgChipDelete = () => {
-    queryParams.delete('organization');
-    navigate(`/manage/courses?${queryParams.toString()}`);
-  };
-
   React.useEffect(() => {
-    console.log(queryParams.has('query'));
     setParams((prevState: Params) => ({
       ...prevState,
       searchQuery: queryParams.has('query') ? queryParams.get('query')! : '',
-      organization: queryParams.has('organization')
-        ? queryParams.get('organization')!
-        : '',
     }));
-    console.log('params', params);
+    console.log(params);
   }, [location]);
 
   React.useEffect(() => {
@@ -309,14 +214,10 @@ export default function Users() {
     // const j = {.PUBLISHED};
     if (status == 'PUBLISHED') {
       return (<Chip label={status} color="success" size="medium" variant="outlined" />)
-    }else return (<Chip label={status} color="warning" size="medium" variant="outlined" />)
-  
-    
-  };
+    } else return (<Chip label={status} color="warning" size="medium" variant="outlined" />)
 
-  //Table pagination
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+  };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -363,17 +264,11 @@ export default function Users() {
                 </Box>
               </Grid>
               <Grid item xs={6}>
-                <Box sx={{ width: { sm: '250px' } }}>
-                  <paramsContext.Provider value={{ params, setParams }}>
-                    <filterContext.Provider
-                      value={{ showFilter, setShowFilter }}
-                    >
-                      <Box>
-                        <ResponsiveDrawer />
-                      </Box>
-                    </filterContext.Provider>
-                  </paramsContext.Provider>
-                </Box>
+                <paramsContext.Provider value={{ params, setParams }}>
+                  <Box>
+                    <ResponsiveDrawer />
+                  </Box>
+                </paramsContext.Provider>
               </Grid>
             </Grid>
 
@@ -398,11 +293,10 @@ export default function Users() {
             </Stack>
 
             <Grid>
-              {isLoading ||
-              isError ||
-              !data ||
-              isRefetchError ||
-              isRefetching ? (
+              {isLoading || isError ||
+                !data ||
+                isRefetchError ||
+                isRefetching ? (
                 [...Array(1).keys()].map((_) => (
                   <Stack spacing={1}>
                     <Skeleton width={800} height={40} />
@@ -428,9 +322,9 @@ export default function Users() {
                     <TableBody>
                       {(rowsPerPage > 0
                         ? data.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                          )
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
                         : data
                       ).map((row: any) => (
                         <TableRow key={row.title}>
@@ -438,10 +332,10 @@ export default function Users() {
                             <Typography variant="body2">{row.title}</Typography>
                           </TableCell>
                           <TableCell>{row.price}$</TableCell>
-                          
-                            <TableCell>{draftChip(row.status)}</TableCell>
-                            {/* <TableCell><Chip label={status} color={status == 'PUBLISHED'?"warning":""} size="small" variant="outlined" /></TableCell> */}
-                          
+
+                          <TableCell>{draftChip(row.status)}</TableCell>
+                          {/* <TableCell><Chip label={status} color={status == 'PUBLISHED'?"warning":""} size="small" variant="outlined" /></TableCell> */}
+
                           <TableCell>
                             <Box
                               style={{
