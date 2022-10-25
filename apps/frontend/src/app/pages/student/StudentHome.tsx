@@ -5,7 +5,6 @@ import {
   Divider,
   FormControl,
   Grid,
-  InputLabel,
   LinearProgress,
   Link,
   MenuItem,
@@ -19,7 +18,7 @@ import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { useEffect, useState } from 'react';
 import StudentHeader from '../../components/StudentHeader';
 
-import { ArrowDropDown, MoreHoriz } from '@mui/icons-material';
+import { Container } from '@mui/system';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useQuery } from 'react-query';
@@ -28,7 +27,6 @@ import '../../../styles.css';
 import { getEnrolledCourses, getRecommendedCourses, search } from '../../api';
 import CourseCard from '../../components/CourseCard';
 import { Footer } from '../public/fragments/Footer';
-import { Container } from '@mui/system';
 
 export function InProgressCourseCard(props: { course: any; onClick: any }) {
   const { course, onClick } = props;
@@ -59,7 +57,7 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
           <Typography sx={{ fontWeight: 'bold' }}>{course.title}</Typography>
           <Typography variant="body2">{course.organization.name}</Typography>
           <Typography variant="caption" component="div" mt={1}>
-            {completion}% Completed
+            {String(completion).substring(0, 2)}% Completed
           </Typography>
           <LinearProgress
             variant="determinate"
@@ -151,7 +149,7 @@ export default function CoursePage(props: any) {
 
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="h6">My Courses</Typography>
-                <FormControl size="small" variant='standard'>
+                <FormControl size="small" variant="standard">
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"

@@ -62,7 +62,11 @@ export default function CourseCard({ course }: { course: any }) {
                 >
                   <Typography sx={{}}>{course.organization.name}</Typography>
                 </MuiLink>
-                <Typography variant="body2">By Prof. Gilbert Strang</Typography>
+                <Typography variant="body2">
+                  By{' '}
+                  {course.instructors &&
+                    course.instructors.map((r: any) => r.name)}
+                </Typography>
               </Box>
             </Box>
 

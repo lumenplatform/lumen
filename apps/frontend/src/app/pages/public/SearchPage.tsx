@@ -90,13 +90,13 @@ function ResponsiveDrawer(props: any) {
   };
 
   const subjectsList = [
+    'Mathematics',
+    'Engineering',
     'Business',
     'Computer Science',
     'Data Science',
     'Health',
     'Information Technology',
-    'Math and Logic',
-    'Physical Science and Engineering',
   ];
   const levelsList = ['Beginner', 'Intermediate', 'Expert'];
   const languageList = ['English', 'Sinhala', 'Mandarin', 'Hindi', 'Spanish'];
@@ -373,9 +373,9 @@ export default function SearchPage() {
   }, [params]);
 
   return (
-    <div >
+    <div>
       <Header />
-      <Container >
+      <Container>
         <Box sx={{ display: 'flex', margin: '0 auto' }}>
           <Box sx={{ width: { sm: '250px' } }}>
             <paramsContext.Provider value={{ params, setParams }}>

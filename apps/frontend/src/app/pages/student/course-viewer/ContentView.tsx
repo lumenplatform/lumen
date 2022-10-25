@@ -92,7 +92,7 @@ export default function ContentView() {
 
           {topic.contentType === 'video' &&
             topic.video &&
-            (typeof topic.video.path == 'string' || !isElectron) && (
+            (typeof topic.video.path !== 'string' && !isElectron) && (
               <VideoPlayer src={topic.video.path} />
             )}
 

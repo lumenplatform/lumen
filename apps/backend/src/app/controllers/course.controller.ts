@@ -82,6 +82,7 @@ export class CourseController {
     const qb = em.qb(Course, 'c');
     qb.select('*')
       .leftJoinAndSelect('c.organization', 'o')
+      .leftJoinAndSelect('c.instructors', 'ins')
       .leftJoinAndSelect('c.courseImage', 'ci')
       .where(parameters);
 

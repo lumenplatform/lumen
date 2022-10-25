@@ -23,7 +23,7 @@ const sections = [
   { component: <EnrolledStudents />, label: 'Enrolled Users' },
   { component: <CourseInstructors />, label: 'Instructors' },
   { component: <QuizAndAssignments />, label: 'Quizzes and Assignments' },
-  { component: <UserLogs />, label: 'User Logs' },
+  // { component: <UserLogs />, label: 'User Logs' },
 ];
 
 export default function ManageCourse() {
@@ -53,7 +53,7 @@ export default function ManageCourse() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h5">{course.title}</Typography>
         <Box>
-          {course.status === 'UN-PUBLISH' && (
+          {(course.status === 'UNPUBLISHED' || course.status === 'DRAFT') && (
             <Button
               color="primary"
               onClick={() => {
@@ -76,7 +76,7 @@ export default function ManageCourse() {
                 );
               }}
             >
-              Unpublished
+              Un-Publish
             </Button>
           )}
           <Button>Edit</Button>

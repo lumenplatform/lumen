@@ -14,13 +14,13 @@ import FilesInput from '../../../../components/FilesInput';
 import { Controller, useFormContext } from 'react-hook-form';
 
 const subjectsList = [
+  'Mathematics',
+  'Engineering',
   'Business',
   'Computer Science',
   'Data Science',
   'Health',
   'Information Technology',
-  'Math and Logic',
-  'Physical Science and Engineering',
 ];
 const levelsList = ['Beginner', 'Intermediate', 'Expert'];
 const languageList = ['English', 'Sinhala', 'Mandarin', 'Hindi', 'Spanish'];

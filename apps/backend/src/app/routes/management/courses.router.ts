@@ -3,7 +3,7 @@ import { assert } from 'console';
 import * as express from 'express';
 import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
-import { Course , CourseStatus} from '../../models/course.model';
+import { Course, CourseStatus } from '../../models/course.model';
 import { Enrollment } from '../../models/enrollment.model';
 import { Organization } from '../../models/organization.model';
 import { User } from '../../models/user.model';
@@ -57,7 +57,9 @@ coursesRouter.post('/', async (req, res, next) => {
     ...courseObj,
     tags: '',
     duration: 100, // calculate ?
-    organization: (await em.find(Organization, {}, { limit: 1 }))[0],
+    organization: await em.findOneOrFail(Organization, {
+      orgId: req.user.orgId,
+    }),
   });
   console.log(course);
 
@@ -104,12 +106,13 @@ coursesRouter.delete('/:courseId/instructors/:uid', async (req, res, next) => {
     { populate: ['instructors'] }
   );
 
-  course.instructors.set(course.instructors.getItems().filter(r=>r.uid!=instructorId));
+  course.instructors.set(
+    course.instructors.getItems().filter((r) => r.uid != instructorId)
+  );
 
   em.persist(course);
   await em.flush();
   res.status(200).json(course);
-
 });
 
 // get course details

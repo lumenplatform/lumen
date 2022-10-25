@@ -15,7 +15,7 @@ export const linerAlgebra: DeepPartial<Course> = {
   description:
     'This course covers matrix theory and linear algebra, emphasizing topics useful in other disciplines such as physics, economics and social sciences, natural',
   language: 'English',
-  level: 'Intermediate',
+  level: 'Beginner',
   tags: 'Algebra',
   subjectArea: 'Mathematics',
   duration: 0,

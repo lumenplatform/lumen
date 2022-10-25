@@ -10,7 +10,7 @@ export const nuclearControlSystems: DeepPartial<Course> = {
   description:
     'This short course provides an introduction to reactor dynamics including subcritical multiplication, critical operation in absence of thermal feedback effects and effects of Xenon, fuel and moderator temperature, etc. Topics include the derivation of point kinetics and dynamic period equations; techniques for reactor control including signal validation, supervisory algorithms, model-based trajectory tracking, and rule-based control; and an overview of light-water reactor startup. Lectures and demonstrations employ computer simulation and the use of the MIT Research Reactor.',
   language: 'English',
-  level: 'Intermediate',
+  level: 'Expert',
   tags: 'Nuclear Engineering',
   subjectArea: 'Engineering ',
   duration: 0,

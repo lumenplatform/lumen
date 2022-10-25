@@ -76,7 +76,7 @@ export default function Billing() {
             Account Balance : <b>${balance}</b>
           </Typography>
           <Box>
-            Plan : <b>Basic</b> <Button size="small">Change</Button>
+            {/* Plan : <b>Basic</b> <Button size="small">Change</Button> */}
           </Box>
         </Box>
         <Button

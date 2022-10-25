@@ -128,7 +128,7 @@ function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
               <tr style={{ opacity: isVideo || isPdf ? 1 : '.3' }}>
                 <td>
                   Watermark &nbsp; &nbsp;
-                  <br /> <small>video / pdf</small>
+                  <br /> <small> pdf</small>
                 </td>
                 <td>
                   <RadioGroup

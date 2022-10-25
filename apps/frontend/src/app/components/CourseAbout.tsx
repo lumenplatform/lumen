@@ -29,7 +29,7 @@ export default function CourseAbout() {
       <CssBaseline />
       <Container>
         <Typography variant="h6">About this course</Typography>
-        <Typography variant="subtitle2">12 recent views</Typography>
+        {/* <Typography variant="subtitle2">12 recent views</Typography> */}
 
         <Typography variant="body1" sx={{ mt: 4, mb: 4 }}>
           {course.description}
