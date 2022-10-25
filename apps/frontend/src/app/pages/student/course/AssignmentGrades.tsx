@@ -14,23 +14,6 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 
 
-function createData(
-  Grade_item: string,
-  grade: number,
-  range: string,
-  Precentage: string,
-  contribution_to_course_total: number
-) {
-  return { Grade_item, grade, range, Precentage, contribution_to_course_total };
-}
-
-const rows = [
-  createData('Activity 1', 159, 50, 24, 4.0),
-  createData('Activity 2', 237, 70, 37, 4.3),
-  createData('Activity 3', 262, 16, 24, 6.0),
-
-];
-
 export default function Grades() {
 
   const { courseId } = useParams();
