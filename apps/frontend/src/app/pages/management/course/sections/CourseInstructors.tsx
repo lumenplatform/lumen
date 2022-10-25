@@ -26,7 +26,11 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { addInstrucotorsToCourse, getOrgCoursesById, getOrgUsers } from '../../../../api';
+import {
+  addInstrucotorsToCourse,
+  getOrgCoursesById,
+  getOrgUsers,
+} from '../../../../api';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
@@ -98,14 +102,24 @@ function AddInstructorForm() {
     setOpen(false);
   };
   const [checked, setChecked] = useState([courseId]);
-  const { data: orgUsers, isLoading } = useQuery('/manage/users' , () =>
-    getOrgUsers()
-  );
+  const { data: orgUsers } = useQuery('/manage/users', () => getOrgUsers());
 
   const addInstructorMutation = useMutation(addInstrucotorsToCourse);
-
+  const { data: courseData } = useQuery('coures' + courseId, () =>
+    getOrgCoursesById(courseId ?? '')
+  );
   // console.log(orgUsers);
 
+  // for(let i=0;i<orgUsers.length;i++)
+  // {
+  //   for(let j=0;j<courseData.instructors.length;j++)
+  //   {
+  //     if(orgUsers[i]===courseData.instructors[j])
+  //     {
+
+  //     }
+  //   }
+  // }
 
   const handleToggle = (value: any) => () => {
     const currentIndex = checked.indexOf(value);
@@ -118,7 +132,6 @@ function AddInstructorForm() {
     }
     setChecked(newChecked);
     // console.log(checked);
-    
   };
   return (
     <>
@@ -140,36 +153,39 @@ function AddInstructorForm() {
             dense
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
           >
-            {orgUsers && orgUsers.map((row:any) => {
-              const labelId = `checkbox-list-secondary-label-${row.uid}`;
-              return (
-                <ListItem
-                  key={row.uid}
-                  secondaryAction={
-                    <Checkbox
-                      edge="end"
-                      onChange={handleToggle(row.uid)}
-                      checked={checked.indexOf(row.uid) !== -1}
-                      inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                  }
-                  disablePadding
-                >
-                  <ListItemButton>
-                    <ListItemAvatar>
-                      <Avatar
-                        alt={`Avatar n°${row.uid + 1}`}
-                        src={`${row.picture}`}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      id={labelId}
-                      primary={`${row.name}`}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
+     
+            {orgUsers &&
+              orgUsers
+                .filter((r: any) =>
+                 ! courseData.instructors.map((k: any) => k.uid).includes(r.uid)
+                )
+                .map((row: any) => {
+                  const labelId = `checkbox-list-secondary-label-${row.uid}`;
+                  return (
+                    <ListItem
+                      key={row.uid}
+                      secondaryAction={
+                        <Checkbox
+                          edge="end"
+                          onChange={handleToggle(row.uid)}
+                          checked={checked.indexOf(row.uid) !== -1}
+                          inputProps={{ 'aria-labelledby': labelId }}
+                        />
+                      }
+                      disablePadding
+                    >
+                      <ListItemButton>
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={`Avatar n°${row.uid + 1}`}
+                            src={`${row.picture}`}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText id={labelId} primary={`${row.name}`} />
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
           </List>
         </DialogContent>
         <DialogActions sx={{ mx: 2, mb: 2 }}>
@@ -177,7 +193,7 @@ function AddInstructorForm() {
             Cancel
           </Button>
           <Button
-            disabled={checked.length===1}
+            disabled={checked.length === 1}
             variant="contained"
             onClick={() => {
               addInstructorMutation.mutate(checked);
