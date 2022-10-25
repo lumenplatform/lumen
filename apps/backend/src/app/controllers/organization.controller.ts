@@ -19,4 +19,20 @@ export class OrganizationController {
     const updatedTheme = await this.orgService.updateThemeConfig(orgId, theme);
     return updatedTheme;
   }
+
+  async getPublicCourseEnrollments(orgId: string) {
+    return this.orgService.getPublicCourseEnrollments(orgId);
+  }
+
+  async getPrivateCourseEnrollments(orgId: string) {
+    return this.orgService.getPrivateCourseEnrollments(orgId);
+  }
+
+  async getWithdrawals(orgId: string) {
+    return this.orgService.getWithdrawals(orgId);
+  }
+
+  async withdrawFunds(orgId: string, amount: number) {
+    return this.orgService.withdrawFunds(orgId, amount);
+  }
 }

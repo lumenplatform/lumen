@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useState } from 'react';
-
+import CourseFees  from './billing/CourseFees';
 export default function Billing() {
   const [value, setValue] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -48,59 +48,8 @@ export default function Billing() {
         <Tab label="Withdrawals / Payments" />
       </Tabs>
 
-      <TableContainer>
-        <Table size="small" aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Student Email</TableCell>
-              <TableCell>Course</TableCell>
-              <TableCell>Transaction Amount</TableCell>
-              <TableCell>Transaction Date</TableCell>
-              <TableCell>Transaction Time</TableCell>
-            </TableRow>
-          </TableHead>
+      {value === 0 && <CourseFees />}
 
-          <TableRow>
-            <TableCell>dalana.dhar@gmail.com</TableCell>
-            <TableCell>Linear Algebra</TableCell>
-            <TableCell>$12</TableCell>
-            <TableCell>Aug 17, 2022</TableCell>
-            <TableCell>10.11PM</TableCell>
-          </TableRow>
-
-          <TableRow>
-            <TableCell>2019cs033@stu.ucsc.lk</TableCell>
-            <TableCell>Linear Algebra</TableCell>
-            <TableCell>$12</TableCell>
-            <TableCell>Aug 14, 2022</TableCell>
-            <TableCell>08.34PM</TableCell>
-          </TableRow>
-
-          <TableRow>
-            <TableCell>dalana.dhar@gmail.com</TableCell>
-            <TableCell>Propulsion Systems</TableCell>
-            <TableCell>$13</TableCell>
-            <TableCell>Aug 13, 2022</TableCell>
-            <TableCell>09.30PM</TableCell>
-          </TableRow>
-
-          <TableRow>
-            <TableCell>2019cs066@stu.ucsc.lk</TableCell>
-            <TableCell>Linear Algebra</TableCell>
-            <TableCell>$12</TableCell>
-            <TableCell>Aug 13, 2022</TableCell>
-            <TableCell>06.32PM</TableCell>
-          </TableRow>
-
-          <TableRow>
-            <TableCell>2019cs137@stu.ucsc.lk</TableCell>
-            <TableCell>Propulsion Systems</TableCell>
-            <TableCell>$13</TableCell>
-            <TableCell>Aug 11, 2022</TableCell>
-            <TableCell>03.21PM</TableCell>
-          </TableRow>
-        </Table>
-      </TableContainer>
     </Box>
   );
 }

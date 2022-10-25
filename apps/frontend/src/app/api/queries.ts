@@ -209,3 +209,7 @@ export function submitQuiz(data: any) {
     .post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data)
     .then((r) => r.data.data);
 }
+
+export function getPublicCourseEnrollments() {
+  return client.get<any>('/org//public-enrollments').then((r) => r.data.data);
+}

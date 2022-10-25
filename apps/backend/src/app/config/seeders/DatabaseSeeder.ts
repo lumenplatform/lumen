@@ -8,6 +8,7 @@ import { UserFactory } from './factories/UserFactory';
 import { courses as dummyCorses } from './data/data';
 import { organizations_data } from './data/organizations';
 import { Organization } from '../../models/organization.model';
+import { EnrollmentType } from '../../models/enrollment.model';
 declare global {
   interface Array<T> {
     sample(): T;
@@ -51,6 +52,7 @@ export class DatabaseSeeder extends Seeder {
       r.user = users.sample();
       r.course = courses.sample();
       r.payment = new PaymentFactory(em).makeOne();
+      r.type = [EnrollmentType.PRIVATE,EnrollmentType.PUBLIC].sample();
     });
 
     em.persist(enrollments);

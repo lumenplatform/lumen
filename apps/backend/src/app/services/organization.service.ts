@@ -5,6 +5,10 @@ import {
   Organization,
   OrgTheme,
 } from '../models/organization.model';
+import { Enrollment, EnrollmentType } from '../models/enrollment.model';
+import { Withdrawal } from '../models/withdrawal.model';
+import { Payment } from '../models/payment.model';
+import { v4 } from 'uuid';
 
 export class OrganizationService {
   /** Organization repository getter  */
@@ -52,5 +56,50 @@ export class OrganizationService {
     em.assign(org, { orgId, ...data }, { em });
     await em.persistAndFlush(org);
     return org;
+  }
+
+  async getPublicCourseEnrollments(orgId: string) {
+    const em = RequestContext.getEntityManager();
+    const courseEnrollments = await em.find(
+      Enrollment,
+      { $and: [{ course: { organization: { orgId: orgId } } } , {type : EnrollmentType.PUBLIC}] },
+      { populate: ['payment'] }
+    );
+    return courseEnrollments;
+  }
+
+  async getPrivateCourseEnrollments(orgId: string) {
+    const em = RequestContext.getEntityManager();
+    const courseEnrollments = await em.find(
+      Enrollment,
+      { $and: [{ course: { organization: { orgId: orgId } } } , {type : EnrollmentType.PRIVATE}] },
+      { populate: ['payment'] }
+    );
+    return courseEnrollments;
+  }
+
+  async getWithdrawals(orgId: string) {
+    const em = RequestContext.getEntityManager();
+    const withdrawals = await em.find(
+      Withdrawal,
+      { organization: { orgId: orgId } },
+      { populate: ['payment'] }
+    );
+    return withdrawals;
+  }
+
+  async withdrawFunds(orgId: string, amount: number) {
+    const em = RequestContext.getEntityManager();
+    const org = await em.findOneOrFail(Organization, { orgId });
+    const payment = em.create(Payment, {
+      txnId : v4(),
+      amount : -amount,
+    });
+    const withdrawal = em.create(Withdrawal, {
+      payment : payment,
+      organization: org,
+    });
+    await em.persistAndFlush(withdrawal);
+    return withdrawal;
   }
 }
