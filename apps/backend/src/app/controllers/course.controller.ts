@@ -69,7 +69,7 @@ export class CourseController {
               $or: [{ title: { $like: `%${searchQuery}%` } }],
             }
           : {},
-        /* { settings: { isPrivate: 'NO' } }, */
+        { settings: { isPrivate: 'NO' } },
         { status: CourseStatus.PUBLISHED },
       ],
     };
