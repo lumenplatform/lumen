@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import List from '@mui/material/List';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItem from '@mui/material/ListItem';
@@ -11,6 +11,9 @@ import LinkIcon from '@mui/icons-material/LinkRounded';
 import { alpha } from '@mui/system';
 import { ListItemText, Typography } from '@mui/material';
 import {useTheme} from '@mui/material';
+import { useQuery } from 'react-query';
+import { getCourseById, getCourseMaterial } from '../../../api';
+import {useParams } from 'react-router-dom';
 
 const courseMaterials = [{
   topic: "Week_1",
@@ -113,6 +116,10 @@ const courseMaterials = [{
 }]
 
 function CourseResources() {
+  const { courseId, sectionId, topicId } = useParams();
+  const { data } = useQuery('mat', () => getCourseMaterial(courseId!));
+  const { data: course } = useQuery('course', () => getCourseById(courseId!));
+
   return (
     <List>
       {
