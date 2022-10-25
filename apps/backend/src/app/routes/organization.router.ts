@@ -53,8 +53,9 @@ organizationRouter.get('/withdrawals', (req, res, next) => {
 
 //withdraw amount
 organizationRouter.post('/withdraw', (req, res, next) => {
+  console.log(req.body);
   organizationController
-    .withdrawFunds(req.user.orgId, req.body)
+    .withdrawFunds(req.user.orgId, req.body.amount)
     .then((result) => {
       res.json(createResponse(result));
     })
