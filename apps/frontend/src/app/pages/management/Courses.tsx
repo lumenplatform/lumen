@@ -1,7 +1,7 @@
 import {
   EditOutlined,
   KeyboardArrowLeft,
-  KeyboardArrowRight
+  KeyboardArrowRight,
 } from '@mui/icons-material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
@@ -9,15 +9,22 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
 import {
-  Button, Chip,
-  Container, FormControl, Grid,
+  Button,
+  Chip,
+  Container,
+  FormControl,
+  Grid,
   IconButton,
   InputLabel,
-  List, MenuItem, Select,
-  Skeleton, Stack, TableFooter,
+  List,
+  MenuItem,
+  Select,
+  Skeleton,
+  Stack,
+  TableFooter,
   TextField,
   Typography,
-  useTheme
+  useTheme,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -131,12 +138,12 @@ const filterContext = createContext<{
   setShowFilter: any;
 }>({
   showFilter: false,
-  setShowFilter: () => { },
+  setShowFilter: () => {},
 });
 
 const paramsContext = createContext<{ params: Params; setParams: any }>({
   params: defaultParams,
-  setParams: () => { },
+  setParams: () => {},
 });
 
 function ResponsiveDrawer(props: any) {
@@ -150,7 +157,7 @@ function ResponsiveDrawer(props: any) {
           labelId="status-select-small"
           id="status-select-small"
           label="Status"
-          defaultValue='ALL'
+          defaultValue="ALL"
           onChange={(e) => {
             setParams({ ...params, publishStatus: e.target.value });
           }}
@@ -159,11 +166,9 @@ function ResponsiveDrawer(props: any) {
           <MenuItem value={'PUBLISHED'}>Published</MenuItem>
           <MenuItem value={'UNPUBLISHED'}>Unpublished</MenuItem>
           <MenuItem value={'DRAFT '}>Draft</MenuItem>
-
         </Select>
       </FormControl>
     </Box>
-
   );
 }
 
@@ -184,8 +189,10 @@ export default function Users() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-
-  const { data, isError, isLoading, isRefetching, isRefetchError, refetch } = useQuery('search-courses', () => getOrgCourses(params.searchQuery, params.publishStatus));
+  const { data, isError, isLoading, isRefetching, isRefetchError, refetch } =
+    useQuery('search-courses', () =>
+      getOrgCourses(params.searchQuery, params.publishStatus)
+    );
 
   const location = useLocation();
   const queryParams = new URLSearchParams(window.location.search);
@@ -213,10 +220,13 @@ export default function Users() {
   const draftChip = (status: string) => {
     // const j = {.PUBLISHED};
     if (status == 'PUBLISHED') {
-      return (<Chip label={status} color="success" size="medium" variant="outlined" />)
-    } else return (<Chip label={status} color="warning" size="medium" variant="outlined" />)
-
-
+      return (
+        <Chip label={status} color="success" size="medium" variant="outlined" />
+      );
+    } else
+      return (
+        <Chip label={status} color="warning" size="medium" variant="outlined" />
+      );
   };
 
   const handleChangePage = (
@@ -293,10 +303,11 @@ export default function Users() {
             </Stack>
 
             <Grid>
-              {isLoading || isError ||
-                !data ||
-                isRefetchError ||
-                isRefetching ? (
+              {isLoading ||
+              isError ||
+              !data ||
+              isRefetchError ||
+              isRefetching ? (
                 [...Array(1).keys()].map((_) => (
                   <Stack spacing={1}>
                     <Skeleton width={800} height={40} />
@@ -322,9 +333,9 @@ export default function Users() {
                     <TableBody>
                       {(rowsPerPage > 0
                         ? data.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
                         : data
                       ).map((row: any) => (
                         <TableRow key={row.title}>
