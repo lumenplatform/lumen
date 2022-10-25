@@ -1,25 +1,22 @@
+import { Auth0Provider } from '@auth0/auth0-react';
+import disableDevtool from 'disable-devtool';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react';
-import { StorageProvider } from './app/components/StorageProvider';
 import App from './app/app';
 import { AuthProvider } from './app/components/Auth';
-import { environment } from './environments/environment';
-import disableDevtool from 'disable-devtool';
+import { StorageProvider } from './app/components/StorageProvider';
+import { queryClient } from './app/providers/queryClient';
 import ThemeModeProvider from './app/providers/ThemeModeProvider';
+import { environment } from './environments/environment';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { cacheTime: 1000 * 60 * 5 } },
-});
-
 if (environment.production) {
-  //  disableDevtool();
+  // disableDevtool();
 }
 
 root.render(
@@ -36,7 +33,7 @@ root.render(
           <AuthProvider>
             <StorageProvider>
               <ThemeModeProvider>
-                <App /> 
+                <App />
               </ThemeModeProvider>
             </StorageProvider>
           </AuthProvider>

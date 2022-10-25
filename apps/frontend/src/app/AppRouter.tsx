@@ -31,6 +31,7 @@ import QuizPage from './pages/student/quiz/QuizPage';
 import AttemptQuizPage from './pages/student/quiz/QuizAttemptPage';
 import QuizResultPage from './pages/student/quiz/QuizResultPage';
 import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
+import CompleteCourse from './pages/student/course/CompleteCourse';
 import QuizMarking from './pages/management/exam/Marking'
 import Attempts from './pages/management/exam/Attempts';
 import Questions from './pages/management/exam/Questions';
@@ -73,6 +74,7 @@ export default function () {
             <Route path="AssignmentSettings" element={<AssignmentSettings />} />
             <Route path="" element={<Navigate replace to="material" />}></Route>
           </Route>
+          <Route path=":courseId/complete-course" element={<CompleteCourse />}/>
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
           </Route>

@@ -28,8 +28,8 @@ import { Container } from '@mui/system';
 
 export function InProgressCourseCard(props: { course: any; onClick: any }) {
   const { course, onClick } = props;
-
-  const completion = ((course.price * 3) % 100) + 5;
+  const navigate = useNavigate();
+  const completion = course.coursePercent;
 
   return (
     <Paper sx={{ my: 2, overflow: 'clip' }}>
@@ -70,17 +70,27 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
           flexItem
           sx={{ display: { xs: 'none', sm: 'block' } }}
         />
-        <Stack sx={{ p: 2, display: { xs: 'none', sm: 'block' } }}>
-          <Typography variant="body2" fontWeight={600}>
-            Next
-          </Typography>
-          <Typography variant="body2">...........</Typography>
+        <Stack sx={{ p: 2, display: { xs: 'none', sm: 'block' },width:'20%' }}>
+          {course.next && (
+            <>
+              <Typography variant="body2" fontWeight={600} mb={1}>
+                Next
+              </Typography>
+              <Typography variant="body2">{course.next?.title}</Typography>
+            </>
+          )}
+          {!course.next && (
+            <Button
+              onClick={() =>
+                navigate(`/student/${course.courseId}/complete-course`)
+              }
+              variant="outlined"
+              size="small"
+            >
+              Complete Course
+            </Button>
+          )}
         </Stack>
-        <Box>
-          <Link sx={{ m: 1 }} component="div">
-            <MoreHoriz />
-          </Link>
-        </Box>
       </Stack>
     </Paper>
   );
@@ -130,6 +140,9 @@ export default function CoursePage(props: any) {
                     />
                   ))}
               </Box>
+              {enrolled && enrolled.length === 0 && (
+                <Typography>No Enrolled Courses</Typography>
+              )}
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="h6">Recommended For You</Typography>
                 <Button onClick={() => navigate('/courses')}>View More</Button>

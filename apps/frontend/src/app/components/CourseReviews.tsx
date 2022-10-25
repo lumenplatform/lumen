@@ -47,26 +47,36 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CourseReviews(props: any) {
-
   const { courseId } = useParams();
 
-  const  {
+  const {
     data: course_reviews,
     isLoading,
     isError,
-  } = useQuery(['course-reviews'+courseId, courseId], () => getCourseReview(courseId!));
+  } = useQuery(['course-reviews' + courseId, courseId], () =>
+    getCourseReview(courseId!)
+  );
 
-  if (isError || isLoading) {
+  if (isError || isLoading || !course_reviews || course_reviews.length === 0) {
     return <Typography variant="subtitle1">No Reviews Yet.</Typography>;
   }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const theme = useTheme();
+  const totalReviews = course_reviews.length;
+  const overallRating =
+    course_reviews.reduce((p: any, c: any) => p + c.rating, 0) / totalReviews;
+
+  const counts = course_reviews.reduce(
+    (p: any, c: any) => {
+      const r = [...p];
+      r[c.rating - 1] += 1;
+      return r;
+    },
+    [0, 0, 0, 0, 0]
+  );
+
   return (
     <div>
       <Grid container spacing={2} rowSpacing={1}>
-        <Grid item xs={5} md={5}></Grid>
-
         <Grid item xs={3} md={3}>
           <Box
             sx={{
@@ -78,114 +88,49 @@ export default function CourseReviews(props: any) {
               paddingLeft: '8px',
             }}
           >
-            <h1>4.7</h1>
+            <h1>{overallRating}</h1>
             <Box sx={{ paddingTop: '20px', paddingLeft: '8px' }}>
-              <Rating name="read-only" value={4} readOnly size="small" />
+              <Rating name="read-only" value={overallRating} readOnly size="small" />
               <div style={{ height: '48px', paddingTop: '' }}>
-                {' '}
-                3 Reviews{' '}
+                {totalReviews} Reviews{' '}
               </div>
             </Box>
           </Box>
         </Grid>
 
-        <Grid item xs={4} md={4}></Grid>
-
-        <Grid item xs={0} md={3}></Grid>
-
         <Grid item xs={12} md={6}>
           <Item>
-            <Grid container spacing={2}>
-              <Grid item xs={2} md={2}>
-                5 stars
-              </Grid>
-              <Grid item xs={8} md={8}>
-                <Box sx={{ mt: '6px' }}>
-                  <LinearProgress variant="determinate" value={75} />{' '}
-                </Box>
-              </Grid>
-              <Grid item xs={2} md={2}>
-                75%
-              </Grid>
-            </Grid>
-          </Item>
-
-          <Item>
-            <Grid container spacing={2}>
-              <Grid item xs={2} md={2}>
-                4 stars
-              </Grid>
-              <Grid item xs={8} md={8}>
-                <Box sx={{ mt: '5px', paddingTop: '3px' }}>
-                  <LinearProgress variant="determinate" value={10} />
-                </Box>
-              </Grid>
-              <Grid item xs={2} md={2}>
-                10%
-              </Grid>
-            </Grid>
-          </Item>
-
-          <Item>
-            <Grid container spacing={2}>
-              <Grid item xs={2} md={2}>
-                4 stars
-              </Grid>
-              <Grid item xs={8} md={8}>
-                <Box sx={{ mt: '6px' }}>
-                  <LinearProgress variant="determinate" value={8} />
-                </Box>
-              </Grid>
-              <Grid item xs={2} md={2}>
-                8%
-              </Grid>
-            </Grid>
-          </Item>
-
-          <Item>
-            <Grid container spacing={2}>
-              <Grid item xs={2} md={2}>
-                2 stars
-              </Grid>
-              <Grid item xs={8} md={8}>
-                <Box sx={{ paddingTop: '5px', mt: '3px' }}>
-                  <LinearProgress variant="determinate" value={5} />
-                </Box>
-              </Grid>
-              <Grid item xs={2} md={2}>
-                5%
-              </Grid>
-            </Grid>
-          </Item>
-
-          <Item>
-            <Grid container spacing={2}>
-              <Grid item xs={2} md={2}>
-                1 stars
-              </Grid>
-              <Grid item xs={8} md={8}>
-                <Box sx={{ paddingTop: '5px', mt: '5px' }}>
-                  <LinearProgress variant="determinate" value={2} />
-                </Box>
-              </Grid>
-              <Grid item xs={2} md={2}>
-                2%
-              </Grid>
-            </Grid>
+            {counts &&
+              counts
+                .map((k: number, index: number) => (
+                  <Grid container spacing={2}>
+                    <Grid item xs={2} md={2}>
+                      {index + 1} stars
+                    </Grid>
+                    <Grid item xs={8} md={8}>
+                      <Box sx={{ mt: '6px' }}>
+                        <LinearProgress
+                          variant="determinate"
+                          value={(k / totalReviews) * 100}
+                        />{' '}
+                      </Box>
+                    </Grid>
+                    <Grid item xs={2} md={2}>
+                      {(k / totalReviews) * 100}%
+                    </Grid>
+                  </Grid>
+                ))
+                .reverse()}
           </Item>
         </Grid>
 
-        <Grid item xs={0} md={3}></Grid>
-
-        <Grid item xs={1} md={1}></Grid>
-
         <Grid item xs={10} md={10}>
           <Item>
-          {course_reviews.map((review:any) => (
+            {course_reviews.map((review: any) => (
               <>
                 <ListItem alignItems="flex-start">
                   <ListItemAvatar>
-                    {/* <Avatar alt={review.userName} src={review.userImage} /> */}
+                    <Avatar alt={review.user.name} src={review.user.picture} />
                   </ListItemAvatar>
                   <ListItemText
                     primary={
@@ -197,7 +142,7 @@ export default function CourseReviews(props: any) {
                             variant="body2"
                             color="text.primary"
                           >
-                            {/* {review.userName} */}
+                            {review.user.name}
                           </Typography>
                           <Typography
                             sx={{ display: 'inline' }}
@@ -242,8 +187,6 @@ export default function CourseReviews(props: any) {
             ))}
           </Item>
         </Grid>
-
-        <Grid item xs={1} md={1}></Grid>
       </Grid>
     </div>
   );

@@ -19,11 +19,9 @@ import Faq from './FAQ';
 import { useQuery } from 'react-query';
 import { Outlet, useParams } from 'react-router-dom';
 
-import { enrollInCourse, getCourseById } from '../api';
+import { enrollInCourse, getCourseById, getCourseReview } from '../api';
 import { Header } from '../pages/public/fragments/Header';
 import StudentHeader from './StudentHeader';
-
-
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -48,13 +46,18 @@ export default function EnrollHEader() {
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
-  const { data: course_instructors } = useQuery(['courses', courseId], () =>
-    getCourseById(courseId!)
+  const { data: course_reviews } = useQuery(
+    ['course-reviews' + courseId, courseId],
+    () => getCourseReview(courseId!)
   );
 
-  if (isError || isLoading) {
-    return <Skeleton></Skeleton>;
+  if (isError || isLoading || !course_reviews || course_reviews.length === 0) {
+    return <Typography variant="subtitle1">No Reviews Yet.</Typography>;
   }
+
+  const totalReviews = course_reviews.length;
+  const overallRating =
+    course_reviews.reduce((p: any, c: any) => p + c.rating, 0) / totalReviews;
 
   return (
     <React.Fragment>
@@ -73,8 +76,13 @@ export default function EnrollHEader() {
           {course.title}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Rating name="read-only" value={course.rating}  readOnly size="small" />
-          
+          <Rating
+            name="read-only"
+            value={overallRating}
+            readOnly
+            size="small"
+          />
+
           {/* get the value from the table (total) */}
 
           <Typography
@@ -83,40 +91,28 @@ export default function EnrollHEader() {
             component="h3"
             sx={{ lineHeight: 0, ml: 1 }}
           >
-            {course.ratingCount} reviews
-
+            {totalReviews} reviews
             {/* get the count from table */}
           </Typography>
         </Box>
 
-        <Box
-          sx={{ margin: '2% 0 0.5%', display: 'flex', alignItems: 'center' }}
-        >
-          <Avatar
-            alt="Remy Sharp"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
-          />
-          <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-            {course_instructors.first_name} {course_instructors.last_name}
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar
-            alt="Kewin Wayne"
-            src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
-          />
-          <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-            {course_instructors.first_name} {course_instructors.last_name}
-          </Typography>
-        </Box>
+        {course.instructors.map((instructor: any) => (
+          <Box
+            sx={{ margin: '2% 0 0.5%', display: 'flex', alignItems: 'center' }}
+          >
+            <Avatar alt={instructor.name} src={instructor.picture} />
+            <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
+              {instructor.name}
+            </Typography>
+          </Box>
+        ))}
 
         <Box
           sx={{ margin: '1.5% 0 0 0', display: 'flex', alignItems: 'center' }}
         >
           {' '}
           <Typography variant="h6" lineHeight={1} mb="20px">
-            Course Fee: Rs. {course.price}.00
+            Course Fee: ${course.price}.00
           </Typography>
         </Box>
 

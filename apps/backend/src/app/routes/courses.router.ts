@@ -49,33 +49,68 @@ coursesRouter.get('/recommended', async (req, res, next) => {
 });
 
 coursesRouter.get('/testemail4', async (req, res, next) => {
-  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
-  mailService.sendMail('sumuduwathsala80@gmail.com',{template:EmailTemplate.COURSE_COMPLETION,data:{course}}).then(k=>res.json(k))
+  const course = await RequestContext.getEntityManager()
+    .find(Course, {}, { limit: 1 })
+    .then((r) => r[0]);
+  mailService
+    .sendMail('sumuduwathsala80@gmail.com', {
+      template: EmailTemplate.COURSE_COMPLETION,
+      data: { course },
+    })
+    .then((k) => res.json(k));
 });
 
-//Email 
+//Email
 coursesRouter.get('/testmail3', async (req, res, next) => {
-  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
-  mailService.sendMail('sumuduwathsala80@gmail.com',{template:EmailTemplate.COURSE_INVITATION,data:{course}}).then(k=>res.json(k))
+  const course = await RequestContext.getEntityManager()
+    .find(Course, {}, { limit: 1 })
+    .then((r) => r[0]);
+  mailService
+    .sendMail('sumuduwathsala80@gmail.com', {
+      template: EmailTemplate.COURSE_INVITATION,
+      data: { course },
+    })
+    .then((k) => res.json(k));
 });
 
 // course enrollment email
 coursesRouter.get('/upcoming-events');
 coursesRouter.get('/testemail', async (req, res, next) => {
-  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
-  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.COURSE_ENROLLMENT,data:{course}}).then(k=>res.json(k))
+  const course = await RequestContext.getEntityManager()
+    .find(Course, {}, { limit: 1 })
+    .then((r) => r[0]);
+  mailService
+    .sendMail('ruwaniwelewatta@gmail.com', {
+      template: EmailTemplate.COURSE_ENROLLMENT,
+      data: { course },
+    })
+    .then((k) => res.json(k));
 });
 
 // platform invitation email
 coursesRouter.get('/testemail2', async (req, res, next) => {
-  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
-  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.PLATFORM_INVITATION,data:{course}}).then(k=>res.json(k))
+  const course = await RequestContext.getEntityManager()
+    .find(Course, {}, { limit: 1 })
+    .then((r) => r[0]);
+  mailService
+    .sendMail('ruwaniwelewatta@gmail.com', {
+      template: EmailTemplate.PLATFORM_INVITATION,
+      data: { course },
+    })
+    .then((k) => res.json(k));
 });
 
-//course completion 
+//course completion
 coursesRouter.get('/testemail3', async (req, res, next) => {
-  const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
-  mailService.sendMail('ruwaniwelewatta@gmail.com',{template:EmailTemplate.COURSE_COMPLETION,data:{course}}).then(k=>res.json(k))
+  const course = await RequestContext.getEntityManager()
+    .find(Course, {}, { limit: 1 })
+    .then((r) => r[0]);
+  mailService
+    .sendMail('ruwaniwelewatta@gmail.com', {
+      template: EmailTemplate.COURSE_COMPLETION,
+      data: { course },
+    })
+    .then((k) => res.json(k));
 });
 
 // get a specific courses
@@ -89,8 +124,12 @@ coursesRouter.get('/:id', (req, res, next) => {
     .catch(next);
 });
 
-
-coursesRouter.get('/:id/reviews');
+coursesRouter.get('/:id/reviews', (req, res, next) => {
+  courseController
+    .getCourseReviews(req.params.id)
+    .then(sendJSON(res, 200, 'Success'))
+    .catch(next);
+});
 
 coursesRouter.post(
   '/:id/reviews',
@@ -110,10 +149,9 @@ coursesRouter.post(
 );
 
 coursesRouter.get('/:id/material', (req, res, next) => {
-  const em = RequestContext.getEntityManager();
   const { id } = req.params;
-  em.findOneOrFail(Course, { courseId: id }, { populate: ['courseMaterial'] })
-    .then((r) => r.courseMaterial)
+  courseController
+    .getCourseMaterial(id, req.user.uid)
     .then((result) => {
       res.json(createResponse(result));
     })
@@ -125,6 +163,20 @@ coursesRouter.post('/:id/enroll', (req, res, next) => {
     .enroll(req, req.user.uid, req.params.id)
     .then((result) => {
       res.json(createResponse({ paymentUrl: result }));
+    })
+    .catch(next);
+});
+
+coursesRouter.post('/:id/complete-course', (req, res, next) => {
+  courseController
+    .completeCourse({
+      courseId: req.params.id,
+      uid: req.user.uid,
+      review: req.body.review,
+      rating: req.body.rating,
+    })
+    .then((result) => {
+      res.json(createResponse(result));
     })
     .catch(next);
 });
@@ -171,6 +223,4 @@ coursesRouter.post('/current', (req, res, next) => {
     .catch(next);
 });
 
-
 coursesRouter.use('/:id/quiz', quizRouter);
-
