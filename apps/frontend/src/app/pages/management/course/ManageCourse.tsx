@@ -53,28 +53,32 @@ export default function ManageCourse() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h5">{course.title}</Typography>
         <Box>
-          <Button
-            color="primary"
-            onClick={() => {
-              updateCourseMutation.mutate(
-                { courseId, status: 'PUBLISHED' },
-                { onSuccess: () => navigate('/manage/courses') }
-              );
-            }}
-          >
-            Publish
-          </Button>
-          <Button
-            color="primary"
-            onClick={() => {
-              updateCourseMutation.mutate(
-                { courseId, status: 'UNPUBLISHED' },
-                { onSuccess: () => navigate('/manage/courses') }
-              );
-            }}
-          >
-            Unpublished
-          </Button>
+          {course.status === 'UN-PUBLISH' && (
+            <Button
+              color="primary"
+              onClick={() => {
+                updateCourseMutation.mutate(
+                  { courseId, status: 'PUBLISHED' },
+                  { onSuccess: () => navigate('/manage/courses') }
+                );
+              }}
+            >
+              Publish
+            </Button>
+          )}
+          {course.status === 'PUBLISHED' && (
+            <Button
+              color="primary"
+              onClick={() => {
+                updateCourseMutation.mutate(
+                  { courseId, status: 'UNPUBLISHED' },
+                  { onSuccess: () => navigate('/manage/courses') }
+                );
+              }}
+            >
+              Unpublished
+            </Button>
+          )}
           <Button>Edit</Button>
           <Button color="error">Delete</Button>
         </Box>

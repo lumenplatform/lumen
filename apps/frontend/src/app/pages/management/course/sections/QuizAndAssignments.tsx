@@ -32,9 +32,6 @@ export default function QuizAndAssignments() {
 
   return (
     <Box>
-      <Button variant="contained" sx={{my:2}} onClick={() => navigate(`/manage/courses/${courseId}/new-exam`)}>
-        Create Quiz
-      </Button>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
