@@ -51,7 +51,7 @@ export default function Grades() {
                 </TableCell>
                 {(attempt.markingStatus == 'MARKED' && attempt.releasedStatus == 'RELEASED') ?
                   <>
-                    <TableCell align="center"> {attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) * 100}%</TableCell>
+                    <TableCell align="center"> {(attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) * 100).toFixed(2)}%</TableCell>
                     <TableCell align="center">{attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / attempt.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) * 100 < attempt.quiz.settings.passGrade ? 'Fail' : 'Pass'}</TableCell>
                   </>
                   :
@@ -62,8 +62,8 @@ export default function Grades() {
                 }
                 <TableCell align="center">
                   <Button
-                    disabled={!attempt.quiz.settings.enableReview}
-                    startIcon={attempt.quiz.settings.enableReview ? <RemoveRedEyeOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
+                    disabled={!attempt.quiz.settings.enableReview || attempt.releasedStatus == 'NOT_RELEASED'}
+                    startIcon={!attempt.quiz.settings.enableReview || attempt.releasedStatus == 'NOT_RELEASED' ? <VisibilityOffOutlinedIcon />:<RemoveRedEyeOutlinedIcon /> }
                     onClick={() => {
                       navigate(`/student/${courseId}/quiz/${attempt.quiz.id}/attempt/${attempt.id}/review`);
                     }}

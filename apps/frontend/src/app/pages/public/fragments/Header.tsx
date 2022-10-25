@@ -60,7 +60,7 @@ export function Header() {
         <HeaderLink text="Home" link="/" />
         <HeaderLink text="Courses" link="/courses" />
         <HeaderLink text="For Instructors" link="/teaching" />
-        <HeaderLink text="About" link="/courses" />
+        <HeaderLink text="About" link="/contact" />
         <Button
           sx={{ mr: 2 }}
           variant="outlined"
