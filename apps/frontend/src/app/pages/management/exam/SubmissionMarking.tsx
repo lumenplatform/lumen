@@ -125,7 +125,7 @@ export default function SubmissionMarking(props: any) {
                             </Box>
                         </Box>
                     }
-                    <Box sx={{ display: 'flex', justifyContent: 'end', marginTop:2}}>
+                    <Box sx={{ display: 'flex', justifyContent: 'end', marginTop:2, paddingRight:1}}>
                         <FormControl sx={{ minWidth: 130, mr:2 }} size="small">
                             <InputLabel id="demo-simple-select-disabled-label">Marking Status</InputLabel>
                             <Select
