@@ -24,7 +24,7 @@ export class CourseSettings {
   isDesktopOnly: 'YES' | 'NO' = 'NO';
 
   @Property({ default: 'YES', columnType: 'varchar' })
-  isPrivate?: 'YES' | 'NO' = 'YES';
+  isPrivate?: 'YES' | 'NO' = 'NO';
 }
 
 export enum CourseStatus {

@@ -51,8 +51,8 @@ export default function EnrollHEader() {
     () => getCourseReview(courseId!)
   );
 
-  if (isError || isLoading || !course_reviews || course_reviews.length === 0) {
-    return <Typography variant="subtitle1">No Reviews Yet.</Typography>;
+  if (isError || isLoading || !course_reviews ) {
+    return <Skeleton />;
   }
 
   const totalReviews = course_reviews.length;
