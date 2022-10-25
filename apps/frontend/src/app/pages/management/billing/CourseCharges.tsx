@@ -5,11 +5,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useQuery } from 'react-query';
-import { getPublicCourseEnrollments } from '../../../api';
+import { getPrivateCourseEnrollments } from '../../../api';
 
 export default function CourseFees() {
 
-  const { data: enrollments, isLoading, isError } = useQuery('quiz', () => getPublicCourseEnrollments());
+  const { data: enrollments, isLoading, isError } = useQuery('quiz', () => getPrivateCourseEnrollments());
 
 
   if (isLoading || isError) {

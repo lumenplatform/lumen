@@ -20,6 +20,6 @@ export class Withdrawal {
   @OneToOne(() => Payment)
   payment: Payment;
 
-  @Property()
+  @Property({ columnType: 'timestamptz' })
   withdrawalDate = new Date();
 }

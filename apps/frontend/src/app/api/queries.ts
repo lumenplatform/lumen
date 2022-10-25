@@ -215,5 +215,17 @@ export function submitQuiz(data: any) {
 }
 
 export function getPublicCourseEnrollments() {
-  return client.get<any>('/org//public-enrollments').then((r) => r.data.data);
+  return client.get<any>('/org/public-enrollments').then((r) => r.data.data);
+}
+
+export function getPrivateCourseEnrollments() {
+  return client.get<any>('/org/private-enrollments').then((r) => r.data.data);
+}
+
+export function getWithdrawals(){
+  return client.get<any>('/org/withdrawals').then((r)=>r.data.data);
+}
+
+export function withdrawBalance(data:any){
+  return client.post<any>('/org/withdraw',data).then((r)=>r.data.data);
 }
