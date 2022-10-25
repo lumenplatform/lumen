@@ -33,7 +33,7 @@ export default function QuizResultPage() {
         Assignment Grades
       </Typography>
       <Container>
-        {results.markingStatus == 'MARKED' ?
+        {results.markingStatus == 'MARKED'&& results.releasedStatus=='RELEASED' ?
           <TableContainer component={Paper} sx={{ my: 3 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -50,7 +50,10 @@ export default function QuizResultPage() {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">{index + 1}</TableCell>
-                    <TableCell align="right">{row.correct ? 'Correct' : 'Incorrect'}</TableCell>
+                    {row.question.type == 'essay' ?
+                      <TableCell align="right" >-</TableCell>
+                      : <TableCell align="right">{row.correct ? 'Correct' : 'Incorrect'}</TableCell>
+                    }
                     <TableCell align="right">{row.marks}</TableCell>
                   </TableRow>
                 ))}
@@ -72,7 +75,7 @@ export default function QuizResultPage() {
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="h6" lineHeight={1}>
-                      {results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) < results.quiz.settings.passGrade ? 'Fail' : 'Pass'}
+                      {results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.marks, 0) / results.submission.reduce((previousValue: any, currentValue: any) => previousValue + currentValue.question.marks, 0) * 100 < results.quiz.settings.passGrade ? 'Fail' : 'Pass'}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
@@ -85,13 +88,13 @@ export default function QuizResultPage() {
             </Table>
           </TableContainer>
           :
-            <Card sx={{p:5,my:2}}>
-              <CardContent>
-                <Typography variant="h6">
-                  Pending to be marked by the Instructor
-                </Typography>
-              </CardContent>
-            </Card>
+          <Card sx={{ p: 5, my: 2 }}>
+            <CardContent>
+              <Typography variant="h6">
+                Pending to be marked by the Instructor
+              </Typography>
+            </CardContent>
+          </Card>
         }
         <Button variant="contained" onClick={() => navigate(`/student/${courseId}`)}>
           Back to course
@@ -100,5 +103,3 @@ export default function QuizResultPage() {
     </Container>
   );
 }
-
-

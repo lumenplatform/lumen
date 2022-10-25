@@ -3,7 +3,7 @@ import { assert } from 'console';
 import * as express from 'express';
 import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
-import { Course, CourseStatus } from '../../models/course.model';
+import { Course , CourseStatus} from '../../models/course.model';
 import { Enrollment } from '../../models/enrollment.model';
 import { Organization } from '../../models/organization.model';
 import { User } from '../../models/user.model';

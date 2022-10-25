@@ -193,7 +193,7 @@ export function updateAttempt(data: any) {
 export function completeAttempt(data: any) {
   return client
     .post(
-      `/manage/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/complete`,
+      `/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/complete`,
       data.submissions
     )
     .then((r) => r.data.data);
@@ -214,6 +214,66 @@ export function getResults(
 export function getQuizzesByCourseId(courseId: string) {
   return client
     .get<any>(`/manage/courses/${courseId}/quizzes`)
+    .then((r) => r.data.data);
+}
+
+export function markSubmssion(data: any) {
+  return client.post(
+    `/manage/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/submission/${data.submissionId}/mark`,
+    data.mark
+  );
+}
+
+export function releaseSubmissionMarks(data: any) {
+  return client.post(
+    `/manage/courses/${data.courseId}/quiz/${data.quizId}/attempt/${data.attemptId}/release`,
+    {}
+  );
+}
+
+//release all marks
+export function releaseAllSubmissionMarks(data: any) {
+  return client.post(
+    `/manage/courses/${data.courseId}/quiz/${data.quizId}/release`,
+    {}
+  );
+}
+export function getAttemptsByQuizId(courseId: string, quizId: string) {
+  return client
+    .get<any>(`/manage/courses/${courseId}/quiz/${quizId}/attempts`)
+    .then((r) => r.data.data);
+}
+
+export function getSubmissionsByQuestionId(
+  courseId: string,
+  quizId: string,
+  questionId: string,
+  marking: string,
+  releasing: string
+) {
+  return client
+    .get<any>(
+      `/manage/courses/${courseId}/quiz/${quizId}/question/${questionId}/submission?marking=${marking}&releasing=${releasing}`
+    )
+    .then((r) => r.data.data);
+}
+
+export function getSubmissionById(
+  courseId: string,
+  quizId: string,
+  submissionId: string
+) {
+  return client
+    .get<any>(
+      `/manage/courses/${courseId}/quiz/${quizId}/submission/${submissionId}`
+    )
+    .then((r) => r.data.data);
+}
+
+//get student attempts for the for a course
+export function getCourseAttempts(courseId: string) {
+  return client
+    .get<any>(`/courses/${courseId}/attempts`)
     .then((r) => r.data.data);
 }
 

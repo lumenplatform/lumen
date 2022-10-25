@@ -12,8 +12,8 @@ export default function NumberCard() {
       sx={{
         height: 100,
         width: 250,
-        margin: 8,
-        marginTop: 20,
+        // margin: 5,
+        // marginTop: 20,
       }}
     >
       <CardContent sx={{ padding: 2 }}>

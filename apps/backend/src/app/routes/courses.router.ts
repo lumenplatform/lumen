@@ -2,8 +2,10 @@ import { RequestContext } from '@mikro-orm/core';
 import * as express from 'express';
 import * as Yup from 'yup';
 import { CourseController } from '../controllers/course.controller';
+import { QuizController } from '../controllers/quiz.controller';
 import { validate } from '../middleware/validation';
 import { Course } from '../models/course.model';
+import { AttemptService } from '../services/attempt.service';
 import { CourseService } from '../services/course.service';
 import { EmailTemplate } from '../services/mail/email-types';
 import { MailJetService } from '../services/mail/mailjet.service';
@@ -21,6 +23,9 @@ const courseController = new CourseController(
   mailService,
   courseService
 );
+
+const attemptService = new AttemptService();
+const quizController = new QuizController(attemptService);
 
 // search courses
 coursesRouter.get('/', async (req, res) => {
@@ -130,6 +135,16 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
     .then((result) => {
       // give the front end url to redirect to
       res.redirect(result);
+    })
+    .catch(next);
+});
+
+//get all quiz-attempts and grades of the user of a course
+coursesRouter.get('/:id/attempts', (req, res, next) => {
+  quizController
+    .getAttemptsOfUser(req.user.uid, req.params.id)
+    .then((result) => {
+      res.json(createResponse(result));
     })
     .catch(next);
 });
