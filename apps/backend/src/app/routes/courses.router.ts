@@ -141,5 +141,21 @@ coursesRouter.post('/:id/complete-topic/:topicId', (req, res, next) => {
     .catch(next);
 });
 
+//course status update
+coursesRouter.get('/current', (req, res, next) => {
+  courseController
+    .getCourseByID(req.user.uid)
+    .then(sendJSON(res, 200))
+    .catch(next);
+});
+
+coursesRouter.post('/current', (req, res, next) => {
+  courseController
+    .updateCourseInformation(req.user.uid, req.body)
+    .then(sendJSON(res, 200))
+    .catch(next);
+});
+
+
 coursesRouter.use('/:id/quiz', quizRouter);
 

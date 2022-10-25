@@ -8,11 +8,20 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useState } from 'react';
 import CourseFees  from './billing/CourseFees';
+import React from 'react';
+import Pagination from '@mui/material/Pagination';
+
+
+
 export default function Billing() {
   const [value, setValue] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+
+  const y = 5;
   };
+
+  
 
   return (
     <Box sx={{ p: 3 }}>
@@ -50,6 +59,7 @@ export default function Billing() {
 
       {value === 0 && <CourseFees />}
 
+         
     </Box>
   );
 }
