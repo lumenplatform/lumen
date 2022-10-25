@@ -3,16 +3,20 @@ import {
   Breadcrumbs,
   Button,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
   LinearProgress,
   Link,
+  MenuItem,
   Paper,
+  Select,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StudentHeader from '../../components/StudentHeader';
 
 import { ArrowDropDown, MoreHoriz } from '@mui/icons-material';
@@ -72,7 +76,8 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
         />
         <Stack
           sx={{ p: 2, display: { xs: 'none', sm: 'flex' }, width: '20%' }}
-          justifyContent="center" alignItems='center'
+          justifyContent="center"
+          alignItems="center"
         >
           {course.next && (
             <>
@@ -112,10 +117,18 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
 export default function CoursePage(props: any) {
   const navigate = useNavigate();
   const { data } = useQuery('courses', () => search({}));
-  const { data: enrolled } = useQuery('enrolled', () => getEnrolledCourses());
+  const [statusFilter, setStatusFilter] = useState('ACTIVE');
+
+  const { data: enrolled, refetch } = useQuery('enrolled', () =>
+    getEnrolledCourses(statusFilter)
+  );
   const { data: recommended } = useQuery('recom', () =>
     getRecommendedCourses()
   );
+
+  useEffect(() => {
+    refetch();
+  }, [statusFilter]);
 
   return (
     <div>
@@ -138,9 +151,19 @@ export default function CoursePage(props: any) {
 
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="h6">My Courses</Typography>
-                <Button>
-                  In Progress <ArrowDropDown />
-                </Button>
+                <FormControl size="small" variant='standard'>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={statusFilter}
+                    label="Age"
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                  >
+                    <MenuItem value={'ACTIVE'}>In Progress</MenuItem>
+                    <MenuItem value={'COMPLETED'}>Completed</MenuItem>
+                    <MenuItem value={'ALL'}>All</MenuItem>
+                  </Select>
+                </FormControl>
               </Stack>
 
               <Box>

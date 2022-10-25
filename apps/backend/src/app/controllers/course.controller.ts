@@ -141,14 +141,14 @@ export class CourseController {
     return quizzes;
   }
 
-  async getEnrolledCourses(uid: string) {
+  async getEnrolledCourses(uid: string, status: EnrollmentStatus) {
     const em = RequestContext.getEntityManager();
     const courses: any = await em
       .find(
         Enrollment,
         {
           user: { uid },
-          // status: EnrollmentStatus.ACTIVE
+          ...(['ACTIVE', 'COMPLETED'].includes(status) ? { status } : {}), //
         },
         { populate: ['course'] }
       )
@@ -181,7 +181,7 @@ export class CourseController {
 
   async getRecommendedCourses(uid: string) {
     // todo : properly calculate recommended
-    const enrolled = await this.getEnrolledCourses(uid);
+    const enrolled = await this.getEnrolledCourses(uid,null);
     const em = RequestContext.getEntityManager();
     const recommended = await em.find(Course, {
       courseId: { $nin: enrolled.map((r) => r.courseId) },
