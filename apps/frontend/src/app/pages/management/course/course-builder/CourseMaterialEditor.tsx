@@ -45,7 +45,9 @@ export function SectionsList() {
         elevation={0}
         sx={{ p: 2, border: `1px solid ${theme.palette.divider}` }}
       >
-        <Button onClick={() => actions.addSectionAt(sections.length)}>
+        <Button
+          onClick={() => actions.addSectionAt(sections ? sections.length : 0)}
+        >
           ADD Section
         </Button>
       </Paper>

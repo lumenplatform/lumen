@@ -8,6 +8,9 @@ import { UserFactory } from './factories/UserFactory';
 import { courses as dummyCorses } from './data/data';
 import { organizations_data } from './data/organizations';
 import { Organization } from '../../models/organization.model';
+import { EnrollmentType } from '../../models/enrollment.model';
+import { WithdrawalFactory } from './factories/WithdrawalFactory';
+
 declare global {
   interface Array<T> {
     sample(): T;
@@ -51,8 +54,17 @@ export class DatabaseSeeder extends Seeder {
       r.user = users.sample();
       r.course = courses.sample();
       r.payment = new PaymentFactory(em).makeOne();
+      r.type = [EnrollmentType.PRIVATE,EnrollmentType.PUBLIC].sample();
     });
 
+    const withdrawals = new WithdrawalFactory(em).make(5);
+    withdrawals.forEach((r) => {
+      r.organization = organizations.sample();
+      r.payment = new PaymentFactory(em).makeOne();
+    });
+
+
+    em.persist(withdrawals);
     em.persist(enrollments);
     em.persist(organizations);
     em.persist(courses);

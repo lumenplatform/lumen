@@ -35,7 +35,7 @@ export default function CourseCreate() {
 
   const courseCreateMutation = useMutation(createNewCourse);
   const courseUpdateMutation = useMutation(updateCourse);
-  
+
   // Active Tab
   const [value, setValue] = useState(0);
 
@@ -52,6 +52,7 @@ export default function CourseCreate() {
       price: 10,
       welcomeMessage: '',
       congratsMessage: '',
+      courseMaterial: [],
     },
     mode: 'onBlur',
   });
@@ -74,6 +75,7 @@ export default function CourseCreate() {
       intendedAudience: [''],
       prerequisites: [''],
       price: 10,
+      courseMaterial: [],
       welcomeMessage: '',
       congratsMessage: '',
     });
@@ -118,10 +120,11 @@ export default function CourseCreate() {
           <Typography mx={3} variant="h6">
             {fieldValues['title']}
           </Typography>
-          <Chip color="warning" label="DRAFT" />
+          {/* <Chip color="warning" label="DRAFT" /> */}
           <Box sx={{ flexGrow: 1 }}></Box>
           <Button
             variant="contained"
+            disableElevation
             onClick={() => {
               if (courseId) {
                 courseUpdateMutation.mutate(fieldValues);

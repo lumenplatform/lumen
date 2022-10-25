@@ -70,7 +70,7 @@ export class Course {
   @OneToOne({ entity: () => Asset, eager: true })
   promotionalVideo: Asset;
 
-  @ManyToMany(() => User)
+  @ManyToMany({ entity: () => User, eager: true })
   instructors = new Collection<User>(this);
 
   @ManyToMany(() => User)

@@ -24,6 +24,11 @@ export enum MarkingStatus {
   MARKED = 'MARKED',
 }
 
+export enum ReleaseStatus {
+  NOT_RELEASED = 'NOT_RELEASED',
+  RELEASED = 'RELEASED',
+}
+
 @Entity()
 export class Attempt {
   @PrimaryKey()
@@ -38,6 +43,12 @@ export class Attempt {
   @Property({ type: 'integer' })
   marks = 0;
 
+  @Property({ nullable: true })
+  isPassed ?: boolean;
+
+  @Property({ type: 'integer' })
+  grade = 0;
+
   @Property({ columnType: 'timestamptz' })
   startedAt = new Date();
 
@@ -50,15 +61,12 @@ export class Attempt {
   @Enum(() => MarkingStatus)
   markingStatus = MarkingStatus.NOT_MARKED;
 
+  @Enum(() => ReleaseStatus)
+  releasedStatus = ReleaseStatus.NOT_RELEASED;
+
+
   @OneToMany(() => Submission, (submission) => submission.attempt, {
     orphanRemoval: true,
   })
   submission = new Collection<Submission>(this);
-
-  @AfterUpdate()
-  async updateQuizAttempts() {
-    if(this.attemptStatus === AttemptStatus.COMPLETED) {
-      await this.quiz.noOfAttempts++;
-    }
-  }
 }

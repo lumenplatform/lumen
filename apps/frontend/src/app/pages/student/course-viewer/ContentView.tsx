@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { useMutation, useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   getCourseById,
   getCourseMaterial,
@@ -8,6 +8,7 @@ import {
 } from '../../../api';
 import FilesInput from '../../../components/FilesInput';
 import VideoPlayer from '../../../components/VideoPlayer';
+import { queryClient } from '../../../providers/queryClient';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const isElectron = window.electron;
@@ -16,12 +17,49 @@ export default function ContentView() {
   const { courseId, sectionId, topicId } = useParams();
   const { data } = useQuery('mat', () => getCourseMaterial(courseId!));
   const { data: course } = useQuery('course', () => getCourseById(courseId!));
-  const completionMutation = useMutation(() =>
-    markTopicAsCompleted(courseId!, topicId!)
+  const navigate = useNavigate();
+
+  const completionMutation = useMutation(
+    () => markTopicAsCompleted(courseId!, topicId!),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('mat');
+      },
+    }
   );
 
-  const section = data?.filter((r: any) => r.id === sectionId)[0];
-  const topic = section?.topics.filter((r: any) => r.id === topicId)[0];
+  const sectionIndex = data?.findIndex((r: any) => r.id === sectionId);
+  const section = data[sectionIndex];
+
+  const topicIndex = section?.topics.findIndex((r: any) => r.id === topicId);
+  const topic = section.topics[topicIndex];
+
+  const endOfCourse = sectionIndex + 1 == data.length;
+  const endOfSection = topicIndex + 1 == section.topics.length;
+
+  const markComplete = () => {
+    if (!topic.completed) {
+      completionMutation.mutate();
+    }
+
+    let nextTopicId = topicId;
+    let nextSectionId = sectionId;
+
+    if (!endOfSection) {
+      nextTopicId = section.topics[topicIndex + 1].id;
+    } else {
+      if (!endOfCourse) {
+        nextSectionId = data[sectionIndex + 1].id;
+        nextTopicId = data[sectionIndex + 1].topics[0].id;
+      }
+      if (endOfCourse) {
+        navigate(`/student/${course.courseId}/complete-course`);
+        return;
+      }
+    }
+
+    navigate(`/student/${courseId}/learn/${nextSectionId}/${nextTopicId}`);
+  };
 
   if (!topic || !course) {
     return null;
@@ -34,7 +72,7 @@ export default function ContentView() {
           {topic.title}
         </Typography>
         <Typography variant="caption">
-          Prof. Gilbert Strang, Massachusetts Institute of Technology
+          TODO: add instructor, {course.organization.name}
         </Typography>
       </Box>
 
@@ -63,13 +101,18 @@ export default function ContentView() {
               dangerouslySetInnerHTML={{ __html: topic.article }}
             />
           )}
-          <Stack direction="row" justifyContent='end'>
+          <Stack direction="row" justifyContent="end">
             <Button
-              variant="outlined"
+              variant="contained"
+              disableElevation
               disabled={completionMutation.isLoading}
-              onClick={() => completionMutation.mutate()}
+              onClick={markComplete}
             >
-              Mark as Completed
+              {endOfCourse && endOfSection
+                ? 'Complete Course'
+                : endOfSection
+                ? 'Next Section'
+                : 'Next Topic'}
             </Button>
           </Stack>
         </Box>

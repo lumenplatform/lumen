@@ -3,9 +3,10 @@ import { assert } from 'console';
 import * as express from 'express';
 import { CourseController } from '../../controllers/course.controller';
 import { Asset } from '../../models/asset.model';
-import { Course } from '../../models/course.model';
+import { Course , CourseStatus} from '../../models/course.model';
 import { Enrollment } from '../../models/enrollment.model';
 import { Organization } from '../../models/organization.model';
+import { User } from '../../models/user.model';
 import { CourseService } from '../../services/course.service';
 import { MailJetService } from '../../services/mail/mailjet.service';
 import { StripePaymentService } from '../../services/payment.service';
@@ -24,8 +25,17 @@ const courseController = new CourseController(
 
 // list courses
 coursesRouter.get('/', (req, res, next) => {
+  const { searchQuery, publishStatus } = req.query as any;
+  console.log(req.query);
   const em = RequestContext.getEntityManager();
-  em.find(Course, {})
+
+  em.find(Course, {
+    $and: [
+      searchQuery != '' ? { title: { $ilike: `%${searchQuery}%` } } : {},
+      publishStatus != 'ALL' ? { status: publishStatus } : {},
+      { organization: { orgId: req.user.orgId } },
+    ],
+  })
     .then((r) => {
       res.json(createResponse(r));
     })
@@ -60,6 +70,46 @@ coursesRouter.post('/', async (req, res, next) => {
       res.json(createResponse(course, 201, 'Successfully created the course'));
     })
     .catch(next);
+});
+
+//add instructors to the course
+coursesRouter.post('/:id/instructors', async (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  const instructors = req.body;
+  const courseId = instructors[0];
+  const course = await em.findOneOrFail(Course, { courseId });
+
+  console.log(courseId);
+
+  for (let i = 1; i < instructors.length; i++) {
+    console.log(instructors[i]);
+    course.instructors.add(em.getReference(User, instructors[i]));
+  }
+
+  em.persist(course);
+  await em.flush();
+  res.status(200).json(course);
+  // console.log(instructors[0]);
+});
+
+//delete instuctor from the course
+coursesRouter.delete('/:courseId/instructors/:uid', async (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  const courseId = req.params.courseId;
+  const instructorId = req.params.uid;
+
+  const course = await em.findOneOrFail(
+    Course,
+    { courseId },
+    { populate: ['instructors'] }
+  );
+
+  course.instructors.set(course.instructors.getItems().filter(r=>r.uid!=instructorId));
+
+  em.persist(course);
+  await em.flush();
+  res.status(200).json(course);
+
 });
 
 // get course details
@@ -133,12 +183,22 @@ coursesRouter.put('/:id', async (req, res, next) => {
     .catch(next);
 });
 
+coursesRouter.post('/:id/update-status', async (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  const course = await em.findOneOrFail(Course, { courseId: req.params.id });
+  course.status = req.body.status;
+  em.persist(course);
+  await em.flush();
+  res.json(course);
+});
+
 coursesRouter.get('/:id/quizzes', (req, res, next) => {
   courseController
-  .getQuizzesByCourseId(req.params.id)
-  .then((r) => {
-    res.json(createResponse(r));
-  }).catch(next);
+    .getQuizzesByCourseId(req.params.id)
+    .then((r) => {
+      res.json(createResponse(r));
+    })
+    .catch(next);
 });
 
 coursesRouter.use('/:id/quiz', quizRouter);

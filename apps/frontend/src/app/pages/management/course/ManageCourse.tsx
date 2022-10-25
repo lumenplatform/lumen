@@ -9,9 +9,10 @@ import {
 } from '@mui/material';
 import { Container } from '@mui/system';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
-import { getCourseById } from '../../../api';
+import { useForm } from 'react-hook-form';
+import { useMutation, useQuery } from 'react-query';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getCourseById, updateCourse, updateCourseStatus } from '../../../api';
 import { TabPanel } from '../../../components/TabPanel';
 import CourseInstructors from './sections/CourseInstructors';
 import EnrolledStudents from './sections/EnrolledStudents';
@@ -39,6 +40,10 @@ export default function ManageCourse() {
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
+  const updateCourseMutation = useMutation(updateCourseStatus);
+
+  const navigate = useNavigate();
+
   if (isError || isLoading) {
     return <Skeleton></Skeleton>;
   }
@@ -48,7 +53,28 @@ export default function ManageCourse() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h5">{course.title}</Typography>
         <Box>
-          <Button color="primary">Publish</Button>
+          <Button
+            color="primary"
+            onClick={() => {
+              updateCourseMutation.mutate(
+                { courseId, status: 'PUBLISHED' },
+                { onSuccess: () => navigate('/manage/courses') }
+              );
+            }}
+          >
+            Publish
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => {
+              updateCourseMutation.mutate(
+                { courseId, status: 'UNPUBLISHED' },
+                { onSuccess: () => navigate('/manage/courses') }
+              );
+            }}
+          >
+            Unpublished
+          </Button>
           <Button>Edit</Button>
           <Button color="error">Delete</Button>
         </Box>

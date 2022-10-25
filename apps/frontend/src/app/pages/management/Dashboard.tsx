@@ -1,33 +1,67 @@
-import { Grid, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography, useTheme, Avatar, Divider, Rating } from '@mui/material';
+import {
+  Avatar,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Paper,
+  Rating,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import Box from '@mui/material/Box';
 import { Component } from 'react';
 import Chart from 'react-apexcharts';
+import { useQuery } from 'react-query';
+import { getOrgStats } from '../../api';
 import StatCard from '../../components/StatCard';
-import * as React from 'react';
 
 export default function Dashboard() {
-  //create array of object containing review, rating, course name,user name, date, course id, user id and user image
-  const reviews = [
-    { review: 'The instructor was very articulate and the content is very feature rich. I also like the idea of answering open ended questions about data.', rating: '4', courseName: 'Calculas Basics', userName: 'Dariya K.', courseId: 'Course Id', userId: 'User Id', userImage: 'http://www.venmond.com/demo/vendroid/img/avatar/big.jpg', date: '2022-08-01' }
-    ,
-    { review: 'For anyone starting out as a data analyst, this is a great introduction and is very inspiring. The content was well paced and was accessible.', rating: '5', courseName: 'Machine learning', userName: 'Lisa L.', courseId: 'Course Id', userId: 'User Id', userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaH95MYy4lQdqXKOR2FCcv2KIHRhz7rCj4N8VKm4zbQmfaOU7lU_m_ykDR6sWGMMEKof8&usqp=CAU', date: '2022-08-05' }
-    ,
-    { review: "Gaining new knowledge and skills through Coursera helped me break out of the mold I'd been in for over a decade. Coursera helped open doors for me.", rating: '4', courseName: 'Key Technologies for Business', userName: 'Loreeli G.', courseId: 'Course Id', userId: 'User Id', userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdZSsRW8ahClgpWbdmk1wKCv_6d5ZNEf_kuZLEmarGpS7KAd8cHuXo9UPSJOy_EESmpu8&usqp=CAU', date: '2022-08-10' }
-    ,
-    { review: "The Specialization I took blew my mind. Each course was interesting, fun, and motivational, which encouraged me to continue learning.", rating: '4', courseName: 'Python for Everybody', userName: 'Visal K.', courseId: 'Course Id', userId: 'User Id', userImage: 'https://www.bnl.gov/today/body_pics/2017/06/stephanhruszkewycz-hr.jpg', date: '2022-08-11' }
-  ];
   const theme = useTheme();
+
+  const { data, isLoading } = useQuery('org-stats', getOrgStats);
+
+  if (!data || isLoading) {
+    return null;
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Grid container spacing={2}>
         <Grid item md={4}>
-          <StatCard heading={'New Enrollments'} caption={'Since Last Week'} stat={'+3'} image={'url(https://demos.wrappixel.com/premium-admin-templates/react/flexy-react/stylish/static/media/welcome-bg2-2x-svg.97ed12dc.svg)'} imageSize={'30%'} />
+          <StatCard
+            heading={'New Enrollments'}
+            caption={'Since Last Week'}
+            stat={'+ ' + data.enrollment_count}
+            image={
+              'url(https://demos.wrappixel.com/premium-admin-templates/react/flexy-react/stylish/static/media/welcome-bg2-2x-svg.97ed12dc.svg)'
+            }
+            imageSize={'30%'}
+          />
         </Grid>
         <Grid item md={4}>
-          <StatCard heading={'Income'} caption={'Since Last Week'} stat={'+$30.00'} image={'url(https://cdn3d.iconscout.com/3d/premium/thumb/income-5706071-4755626.png)'} imageSize={'30%'} />
+          <StatCard
+            heading={'Income'}
+            caption={'Since Last Week'}
+            stat={'+ $' + data.income}
+            image={
+              'url(https://cdn3d.iconscout.com/3d/premium/thumb/income-5706071-4755626.png)'
+            }
+            imageSize={'30%'}
+          />
         </Grid>
         <Grid item md={4}>
-          <StatCard heading={'User engagemnet'} caption={'Since Last Week'} stat={'700Hrs'} image={'url(https://ouch-cdn2.icons8.com/-vVVU0ytD19Goilrknwy2AvD8Hdl5hOd0QA_Dfj18ds/rs:fit:256:162/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvNzE3/LzQ4NmM0ZmJmLTQ0/MWItNDlkOS05NzE1/LTJmYjgxNzQ5Zjg4/OS5wbmc.png)'} imageSize={'40%'} />
+          <StatCard
+            heading={'User Engagement'}
+            caption={'Since Last Week'}
+            stat={data.engagement + ' Hrs'}
+            image={
+              'url(https://ouch-cdn2.icons8.com/-vVVU0ytD19Goilrknwy2AvD8Hdl5hOd0QA_Dfj18ds/rs:fit:256:162/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvNzE3/LzQ4NmM0ZmJmLTQ0/MWItNDlkOS05NzE1/LTJmYjgxNzQ5Zjg4/OS5wbmc.png)'
+            }
+            imageSize={'40%'}
+          />
         </Grid>
         <Grid item md={4}>
           {/*           <Paper
@@ -50,22 +84,25 @@ export default function Dashboard() {
               p: 3,
             }}
           >
-            <Typography variant="h6">
-              Latest Reviews
-            </Typography>
-            <List sx={{
-              overflow: 'scroll',
-              height: '85%',
-              position: 'absolute',
-              right: 0,
-              top: '10%',
-              borderRadius: theme.shape.borderRadius,
-            }}>
-              {reviews.map((review: any) => (
+            <Typography variant="h6">Latest Reviews</Typography>
+            <List
+              sx={{
+                overflow: 'scroll',
+                height: '85%',
+                position: 'absolute',
+                right: 0,
+                top: '10%',
+                borderRadius: theme.shape.borderRadius,
+              }}
+            >
+              {data.reviews.map((review: any) => (
                 <>
                   <ListItem alignItems="flex-start">
                     <ListItemAvatar>
-                      <Avatar alt={review.userName} src={review.userImage} />
+                      <Avatar
+                        alt={review.user.name}
+                        src={review.user.picture}
+                      />
                     </ListItemAvatar>
                     <ListItemText
                       primary={
@@ -77,7 +114,7 @@ export default function Dashboard() {
                               variant="body2"
                               color="text.primary"
                             >
-                              {review.userName}
+                              {review.user.name}
                             </Typography>
                             <Typography
                               sx={{ display: 'inline' }}
@@ -85,7 +122,7 @@ export default function Dashboard() {
                               variant="caption"
                               color="text.primary"
                             >
-                              {" - " + review.courseName}
+                              {' - ' + review.enrollment.course.title}
                             </Typography>
                           </Box>
                           <Rating
@@ -132,12 +169,12 @@ export default function Dashboard() {
             }}
           >
             <Typography variant="h6">Enrollments</Typography>
-            <ChartX />
+            <ChartX data={data} />
             &nbsp;
           </Paper>
         </Grid>
       </Grid>
-    </Box >
+    </Box>
   );
 }
 
@@ -148,7 +185,7 @@ class ChartX extends Component<any, any> {
     this.state = {
       options: {
         theme: {
-          palette: 'palette5' // upto palette10
+          palette: 'palette5', // upto palette10
         },
         chart: {
           id: 'basic-bar',
@@ -167,33 +204,22 @@ class ChartX extends Component<any, any> {
             vertical: 2,
           },
           formatter: function (seriesName: any, opts: any) {
-            return [seriesName, " Total - ", opts.w.globals.series[opts.seriesIndex].reduce((a: number, b: number) => a + b, 0)]
-          }
+            return [
+              seriesName,
+              ' Total - ',
+              opts.w.globals.series[opts.seriesIndex].reduce(
+                (a: number, b: number) => a + b,
+                0
+              ),
+            ];
+          },
         },
 
         xaxis: {
-          categories: [
-            '07/02',
-            '07/02',
-            '07/02',
-            '07/02',
-            '07/02',
-            '07/02',
-            '07/02',
-            '07/02',
-          ],
+          categories: props.data.enrollments.dates,
         },
       },
-      series: [
-        {
-          name: 'Calculas Basics',
-          data: [44, 40, 35, 50, 39, 60, 70, 91],
-        },
-        {
-          name: 'Machine Learning',
-          data: [76, 85, 66, 85, 67, 35, 45, 55],
-        },
-      ],
+      series: props.data.enrollments.counts,
     };
   }
 

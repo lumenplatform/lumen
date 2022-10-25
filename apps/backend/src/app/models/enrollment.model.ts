@@ -21,6 +21,11 @@ export enum EnrollmentStatus {
   ABANDONED = 'ABANDONED',
 }
 
+export enum EnrollmentType {
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE',
+}
+
 @Entity()
 export class Enrollment {
   @PrimaryKey()
@@ -35,11 +40,17 @@ export class Enrollment {
   @Property()
   enrollmentDate: Date;
 
+  @Property({ nullable: true })
+  completionDate?: Date;
+
   @ManyToOne(() => Payment)
   payment: Payment;
 
   @Enum(() => EnrollmentStatus)
   status: EnrollmentStatus;
+
+  @Enum(() => EnrollmentType)
+  type = EnrollmentType.PUBLIC;
 
   @OneToMany(() => CourseReview, (review) => review.enrollment, {
     nullable: true,
