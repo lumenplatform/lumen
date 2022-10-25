@@ -31,13 +31,10 @@ export default function CourseCreate() {
   const navigate = useNavigate();
   const theme = useTheme();
   const { courseId } = useParams();
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const courseCreateMutation = useMutation(createNewCourse);
   const courseUpdateMutation = useMutation(updateCourse);
-
-  const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
-    getOrgCoursesById(courseId ?? '')
-  );
   
   // Active Tab
   const [value, setValue] = useState(0);
@@ -62,10 +59,13 @@ export default function CourseCreate() {
   const fieldValues = methods.watch();
 
   useEffect(() => {
-    if (courseData) {
-      methods.reset(courseData);
+    if (courseId) {
+      getOrgCoursesById(courseId).then((data) => {
+        methods.reset(data);
+        setDataLoaded(true);
+      });
     }
-  }, [courseData]);
+  }, []);
 
   useEffect(() => {
     methods.reset({
@@ -91,7 +91,7 @@ export default function CourseCreate() {
     { component: <CourseSettings />, label: 'Settings' },
   ];
 
-  if (courseId && !courseData) return null;
+  if (courseId && !dataLoaded) return null;
 
   return (
     <FormProvider {...methods}>

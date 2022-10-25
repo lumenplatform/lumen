@@ -8,6 +8,7 @@ import { UserFactory } from './factories/UserFactory';
 import { courses as dummyCorses } from './data/data';
 import { organizations_data } from './data/organizations';
 import { Organization } from '../../models/organization.model';
+import { EnrollmentType } from '../../models/enrollment.model';
 declare global {
   interface Array<T> {
     sample(): T;
@@ -23,6 +24,8 @@ if (!Array.prototype.sample) {
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     const users = new UserFactory(em).make(5);
+    users[0].uid = 'google-oauth2|101061271827612555828';
+    users[0].email = 'dalana199981@gmail.com';
 
     const organizations = organizations_data.map((r: any) =>
       em.create(Organization, r)
@@ -49,6 +52,7 @@ export class DatabaseSeeder extends Seeder {
       r.user = users.sample();
       r.course = courses.sample();
       r.payment = new PaymentFactory(em).makeOne();
+      r.type = [EnrollmentType.PRIVATE,EnrollmentType.PUBLIC].sample();
     });
 
     em.persist(enrollments);

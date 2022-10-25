@@ -17,8 +17,8 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 function createData(
   Grade_item: string,
   grade: number,
-  range: number,
-  Precentage: number,
+  range: string,
+  Precentage: string,
   contribution_to_course_total: number
 ) {
   return { Grade_item, grade, range, Precentage, contribution_to_course_total };

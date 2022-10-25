@@ -1,14 +1,18 @@
 import {
+  Collection,
   Entity,
   Enum,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+import { v4 } from 'uuid';
+import { CourseMaterial } from './course-material.model';
 import { Course } from './course.model';
-import { CourseReview } from './review.mode';
 import { Payment } from './payment.model';
+import { CourseReview } from './review.mode';
 import { User } from './user.model';
 
 export enum EnrollmentStatus {
@@ -17,10 +21,15 @@ export enum EnrollmentStatus {
   ABANDONED = 'ABANDONED',
 }
 
+export enum EnrollmentType {
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE',
+}
+
 @Entity()
 export class Enrollment {
   @PrimaryKey()
-  enrollmentId: string;
+  enrollmentId: string = v4();
 
   @ManyToOne(() => User)
   user: User;
@@ -37,15 +46,43 @@ export class Enrollment {
   @Enum(() => EnrollmentStatus)
   status: EnrollmentStatus;
 
-  @OneToMany(() => CourseReview, (review) => review.enrollment)
+  @Enum(() => EnrollmentType)
+  type: EnrollmentType;
+
+  @OneToMany(() => CourseReview, (review) => review.enrollment, {
+    nullable: true,
+  })
   review: CourseReview;
 
-  constructor(enrollmentId,user,course,payment,enrollmentDate = new Date(),status = EnrollmentStatus.ACTIVE){
-    this.enrollmentId = enrollmentId;
+  @ManyToMany({
+    entity: () => CourseMaterial,
+    pivotEntity: () => CompletedTopic,
+  })
+  completedTopics = new Collection<CourseMaterial>(this);
+
+  constructor(
+    user,
+    course,
+    payment,
+    enrollmentDate = new Date(),
+    status = EnrollmentStatus.ACTIVE
+  ) {
     this.user = user;
     this.course = course;
     this.payment = payment;
     this.enrollmentDate = enrollmentDate;
     this.status = status;
   }
+}
+
+@Entity()
+export class CompletedTopic {
+  @ManyToOne({ entity: () => Enrollment, primary: true })
+  enrollment: Enrollment;
+
+  @ManyToOne({ entity: () => CourseMaterial, primary: true })
+  topic: CourseMaterial;
+
+  @Property({ defaultRaw: 'now()' })
+  createdAt: Date;
 }

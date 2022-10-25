@@ -11,10 +11,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 export default function CourseSettings() {
-  const { register, getValues } = useFormContext();
+  const { register, getValues, control } = useFormContext();
 
   return (
     <Box sx={{ px: 3, maxWidth: '720px' }}>
@@ -24,26 +24,35 @@ export default function CourseSettings() {
         and users are able to enroll after paying the course fee.
       </Typography>
       <Box>
-        <RadioGroup row={true} {...register('settings.isPrivate')}>
-          <FormControlLabel
-            control={<Radio value={'0'} defaultChecked />}
-            label="Public"
-          />
-          <FormControlLabel control={<Radio />} value={'1'} label="Private" />
-        </RadioGroup>
+        <Controller
+          name="settings.isPrivate"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <RadioGroup row={true} value={value} onChange={onChange}>
+              <FormControlLabel
+                control={<Radio value={'NO'} />}
+                label="Public"
+              />
+              <FormControlLabel
+                control={<Radio value={'YES'} />}
+                label="Private"
+              />
+            </RadioGroup>
+          )}
+        />
       </Box>
 
       <Box
         sx={{
           mb: 2,
           mt: 1,
-          opacity: getValues('settings.isPrivate') ? 1 : '.3',
-          pointerEvents: getValues('settings.isPrivate') ? 1 : '.3',
+          opacity: getValues('settings.isPrivate') === 'NO' ? 1 : '.3',
+          pointerEvents: getValues('settings.isPrivate') === 'NO' ? 1 : '.3',
         }}
       >
         <Typography variant="h6">Pricing</Typography>
         <Typography variant="body2" mb={1}>
-          When setting a price, please note that price can't go below $0.25 per
+          When setting a price, please note that price can't go below $1 per
           each hour of video content
         </Typography>
         <FormControl variant="standard" sx={{ mr: 1, minWidth: '5rem' }}>
@@ -61,6 +70,7 @@ export default function CourseSettings() {
         <TextField
           label="Amount"
           variant="standard"
+          {...register('price')}
           InputProps={{
             startAdornment: <InputAdornment position="start">$</InputAdornment>,
           }}
@@ -75,14 +85,22 @@ export default function CourseSettings() {
           protection to metadata of the course material like topics,
           descriptions etc.
         </Typography>
-        <RadioGroup row={true} {...register('settings.isDesktopOnly')}>
-          <FormControlLabel
-            control={<Radio defaultChecked />}
-            value={true}
-            label="Active"
-          />
-          <FormControlLabel control={<Radio />} value={false} label="Disable" />
-        </RadioGroup>
+        <Controller
+          name="settings.isDesktopOnly"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <RadioGroup row={true} value={value} onChange={onChange}>
+              <FormControlLabel
+                control={<Radio value={'YES'} />}
+                label="Active"
+              />
+              <FormControlLabel
+                control={<Radio value={'NO'} />}
+                label="Disable"
+              />
+            </RadioGroup>
+          )}
+        />
       </Box>
     </Box>
   );

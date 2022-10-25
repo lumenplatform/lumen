@@ -21,7 +21,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles.css';
-import { search } from '../../api';
+import { getEnrolledCourses, getRecommendedCourses, search } from '../../api';
 import CourseCard from '../../components/CourseCard';
 import { Footer } from '../public/fragments/Footer';
 import { Container } from '@mui/system';
@@ -89,6 +89,11 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
 export default function CoursePage(props: any) {
   const navigate = useNavigate();
   const { data } = useQuery('courses', () => search({}));
+  const { data: enrolled } = useQuery('enrolled', () => getEnrolledCourses());
+  const { data: recommended } = useQuery('recom', () =>
+    getRecommendedCourses()
+  );
+
   return (
     <div>
       <StudentHeader />
@@ -116,15 +121,8 @@ export default function CoursePage(props: any) {
               </Stack>
 
               <Box>
-                {data
-                  ?.filter(
-                    (r: any) =>
-                      r.title.includes('Nuclear') ||
-                      r.title.includes('Linear') ||
-                      r.title.includes('COSMIC')
-                  )
-                  .slice(0, 3)
-                  .map((r: any) => (
+                {enrolled &&
+                  enrolled.map((r: any) => (
                     <InProgressCourseCard
                       course={r}
                       key={r}
@@ -145,15 +143,10 @@ export default function CoursePage(props: any) {
                   mb: 6,
                 }}
               >
-                {data &&
-                  data
-                    ?.filter(
-                      (r: any) =>
-                        !r.title.includes('Nuclear') &&
-                        !r.title.includes('Linear') &&
-                        !r.title.includes('COSMIC')
-                    )
-                    .map((r: any) => <CourseCard course={r} key={r} />)}
+                {recommended &&
+                  recommended.map((r: any) => (
+                    <CourseCard course={r} key={r} />
+                  ))}
               </Box>
             </Box>
           </Grid>

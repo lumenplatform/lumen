@@ -1,13 +1,17 @@
 /* eslint-disable no-restricted-globals */
 import { useAuth0, User } from '@auth0/auth0-react';
 import { Backdrop, CircularProgress, Stack } from '@mui/material';
-import { type } from 'os';
 import { createContext, useContext, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { fetchUser, getCourseById } from '../api';
 import InstructorOnboarding from '../pages/auth/InstructorOnboarding';
 import AppBanner from './AppBanner';
+declare global {
+  interface Window {
+    electron: any;
+  }
+}
 
 export type UserRole = 'instructor' | 'student' | 'any';
 interface AuthContextType {
@@ -53,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated, getIdTokenClaims, user?.sub]);
 
   const { data: appUser, isLoading: userLoading } = useQuery('me', fetchUser, {
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && !!user && !auth0Loading,
   });
 
   const signIn = (opt: { redirectPath: string }) => {
@@ -124,9 +128,11 @@ export function RequireDesktop({
   );
 
   if (!bypass && courseId) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (course && course.settings?.isDesktopOnly && !window.electron) {
+    if (
+      course &&
+      course.settings?.isDesktopOnly === 'YES' &&
+      !window.electron
+    ) {
       return <AppBanner link={'lumen-desktop://open?url=' + location.href} />;
     }
     return children;

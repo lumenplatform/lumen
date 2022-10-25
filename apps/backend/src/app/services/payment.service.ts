@@ -3,15 +3,20 @@ import Stripe from 'stripe';
 import { Course } from '../models/course.model';
 import { User } from '../models/user.model';
 
-const stripeSecretKey = process.env.STRIPE_SECRET;
+const stripeSecretKey = process.env.STRIPE_SK;
 
 type PaymentBill = {
+  txnId: string;
   user: User;
   course: Course;
   price: any;
 };
 export interface PaymentService {
-  acceptEnrollmentPayment(user: User, course: Course, domain: string): Promise<string>;
+  acceptEnrollmentPayment(
+    user: User,
+    course: Course,
+    domain: string
+  ): Promise<string>;
   getPaymentDetails(sessionId: string): Promise<PaymentBill>;
 }
 
@@ -21,16 +26,21 @@ export class StripePaymentService {
     this.stripe = new Stripe(stripeSecretKey, { apiVersion: '2020-08-27' });
   }
 
-  async acceptEnrollmentPayment(user :User, course : Course, domain : string) {
+  async acceptEnrollmentPayment(user: User, course: Course, domain: string) {
     const session = await this.stripe.checkout.sessions.create({
+      customer_email: user.email,
+      client_reference_id: course.courseId,
+      metadata: { user: user.uid, course: course.courseId },
       line_items: [
-        {         //metadata : {user: user.uid , course : course.courseId}
+        {
           price_data: {
-            currency: 'lkr',
-            product_data:{
-              name: course.title
+            currency: 'usd',
+            product_data: {
+              name: course.title,
+              description: course.description,
+              images: [course.courseImage.url],
             },
-            unit_amount: course.price,
+            unit_amount: course.price * 100,
           },
           quantity: 1,
         },
@@ -45,12 +55,15 @@ export class StripePaymentService {
   async getPaymentDetails(session_id) {
     const session = await this.stripe.checkout.sessions.retrieve(session_id);
     const em = RequestContext.getEntityManager();
-    const user = await em.findOneOrFail(User, { uid: session.metadata.userId });
-    const course = await em.findOneOrFail(Course, { courseId: session.metadata.courseId });
+    const user = await em.findOneOrFail(User, { uid: session.metadata.user });
+    const course = await em.findOneOrFail(Course, {
+      courseId: session.metadata.course,
+    });
     const paymentDetails: PaymentBill = {
+      txnId: session_id,
       user: user,
       course: course,
-      price: session.line_items.data[0].price,
+      price: course.price,
     };
     return paymentDetails;
   }

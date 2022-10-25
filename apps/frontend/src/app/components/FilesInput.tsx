@@ -1,7 +1,6 @@
 import { BlockBlobClient } from '@azure/storage-blob';
 import {
   DeleteOutlined,
-  Description,
   DescriptionOutlined,
   PhotoOutlined,
   PictureAsPdfOutlined,
@@ -32,11 +31,12 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { Component, ContextType, useEffect, useRef, useState } from 'react';
-import { useList } from 'react-use';
-import { StorageContext, useStorage } from './StorageProvider';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { Component, ContextType, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useList } from 'react-use';
 import { useAuth } from './Auth';
+import { StorageContext, useStorage } from './StorageProvider';
 
 function formatBytes(bytes: number, decimals: number) {
   if (bytes == 0) return '0 Bytes';
@@ -75,11 +75,15 @@ function getExtensionColor(r: string) {
 
 function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(props.value);
+  const [value, setValue] = useState<any>();
 
   const handleClose = () => setOpen(false);
   const isVideo = props.mime?.startsWith('video');
   const isPdf = props.mime === 'application/pdf';
+
+  useEffect(() => {
+    setValue(props.value);
+  }, [props.value]);
 
   return (
     <>
@@ -97,79 +101,86 @@ function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
         </DialogTitle>
         <DialogContent>
           <table style={{ lineHeight: 1 }}>
-            <tr>
-              <td>Disable Downloading&nbsp; &nbsp;</td>
-              <td>
-                <RadioGroup
-                  row={true}
-                  onChange={(r) => {
-                    setValue((e: any) => ({ ...e, down: r.target.value }));
-                  }}
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio defaultChecked />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </td>
-            </tr>
-            <tr style={{ opacity: isVideo || isPdf ? 1 : '.3' }}>
-              <td>
-                Watermark &nbsp; &nbsp;
-                <br /> <small>video / pdf</small>
-              </td>
-              <td>
-                <RadioGroup
-                  row={true}
-                  onChange={(r) => {
-                    setValue((e: any) => ({ ...e, down: r.target.value }));
-                  }}
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio defaultChecked />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </td>
-            </tr>
-            <tr style={{ opacity: isVideo ? 1 : '.3' }}>
-              <td>
-                No Screen Capture
-                <br /> <small>video </small>
-              </td>
-              <td>
-                <RadioGroup
-                  row={true}
-                  onChange={(r) => {
-                    setValue((e: any) => ({ ...e, sc: r.target.value }));
-                  }}
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio defaultChecked />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </td>
-            </tr>
-            <tr style={{ opacity: isVideo ? 1 : '.3' }}>
+            <tbody>
+              <tr>
+                <td>Disable Downloading&nbsp; &nbsp;</td>
+                <td>
+                  <RadioGroup
+                    row={true}
+                    value={value?.down}
+                    onChange={(r) => {
+                      setValue((e: any) => ({ ...e, down: r.target.value }));
+                    }}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </td>
+              </tr>
+              <tr style={{ opacity: isVideo || isPdf ? 1 : '.3' }}>
+                <td>
+                  Watermark &nbsp; &nbsp;
+                  <br /> <small>video / pdf</small>
+                </td>
+                <td>
+                  <RadioGroup
+                    row={true}
+                    value={value?.watermark}
+                    onChange={(r) => {
+                      setValue((e: any) => ({
+                        ...e,
+                        watermark: r.target.value,
+                      }));
+                    }}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </td>
+              </tr>
+              <tr style={{ opacity: isVideo ? 1 : '.3' }}>
+                <td>
+                  No Screen Capture
+                  <br /> <small>video </small>
+                </td>
+                <td>
+                  <RadioGroup
+                    row={true}
+                    value={value?.sc}
+                    onChange={(r) => {
+                      setValue((e: any) => ({ ...e, sc: r.target.value }));
+                    }}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </td>
+              </tr>
+              {/* <tr style={{ opacity: isVideo ? 1 : '.3' }}>
               <td>
                 Verified Media Path <br /> <small>video</small>
               </td>
@@ -192,7 +203,8 @@ function AssetOptions(props: { onChange?: any; value?: any; mime?: string }) {
                   />
                 </RadioGroup>
               </td>
-            </tr>
+            </tr> */}
+            </tbody>
           </table>
 
           {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
@@ -249,7 +261,7 @@ async function addWatermark(url: string, watermark: string) {
   return pdfDataURL;
 }
 
-function AssetView(props: { url?: any; name: string }) {
+function AssetView(props: { url?: any; name: string; path?: string }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [blobURL, setBlobURL] = useState<string>(null!);
@@ -259,20 +271,23 @@ function AssetView(props: { url?: any; name: string }) {
     if (['pdf'].includes(ext.toLowerCase())) {
       setOpen(true);
     } else {
-      window.open(props.url, '_blank')?.focus();
+      window.open(props.path, '_blank')?.focus();
     }
   };
 
   useEffect(() => {
-    const processedBlob = async () => {
-      const data = await addWatermark(
-        props.url,
-        `${user?.email}\n${new Date().toLocaleString()}`
-      );
-      setBlobURL(() => data);
-    };
+    const ext = getExtension(props.name);
+    if (['pdf'].includes(ext.toLowerCase())) {
+      const processedBlob = async () => {
+        const data = await addWatermark(
+          props.path!,
+          `${user?.email}\n${new Date().toLocaleString()}`
+        );
+        setBlobURL(() => data);
+      };
 
-    processedBlob().catch(console.log);
+      processedBlob().catch(console.log);
+    }
   }, [props]);
 
   const handleClose = () => setOpen(false);
@@ -329,6 +344,7 @@ export class FileItemComp extends Component<
     handleRemove: any;
     updateItem: any;
     fileActions: boolean;
+    showSettings?: boolean;
     removeType: 'replace' | 'delete';
   },
   {
@@ -355,6 +371,7 @@ export class FileItemComp extends Component<
       this.started = true;
       const blockBlobClient: BlockBlobClient =
         this.context.containerClient?.getBlockBlobClient(
+          // TODO : add a random Prefix ?
           this.props.fileItem.file.name
         );
 
@@ -367,7 +384,7 @@ export class FileItemComp extends Component<
           onProgress: (e) => {
             this.setState({
               progress: Math.round(
-                (e.loadedBytes / this.props.fileItem.file.size) * 100
+                (e.loadedBytes / this.props.fileItem.size) * 100
               ),
             });
           },
@@ -376,6 +393,7 @@ export class FileItemComp extends Component<
           blockBlobClient.setHTTPHeaders({
             blobContentDisposition: 'inline;',
             blobContentType: this.props.fileItem.mime,
+            blobCacheControl: 'public, max-age=604800, immutable',
           })
         )
         .then((_) => {
@@ -387,7 +405,7 @@ export class FileItemComp extends Component<
   override render() {
     const { progress } = this.state;
     const {
-      fileItem: { uploading, size, name, url, mime, config },
+      fileItem: { uploading, size, name, url, mime, config, path },
       handleRemove,
       fileActions,
     } = this.props;
@@ -431,21 +449,28 @@ export class FileItemComp extends Component<
         dense
         secondaryAction={
           fileActions && (
-            <Box>
-              <AssetOptions
-                value={config}
-                mime={mime}
-                onChange={(config: any) => this.props.updateItem({ config })}
-              />
-              {this.props.removeType === 'delete' ? (
-                <IconButton edge="end" color="error" onClick={handleRemove}>
-                  <DeleteOutlined />
-                </IconButton>
-              ) : (
+            <Box
+              sx={{
+                backgroundColor: (t) =>
+                  t.palette.mode === 'light' ? 'white' : 'black',
+              }}
+            >
+              {this.props.showSettings && (
+                <AssetOptions
+                  value={config}
+                  mime={mime}
+                  onChange={(config: any) => this.props.updateItem({ config })}
+                />
+              )}
+              {/* {this.props.removeType === 'delete' ? ( */}
+              <IconButton edge="end" color="error" onClick={handleRemove}>
+                <DeleteOutlined />
+              </IconButton>
+              {/* ) : (  
                 <Button onClick={handleRemove} color="secondary">
                   Replace
                 </Button>
-              )}
+                )} */}
             </Box>
           )
         }
@@ -463,7 +488,7 @@ export class FileItemComp extends Component<
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary={<AssetView name={name} url={url} />}
+          primary={<AssetView name={name} path={path} />}
           secondary={uploading ? <UploadIndicator /> : <FileInfo />}
         />
       </SwitchedListItem>
@@ -476,6 +501,7 @@ type FileItem = {
   name: string;
   file: File;
   url?: string;
+  path?: string;
   mime: string;
   size: number;
   config: any;
@@ -487,52 +513,80 @@ type FileInputProps = {
   onBlur?: any;
   onPreviewChange?: any;
   name?: string;
+  showSettings?: boolean;
   accept?: string;
   value?: FileItem[] | FileItem;
   viewOnly?: boolean;
 };
 
-function FilesInput({
-  multiple,
-  viewOnly,
-  onChange,
-  value,
-  accept,
-}: FileInputProps) {
-  const [files, { updateAt, push, removeAt, set }] = useList<FileItem>(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    multiple ? (value ? value : []) : value ? [value] : []
-  );
+function FilesInput(props: FileInputProps) {
+  const { multiple, viewOnly, onChange, value, accept } = props;
+  const [files, setFiles] = useState<FileItem[]>([]);
+
+  const [valueSet, setValueSet] = useState(false);
+
   const fileInputElement = useRef<HTMLInputElement>(null);
   const storage = useStorage();
 
-  useEffect(() => {
+  const change = (updatedFiles: FileItem[]) => {
     if (onChange && !viewOnly) {
-      onChange(multiple ? files : files[0]);
+      onChange(multiple ? updatedFiles : updatedFiles[0]);
     }
+  };
+
+  useEffect(() => {
+    change(files);
   }, [files]);
 
   useEffect(() => {
-    if (viewOnly) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      set(multiple ? (value ? value : []) : value ? [value] : []);
+    if (value && valueSet === false) {
+      if (multiple) {
+        setFiles((value ? value : []) as FileItem[]);
+      } else {
+        setFiles(value ? [value as FileItem] : []);
+      }
+      setValueSet(true);
     }
   }, [value]);
 
   const onFileChange = (fileInput: any) => {
-    for (const file of fileInput.files) {
-      push({
-        name: file.name,
-        file,
-        size: file.size,
-        uploading: true,
-        mime: file.type,
-        config: {},
-      });
-    }
-    fileInput.value = null;
+    setFiles((crr) => {
+      const newFiles = [];
+
+      for (const file of fileInput.files) {
+        newFiles.push({
+          name: file.name,
+          file,
+          size: file.size,
+          uploading: true,
+          mime: file.type,
+          config: {},
+        });
+      }
+
+      fileInput.value = null;
+      const updatedFiles = [...crr, ...newFiles];
+      return updatedFiles;
+    });
+  };
+
+  const onFileUpdate = (index: number, data: FileItem) => {
+    setFiles((crr) => {
+      const updatedFiles = [...crr];
+      updatedFiles.splice(index, 1, data);
+      console.log(updatedFiles);
+      return updatedFiles;
+    });
+  };
+
+  const onFileRemove = (index: number) => {
+    setFiles((crr) => {
+      const updatedFiles = [...crr];
+      updatedFiles.splice(index, 1);
+      return updatedFiles;
+    });
+
+    if (!multiple) addFiles();
   };
 
   const addFiles = () => fileInputElement.current?.click();
@@ -545,12 +599,10 @@ function FilesInput({
             <FileItemComp
               key={index}
               fileItem={file}
-              handleRemove={() => {
-                removeAt(index);
-                if (!multiple) addFiles();
-              }}
+              showSettings={props.showSettings}
+              handleRemove={() => onFileRemove(index)}
               fileActions={!viewOnly}
-              updateItem={(c: any) => updateAt(index, { ...file, ...c })}
+              updateItem={(c: any) => onFileUpdate(index, { ...file, ...c })}
               removeType={multiple ? 'delete' : 'replace'}
             />
           ))}

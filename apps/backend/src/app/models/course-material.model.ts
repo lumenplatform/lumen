@@ -1,5 +1,6 @@
 import {
   Cascade,
+  Collection,
   Entity,
   ManyToOne,
   OneToMany,
@@ -44,7 +45,7 @@ export class CourseMaterial {
     eager: true,
     orderBy: { order: 1 },
   })
-  topics?: CourseMaterial[];
+  topics?: Collection<CourseMaterial>
 
   @ManyToOne({ entity: () => CourseMaterial, nullable: true, hidden: true })
   parent?: CourseMaterial;
@@ -61,4 +62,12 @@ export class CourseMaterial {
     cascade: [Cascade.ALL],
   })
   resources?: CourseResource[];
+
+  @Property({ persist: false })
+  get totalTime() {
+    if (this.topics) {
+      return this.topics?.getItems(true).reduce((p, c) => p + c.timeEstimate, 0);
+    }
+    return 0;
+  }
 }

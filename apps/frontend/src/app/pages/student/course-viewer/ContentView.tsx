@@ -1,7 +1,11 @@
-import { Box, Typography } from '@mui/material';
-import { useQuery } from 'react-query';
+import { Box, Button, Stack, Typography } from '@mui/material';
+import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getCourseById, getCourseMaterial } from '../../../api';
+import {
+  getCourseById,
+  getCourseMaterial,
+  markTopicAsCompleted,
+} from '../../../api';
 import FilesInput from '../../../components/FilesInput';
 import VideoPlayer from '../../../components/VideoPlayer';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -12,6 +16,9 @@ export default function ContentView() {
   const { courseId, sectionId, topicId } = useParams();
   const { data } = useQuery('mat', () => getCourseMaterial(courseId!));
   const { data: course } = useQuery('course', () => getCourseById(courseId!));
+  const completionMutation = useMutation(() =>
+    markTopicAsCompleted(courseId!, topicId!)
+  );
 
   const section = data?.filter((r: any) => r.id === sectionId)[0];
   const topic = section?.topics.filter((r: any) => r.id === topicId)[0];
@@ -56,7 +63,17 @@ export default function ContentView() {
               dangerouslySetInnerHTML={{ __html: topic.article }}
             />
           )}
+          <Stack direction="row" justifyContent='end'>
+            <Button
+              variant="outlined"
+              disabled={completionMutation.isLoading}
+              onClick={() => completionMutation.mutate()}
+            >
+              Mark as Completed
+            </Button>
+          </Stack>
         </Box>
+
         <Typography my={1} variant="body1" fontWeight={600}>
           Description / Notes
         </Typography>
