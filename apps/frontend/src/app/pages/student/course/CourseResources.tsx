@@ -9,11 +9,11 @@ import FileIcon from '@mui/icons-material/PictureAsPdfRounded';
 import AudioIcon from '@mui/icons-material/AudioFileRounded';
 import LinkIcon from '@mui/icons-material/LinkRounded';
 import { alpha } from '@mui/system';
-import { ListItemText, Typography } from '@mui/material';
+import { Box, ListItemText, Typography } from '@mui/material';
 import {useTheme} from '@mui/material';
 
 const courseMaterials = [{
-  topic: "Week_1",
+  topic: "Section 1",
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
   items: [
     {
@@ -21,48 +21,38 @@ const courseMaterials = [{
       resources: [{
         type: "video",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
+        title: "Problem Set 1 Explanation",
         checked: false,
       },
-      {
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }
+      
       ]
     },
     {
       item_topic: "all",
       resources: [{
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }, {
         type: "video",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: true,
-      },
-      {
-        type: "file",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "File 1",
-        checked: true,
+        title: "Problem Set 2 Explanation",
+        checked: false,
+      },  
+        {
+          type: "file",
+          url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          title: "Reference Book",
+          checked: true,
       }
         ,
       {
         type: "link",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Link 1",
+        title: "Web Activity",
         checked: false,
       }
       ]
     }
   ]
 }, {
-  topic: "Week_2",
+  topic: "Section 2",
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolorsit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,sit amet blandit leo lobortis eget.",
   items: [
     {
@@ -70,41 +60,31 @@ const courseMaterials = [{
       resources: [{
         type: "video",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
+        title: "Problem Set 3 Explanation",
         checked: false,
       },
-      {
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }
+      
       ]
     },
     {
       item_topic: "all",
       resources: [{
-        type: "audio",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Audio 1",
-        checked: false,
-      }, {
         type: "video",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Video 1",
-        checked: true,
-      },
-      {
-        type: "file",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "File 1",
-        checked: true,
+        title: "Problem Set 4 Explanation",
+        checked: false,
+      },  
+        {
+          type: "file",
+          url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          title: "Reference Book",
+          checked: true,
       }
         ,
       {
         type: "link",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Link 1",
+        title: "Web Activity",
         checked: false,
       }
       ]
@@ -114,13 +94,13 @@ const courseMaterials = [{
 
 function CourseResources() {
   return (
-    <List>
+    <Box sx={{p:2}}>
       {
         courseMaterials.map((material) => (
           <CourseMaterialTopics topic={material.topic} description={material.description} items={material.items} />
         ))
       }
-    </List>
+    </Box>
   );
 }
 
@@ -130,10 +110,8 @@ function CourseMaterialTopics(props: any) {
 
   return (
     <>
-      <ListItem>
-        <ListItemText disableTypography primary={<Typography variant="h6">{props.topic}</Typography>} />
-      </ListItem>
-      <List disablePadding>
+      <Typography variant="h6">{props.topic}</Typography>
+      <List  >
         {
           resources.map((item:any) => (
             <ResourceItem item = {item} />
@@ -156,7 +134,7 @@ function ResourceItem(props: any) {
   else if (props.item.type === "file")
     icon = <FileIcon color="action" />;
   return (
-    <ListItem sx={{pl: 6,ml:6, py: 1.2 ,mb: 0.5, borderRadius: 2 , background: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity)}}>
+    <ListItem sx={{ borderRadius: 2 , my:1,background: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity)}}>
       <ListItemIcon>
         <Badge color="primary" variant="dot" invisible={props.item.checked}>
           {icon}

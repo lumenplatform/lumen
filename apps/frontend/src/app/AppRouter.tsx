@@ -11,8 +11,10 @@ import Dashboard from './pages/management/Dashboard';
 import ExamPage from './pages/management/exam/ExamPage';
 import Users from './pages/management/Users';
 import NotFound from './pages/NotFound';
+import Notification from './pages/Notification/AllNotification';
 import ForInstructors from './pages/public/ForInstructors';
 import HomePage from './pages/public/HomePage';
+import SearchPage from './pages/public/SearchPage';
 import ContentView from './pages/student/course-viewer/ContentView';
 import CourseViewer from './pages/student/course-viewer/CourseViewer';
 import AssignmentGrades from './pages/student/course/AssignmentGrades';
@@ -23,14 +25,14 @@ import CourseResources from './pages/student/course/CourseResources';
 import FileUpload from './pages/student/course/FileUpload';
 import SubmissionStatus from './pages/student/course/SubmissionStatus';
 import CoursePage from './pages/student/CoursePage';
-import SearchPage from './pages/student/SearchPage';
 import StudentHome from './pages/student/StudentHome';
 import UserProfile from './pages/UserProfile';
-import Notification from './pages/Notification/AllNotification';
 import QuizPage from './pages/student/quiz/QuizPage';
 import AttemptQuizPage from './pages/student/quiz/QuizAttemptPage';
 import QuizResultPage from './pages/student/quiz/QuizResultPage';
 import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
+import ContactUs from './pages/contactUs';
+import Privacy from './pages/privacy';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -47,7 +49,10 @@ export default function () {
       <Route path="/" element={<HomePage />} />
       <Route path="/teaching" element={<ForInstructors />} />
       <Route path="/courses" element={<SearchPage />} />
-      <Route path="/courses/:courseId" element={<Enroll />}></Route>
+      <Route path="/courses/:courseId" element={<Enroll />} />
+      <Route path="/contact" element={<ContactUs />} /> 
+      <Route path='/privacy' element={<Privacy />} />
+      
 
       {/* Pages accessed by the student */}
       <Route element={<ProtectedPage userRole="student" />}>

@@ -9,7 +9,7 @@ import { EmailTemplate } from '../services/mail/email-types';
 import { MailJetService } from '../services/mail/mailjet.service';
 import { StripePaymentService } from '../services/payment.service';
 import { quizRouter } from './../routes/quiz.router';
-import { createResponse } from './../utils/response-mapper';
+import { createResponse, sendJSON } from './../utils/response-mapper';
 
 export const coursesRouter = express.Router();
 
@@ -29,8 +29,20 @@ coursesRouter.get('/', async (req, res) => {
   res.json(createResponse(courses));
 });
 
-// get enrolled courses
-coursesRouter.get('/enrolled');
+coursesRouter.get('/enrolled', async (req, res, next) => {
+  courseController
+    .getEnrolledCourses(req.user.uid)
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+coursesRouter.get('/recommended', async (req, res, next) => {
+  courseController
+    .getRecommendedCourses(req.user.uid)
+    .then(sendJSON(res))
+    .catch(next);
+});
+
 coursesRouter.get('/testemail4', async (req, res, next) => {
   const course = await RequestContext.getEntityManager().find(Course,{},{limit:1}).then(r=>r[0])
   mailService.sendMail('sumuduwathsala80@gmail.com',{template:EmailTemplate.COURSE_COMPLETION,data:{course}}).then(k=>res.json(k))
@@ -105,9 +117,9 @@ coursesRouter.get('/:id/material', (req, res, next) => {
 
 coursesRouter.post('/:id/enroll', (req, res, next) => {
   courseController
-    .enroll(req, req.user, req.params.id)
+    .enroll(req, req.user.uid, req.params.id)
     .then((result) => {
-      res.redirect(303, result);
+      res.json(createResponse({ paymentUrl: result }));
     })
     .catch(next);
 });
@@ -116,8 +128,31 @@ coursesRouter.get('/:id/enroll/success', (req, res, next) => {
   courseController
     .enrollSuccess(req.query.session_id)
     .then((result) => {
+      // give the front end url to redirect to
       res.redirect(result);
     })
+    .catch(next);
+});
+
+coursesRouter.post('/:id/complete-topic/:topicId', (req, res, next) => {
+  courseController
+    .markTopicAsCompleted(req.user.uid, req.params.id, req.params.topicId)
+    .then(sendJSON(res))
+    .catch(next);
+});
+
+//course status update
+coursesRouter.get('/current', (req, res, next) => {
+  courseController
+    .getCourseByID(req.user.uid)
+    .then(sendJSON(res, 200))
+    .catch(next);
+});
+
+coursesRouter.post('/current', (req, res, next) => {
+  courseController
+    .updateCourseInformation(req.user.uid, req.body)
+    .then(sendJSON(res, 200))
     .catch(next);
 });
 

@@ -13,6 +13,18 @@ import { Box } from '@mui/system';
 import FilesInput from '../../../../components/FilesInput';
 import { Controller, useFormContext } from 'react-hook-form';
 
+const subjectsList = [
+  'Business',
+  'Computer Science',
+  'Data Science',
+  'Health',
+  'Information Technology',
+  'Math and Logic',
+  'Physical Science and Engineering',
+];
+const levelsList = ['Beginner', 'Intermediate', 'Expert'];
+const languageList = ['English', 'Sinhala', 'Mandarin', 'Hindi', 'Spanish'];
+
 export function CourseLandingPage() {
   const {
     register,
@@ -98,9 +110,11 @@ export function CourseLandingPage() {
                     onChange={field.onChange}
                     value={field.value || ''}
                   >
-                    <MenuItem value="English">English</MenuItem>
-                    <MenuItem value="Spanish">Spanish</MenuItem>
-                    <MenuItem value="Sinhala">Sinhala</MenuItem>
+                    {languageList.map((language) => (
+                      <MenuItem key={language} value={language}>
+                        {language}
+                      </MenuItem>
+                    ))}
                   </Select>
                 )}
               />
@@ -120,9 +134,11 @@ export function CourseLandingPage() {
                     onBlur={field.onBlur}
                     value={field.value || ''}
                   >
-                    <MenuItem value="Beginner">Beginner </MenuItem>
-                    <MenuItem value="Intermediate">Intermediate </MenuItem>
-                    <MenuItem value="Expert">Expert </MenuItem>
+                    {levelsList.map((level) => (
+                      <MenuItem key={level} value={level}>
+                        {level}
+                      </MenuItem>
+                    ))}
                   </Select>
                 )}
               />
@@ -141,11 +157,11 @@ export function CourseLandingPage() {
                     onBlur={field.onBlur}
                     value={field.value || ''}
                   >
-                    <MenuItem value={'Computer Science'}>
-                      Computer Science
-                    </MenuItem>
-                    <MenuItem value={'Physics'}>Physics</MenuItem>
-                    <MenuItem value={'Mathematics'}>Mathematics</MenuItem>
+                    {subjectsList.map((subject) => (
+                      <MenuItem key={subject} value={subject}>
+                        {subject}
+                      </MenuItem>
+                    ))}
                   </Select>
                 )}
               />

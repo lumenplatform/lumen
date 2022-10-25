@@ -15,19 +15,27 @@ export default function TeacherHero() {
             justifyContent: 'center',
           }}
         >
-          <Typography variant="h2" fontWeight={600} my={3}>
-            Secure <br></br>Course Delivery Platform
+          <Typography variant="h3" fontWeight={600} mt={3}>
+            The Secure <br></br>Course Delivery Platform
+          </Typography>
+          <Typography variant="body1" mb={3} mt={1}>
+            Advanced Protection For Your Content
           </Typography>
           <Box>
             <Button
               variant="contained"
               onClick={() => navigate('/manage')}
+              disableElevation
             >
               Start Teaching
             </Button>
           </Box>
         </Box>
-        <img src="/assets/images/illustration_3.png" alt='' style={{ width: '50%' }} />
+        <img
+          src="/assets/images/illustration_3.png"
+          alt=""
+          style={{ width: '50%' }}
+        />
       </Box>
     </Container>
   );

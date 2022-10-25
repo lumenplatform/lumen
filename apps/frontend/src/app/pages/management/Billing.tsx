@@ -1,89 +1,65 @@
+import { PaymentsOutlined } from '@mui/icons-material';
+import { Button, Stack, Tab, Tabs, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import * as React from 'react';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { useState } from 'react';
+import CourseFees  from './billing/CourseFees';
+import React from 'react';
+import Pagination from '@mui/material/Pagination';
+
+
 
 export default function Billing() {
+  const [value, setValue] = useState(0);
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+
+  const y = 5;
+  };
+
+  
+
   return (
-    <Box>
-      <Box sx={{ marginBottom: 7 }}>
-        <Typography variant="h4">Billing and Payments</Typography>
-      </Box>
+    <Box sx={{ p: 3 }}>
+      <Stack direction="row" alignItems="center">
+        <PaymentsOutlined />
+        <Typography ml={1} variant="h6">
+          Billing
+        </Typography>
+      </Stack>
+      <Typography my={1} variant="subtitle2">
+        Summery
+      </Typography>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Income</Typography>
-      </Box>
+      <Stack direction={'row'} justifyContent='space-between' alignItems='center'>
+        <Box>
+          <Typography>
+            Account Balance : <b>$62.00</b>
+          </Typography>
+          <Box>
+            Plan : <b>Basic</b> <Button size="small">Change</Button>
+          </Box>
+        </Box>
+        <Button variant='contained' disableElevation>Withdraw</Button>
+      </Stack>
 
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Student Email</TableCell>
-              <TableCell>Transaction Amount</TableCell>
-              <TableCell>Transaction Date</TableCell>
-              <TableCell>Transaction Time</TableCell>
-            </TableRow>
-          </TableHead>
+      <Typography mt={1} mb={0} variant="subtitle2">
+        Transactions
+      </Typography>
 
-          <TableRow>
-            <TableCell>blajbalba</TableCell>
-            <TableCell>7498729</TableCell>
-            <TableCell>201564684</TableCell>
-            <TableCell>nfianoiwn</TableCell>
-          </TableRow>
+      <Tabs sx={{ mb: 1 }} value={value} onChange={handleChange}>
+        <Tab label="Course Fees" />
+        <Tab label="Enrollment Charges" />
+        <Tab label="Withdrawals / Payments" />
+      </Tabs>
 
-          <TableRow>
-            <TableCell>blajbalba</TableCell>
-            <TableCell>7498729</TableCell>
-            <TableCell>201564684</TableCell>
-            <TableCell>nfianoiwn</TableCell>
-          </TableRow>
-        </Table>
-      </TableContainer>
+      {value === 0 && <CourseFees />}
 
-      <Box sx={{ mt: 5, mb: 3 }}>
-        <Typography variant="h6">Expenses</Typography>
-      </Box>
-
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Student Email</TableCell>
-              <TableCell>Transaction Amount</TableCell>
-              <TableCell>Transaction Date</TableCell>
-              <TableCell>Transaction Time</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableRow>
-            <TableCell>blajbalba</TableCell>
-            <TableCell>7498729</TableCell>
-            <TableCell>201564684</TableCell>
-            <TableCell>nfianoiwn</TableCell>
-          </TableRow>
-
-          <TableRow>
-            <TableCell>blajbalba</TableCell>
-            <TableCell>7498729</TableCell>
-            <TableCell>201564684</TableCell>
-            <TableCell>nfianoiwn</TableCell>
-          </TableRow>
-
-          <TableRow>
-            <TableCell>blajbalba</TableCell>
-            <TableCell>7498729</TableCell>
-            <TableCell>201564684</TableCell>
-            <TableCell>nfianoiwn</TableCell>
-          </TableRow>
-        </Table>
-      </TableContainer>
+         
     </Box>
   );
 }

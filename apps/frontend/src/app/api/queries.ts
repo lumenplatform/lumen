@@ -59,6 +59,24 @@ export function getCourseMaterial(id: string) {
   return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
 }
 
+ 
+export function getCourseReview(id: string) {
+  return client.get<any>(`/courses/${id}/reviews`).then((r) => r.data.data);
+}
+
+export function getEnrolledCourses() {
+  return client.get<any>('/courses/enrolled').then((r) => r.data.data);
+}
+
+export function getRecommendedCourses() {
+  return client.get<any>('/courses/recommended').then((r) => r.data.data);
+}
+
+export function markTopicAsCompleted(courseId: string, topicId: string) {
+  return client.post(`/courses/${courseId}/complete-topic/${topicId}`);
+ 
+}
+
 // MANAGEMENT
 export function createNewCourse(data: any) {
   return client.post('/manage/courses', data, {});
@@ -70,8 +88,8 @@ export function updateCourse(data: any) {
     .then((r) => r.data.data);
 }
 
-export function getOrgCourses() {
-  return client.get<any>('/manage/courses/', {}).then((r) => r.data.data);
+export function getOrgCourses(searchQuery:any,publishStatus:any) {
+  return client.get<any>(`/manage/courses/?searchQuery=${searchQuery? searchQuery:''}&publishStatus=${publishStatus}`, {}).then((r) => r.data.data);
 }
 
 export function getOrgCoursesById(id: string) {
@@ -102,7 +120,23 @@ export function addInstrucotorsToCourse(data: any) {
 export function getPendingOrgInvitations() {
   return client.get('/manage/users/invites').then((r) => r.data.data);
 }
+
+export function getCurrentOrganization() {
+  return client.get('/org/current').then((r) => r.data.data);
+}
+
+export function updateCurrentOrganization(data: any) {
+  return client.post('/org/current', data).then((r) => r.data.data);
+}
+
+export function updateCourseStatus(data: any) {
+  return client.post(`/manage/courses/${data.courseId}/update-status`, data).then((r) => r.data.data);
+}
 // END MANAGEMENT
+
+export function enrollInCourse(id: string) {
+  return client.post(`/courses/${id}/enroll/`, {}).then((r) => r.data.data);
+}
 
 export function createNewQuiz(data: any) {
   return client
@@ -181,4 +215,14 @@ export function getQuizzesByCourseId(courseId: string) {
   return client
     .get<any>(`/manage/courses/${courseId}/quizzes`)
     .then((r) => r.data.data);
+}
+
+export function submitQuiz(data: any) {
+  return client
+    .post(`/courses/${data.courseId}/quiz/${data.quizId}/submit`, data)
+    .then((r) => r.data.data);
+}
+
+export function getPublicCourseEnrollments() {
+  return client.get<any>('/org//public-enrollments').then((r) => r.data.data);
 }

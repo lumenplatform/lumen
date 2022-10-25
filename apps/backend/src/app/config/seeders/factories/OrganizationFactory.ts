@@ -14,7 +14,7 @@ export class OrganizationFactory extends Factory<Organization> {
   definition(faker: Faker): Partial<Organization> {
     return {
       name: faker.company.companyName(),
-      customizations: {
+      theme: {
         logo: new AssetFactory(this.em_).makeOne(),
       },
     };

@@ -1,7 +1,8 @@
-import { Box, Button, Container, Typography, useTheme } from '@mui/material';
+import { Box, Button, Chip, Container, Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import { useSpring, animated, easings } from '@react-spring/web';
+import { InfoOutlined } from '@mui/icons-material';
 
 export function StudentHero() {
   const navigate = useNavigate();
@@ -77,13 +78,16 @@ export function StudentHero() {
               justifyContent: 'center',
             }}
           >
+            <Box>
+              {/* <Chip variant='outlined' icon={<InfoOutlined/>} clickable color='success'   label={'V1.0 Released. See What\'s New'} ></Chip> */}
+            </Box>
             <Typography variant="h2" fontWeight={600} my={3}>
               Learning, Reimagined.
             </Typography>
             <Typography mb={3}>
               Improve to your knowledge, wherever you are.
             </Typography>
-            <Box>
+            <Stack direction={'row'} spacing={2}>
               <Button
                 variant="contained"
                 // color="secondary"
@@ -93,7 +97,14 @@ export function StudentHero() {
               >
                 Get Started
               </Button>
-            </Box>
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={() => navigate('/courses')}
+              >
+                Explore
+              </Button>
+            </Stack>
           </Box>
           <Box>
             <Box

@@ -53,7 +53,7 @@ export default function QuizPage(props: any) {
   const [page, setPage] = React.useState<number>(0);
   const { mutate: submissionCompleteMutation, isSuccess: isQuizSubmitted, isLoading: isQuizSubmitting, isError: isQuizSubmitError } = useMutation(completeAttempt);
   const { mutate: submissionUpdateMutation } = useMutation(updateAttempt);
-  const submissionUpdateDebounce = useDebouncedCallback((data) => { submissionUpdateMutation(data) }, 5000);
+  const submissionUpdateDebounce = useDebouncedCallback((data:any) => { submissionUpdateMutation(data) }, 5000);
   const { courseId, quizId, attemptId } = useParams();
 
   const { seconds, minutes, hours, isRunning, restart } = useTimer({
