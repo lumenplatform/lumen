@@ -28,6 +28,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {
   addInstrucotorsToCourse,
+  deleteCourseInstructor,
   getOrgCoursesById,
   getOrgUsers,
 } from '../../../../api';
@@ -50,6 +51,10 @@ export default function CourseInstructors() {
   const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
     getOrgCoursesById(courseId ?? '')
   );
+  const handleDelete = (uid:string,courseId:string) => {
+    console.log("handleDelete");
+    deleteCourseInstructor(uid ?? '', courseId);
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -74,6 +79,7 @@ export default function CourseInstructors() {
                     variant="outlined"
                     color="secondary"
                     startIcon={<DeleteOutlineIcon />}
+                    onClick={()=>handleDelete(row.uid,courseId!)}
                   >
                     Remove
                   </Button>
@@ -154,7 +160,7 @@ function AddInstructorForm() {
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
           >
      
-            {orgUsers &&
+            {orgUsers && courseData.instructors &&
               orgUsers
                 .filter((r: any) =>
                  ! courseData.instructors.map((k: any) => k.uid).includes(r.uid)

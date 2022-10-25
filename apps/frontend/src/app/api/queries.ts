@@ -78,6 +78,11 @@ export function getOrgCoursesById(id: string) {
   return client.get<any>('/manage/courses/' + id, {}).then((r) => r.data.data);
 }
 
+export function deleteCourseInstructor(id: string, courseId: string) {
+  console.log('/manage/courses/'+courseId+'/instructors/'+id);
+  return client.delete<any>('/manage/courses/'+courseId+'/instructors/'+id, {}).then((r)=>r.data.data);
+}
+
 export function getOrgCourseUsers(id: string) {
   return client.get<any>('/manage/courses/'+id+'/users',{}).then((r)=>r.data.data);
 }

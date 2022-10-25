@@ -83,6 +83,24 @@ coursesRouter.post('/:id/instructors', async (req, res, next) => {
   // console.log(instructors[0]);
 });
 
+//delete instuctor from the course
+coursesRouter.delete('/:courseId/instructors/:uid', async (req, res, next) => {
+  const em = RequestContext.getEntityManager();
+  const courseId = req.params.courseId;
+  const instructorId = req.params.uid;
+
+  const course = await em.findOneOrFail(
+    Course,
+    { courseId },
+    { populate: ['instructors'] }
+  );
+
+  console.log(course.instructors);
+  console.log(instructorId);
+
+  return;
+});
+
 // get course details
 coursesRouter.get('/:id', (req, res, next) => {
   const em = RequestContext.getEntityManager();
