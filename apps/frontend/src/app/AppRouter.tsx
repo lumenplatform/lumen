@@ -9,7 +9,7 @@ import Courses from './pages/management/Courses';
 import Customizations from './pages/management/Customizations';
 import Dashboard from './pages/management/Dashboard';
 import ExamPage from './pages/management/exam/ExamPage';
-import Users from './pages/management/Users';
+import Users from './pages/management/Users'; 
 import NotFound from './pages/NotFound';
 import Notification from './pages/Notification/AllNotification';
 import ForInstructors from './pages/public/ForInstructors';
@@ -32,6 +32,12 @@ import AttemptQuizPage from './pages/student/quiz/QuizAttemptPage';
 import QuizResultPage from './pages/student/quiz/QuizResultPage';
 import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
 import CompleteCourse from './pages/student/course/CompleteCourse';
+import QuizMarking from './pages/management/exam/Marking'
+import Attempts from './pages/management/exam/Attempts';
+import Questions from './pages/management/exam/Questions';
+import AttemptMarking from './pages/management/exam/AttemptMarking';
+import MarkingAll from './pages/management/exam/MarkAll';
+import QuizReviewPage from './pages/student/quiz/QuizReview';
 import ContactUs from './pages/contactUs';
 import Privacy from './pages/privacy';
 
@@ -76,6 +82,7 @@ export default function () {
             <Route path=":quizId" element={<AttemptQuizPage />} />
             <Route path=":quizId/attempt/:attemptId" element={<QuizPage />} />
             <Route path=":quizId/attempt/:attemptId/results" element={<QuizResultPage />} />
+            <Route path=":quizId/attempt/:attemptId/review" element={<QuizReviewPage />} />
           </Route>
         </Route>
       </Route>
@@ -90,6 +97,12 @@ export default function () {
           <Route path="customize" element={<Customizations />}></Route>
           <Route path="courses/:courseId">
             <Route index element={<ManageCourse />} />
+            <Route path="exam/:examId/attempt/:attemptId" element={<QuizMarking/>} />
+            <Route path="exam/:examId/attempts" element={<Attempts />} />
+            <Route path="exam/:examId/questions" element={<Questions />} />
+            <Route path="exam/:examId/attemptMarking" element={<AttemptMarking />} />
+            <Route path="exam/:examId/question/:questionId/submission" element={<MarkingAll/>} />
+            <Route path="exam/:examId/question/:questionId/submission/:submissionId" element={<MarkingAll/>} />
           </Route>
         </Route>
         <Route path="/manage/courses/:courseId">

@@ -16,11 +16,12 @@ export type Questions = {
 }
 
 export default function ExamCreate(props: any) {
-    const { changeQuestions, examQuestions ,isAllQuestionsTimeBoxed} = props;
+    const { changeQuestions, examQuestions, isAllQuestionsTimeBoxed } = props;
     const [questions, setQuestions] = useState<Questions[]>([]);
 
     useEffect(() => {
-        changeQuestions(questions);
+        if (questions != examQuestions)
+            changeQuestions(questions);
     }, [questions]);
 
     if (examQuestions && examQuestions != questions && questions.length == 0) {
@@ -47,11 +48,13 @@ export default function ExamCreate(props: any) {
     }
 
     return (
-        <Box>
-            <List sx={{ display: 'flex',justifyContent:'center',alignItems:'center', flexDirection: 'column', width: '100%' }} >
+        <Box sx={{
+            display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'
+        }}>
+            <List sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '100%', maxWidth: 800 }} >
                 {questions.map((question, index) => (
                     <ListItem key={index} dense={true} autoFocus={true}>
-                        <Card sx={{ display: 'flex', flexDirection: 'column', width: '100%', py: 2, px: 3 ,mb:4}}>
+                        <Card sx={{ display: 'flex', flexDirection: 'column', width: '100%', py: 2, px: 3, mb: 4 }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Typography variant="subtitle2" sx={{ mx: 1, color: 'black' }}>
                                     Question {index + 1}
@@ -61,12 +64,12 @@ export default function ExamCreate(props: any) {
                                 </IconButton>
                             </Box>
                             {question.type === 'mcq' && <McqQuestion changeQuestion={handleQuestionChange} question={question} questionIndex={index} isTimeBoxed={isAllQuestionsTimeBoxed} />}
-                            {question.type === 'essay' && <EssayQuestion changeQuestion={handleQuestionChange} question={question} questionIndex={index} isTimeBoxed={isAllQuestionsTimeBoxed}/>}
+                            {question.type === 'essay' && <EssayQuestion changeQuestion={handleQuestionChange} question={question} questionIndex={index} isTimeBoxed={isAllQuestionsTimeBoxed} />}
                         </Card>
                     </ListItem>
                 ))}
             </List>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center',mb:4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 4 }}>
                 <AddLocationAltOutlinedIcon color="primary" sx={{ transform: 'rotate(-90deg)' }} />
                 <ButtonGroup variant="text" aria-label="text button group">
                     <Button onClick={() => handleAddQuestion('mcq')}>

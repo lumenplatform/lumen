@@ -1,15 +1,15 @@
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { CourseMaterial } from '../models/course-material.model';
-import { Course } from '../models/course.model';
+import { Course, CourseStatus } from '../models/course.model';
 import {
   CompletedTopic,
   Enrollment,
   EnrollmentStatus,
 } from '../models/enrollment.model';
+import { Quiz } from '../models/quiz.model';
 import { CourseReview } from '../models/review.mode';
 import { User } from '../models/user.model';
-import { Quiz } from '../models/quiz.model';
 import { CourseService } from '../services/course.service';
 import { MailService } from '../services/mail/email-types';
 import { PaymentService } from '../services/payment.service';
@@ -73,6 +73,8 @@ export class CourseController {
               $or: [{ title: { $like: `%${searchQuery}%` } }],
             }
           : {},
+        { settings: { isPrivate: 'NO' } },
+        { status: CourseStatus.PUBLISHED },
       ],
     };
 
@@ -85,25 +87,22 @@ export class CourseController {
 
     //chain Where if only title is true
     if (searchQuery) {
-      qb.andWhere(
+      qb.orWhere(
         "to_tsvector('english',c.title || ' ' || c.description || ' ' || o.name) @@ to_tsquery(?)",
         [titleWords.join(' | ')]
       );
     }
 
-    const courses = em.find(Course, parameters);
-    //console.log(courses);
+    const courses = await qb.execute();
     return courses;
   }
 
   async getCourseByID(id: string) {
     const em = RequestContext.getEntityManager();
-    return em
-      .findOneOrFail(Course, { courseId: id })
-      .then((r) => ({
-        ...r,
-        enrolledCount: em.count(Enrollment, { course: { courseId: id } }),
-      }));
+    return em.findOneOrFail(Course, { courseId: id }).then((r) => ({
+      ...r,
+      enrolledCount: em.count(Enrollment, { course: { courseId: id } }),
+    }));
   }
 
   async updateCourseInformation(courseId: string, data: Partial<Course>) {

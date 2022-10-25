@@ -89,6 +89,10 @@ export function McqQuestion(props: any) {
                     />
 
                     <TextField
+                        error={question.marks === ''}
+                        InputProps={{
+                            inputProps: { min: 0 },
+                        }}
                         size="small"
                         id="outlined-number"
                         label={

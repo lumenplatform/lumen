@@ -1,14 +1,20 @@
-import { RequestContext, t } from '@mikro-orm/core';
-import { emit } from 'process';
+import { RequestContext } from '@mikro-orm/core';
+import { v4 } from 'uuid';
 import { Asset } from '../models/asset.model';
 import { Course } from '../models/course.model';
-import { CompletedTopic, Enrollment } from '../models/enrollment.model';
+import {
+  CompletedTopic,
+  Enrollment,
+  EnrollmentType
+} from '../models/enrollment.model';
 import {
   BillingPlan,
   Organization,
-  OrgTheme,
+  OrgTheme
 } from '../models/organization.model';
+import { Payment } from '../models/payment.model';
 import { CourseReview } from '../models/review.mode';
+import { Withdrawal } from '../models/withdrawal.model';
 
 const sevenDaysAgo = () => {
   const date = new Date();
@@ -168,5 +174,59 @@ export class OrganizationService {
       ...(courseId ? { course: { courseId } } : null),
       enrollmentDate: { $gte: start, $lt: end },
     });
+  }
+  async getPublicCourseEnrollments(orgId: string) {
+    const em = RequestContext.getEntityManager();
+    const courseEnrollments = await em.find(
+      Enrollment,
+      {
+        $and: [
+          { course: { organization: { orgId: orgId } } },
+          { type: EnrollmentType.PUBLIC },
+        ],
+      },
+      { populate: ['payment', 'user', 'course'] }
+    );
+    return courseEnrollments;
+  }
+
+  async getPrivateCourseEnrollments(orgId: string) {
+    const em = RequestContext.getEntityManager();
+    const courseEnrollments = await em.find(
+      Enrollment,
+      {
+        $and: [
+          { course: { organization: { orgId: orgId } } },
+          { type: EnrollmentType.PRIVATE },
+        ],
+      },
+      { populate: ['payment', 'user', 'course'] }
+    );
+    return courseEnrollments;
+  }
+
+  async getWithdrawals(orgId: string) {
+    const em = RequestContext.getEntityManager();
+    const withdrawals = await em.find(
+      Withdrawal,
+      { organization: { orgId: orgId } },
+      { populate: ['payment'] }
+    );
+    return withdrawals;
+  }
+
+  async withdrawFunds(orgId: string, amount: number) {
+    const em = RequestContext.getEntityManager();
+    const org = await em.findOneOrFail(Organization, { orgId });
+    const payment = em.create(Payment, {
+      txnId: v4(),
+      amount: amount,
+    });
+    const withdrawal = em.create(Withdrawal, {
+      payment: payment,
+      organization: org,
+    });
+    await em.persistAndFlush(withdrawal);
+    return withdrawal;
   }
 }

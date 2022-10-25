@@ -9,3 +9,9 @@ export class NotFoundException extends ServerException {
     super(message, 404);
   }
 }
+
+export class ForbiddenException extends ServerException {
+  constructor(message: string) {
+    super(message, 403);
+  }
+}
