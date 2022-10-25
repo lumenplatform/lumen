@@ -1,51 +1,30 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Certificate from '../../../components/certification';
+import StudentHeader from '../../../components/StudentHeader';
+// import { getCourseById } from '../../../api';
 
-import Chip from '@mui/material/Chip';
-import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
-
-import Typography from '@mui/material/Typography';
-
-import { Skeleton, useTheme } from '@mui/material';
-
-import { useQuery } from 'react-query';
-import { Outlet, useParams } from 'react-router-dom';
-import { getCourseById } from '../../../api';
-
-
-
-export default function Certificate() {
-    const { courseId } = useParams();
-    const {
-        data: course,
-        isLoading,
-        isError,
-      } = useQuery(['courses', courseId], () => getCourseById(courseId!));
-    
-      if (isError || isLoading) {
-        return <Skeleton></Skeleton>;
-      }
+export default function CertificateDownload() {
+ 
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
-          xs=8
-        </Grid>
-        <Grid item xs={4}>
-          xs=4
-        </Grid>
-        <Grid item xs={4}>
-          xs=4
-        </Grid>
-        <Grid item xs={8}>
-          xs=8
-        </Grid>
-      </Grid>
-    </Box>
+
+    <><StudentHeader></StudentHeader>
+    <Grid container spacing={2}>
+          <Grid item xs={1} md={1}>
+
+          </Grid>
+          <Grid item xs={10} md={10}>
+              <Box sx={{}}>
+                  <Certificate />
+              </Box>
+          </Grid>
+          <Grid item xs={1} md={1}></Grid>
+
+          <Button variant="contained" sx={{ ml: 100, my: 3 }}>
+              Download
+          </Button>
+      </Grid></>
   );
 }
