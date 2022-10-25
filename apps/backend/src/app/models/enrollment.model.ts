@@ -47,7 +47,7 @@ export class Enrollment {
   status: EnrollmentStatus;
 
   @Enum(() => EnrollmentType)
-  type: EnrollmentType;
+  type = EnrollmentType.PUBLIC;
 
   @OneToMany(() => CourseReview, (review) => review.enrollment, {
     nullable: true,

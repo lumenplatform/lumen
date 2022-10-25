@@ -64,7 +64,7 @@ export class OrganizationService {
     const courseEnrollments = await em.find(
       Enrollment,
       { $and: [{ course: { organization: { orgId: orgId } } } , {type : EnrollmentType.PUBLIC}] },
-      { populate: ['payment'] }
+      { populate: ['payment' ,'user','course'] }
     );
     return courseEnrollments;
   }
@@ -74,7 +74,7 @@ export class OrganizationService {
     const courseEnrollments = await em.find(
       Enrollment,
       { $and: [{ course: { organization: { orgId: orgId } } } , {type : EnrollmentType.PRIVATE}] },
-      { populate: ['payment'] }
+      { populate: ['payment' ,'user','course'] }
     );
     return courseEnrollments;
   }
@@ -94,7 +94,7 @@ export class OrganizationService {
     const org = await em.findOneOrFail(Organization, { orgId });
     const payment = em.create(Payment, {
       txnId : v4(),
-      amount : -amount,
+      amount : amount,
     });
     const withdrawal = em.create(Withdrawal, {
       payment : payment,
