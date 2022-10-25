@@ -34,7 +34,7 @@ import {
 } from '../../../../api';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 //sample data array with objects containg username,email,enrolled date,course title
 const data = [
@@ -48,17 +48,16 @@ const data = [
 export default function CourseInstructors() {
   const theme = useTheme();
   const { courseId } = useParams();
-  const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
+  const { data: courseData, refetch } = useQuery('coures' + courseId, () =>
     getOrgCoursesById(courseId ?? '')
   );
-  const handleDelete = (uid:string,courseId:string) => {
-    console.log("handleDelete");
+  const handleDelete = (uid: string, courseId: string) => {
     deleteCourseInstructor(uid ?? '', courseId);
-  }
+  };
 
   return (
     <TableContainer component={Paper}>
-      <AddInstructorForm />
+      <AddInstructorForm refetchMain={refetch}/>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -79,7 +78,10 @@ export default function CourseInstructors() {
                     variant="outlined"
                     color="secondary"
                     startIcon={<DeleteOutlineIcon />}
-                    onClick={()=>handleDelete(row.uid,courseId!)}
+                    onClick={() => {
+                      handleDelete(row.uid, courseId!);
+                      refetch();
+                    }}
                   >
                     Remove
                   </Button>
@@ -101,19 +103,30 @@ export default function CourseInstructors() {
   );
 }
 
-function AddInstructorForm() {
+function AddInstructorForm(props:any) {
+  const { refetchMain} = props;
   const { courseId } = useParams();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
   };
   const [checked, setChecked] = useState([courseId]);
-  const { data: orgUsers } = useQuery('/manage/users', () => getOrgUsers());
+  const { data: orgUsers, refetch  } = useQuery('/manage/users', () =>
+    getOrgUsers()
+  );
 
-  const addInstructorMutation = useMutation(addInstrucotorsToCourse);
+  const {mutate:addInstructorMutation,isSuccess} = useMutation(addInstrucotorsToCourse);
   const { data: courseData } = useQuery('coures' + courseId, () =>
     getOrgCoursesById(courseId ?? '')
   );
+
+  useEffect(() => {
+    if(isSuccess){
+      refetchMain();
+      handleClose();
+    }
+  }, [isSuccess]);
+
   // console.log(orgUsers);
 
   // for(let i=0;i<orgUsers.length;i++)
@@ -159,11 +172,14 @@ function AddInstructorForm() {
             dense
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
           >
-     
-            {orgUsers && courseData.instructors &&
+            {orgUsers &&
+              courseData.instructors &&
               orgUsers
-                .filter((r: any) =>
-                 ! courseData.instructors.map((k: any) => k.uid).includes(r.uid)
+                .filter(
+                  (r: any) =>
+                    !courseData.instructors
+                      .map((k: any) => k.uid)
+                      .includes(r.uid)
                 )
                 .map((row: any) => {
                   const labelId = `checkbox-list-secondary-label-${row.uid}`;
@@ -202,7 +218,7 @@ function AddInstructorForm() {
             disabled={checked.length === 1}
             variant="contained"
             onClick={() => {
-              addInstructorMutation.mutate(checked);
+              addInstructorMutation(checked);
             }}
           >
             Add

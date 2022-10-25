@@ -95,10 +95,12 @@ coursesRouter.delete('/:courseId/instructors/:uid', async (req, res, next) => {
     { populate: ['instructors'] }
   );
 
-  console.log(course.instructors);
-  console.log(instructorId);
+  course.instructors.set(course.instructors.getItems().filter(r=>r.uid!=instructorId));
 
-  return;
+  em.persist(course);
+  await em.flush();
+  res.status(200).json(course);
+
 });
 
 // get course details
