@@ -35,6 +35,9 @@ export class Enrollment {
   @Property()
   enrollmentDate: Date;
 
+  @Property({ nullable: true })
+  completionDate?: Date;
+
   @ManyToOne(() => Payment)
   payment: Payment;
 

@@ -59,7 +59,6 @@ export function getCourseMaterial(id: string) {
   return client.get<any>(`/courses/${id}/material`).then((r) => r.data.data);
 }
 
- 
 export function getCourseReview(id: string) {
   return client.get<any>(`/courses/${id}/reviews`).then((r) => r.data.data);
 }
@@ -74,7 +73,6 @@ export function getRecommendedCourses() {
 
 export function markTopicAsCompleted(courseId: string, topicId: string) {
   return client.post(`/courses/${courseId}/complete-topic/${topicId}`);
- 
 }
 
 // MANAGEMENT
@@ -97,7 +95,9 @@ export function getOrgCoursesById(id: string) {
 }
 
 export function getOrgCourseUsers(id: string) {
-  return client.get<any>('/manage/courses/'+id+'/users',{}).then((r)=>r.data.data);
+  return client
+    .get<any>('/manage/courses/' + id + '/users', {})
+    .then((r) => r.data.data);
 }
 
 export function getOrgUsers() {
@@ -123,6 +123,14 @@ export function updateCurrentOrganization(data: any) {
 
 export function enrollInCourse(id: string) {
   return client.post(`/courses/${id}/enroll/`, {}).then((r) => r.data.data);
+}
+
+export function completeCourse(data: {
+  courseId: string;
+  review: string;
+  rating: number;
+}) {
+  return client.post(`/courses/${data.courseId}/complete-course`, data);
 }
 
 export function createNewQuiz(data: any) {

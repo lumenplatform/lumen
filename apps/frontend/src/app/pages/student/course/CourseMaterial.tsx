@@ -1,5 +1,8 @@
+import {
+  CheckCircle,
+  IndeterminateCheckBoxOutlined,
+} from '@mui/icons-material';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import OndemandVideoOutlined from '@mui/icons-material/OndemandVideoOutlined';
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
@@ -96,7 +99,20 @@ function CourseTopic(props: { sectionId: string; topic: any }) {
   const navigate = useNavigate();
 
   return (
-    <ListItem disablePadding secondaryAction={<CheckCircleOutlineIcon />}>
+    <ListItem
+      disablePadding
+      secondaryAction={
+        topic.completed   ? (
+          <Box sx={{ color: (t) => t.palette.success.main }}>
+            <CheckCircle />
+          </Box>
+        ) : (
+          <Box sx={{ opacity: 0.1 }}>
+            <IndeterminateCheckBoxOutlined />
+          </Box>
+        )
+      }
+    >
       <ListItemButton
         sx={{ py: 0 }}
         onClick={() =>

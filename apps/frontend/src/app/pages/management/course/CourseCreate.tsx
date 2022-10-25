@@ -97,13 +97,7 @@ export default function CourseCreate() {
     <FormProvider {...methods}>
       <Box>
         <Toolbar sx={{ borderBottom: 1, borderColor: theme.palette.divider }}>
-          <Button
-            startIcon={<ArrowBack />}
-            onClick={() => navigate('/manage/courses')}
-            color="inherit"
-          >
-            Back to Courses
-          </Button>
+           
           <Divider
             orientation="vertical"
             flexItem

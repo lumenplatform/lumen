@@ -84,11 +84,11 @@ export function CourseViewerNav({ topics }: { topics: any[] }) {
           {sectionIndex + 1} of {material.length}
         </small>
         <Stack direction="row" spacing={'6px'}>
-          {material.map((r: unknown, index: number) => (
+          {material.map((r: any, index: number) => (
             <Box sx={{ flex: '1' }} key={index}>
               <LinearProgress
                 variant="determinate"
-                value={sectionIndex === index ? 100 : 0}
+                value={r.completedPercent}
                 sx={{
                   background: theme.palette.grey[300],
                 }}
@@ -130,12 +130,13 @@ function ContentNavItem(props: { topic: any; index: number; viewed: boolean }) {
             ':hover': {
               backgroundColor: (theme) => theme.palette.background.default,
             },
+            opacity: topic.completed && !isActive ? 0.4 : 1,
           }}
         >
           <CircularProgressWithLabel
             variant="determinate"
             index={index}
-            value={viewed ? 100 : isActive ? 50 : 0}
+            value={topic.completed ? 100 : isActive ? 50 : 0}
           ></CircularProgressWithLabel>
 
           <Typography
