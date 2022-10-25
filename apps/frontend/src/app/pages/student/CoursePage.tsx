@@ -114,6 +114,11 @@ export default function CoursePage(props: any) {
     return <Skeleton></Skeleton>;
   }
 
+  const tt = material.reduce((p: number, c: any) => p + c.totalTime, 0);
+  const ct = material.reduce((p: number, c: any) => p + c.completedTotal, 0);
+
+  const comp = Math.round((ct/tt) * 10000) / 100;
+
   return (
     <div>
       <StudentHeader />
@@ -173,9 +178,9 @@ export default function CoursePage(props: any) {
           <Box sx={{ width: '240px', pr: 1 }}>
             <Box sx={{ ml: 1, mb: 3 }}>
               <Typography variant="body2" display={'flex'} flexDirection="row">
-                Course Progress <Box sx={{ flexGrow: 1 }}></Box>30%
+                Course Progress <Box sx={{ flexGrow: 1 }}></Box> {comp}%
               </Typography>
-              <LinearProgress sx={{ mt: 1 }} value={30} variant="determinate" />
+              <LinearProgress sx={{ mt: 1 }} value={comp} variant="determinate" />
             </Box>
             <CourseToC items={material.map((r: any) => ({ text: r.title }))} />
           </Box>
