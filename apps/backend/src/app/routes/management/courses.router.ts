@@ -24,19 +24,21 @@ const courseController = new CourseController(
 
 // list courses
 coursesRouter.get('/', (req, res, next) => {
-  const {searchQuery, publishStatus } = req.query as any;
+  const { searchQuery, publishStatus } = req.query as any;
   console.log(req.query);
   const em = RequestContext.getEntityManager();
+
   em.find(Course, {
     $and: [
-      searchQuery !='' ? { title: { $like: `%${searchQuery}%` } } : {},
-      publishStatus !='ALL' ? { status: publishStatus } : {},
+      searchQuery != '' ? { title: { $ilike: `%${searchQuery}%` } } : {},
+      publishStatus != 'ALL' ? { status: publishStatus } : {},
+      { organization: { orgId: req.user.orgId } },
     ],
   })
     .then((r) => {
       res.json(createResponse(r));
     })
-    .catch(next); 
+    .catch(next);
 });
 
 // // get all details about a course

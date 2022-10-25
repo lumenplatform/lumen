@@ -1,4 +1,5 @@
 import {
+  BookOnlineOutlined,
   EditOutlined,
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -176,7 +177,7 @@ function NoResults(props: any) {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <SchoolOutlinedIcon fontSize="large" />
-      <Typography variant="h6">No results found for "{props.value}"</Typography>
+      <Typography variant="h6">No Courses Found </Typography>
     </Stack>
   );
 }
@@ -244,177 +245,150 @@ export default function Users() {
   };
 
   return (
-    <div>
-      <Container>
-        <Box sx={{ display: 'flex', margin: '0 auto' }}>
-          <Box sx={{ flex: 1, mr: { sm: 0, md: 5, lg: 10 } }}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'center',
-                    mt: 0,
-                    mb: 4,
-                    width: { sm: '70%', md: '50%' },
-                  }}
-                >
-                  <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                  <TextField
-                    label="Search Courses"
-                    variant="standard"
-                    fullWidth
-                    color="primary"
-                    sx={{ mr: 3 }}
-                    defaultValue={params.searchQuery}
-                    value={params.searchQuery}
-                    onChange={(e) => handleSearchQuery(e)}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <paramsContext.Provider value={{ params, setParams }}>
-                  <Box>
-                    <ResponsiveDrawer />
-                  </Box>
-                </paramsContext.Provider>
-              </Grid>
-            </Grid>
+    <Box sx={{ p: 3 }}>
+      <Stack direction="row" alignItems="center">
+        <BookOnlineOutlined />
+        <Typography ml={1} variant="h6">
+          Your Courses
+        </Typography>
+        <Box flex={'1 1 0'}></Box>
+        <Button
+          variant="contained"
+          disableElevation
+          onClick={() => navigate('/manage/new-course')}
+        >
+          New Course
+        </Button>
+      </Stack>
 
-            <Stack
-              direction={'row'}
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography
-                variant="h5"
-                sx={{ my: theme.spacing(2) }}
-                component="div"
-              >
-                Courses
-              </Typography>
-              <Button
-                variant="contained"
-                onClick={() => navigate('/manage/new-course')}
-              >
-                New Course
-              </Button>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          my: 2,
+          width: { sm: '70%', md: '50%' },
+        }}
+      >
+        <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+        <TextField
+          label="Search Courses"
+          variant="standard"
+          fullWidth
+          color="primary"
+          sx={{ mr: 3 }}
+          defaultValue={params.searchQuery}
+          value={params.searchQuery}
+          onChange={(e) => handleSearchQuery(e)}
+        />
+        <paramsContext.Provider value={{ params, setParams }}>
+          <ResponsiveDrawer />
+        </paramsContext.Provider>
+      </Box>
+
+      <Grid>
+        {isLoading || isError || !data || isRefetchError || isRefetching ? (
+          [...Array(1).keys()].map((_) => (
+            <Stack spacing={1}>
+              <Skeleton width={800} height={40} />
             </Stack>
+          ))
+        ) : data.length > 0 ? (
+          <TableContainer>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ pl: theme.spacing(3) }}>Course</TableCell>
+                  {/* <TableCell>Enrolled</TableCell> */}
+                  <TableCell>Price</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
 
-            <Grid>
-              {isLoading ||
-              isError ||
-              !data ||
-              isRefetchError ||
-              isRefetching ? (
-                [...Array(1).keys()].map((_) => (
-                  <Stack spacing={1}>
-                    <Skeleton width={800} height={40} />
-                  </Stack>
-                ))
-              ) : data.length > 0 ? (
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell sx={{ pl: theme.spacing(3) }}>
-                          Course
-                        </TableCell>
-                        {/* <TableCell>Enrolled</TableCell> */}
-                        <TableCell>Price</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
+              {/* apply all here */}
 
-                    {/* apply all here */}
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? data.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : data
+                ).map((row: any) => (
+                  <TableRow key={row.title}>
+                    <TableCell sx={{ pl: theme.spacing(3) }}>
+                      <Typography variant="body2">{row.title}</Typography>
+                    </TableCell>
+                    <TableCell>{row.price}$</TableCell>
 
-                    <TableBody>
-                      {(rowsPerPage > 0
-                        ? data.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                          )
-                        : data
-                      ).map((row: any) => (
-                        <TableRow key={row.title}>
-                          <TableCell sx={{ pl: theme.spacing(3) }}>
-                            <Typography variant="body2">{row.title}</Typography>
-                          </TableCell>
-                          <TableCell>{row.price}$</TableCell>
+                    <TableCell>{draftChip(row.status)}</TableCell>
+                    {/* <TableCell><Chip label={status} color={status == 'PUBLISHED'?"warning":""} size="small" variant="outlined" /></TableCell> */}
 
-                          <TableCell>{draftChip(row.status)}</TableCell>
-                          {/* <TableCell><Chip label={status} color={status == 'PUBLISHED'?"warning":""} size="small" variant="outlined" /></TableCell> */}
-
-                          <TableCell>
-                            <Box
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                              }}
-                            >
-                              <Button
-                                startIcon={<RemoveRedEyeOutlinedIcon />}
-                                onClick={() => {
-                                  navigate(`/manage/courses/${row.courseId}`);
-                                }}
-                              >
-                                View
-                              </Button>
-                              &nbsp; | &nbsp;
-                              <Button
-                                startIcon={<EditOutlined />}
-                                onClick={() => {
-                                  navigate(
-                                    `/manage/courses/${row.courseId}/edit`
-                                  );
-                                }}
-                              >
-                                Edit
-                              </Button>
-                            </Box>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-
-                    <TableFooter>
-                      <TableRow>
-                        <TablePagination
-                          rowsPerPageOptions={[
-                            5,
-                            10,
-                            25,
-                            { label: 'All', value: -1 },
-                          ]}
-                          colSpan={3}
-                          count={data.length}
-                          rowsPerPage={rowsPerPage}
-                          page={page}
-                          SelectProps={{
-                            inputProps: {
-                              'aria-label': 'rows per page',
-                            },
-                            native: true,
+                    <TableCell>
+                      <Box
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Button
+                          startIcon={<RemoveRedEyeOutlinedIcon />}
+                          onClick={() => {
+                            navigate(`/manage/courses/${row.courseId}`);
                           }}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeRowsPerPage}
-                          ActionsComponent={TablePaginationActions}
-                        />
-                      </TableRow>
-                    </TableFooter>
-                  </Table>
-                </TableContainer>
-              ) : (
-                <Grid item xs={12} sm={6} md={6} lg={4}>
-                  <NoResults value={params.searchQuery} />
-                </Grid>
-              )}
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-    </div>
+                        >
+                          View
+                        </Button>
+                        &nbsp; | &nbsp;
+                        <Button
+                          startIcon={<EditOutlined />}
+                          onClick={() => {
+                            navigate(`/manage/courses/${row.courseId}/edit`);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: 'All', value: -1 },
+                    ]}
+                    colSpan={4}
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Grid item xs={12} sm={6} md={6} lg={4}>
+            <NoResults value={params.searchQuery} />
+          </Grid>
+        )}
+      </Grid>
+    </Box>
   );
 }

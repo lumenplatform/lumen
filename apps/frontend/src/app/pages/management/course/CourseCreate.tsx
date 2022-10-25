@@ -97,7 +97,13 @@ export default function CourseCreate() {
     <FormProvider {...methods}>
       <Box>
         <Toolbar sx={{ borderBottom: 1, borderColor: theme.palette.divider }}>
-           
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate('/manage/courses')}
+            color="inherit"
+          >
+            Back to Courses
+          </Button>
           <Divider
             orientation="vertical"
             flexItem
@@ -112,7 +118,7 @@ export default function CourseCreate() {
           <Typography mx={3} variant="h6">
             {fieldValues['title']}
           </Typography>
-          <Chip color="warning" label="DRAFT" />
+          {/* <Chip color="warning" label="DRAFT" /> */}
           <Box sx={{ flexGrow: 1 }}></Box>
           <Button
             variant="contained"
