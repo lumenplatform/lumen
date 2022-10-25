@@ -31,6 +31,8 @@ import QuizPage from './pages/student/quiz/QuizPage';
 import AttemptQuizPage from './pages/student/quiz/QuizAttemptPage';
 import QuizResultPage from './pages/student/quiz/QuizResultPage';
 import QuizTemplatePage from './pages/student/quiz/QuizTemplatePage';
+import ContactUs from './pages/contactUs';
+import Privacy from './pages/privacy';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -47,7 +49,10 @@ export default function () {
       <Route path="/" element={<HomePage />} />
       <Route path="/teaching" element={<ForInstructors />} />
       <Route path="/courses" element={<SearchPage />} />
-      <Route path="/courses/:courseId" element={<Enroll />}></Route>
+      <Route path="/courses/:courseId" element={<Enroll />} />
+      <Route path="/contact" element={<ContactUs />} /> 
+      <Route path='/privacy' element={<Privacy />} />
+      
 
       {/* Pages accessed by the student */}
       <Route element={<ProtectedPage userRole="student" />}>
