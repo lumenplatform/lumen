@@ -97,6 +97,10 @@ export class CourseController {
     return em.findOneOrFail(Course, { courseId: id });
   }
 
+  async updateCourseInformation(courseId: string, data: Partial<Course>) {
+    return this.courseService.updateCourseInfo(courseId, data);
+  }
+
   async enroll(req, userId, courseId) {
     const course = await this.getCourseByID(courseId);
     const em = RequestContext.getEntityManager();
