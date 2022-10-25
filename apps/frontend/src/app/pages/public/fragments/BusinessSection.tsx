@@ -6,9 +6,11 @@ import {
   InputAdornment, Stack,
   TextField, Typography
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 
 export function BusinessSection() {
+  const navigate = useNavigate();
   return (
     <Box sx={{ background: '#fafafa' }}>
       <Container>
@@ -23,7 +25,7 @@ export function BusinessSection() {
                 academic or a business organization
               </Typography>
               <br></br>
-              <Button variant="outlined"> Register Organization </Button>
+              <Button variant="outlined" onClick={() => navigate('/manage')}> Register Organization </Button>
               <Divider textAlign="left" sx={{ my: 2 }}>
                 OR
               </Divider>

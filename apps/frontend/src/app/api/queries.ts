@@ -86,8 +86,8 @@ export function updateCourse(data: any) {
     .then((r) => r.data.data);
 }
 
-export function getOrgCourses() {
-  return client.get<any>('/manage/courses/', {}).then((r) => r.data.data);
+export function getOrgCourses(searchQuery:any,publishStatus:any) {
+  return client.get<any>(`/manage/courses/?searchQuery=${searchQuery? searchQuery:''}&publishStatus=${publishStatus}`, {}).then((r) => r.data.data);
 }
 
 export function getOrgCoursesById(id: string) {
@@ -122,6 +122,10 @@ export function updateCurrentOrganization(data: any) {
 
 export function getOrgStats() {
   return client.get('/org//dashboard-data').then((r) => r.data.data);
+}
+
+export function updateCourseStatus(data: any) {
+  return client.post(`/manage/courses/${data.courseId}/update-status`, data).then((r) => r.data.data);
 }
 // END MANAGEMENT
 

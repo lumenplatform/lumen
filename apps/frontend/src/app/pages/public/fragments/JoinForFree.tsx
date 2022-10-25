@@ -1,6 +1,8 @@
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export function JoinForFree() {
+  const navigate = useNavigate();
   return (
     <Box sx={{}}>
       <Container>
@@ -21,7 +23,7 @@ export function JoinForFree() {
                 Join now to receive personalized recommendations from the full
                 course catalog.
               </Typography>
-              <Button variant="contained" disableElevation>
+              <Button variant="contained" onClick={() => navigate('/student')} disableElevation>
                 Join Today
               </Button>
             </Box>

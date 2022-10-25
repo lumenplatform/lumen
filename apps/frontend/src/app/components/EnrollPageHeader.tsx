@@ -18,11 +18,12 @@ import Faq from './FAQ';
 
 import { useQuery } from 'react-query';
 import { Outlet, useParams } from 'react-router-dom';
- 
-import {enrollInCourse, getCourseById } from '../api';
+
+import { enrollInCourse, getCourseById } from '../api';
 import { Header } from '../pages/public/fragments/Header';
 import StudentHeader from './StudentHeader';
- 
+
+
 
 export default function EnrollHEader() {
   const theme = useTheme();
@@ -42,21 +43,20 @@ export default function EnrollHEader() {
   const { courseId } = useParams();
 
   const {
-    data: course, 
+    data: course,
     isLoading,
     isError,
   } = useQuery(['courses', courseId], () => getCourseById(courseId!));
 
-  const {
-    data: course_instructors,
-  } = useQuery(['courses', courseId], () => getCourseById(courseId!));
+  const { data: course_instructors } = useQuery(['courses', courseId], () =>
+    getCourseById(courseId!)
+  );
 
   if (isError || isLoading) {
     return <Skeleton></Skeleton>;
   }
 
   return (
-    
     <React.Fragment>
       <StudentHeader />
       <Box
@@ -73,7 +73,8 @@ export default function EnrollHEader() {
           {course.title}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Rating name="read-only" value={4} readOnly size="small" />
+          <Rating name="read-only" value={course.rating}  readOnly size="small" />
+          
           {/* get the value from the table (total) */}
 
           <Typography
@@ -82,8 +83,9 @@ export default function EnrollHEader() {
             component="h3"
             sx={{ lineHeight: 0, ml: 1 }}
           >
-            3 ratings  
-              {/* get the count from table */}
+            {course.ratingCount} reviews
+
+            {/* get the count from table */}
           </Typography>
         </Box>
 
@@ -95,7 +97,7 @@ export default function EnrollHEader() {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeUl9IZDN97pBQNgeunx6dD1df-4g7vkPFw&usqp=CAU"
           />
           <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-          {course_instructors.first_name} {course_instructors.last_name}
+            {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
         </Box>
 
@@ -105,12 +107,21 @@ export default function EnrollHEader() {
             src="https://cdn-icons-png.flaticon.com/512/146/146031.png"
           />
           <Typography variant="subtitle1" style={{ margin: '0.5rem 1%' }}>
-          {course_instructors.first_name} {course_instructors.last_name}
+            {course_instructors.first_name} {course_instructors.last_name}
           </Typography>
         </Box>
 
         <Box
-          sx={{ margin: '3% 1% 0 0', display: 'flex', alignItems: 'center' }}
+          sx={{ margin: '1.5% 0 0 0', display: 'flex', alignItems: 'center' }}
+        >
+          {' '}
+          <Typography variant="h6" lineHeight={1} mb="20px">
+            Course Fee: Rs. {course.price}.00
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{ margin: '1% 1% 0 0', display: 'flex', alignItems: 'center' }}
         >
           <Button variant="contained" size="large" onClick={enrollbutton}>
             Enroll Me
@@ -120,7 +131,6 @@ export default function EnrollHEader() {
             display="inline"
             style={{ marginLeft: 10 }}
           >
- 
             3 Already enrolled
             {/* get the total */}
           </Typography>
@@ -141,8 +151,7 @@ export default function EnrollHEader() {
               <Tab label="Instructors" value="2" />
               <Tab label="Syllabus" value="3" />
               <Tab label="Reviews" value="4" />
-              <Tab label="Enrollment Options" value="5" />
-              <Tab label="FAQ" value="6" />
+              <Tab label="FAQ" value="5" />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -158,9 +167,6 @@ export default function EnrollHEader() {
             <CourseReviews />
           </TabPanel>
           <TabPanel value="5">
-            <CourseEnrolmentOptions />
-          </TabPanel>
-          <TabPanel value="6">
             <Faq />
           </TabPanel>
         </TabContext>

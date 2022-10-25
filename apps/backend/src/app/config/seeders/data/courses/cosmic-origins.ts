@@ -15,6 +15,7 @@ export const cosmicOrigins: DeepPartial<Course> = {
   subjectArea: 'Science',
   duration: 0,
   price: 5,
+  
 
   courseImage: {
     type: AssetType.IMAGE,
