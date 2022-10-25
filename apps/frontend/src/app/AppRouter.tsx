@@ -40,6 +40,7 @@ import MarkingAll from './pages/management/exam/MarkAll';
 import QuizReviewPage from './pages/student/quiz/QuizReview';
 import ContactUs from './pages/contactUs';
 import Privacy from './pages/privacy';
+import Certificate from './pages/student/course/certificate';
 
 const ProtectedPage = ({ userRole }: { userRole: UserRole }) => (
   <RequireAuth role={userRole}>
@@ -74,6 +75,7 @@ export default function () {
             <Route path="AssignmentSettings" element={<AssignmentSettings />} />
             <Route path="" element={<Navigate replace to="material" />}></Route>
           </Route>
+          <Route path=":courseId/certificate" element={<Certificate />} />
           <Route path=":courseId/complete-course" element={<CompleteCourse />}/>
           <Route path=":courseId/learn/" element={<CourseViewer />}>
             <Route path=":sectionId/:topicId" element={<ContentView />} />
