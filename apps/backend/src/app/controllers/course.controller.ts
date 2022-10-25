@@ -1,7 +1,7 @@
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { CourseMaterial } from '../models/course-material.model';
-import { Course } from '../models/course.model';
+import { Course, CourseStatus } from '../models/course.model';
 import { CompletedTopic, Enrollment } from '../models/enrollment.model';
 import { CourseReview } from '../models/review.mode';
 import { User } from '../models/user.model';
@@ -69,6 +69,8 @@ export class CourseController {
               $or: [{ title: { $like: `%${searchQuery}%` } }],
             }
           : {},
+        { settings: { isPrivate: 'NO' } },
+        { status: CourseStatus.PUBLISHED },
       ],
     };
 
@@ -81,14 +83,13 @@ export class CourseController {
 
     //chain Where if only title is true
     if (searchQuery) {
-      qb.andWhere(
+      qb.orWhere(
         "to_tsvector('english',c.title || ' ' || c.description || ' ' || o.name) @@ to_tsquery(?)",
         [titleWords.join(' | ')]
       );
     }
 
-    const courses = em.find(Course, parameters);
-    //console.log(courses);
+    const courses = await qb.execute();
     return courses;
   }
 
@@ -128,7 +129,7 @@ export class CourseController {
 
   async getQuizzesByCourseId(id: string) {
     const em = RequestContext.getEntityManager();
-    const course = await em.findOneOrFail(Course,{courseId: id});
+    const course = await em.findOneOrFail(Course, { courseId: id });
     const quizzes = await em.find(Quiz, { course: course });
     return quizzes;
   }
