@@ -1,6 +1,7 @@
 import { RequestContext } from '@mikro-orm/core';
 import { assert } from 'console';
 import { Asset } from '../models/asset.model';
+import { Organization } from '../models/organization.model';
 import { InviteType, UserInvite } from '../models/user-invite.model';
 import { OrganizationService } from '../services/organization.service';
 import { UserService } from '../services/user.service';
@@ -113,5 +114,60 @@ export class AuthController {
       // todo: enroll in course
     }
     em.flush();
+  }
+
+  async getTheme(subdomain: string) {
+    const em = RequestContext.getEntityManager();
+    const orgs = await em.find(Organization, {
+      domains: { subdomain: { $ilike: subdomain } },
+    });
+    if (orgs.length == 0)
+      return {
+        palette: {
+          primary: {
+            main: '#1dbf7b',
+            contrastText: 'white',
+          },
+          secondary: {
+            main: '#f50057',
+          },
+          error: {
+            main: '#ff0000',
+          },
+        },
+        typography: {
+          fontFamily: 'Inter,sans-serif',
+          button: {
+            fontWeight: 600,
+          },
+          fontWeightMedium: 600,
+          fontWeightRegular: 400,
+        },
+      };
+
+    const orgTheme = orgs[0].theme;
+
+    return {
+      palette: {
+        primary: {
+          main: orgTheme?.theme?.primary || '#1dbf7b',
+          contrastText: 'white',
+        },
+        secondary: {
+          main: orgTheme?.theme?.secondary || '#f50057',
+        },
+        error: {
+          main: '#ff0000',
+        },
+      },
+      typography: {
+        fontFamily: 'Inter,sans-serif',
+        button: {
+          fontWeight: 600,
+        },
+        fontWeightMedium: 600,
+        fontWeightRegular: 400,
+      },
+    };
   }
 }

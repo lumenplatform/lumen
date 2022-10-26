@@ -14,6 +14,13 @@ const orgService = new OrganizationService();
 
 const authController = new AuthController(userService, orgService);
 
+authRouter.get('/theme', (req, res, next) => {
+  authController
+    .getTheme(req.subdomains.length ? req.subdomains[0] : null)
+    .then(sendJSON(res))
+    .catch(next);
+});
+
 authRouter.use(guard.isAuthenticated);
 
 authRouter.get('/me', (req, res, next) => {

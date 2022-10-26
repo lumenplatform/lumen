@@ -17,6 +17,10 @@ client.interceptors.request.use(function (config) {
   return config;
 });
 
+export function fetchTheme() {
+  return client.get<any>('/auth/theme').then((r) => r.data.data);
+}
+
 // AUTHENTICATION
 export function fetchUser() {
   return client.get<any>('/auth/me').then((r) => r.data.data);
