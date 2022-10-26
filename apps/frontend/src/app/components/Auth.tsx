@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = () => {
     localStorage.removeItem('lumen_token');
-    logout();
+    logout({ returnTo: location.protocol + '//' + location.host });
   };
 
   const isLoading = auth0Loading || userLoading;

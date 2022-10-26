@@ -19,77 +19,60 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { getOrgCourseUsers } from '../../../../api';
-import { useQuery } from 'react-query';
+import {
+  getOrgCourseUsers,
+  inviteStudentToCourse,
+  inviteUserToOrg,
+} from '../../../../api';
+import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { PersonAddAlt } from '@mui/icons-material';
+import { queryClient } from 'apps/frontend/src/app/providers/queryClient';
+import { useForm } from 'react-hook-form';
 
-//sample data array with objects containg username,email,enrolled date,course title
-const data = [
-  {
-    username: 'John Doe',
-    email: 'sample@gmail.com',
-    enrolledDate: '2022-08-12',
-    course: 'machine learning',
-  },
-  {
-    username: 'John Doe',
-    email: 'sample@gmail.com',
-    enrolledDate: '2022-08-12',
-    course: 'machine learning',
-  },
-  {
-    username: 'John Doe',
-    email: 'sample@gmail.com',
-    enrolledDate: '2022-08-12',
-    course: 'machine learning',
-  },
-  {
-    username: 'John Doe',
-    email: 'sample@gmail.com',
-    enrolledDate: '2022-08-12',
-    course: 'machine learning',
-  },
-  {
-    username: 'John Doe',
-    email: 'sample@gmail.com',
-    enrolledDate: '2022-08-12',
-    course: 'machine learning',
-  },
-];
 export default function EnrolledStudents() {
   const theme = useTheme();
   const { courseId } = useParams();
-  const { data: courseData, isLoading } = useQuery('coures' + courseId, () =>
+  const { data: courseData } = useQuery('course-users', () =>
     getOrgCourseUsers(courseId ?? '')
   );
 
   // console.log("metana metana metana");
   // console.log(courseData);
   if (!courseData) return null;
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <TableContainer>
+      <Stack justifyContent="end" alignItems="end">
+        <StudentInviteForm />
+      </Stack>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell sx={{ pl: theme.spacing(3) }}>User</TableCell>
             <TableCell>User mail</TableCell>
-            <TableCell>Enrolled Date</TableCell>
+            <TableCell>Enrolled Date & Time</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {courseData && courseData.length && courseData.map((row: any) => (
-            <TableRow key={row.enrollmentId}>
-              <TableCell sx={{ pl: theme.spacing(3) }}>
-                <Typography variant="body2">{row.user.name}</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="body2">{row.user.email}</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="body2">{row.enrollmentDate}</Typography>
-              </TableCell>
-            </TableRow>
-          ))}
+          {courseData &&
+            courseData.length !== 0 &&
+            courseData.map((row: any) => (
+              <TableRow key={row.enrollmentId}>
+                <TableCell sx={{ pl: theme.spacing(3) }}>
+                  <Typography variant="body2">{row.user.name}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2">{row.user.email}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2">
+                    {new Date(row.enrollmentDate).toLocaleString()}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
       {/* <TablePagination
@@ -105,4 +88,70 @@ export default function EnrolledStudents() {
   );
 }
 
+function StudentInviteForm() {
+  const [open, setOpen] = useState(false);
+  const inviteUserMutation = useMutation(inviteStudentToCourse, {
+    onSuccess: () => {
+      handleClose();
+      queryClient.refetchQueries('course-users');
+    },
+  });
+  const { register, getValues, reset } = useForm();
+  const { courseId } = useParams();
 
+  const handleClose = () => {
+    setOpen(false);
+    reset({ email: null });
+  };
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        disableElevation
+        onClick={() => setOpen(true)}
+      >
+        Invite Student
+      </Button>
+      <Dialog open={open} maxWidth="xs" hideBackdrop={false}>
+        <DialogTitle>
+          <Stack direction={'row'} alignItems="center">
+            <PersonAddAlt sx={{ mr: 2 }} /> Invite an student
+          </Stack>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Student will be able to access course by creating a account using
+            the given Email
+          </DialogContentText>
+          <TextField
+            autoFocus
+            {...register('email', {})}
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions sx={{ mx: 2, mb: 2 }}>
+          <Button color="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              inviteUserMutation.mutate({
+                email: getValues('email'),
+                courseId,
+              });
+            }}
+          >
+            Invite
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}

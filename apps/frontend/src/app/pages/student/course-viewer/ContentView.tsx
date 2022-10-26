@@ -72,13 +72,14 @@ export default function ContentView() {
           {topic.title}
         </Typography>
         <Typography variant="caption">
-          TODO: add instructor, {course.organization.name}
+          {course.instructors.map((c: any) => c.name)} -{' '}
+          {course.organization.name}
         </Typography>
       </Box>
 
       <Box sx={{}}>
         <Box mb={2}>
-          {topic.contentType == 'video' &&
+          {topic.contentType === 'video' &&
             topic.video &&
             (typeof topic.video.path == 'string' || isElectron) && (
               <Box style={{ aspectRatio: '16/9' }}>
@@ -89,32 +90,48 @@ export default function ContentView() {
               </Box>
             )}
 
-          {topic.contentType == 'video' &&
+          {topic.contentType === 'video' &&
             topic.video &&
-            (typeof topic.video.path == 'string' || !isElectron) && (
+            (typeof topic.video.path !== 'string' && !isElectron) && (
               <VideoPlayer src={topic.video.path} />
             )}
 
-          {topic.contentType == 'article' && (
+          {topic.contentType === 'article' && (
             <div
               className="ProseMirror"
               dangerouslySetInnerHTML={{ __html: topic.article }}
             />
           )}
-          <Stack direction="row" justifyContent="end">
-            <Button
-              variant="contained"
-              disableElevation
-              disabled={completionMutation.isLoading}
-              onClick={markComplete}
-            >
-              {endOfCourse && endOfSection
-                ? 'Complete Course'
-                : endOfSection
-                ? 'Next Section'
-                : 'Next Topic'}
-            </Button>
-          </Stack>
+
+          {topic.contentType === 'quiz' && topic.examId && (
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography variant="h5"> Quiz</Typography>
+              <Button
+                onClick={() =>
+                  window.open('/student/' + courseId + '/quiz/' + topic.examId)
+                }
+              >
+                View Quiz
+              </Button>
+            </Box>
+          )}
+
+          {topic.contentType !== 'quizX' && (
+            <Stack direction="row" justifyContent="end">
+              <Button
+                variant="contained"
+                disableElevation
+                disabled={completionMutation.isLoading}
+                onClick={markComplete}
+              >
+                {endOfCourse && endOfSection
+                  ? 'Complete Course'
+                  : endOfSection
+                  ? 'Next Section'
+                  : 'Next Topic'}
+              </Button>
+            </Stack>
+          )}
         </Box>
 
         <Typography my={1} variant="body1" fontWeight={600}>

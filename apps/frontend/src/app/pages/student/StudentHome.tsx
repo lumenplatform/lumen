@@ -3,19 +3,22 @@ import {
   Breadcrumbs,
   Button,
   Divider,
+  FormControl,
   Grid,
   LinearProgress,
   Link,
+  MenuItem,
   Paper,
+  Select,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StudentHeader from '../../components/StudentHeader';
 
-import { ArrowDropDown, MoreHoriz } from '@mui/icons-material';
+import { Container } from '@mui/system';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useQuery } from 'react-query';
@@ -24,7 +27,6 @@ import '../../../styles.css';
 import { getEnrolledCourses, getRecommendedCourses, search } from '../../api';
 import CourseCard from '../../components/CourseCard';
 import { Footer } from '../public/fragments/Footer';
-import { Container } from '@mui/system';
 
 export function InProgressCourseCard(props: { course: any; onClick: any }) {
   const { course, onClick } = props;
@@ -55,7 +57,7 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
           <Typography sx={{ fontWeight: 'bold' }}>{course.title}</Typography>
           <Typography variant="body2">{course.organization.name}</Typography>
           <Typography variant="caption" component="div" mt={1}>
-            {completion}% Completed
+            {String(completion).substring(0, 2)}% Completed
           </Typography>
           <LinearProgress
             variant="determinate"
@@ -70,7 +72,11 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
           flexItem
           sx={{ display: { xs: 'none', sm: 'block' } }}
         />
-        <Stack sx={{ p: 2, display: { xs: 'none', sm: 'block' },width:'20%' }}>
+        <Stack
+          sx={{ p: 2, display: { xs: 'none', sm: 'flex' }, width: '20%' }}
+          justifyContent="center"
+          alignItems="center"
+        >
           {course.next && (
             <>
               <Typography variant="body2" fontWeight={600} mb={1}>
@@ -79,7 +85,7 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
               <Typography variant="body2">{course.next?.title}</Typography>
             </>
           )}
-          {!course.next && (
+          {!course.next && course.enrollment.status === 'ACTIVE' && (
             <Button
               onClick={() =>
                 navigate(`/student/${course.courseId}/complete-course`)
@@ -88,6 +94,16 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
               size="small"
             >
               Complete Course
+            </Button>
+          )}
+          {course.enrollment.status === 'COMPLETED' && (
+            <Button
+              onClick={() =>
+                navigate(`/student/${course.courseId}/certificate`)
+              }
+              size="small"
+            >
+              View Certificate
             </Button>
           )}
         </Stack>
@@ -99,10 +115,18 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
 export default function CoursePage(props: any) {
   const navigate = useNavigate();
   const { data } = useQuery('courses', () => search({}));
-  const { data: enrolled } = useQuery('enrolled', () => getEnrolledCourses());
+  const [statusFilter, setStatusFilter] = useState('ACTIVE');
+
+  const { data: enrolled, refetch } = useQuery('enrolled', () =>
+    getEnrolledCourses(statusFilter)
+  );
   const { data: recommended } = useQuery('recom', () =>
     getRecommendedCourses()
   );
+
+  useEffect(() => {
+    refetch();
+  }, [statusFilter]);
 
   return (
     <div>
@@ -125,9 +149,19 @@ export default function CoursePage(props: any) {
 
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="h6">My Courses</Typography>
-                <Button>
-                  In Progress <ArrowDropDown />
-                </Button>
+                <FormControl size="small" variant="standard">
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={statusFilter}
+                    label="Age"
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                  >
+                    <MenuItem value={'ACTIVE'}>In Progress</MenuItem>
+                    <MenuItem value={'COMPLETED'}>Completed</MenuItem>
+                    <MenuItem value={'ALL'}>All</MenuItem>
+                  </Select>
+                </FormControl>
               </Stack>
 
               <Box>

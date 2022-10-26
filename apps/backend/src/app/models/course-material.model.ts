@@ -31,6 +31,9 @@ export class CourseMaterial {
 
   @Property({ type: 'text', nullable: true })
   article?: string;
+  
+  @Property({ type: 'text', nullable: true })
+  examId?: string;
 
   @Property({ nullable: true })
   contentType?: string;

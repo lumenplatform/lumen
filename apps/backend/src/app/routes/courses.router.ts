@@ -5,6 +5,7 @@ import { CourseController } from '../controllers/course.controller';
 import { QuizController } from '../controllers/quiz.controller';
 import { validate } from '../middleware/validation';
 import { Course } from '../models/course.model';
+import { EnrollmentStatus } from '../models/enrollment.model';
 import { AttemptService } from '../services/attempt.service';
 import { CourseService } from '../services/course.service';
 import { EmailTemplate } from '../services/mail/email-types';
@@ -36,7 +37,7 @@ coursesRouter.get('/', async (req, res) => {
 
 coursesRouter.get('/enrolled', async (req, res, next) => {
   courseController
-    .getEnrolledCourses(req.user.uid)
+    .getEnrolledCourses(req.user.uid, req.query.status as EnrollmentStatus)
     .then(sendJSON(res))
     .catch(next);
 });

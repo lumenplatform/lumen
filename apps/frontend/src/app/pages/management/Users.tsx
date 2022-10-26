@@ -1,4 +1,9 @@
-import { DeleteOutline, PersonAddAlt } from '@mui/icons-material';
+import {
+  AccountCircleOutlined,
+  DeleteOutline,
+  HourglassBottomOutlined,
+  PersonAddAlt,
+} from '@mui/icons-material';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import {
   Avatar,
@@ -31,6 +36,7 @@ import {
   getPendingOrgInvitations,
   inviteUserToOrg,
 } from '../../api';
+import { queryClient } from '../../providers/queryClient';
 
 const UserChip = ({ user }: any) => {
   const theme = useTheme();
@@ -56,17 +62,24 @@ const UserChip = ({ user }: any) => {
 
 export default function Users() {
   const theme = useTheme();
-  const { data: users } = useQuery('org-users', getOrgUsers);
+  const { data: users, refetch } = useQuery('org-users', getOrgUsers);
 
   return (
-    <Box>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h6" sx={{ my: 2 }}>
+    <Box sx={{ p: 3 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        mb={2}
+        justifyContent="space-between"
+      >
+        <AccountCircleOutlined />
+        <Typography ml={1} variant="h6">
           Organization Users
         </Typography>
+        <Box flex={'1 1 0'} />
         <UserInviteForm />
       </Stack>
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -124,36 +137,37 @@ export function PendingInvites() {
 
   return (
     <Box>
-      <Typography variant="h6" sx={{ my: 3 }}>
-        Pending User Invitations
-      </Typography>
-      <Paper>
-        <Table sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Email</TableCell>
-              <TableCell>Expires At</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {invites &&
-              invites.map((invite: any) => (
-                <TableRow key={invite.email}>
-                  <TableCell>{invite.email}</TableCell>
-                  <TableCell>
-                    {new Date(invite.expiresAt).toLocaleString()}
-                  </TableCell>
-                  <TableCell>
-                    <Button color="error">
-                      <DeleteOutline /> &nbsp; Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </Paper>
+      <Stack direction="row" alignItems="center" mb={2}>
+        <HourglassBottomOutlined />
+        <Typography ml={1} variant="h6">
+          Pending Invitations
+        </Typography>
+      </Stack>
+      <Table size="small" sx={{ minWidth: 650 }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Email</TableCell>
+            <TableCell>Expires At</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {invites &&
+            invites.map((invite: any) => (
+              <TableRow key={invite.email}>
+                <TableCell>{invite.email}</TableCell>
+                <TableCell>
+                  {new Date(invite.expiresAt).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  <Button color="error">
+                    <DeleteOutline /> &nbsp; Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
     </Box>
   );
 }
@@ -163,6 +177,8 @@ function UserInviteForm() {
   const inviteUserMutation = useMutation(inviteUserToOrg, {
     onSuccess: () => {
       handleClose();
+      queryClient.refetchQueries('org-users');
+      queryClient.refetchQueries('invites');
     },
   });
   const { register, getValues } = useForm();
@@ -173,7 +189,7 @@ function UserInviteForm() {
 
   return (
     <>
-      <Button variant="contained" onClick={() => setOpen(true)}>
+      <Button variant="contained" disableElevation onClick={() => setOpen(true)}>
         Invite User
       </Button>
       <Dialog open={open} maxWidth="xs" hideBackdrop={false}>

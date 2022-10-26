@@ -36,10 +36,10 @@ export default function Instructors() {
 
             <Stack>
               <Typography variant="h6" sx={{ mb: 1 }}>
-                {instructor.first_name} {instructor.last_name}
+                {instructor.name} {instructor.last_name}
               </Typography>
-              <Typography variant="subtitle1">1 learners</Typography>
-              <Typography variant="subtitle1">3 courses</Typography>
+              {/* <Typography variant="subtitle1">1 learners</Typography> */}
+              <Typography variant="subtitle1">{course.organization.name}</Typography>
             </Stack>
           </Stack>
         ))}

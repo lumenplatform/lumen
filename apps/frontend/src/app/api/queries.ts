@@ -17,6 +17,10 @@ client.interceptors.request.use(function (config) {
   return config;
 });
 
+export function fetchTheme() {
+  return client.get<any>('/auth/theme').then((r) => r.data.data);
+}
+
 // AUTHENTICATION
 export function fetchUser() {
   return client.get<any>('/auth/me').then((r) => r.data.data);
@@ -63,8 +67,8 @@ export function getCourseReview(id: string) {
   return client.get<any>(`/courses/${id}/reviews`).then((r) => r.data.data);
 }
 
-export function getEnrolledCourses() {
-  return client.get<any>('/courses/enrolled').then((r) => r.data.data);
+export function getEnrolledCourses(statusFilter:string) {
+  return client.get<any>('/courses/enrolled?status='+statusFilter).then((r) => r.data.data);
 }
 
 export function getRecommendedCourses() {
@@ -111,6 +115,10 @@ export function getOrgUsers() {
 
 export function inviteUserToOrg(data: any) {
   return client.post('/manage/users/invites', data).then((r) => r.data.data);
+}
+
+export function inviteStudentToCourse(data: any) {
+  return client.post('/manage/courses/'+data.courseId+'/invites', data).then((r) => r.data.data);
 }
 
 export function addInstrucotorsToCourse(data: any) {

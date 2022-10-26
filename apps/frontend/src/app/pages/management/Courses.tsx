@@ -321,7 +321,7 @@ export default function Users() {
                     <TableCell sx={{ pl: theme.spacing(3) }}>
                       <Typography variant="body2">{row.title}</Typography>
                     </TableCell>
-                    <TableCell>{row.price}$</TableCell>
+                    <TableCell>$ {row.price}.00</TableCell>
 
                     <TableCell>{draftChip(row.status)}</TableCell>
                     {/* <TableCell><Chip label={status} color={status == 'PUBLISHED'?"warning":""} size="small" variant="outlined" /></TableCell> */}

@@ -13,7 +13,7 @@ export class QuizController {
     const em = RequestContext.getEntityManager();
     const quiz = await em.create(Quiz, data);
     em.persist(quiz);
-    em.flush();
+    await em.flush();
     return quiz.id;
   }
 

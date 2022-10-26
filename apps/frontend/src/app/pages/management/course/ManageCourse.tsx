@@ -23,7 +23,7 @@ const sections = [
   { component: <EnrolledStudents />, label: 'Enrolled Users' },
   { component: <CourseInstructors />, label: 'Instructors' },
   { component: <QuizAndAssignments />, label: 'Quizzes and Assignments' },
-  { component: <UserLogs />, label: 'User Logs' },
+  // { component: <UserLogs />, label: 'User Logs' },
 ];
 
 export default function ManageCourse() {
@@ -53,30 +53,37 @@ export default function ManageCourse() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h5">{course.title}</Typography>
         <Box>
+          {(course.status === 'UNPUBLISHED' || course.status === 'DRAFT') && (
+            <Button
+              color="primary"
+              onClick={() => {
+                updateCourseMutation.mutate(
+                  { courseId, status: 'PUBLISHED' },
+                  { onSuccess: () => navigate('/manage/courses') }
+                );
+              }}
+            >
+              Publish
+            </Button>
+          )}
+          {course.status === 'PUBLISHED' && (
+            <Button
+              color="primary"
+              onClick={() => {
+                updateCourseMutation.mutate(
+                  { courseId, status: 'UNPUBLISHED' },
+                  { onSuccess: () => navigate('/manage/courses') }
+                );
+              }}
+            >
+              Un-Publish
+            </Button>
+          )}
           <Button
-            color="primary"
-            onClick={() => {
-              updateCourseMutation.mutate(
-                { courseId, status: 'PUBLISHED' },
-                { onSuccess: () => navigate('/manage/courses') }
-              );
-            }}
+            onClick={() => navigate('/manage/courses/' + courseId + '/edit')}
           >
-            Publish
+            Edit
           </Button>
-          <Button
-            color="primary"
-            onClick={() => {
-              updateCourseMutation.mutate(
-                { courseId, status: 'UNPUBLISHED' },
-                { onSuccess: () => navigate('/manage/courses') }
-              );
-            }}
-          >
-            Unpublished
-          </Button>
-          <Button>Edit</Button>
-          <Button color="error">Delete</Button>
         </Box>
       </Box>
       <Box sx={{ width: '100%' }}>

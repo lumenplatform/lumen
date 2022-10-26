@@ -62,6 +62,7 @@ export default function CourseCreate() {
   useEffect(() => {
     if (courseId) {
       getOrgCoursesById(courseId).then((data) => {
+        delete data.instructors
         methods.reset(data);
         setDataLoaded(true);
       });

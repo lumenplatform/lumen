@@ -29,13 +29,13 @@ const RegisterForm = () => {
 
   return (
     <Stack spacing={2}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography>Register As : &nbsp;</Typography>
         <ToggleButtonGroup color="primary" {...register('type')}>
           <ToggleButton value="individual">Individual</ToggleButton>
           <ToggleButton value="organization">Organization</ToggleButton>
         </ToggleButtonGroup>
-      </Box>
+      </Box> */}
       <TextField fullWidth label="Name" {...register('orgName')} />
       <TextField
         label="Bio / Description"

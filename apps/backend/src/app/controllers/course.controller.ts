@@ -82,6 +82,7 @@ export class CourseController {
     const qb = em.qb(Course, 'c');
     qb.select('*')
       .leftJoinAndSelect('c.organization', 'o')
+      .leftJoinAndSelect('c.instructors', 'ins')
       .leftJoinAndSelect('c.courseImage', 'ci')
       .where(parameters);
 
@@ -141,15 +142,18 @@ export class CourseController {
     return quizzes;
   }
 
-  async getEnrolledCourses(uid: string) {
+  async getEnrolledCourses(uid: string, status: EnrollmentStatus) {
     const em = RequestContext.getEntityManager();
     const courses: any = await em
       .find(
         Enrollment,
-        { user: { uid }, status: EnrollmentStatus.ACTIVE },
+        {
+          user: { uid },
+          ...(['ACTIVE', 'COMPLETED'].includes(status) ? { status } : {}), //
+        },
         { populate: ['course'] }
       )
-      .then((r) => r.map((k) => k.course));
+      .then((r) => r.map((k) => ({ ...k.course, enrollment: k })));
 
     for (let i = 0; i < courses.length; i++) {
       const material = await this.getCourseMaterial(courses[i].courseId, uid);
@@ -178,7 +182,7 @@ export class CourseController {
 
   async getRecommendedCourses(uid: string) {
     // todo : properly calculate recommended
-    const enrolled = await this.getEnrolledCourses(uid);
+    const enrolled = await this.getEnrolledCourses(uid,null);
     const em = RequestContext.getEntityManager();
     const recommended = await em.find(Course, {
       courseId: { $nin: enrolled.map((r) => r.courseId) },
