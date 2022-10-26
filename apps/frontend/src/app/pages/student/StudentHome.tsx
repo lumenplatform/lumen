@@ -57,7 +57,7 @@ export function InProgressCourseCard(props: { course: any; onClick: any }) {
           <Typography sx={{ fontWeight: 'bold' }}>{course.title}</Typography>
           <Typography variant="body2">{course.organization.name}</Typography>
           <Typography variant="caption" component="div" mt={1}>
-            {String(completion).substring(0, 2)}% Completed
+            {String(completion).substring(0, 5)}% Completed
           </Typography>
           <LinearProgress
             variant="determinate"
