@@ -8,7 +8,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { getPrivateCourseEnrollments, getPublicCourseEnrollments, getWithdrawals, withdrawBalance } from '../../api';
+import {
+  getPrivateCourseEnrollments,
+  getPublicCourseEnrollments,
+  getWithdrawals,
+  withdrawBalance,
+} from '../../api';
 import CourseCharges from './billing/CourseCharges';
 import CourseFees from './billing/CourseFees';
 import Withdrawals from './billing/Withdrawals';
@@ -28,18 +33,34 @@ export default function Billing() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
 
-  const y = 5;
+    const y = 5;
   };
 
   const handleWithdraw = () => {
-    withdrawalMutation({ amount: balance })
+    withdrawalMutation({ amount: balance });
     setOpen(false);
-  }
+  };
 
-  const { data: withdrawals, isLoading: withdrawalsLoading, isError: withdrawalsError, refetch: withdrawalsRefetch } = useQuery('withdrawals', () => getWithdrawals());
-  const { data: pvEnrollments, isLoading: pvEnrollmentsLoading, isError: pvEnrollmentsError, refetch: pvEnrollmentsRefetch } = useQuery('publicenrolleement', () => getPublicCourseEnrollments());
-  const { data: pbEnrollments, isLoading: pbEnrollmentsLoading, isError: pbRnrollmentsError, refetch: pbRnrollmentsRefetch } = useQuery('privateenrolleement', () => getPrivateCourseEnrollments());
-  const { mutate: withdrawalMutation, isSuccess: withdrawalSuccess } = useMutation(withdrawBalance);
+  const {
+    data: withdrawals,
+    isLoading: withdrawalsLoading,
+    isError: withdrawalsError,
+    refetch: withdrawalsRefetch,
+  } = useQuery('withdrawals', () => getWithdrawals());
+  const {
+    data: pvEnrollments,
+    isLoading: pvEnrollmentsLoading,
+    isError: pvEnrollmentsError,
+    refetch: pvEnrollmentsRefetch,
+  } = useQuery('publicenrolleement', () => getPrivateCourseEnrollments());
+  const {
+    data: pbEnrollments,
+    isLoading: pbEnrollmentsLoading,
+    isError: pbRnrollmentsError,
+    refetch: pbRnrollmentsRefetch,
+  } = useQuery('privateenrolleement', () => getPublicCourseEnrollments());
+  const { mutate: withdrawalMutation, isSuccess: withdrawalSuccess } =
+    useMutation(withdrawBalance);
 
   useEffect(() => {
     if (withdrawalSuccess) {
@@ -52,9 +73,18 @@ export default function Billing() {
   if (withdrawalsLoading || pvEnrollmentsLoading || pbEnrollmentsLoading)
     return <Skeleton />;
 
-  const pvTotal = pvEnrollments.reduce((acc: any, enrollment: any) => acc + enrollment.payment.amount, 0);
-  const pbTotal = pbEnrollments.reduce((acc: any, enrollment: any) => acc + enrollment.payment.amount, 0);
-  const withdrawalTotal = withdrawals.reduce((acc: any, withdrawal: any) => acc + withdrawal.payment.amount, 0);
+  const pvTotal = pvEnrollments.reduce(
+    (acc: any, enrollment: any) => acc + enrollment.payment.amount,
+    0
+  );
+  const pbTotal = pbEnrollments.reduce(
+    (acc: any, enrollment: any) => acc + enrollment.payment.amount,
+    0
+  );
+  const withdrawalTotal = withdrawals.reduce(
+    (acc: any, withdrawal: any) => acc + withdrawal.payment.amount,
+    0
+  );
 
   const balance = pbTotal - pvTotal - withdrawalTotal;
 
@@ -70,7 +100,11 @@ export default function Billing() {
         Summery
       </Typography>
 
-      <Stack direction={'row'} justifyContent='space-between' alignItems='center'>
+      <Stack
+        direction={'row'}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Box>
           <Typography>
             Account Balance : <b>${balance}</b>
@@ -79,11 +113,24 @@ export default function Billing() {
             {/* Plan : <b>Basic</b> <Button size="small">Change</Button> */}
           </Box>
         </Box>
-        <Button
-          variant='contained'
-          disableElevation
-          onClick={handleClickOpen}
-        >Withdraw</Button>
+        <Box>
+          <Button
+            disabled={balance >= 0}
+            sx={{ mr: 2 }}
+            variant="outlined"
+            disableElevation
+          >
+            Pay
+          </Button>
+          <Button
+            disabled={balance <= 0}
+            variant="contained"
+            disableElevation
+            onClick={handleClickOpen}
+          >
+            Withdraw
+          </Button>
+        </Box>
       </Stack>
 
       <Typography mt={1} mb={0} variant="subtitle2">
