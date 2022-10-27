@@ -9,14 +9,21 @@ import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
+import LinearProgress, {
+  LinearProgressProps,
+} from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
+import { useQuery } from 'react-query';
+import { getEnrolledCourses } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 function createData(name: string, EnrolledDate: string, CompletedDate: string) {
   return { name, EnrolledDate, CompletedDate }; //enter the other variable names if used
 }
 
-function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+function LinearProgressWithLabel(
+  props: LinearProgressProps & { value: number }
+) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ width: '100%', mr: 1 }}>
@@ -24,24 +31,30 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
       </Box>
       <Box sx={{ minWidth: 35 }}>
         <Typography variant="body2" color="text.secondary">{`${Math.round(
-          props.value,
+          props.value
         )}%`}</Typography>
       </Box>
     </Box>
   );
 }
 
-
-
 const rows = [
-  createData('Machine Learnineg',"2020-01-15", "2020-03-05"),        //enter data if other variables are used
-  createData('Machine Learning', "2020-01-15", "2020-03-05"), 
-
+  createData('Machine Learnineg', '2020-01-15', '2020-03-05'), //enter data if other variables are used
+  createData('Machine Learning', '2020-01-15', '2020-03-05'),
 ];
 
 export default function CourseHistoryList() {
+  const navigate = useNavigate();
+  const { data: enrolled, refetch } = useQuery('enrolled', () =>
+    getEnrolledCourses('ALL')
+  );
+
+  if (!enrolled) {
+    return null;
+  }
+
   return (
-    <TableContainer   >
+    <TableContainer>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -53,18 +66,43 @@ export default function CourseHistoryList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {enrolled.map((row: any) => (
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.title}
               </TableCell>
-              <TableCell>{<LinearProgressWithLabel value={80} />}</TableCell>
-              <TableCell>{row.EnrolledDate}</TableCell>
-              <TableCell>{row.CompletedDate}</TableCell>
-              <TableCell>{<Button variant="outlined">View</Button>}</TableCell>
+              <TableCell>
+                {<LinearProgressWithLabel value={row.coursePercent} />}
+              </TableCell>
+              <TableCell>
+                {new Date(row.enrollment.enrollmentDate).toLocaleString()}
+              </TableCell>
+              <TableCell>
+                {row.enrollment.status == 'COMPLETED' ? (
+                  <Box>
+                    {new Date(row.enrollment.completionDate).toLocaleString()}
+                  </Box>
+                ) : (
+                  'N/A'
+                )}
+              </TableCell>
+              <TableCell>
+                {row.enrollment.status == 'COMPLETED' ? (
+                  <Button
+                    onClick={() =>
+                      navigate(`/student/${row.courseId}/certificate`)
+                    }
+                    variant="outlined"
+                  >
+                    View
+                  </Button>
+                ) : (
+                  'N/A'
+                )}
+              </TableCell>
               {/* <TableCell align="right">{row.protein}</TableCell> */}
             </TableRow>
           ))}
@@ -73,5 +111,3 @@ export default function CourseHistoryList() {
     </TableContainer>
   );
 }
-
-
