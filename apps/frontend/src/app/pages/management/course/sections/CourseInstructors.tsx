@@ -66,7 +66,7 @@ export default function CourseInstructors() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {courseData.instructors &&
+          {courseData && courseData.instructors &&
             courseData.instructors.map((row: any) => (
               <TableRow key={row.uid}>
                 <TableCell sx={{ pl: theme.spacing(3) }}>
@@ -172,7 +172,7 @@ function AddInstructorForm(props:any) {
             dense
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
           >
-            {orgUsers &&
+            {orgUsers && courseData&&
               courseData.instructors &&
               orgUsers
                 .filter(
