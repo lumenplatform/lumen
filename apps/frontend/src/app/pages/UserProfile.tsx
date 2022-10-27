@@ -27,7 +27,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
 import React from 'react';
 import { useQuery } from 'react-query';
-import { fetchUser } from '../api';
+import { fetchUser, getEnrolledCourses } from '../api';
 import { useAuth } from '../components/Auth';
 import CourseHistoryList from '../components/CourseHistoryList';
 import StudentHeader from '../components/StudentHeader';
@@ -55,6 +55,7 @@ function TabPanel(props: TabPanelProps) {
 
 function OverviewTab() {
   const { user, signOut } = useAuth();
+
   if (!user) {
     return <Skeleton variant="rectangular" width={210} height={118} />;
   }
