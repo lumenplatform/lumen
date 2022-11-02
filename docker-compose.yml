@@ -1,0 +1,44 @@
+version: "3"
+services:
+  www:
+    build: .
+    ports:
+      - "80:8080"
+    networks:
+      - default
+    environment:
+      - PG_CONNECTION_STRING=postgres://postgres:postgres>@db-postgres:5432/postgres
+      - PORT=8080
+      - AZURE_CLIENT_ID= ""
+      - AZURE_CLIENT_SECRET= ""
+      - AZURE_MEDIA_SERVICES_ACCOUNT_NAME=""
+      - AZURE_RESOURCE_GROUP=""
+      - AZURE_SUBSCRIPTION_ID=""
+      - AZURE_STORAGE_ACCOUNT_NAME = ""
+      - AZURE_TENANT_DOMAIN= ""
+      - AZURE_TENANT_ID= ""
+      - AZURE_ARM_TOKEN_AUDIENCE= ""
+      - AZURE_ARM_ENDPOINT= ""
+      - AZURE_USER_ASSIGNED_IDENTITY = ""
+      - AADENDPOINT=""
+      - AZURE_STORAGE_CONN_STRING=""
+      - DRMSYMMETRICKEY=""
+      - STRIPE_SK=""
+      - STRIPE_PK=""
+      - MAILJET_KEY=""
+      - MAILJET_SECRET=""
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db-postgres
+ 
+  db-postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+
+volumes:
+  postgres-data:

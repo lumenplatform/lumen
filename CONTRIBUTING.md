@@ -1,6 +1,6 @@
-# Contributing to Nest
+# Contributing to Lumen
 
-We would love for you to contribute to Nest and help make it even better than it is
+We would love for you to contribute to Lumen and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
 
 <!--* [Code of Conduct](#coc)-->
@@ -15,11 +15,11 @@ today! As a contributor, here are the guidelines we would like you to follow:
   <!-- - [Signing the CLA](#cla) -->
 
 <!-- ## <a name="coc"></a> Code of Conduct
-Help us keep Nest open and inclusive. Please read and follow our [Code of Conduct][coc]. -->
+Help us keep Lumen open and inclusive. Please read and follow our [Code of Conduct][coc]. -->
 
 ## <a name="question"></a> Got a Question or Problem?
 
-**Do not open issues for general support questions as we want to keep GitHub issues for bug reports and feature requests.** You've got much better chances of getting your question answered on [Stack Overflow][stackoverflow] where the questions should be tagged with tag `nestjs`.
+**Do not open issues for general support questions as we want to keep GitHub issues for bug reports and feature requests.** You've got much better chances of getting your question answered on [Stack Overflow][stackoverflow] where the questions should be tagged with tag `lumenlms`.
 
 Stack Overflow is a much better place to ask questions since:
 
@@ -58,7 +58,7 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will systematically ask you to provide a minimal reproduction scenario using a repository or [Gist](https://gist.github.com/). Having a live, reproducible scenario gives us wealth of important information without going back & forth to you with additional questions like:
 
-- version of NestJS used
+- version of LumenJS used
 - 3rd-party libraries and their versions
 - and most importantly - a use-case that fails
 
@@ -95,7 +95,7 @@ We cannot accept code without this.
 
 1. Create your patch, **including appropriate test cases**.
 1. Follow our [Coding Rules](#rules).
-1. Run the full Nest test suite (see [common scripts](#common-scripts)),
+1. Run the full Lumen test suite (see [common scripts](#common-scripts)),
    and ensure that all tests pass.
 1. Commit your changes using a descriptive commit message that follows our
    [commit message conventions](#commit). Adherence to these conventions
@@ -113,12 +113,12 @@ We cannot accept code without this.
    git push origin my-fix-branch
    ```
 
-1. In GitHub, send a pull request to `nestjs:master`.
+1. In GitHub, send a pull request to `lumenlms:master`.
 
 - If we suggest changes then:
 
   - Make the required updates.
-  - Re-run the Nest test suites to ensure tests are still passing.
+  - Re-run the Lumen test suites to ensure tests are still passing.
   - Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell
@@ -211,7 +211,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**. But also,
-we use the git commit messages to **generate the Nest change log**.
+we use the git commit messages to **generate the Lumen change log**.
 
 ### Commit Message Format
 
@@ -305,4 +305,4 @@ reference GitHub issues that this commit **Closes**.
 A detailed explanation can be found in this [document]: (https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit)
 
 [js-style-guide]: https://google.github.io/styleguide/jsguide.html
-[commits_samples]: https://github.com/nestjs/nest/commits/master
+[commits_samples]: https://github.com/lumenlms/lumen/commits/master
